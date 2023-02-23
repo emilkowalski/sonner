@@ -1,0 +1,58 @@
+.root {
+  padding: 16px;
+  margin: 0;
+  background: var(--gray1);
+  border-radius: 0;
+  position: relative;
+  line-height: 17px;
+  white-space: pre-wrap;
+  background: linear-gradient(to top, var(--gray2), var(--gray1) 16px);
+}
+
+.wrapper {
+  overflow: hidden;
+  margin: 0;
+  position: relative;
+  border-radius: 6px;
+  margin-top: 16px;
+  border: 1px solid var(--gray3);
+}
+
+.copyButton {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 1;
+  width: 26px;
+  height: 26px;
+  border: 1px solid var(--gray4);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--gray0);
+  cursor: pointer;
+  opacity: 0;
+  color: var(--gray12);
+  transition: background 200ms, box-shadow 200ms, opacity 200ms;
+}
+
+.copyButton:hover {
+  background: var(--gray1);
+}
+
+.copyButton:focus-visible {
+  box-shadow: 0 0 0 1px var(--gray4);
+}
+
+.copyButton > div {
+  display: flex;
+}
+
+.outerWrapper {
+  position: relative;
+}
+
+.outerWrapper:hover .copyButton {
+  opacity: 1;
+}
