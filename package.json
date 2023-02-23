@@ -26,6 +26,7 @@
     "@playwright/test": "^1.30.0",
     "@types/node": "^18.11.13",
     "@types/react": "^18.0.26",
+    "postcss": "^8.4.21",
     "react": "^18.2.0",
     "tsup": "^6.4.0",
     "turbo": "1.6",

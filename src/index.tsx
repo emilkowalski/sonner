@@ -118,14 +118,22 @@ const Toast = (props: ToastProps) => {
   React.useEffect(() => {
     if (toast.promise) {
       setPromiseStatus('loading');
-      toast
-        .promise()
-        .then(() => {
-          setPromiseStatus('success');
-        })
-        .catch(() => {
-          setPromiseStatus('error');
-        });
+			if (toast.promise instanceof Promise) {
+				toast.promise.then(() => {
+					setPromiseStatus('success');
+				}).catch(() => {
+					setPromiseStatus('error');
+				})
+			} else if (typeof toast.promise === "function") {
+				toast
+					.promise()
+					.then(() => {
+						setPromiseStatus('success');
+					})
+					.catch(() => {
+						setPromiseStatus('error');
+					});
+			}
     }
   }, [toast]);
 
