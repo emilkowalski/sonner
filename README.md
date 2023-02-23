@@ -152,7 +152,11 @@ toast('Event has been created', {
 
 ### Close button
 
-Add a close button to all toasts that shows on hover by adding the `dismissable` prop.
+Add a close button to all toasts that shows on hover by adding the `closeButton` prop.
+
+```jsx
+<Toaster closeButton />
+```
 
 ### Rich colors
 
