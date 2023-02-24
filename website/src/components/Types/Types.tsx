@@ -9,7 +9,7 @@ export const Types = () => {
     <div>
       <h2>Types</h2>
       <p>
-        You can customize the type of toast you want, or pass an options object as the second argument.
+        You can customize the type of toast you want to render, and pass an options object as the second argument.
       </p>
       <div className="buttons">
         {allTypes.map((type) => (
