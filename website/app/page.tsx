@@ -32,12 +32,7 @@ export default function Home() {
         </div>
       </main>
       <Footer />
-      <Toaster
-        richColors={richColors}
-        closeButton={closeButton}
-        expand={expand}
-        position={position}
-      />
+      <Toaster richColors={richColors} closeButton={closeButton} expand={expand} position={position} />
     </>
   );
 }

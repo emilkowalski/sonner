@@ -1,9 +1,8 @@
 [data-sonner-toaster] {
   position: fixed;
   width: var(--width);
-  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
-    Helvetica Neue, Arial, Noto Sans, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol,
-    Noto Color Emoji;
+  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Arial,
+    Noto Sans, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
   --gray1: hsl(0, 0%, 99%);
   --gray2: hsl(0, 0%, 97.3%);
   --gray3: hsl(0, 0%, 95.1%);
@@ -174,7 +173,12 @@
   border-radius: 50%;
   opacity: 0;
   cursor: pointer;
+  z-index: 1;
   transition: opacity 100ms, background 200ms, border-color 200ms;
+}
+
+[data-sonner-toast] [data-disabled='true'] {
+  cursor: not-allowed;
 }
 
 [data-sonner-toast]:hover [data-close-button] {
@@ -240,7 +244,7 @@
   pointer-events: none;
 }
 
-[data-sonner-toast][data-expanded='true'] {
+[data-sonner-toast][data-mounted='true'][data-expanded='true'] {
   --y: translateY(calc(var(--lift) * var(--offset)));
   height: var(--initial-height);
 }
@@ -281,9 +285,7 @@
   }
 
   to {
-    transform: translateY(
-      calc(var(--lift) * var(--offset) + var(--swipe-amount) + var(--lift) * -100%)
-    );
+    transform: translateY(calc(var(--lift) * var(--offset) + var(--swipe-amount) + var(--lift) * -100%));
     opacity: 0;
   }
 }

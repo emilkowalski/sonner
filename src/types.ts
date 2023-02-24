@@ -34,13 +34,7 @@ export interface ToastT {
   className?: string;
 }
 
-export type Position =
-  | 'top-left'
-  | 'top-right'
-  | 'bottom-left'
-  | 'bottom-right'
-  | 'top-center'
-  | 'bottom-center';
+export type Position = 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right' | 'top-center' | 'bottom-center';
 export interface HeightT {
   height: number;
   toastId: number;
