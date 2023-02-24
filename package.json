@@ -12,7 +12,8 @@
     "build": "tsup src/index.tsx",
     "dev": "tsup src/index.tsx --watch",
     "dev:website": "turbo run dev --filter=website...",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "test": "playwright test"
   },
   "keywords": [
     "react",
