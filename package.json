@@ -11,7 +11,8 @@
   "scripts": {
     "build": "tsup src/index.tsx",
     "dev": "tsup src/index.tsx --watch",
-    "dev:website": "turbo run dev --filter=website..."
+    "dev:website": "turbo run dev --filter=website...",
+    "format": "prettier --write ."
   },
   "keywords": [
     "react",
@@ -26,6 +27,7 @@
     "@playwright/test": "^1.30.0",
     "@types/node": "^18.11.13",
     "@types/react": "^18.0.26",
+    "prettier": "^2.8.4",
     "react": "^18.2.0",
     "tsup": "^6.4.0",
     "turbo": "1.6",

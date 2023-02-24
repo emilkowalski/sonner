@@ -1,8 +1,4 @@
-
-
 https://user-images.githubusercontent.com/36730035/220868994-f0c92862-7e7d-487c-ab3a-540e7b48ab4a.mp4
-
-
 
 # Introduction
 
