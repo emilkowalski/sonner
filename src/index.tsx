@@ -68,9 +68,7 @@ const Toast = (props: ToastProps) => {
   const [removed, setRemoved] = React.useState(false);
   const [swiping, setSwiping] = React.useState(false);
   const [swipeOut, setSwipeOut] = React.useState(false);
-  const [promiseStatus, setPromiseStatus] = React.useState<'loading' | 'success' | 'error' | null>(
-    null
-  );
+  const [promiseStatus, setPromiseStatus] = React.useState<'loading' | 'success' | 'error' | null>(null);
   const [offsetBeforeRemove, setOffsetBeforeRemove] = React.useState(0);
   const [initialHeight, setInitialHeight] = React.useState(0);
   const toastRef = React.useRef<HTMLLIElement>(null);
@@ -81,11 +79,11 @@ const Toast = (props: ToastProps) => {
   // Height index is used to calculate the offset as it gets updated before the toast array, which means we can calculate the new layout faster.
   const heightIndex = React.useMemo(
     () => heights.findIndex((height) => height.toastId === toast.id) || 0,
-    [heights, toast.id]
+    [heights, toast.id],
   );
   const duration = React.useMemo(
     () => toast.duration || durationFromToaster || TOAST_LIFETIME,
-    [toast.duration, durationFromToaster]
+    [toast.duration, durationFromToaster],
   );
   const closeTimerStartTimeRef = React.useRef(0);
   const offset = React.useRef(0);
@@ -104,11 +102,8 @@ const Toast = (props: ToastProps) => {
     }, 0);
   }, [heights, heightIndex]);
   const invert = toast.invert || ToasterInvert;
-
-  offset.current = React.useMemo(
-    () => heightIndex * GAP + toastsHeightBefore,
-    [heightIndex, toastsHeightBefore]
-  );
+  const disabled = promiseStatus === 'loading';
+  offset.current = React.useMemo(() => heightIndex * GAP + toastsHeightBefore, [heightIndex, toastsHeightBefore]);
 
   React.useEffect(() => {
     // Trigger enter animation without using CSS animation
@@ -171,16 +166,7 @@ const Toast = (props: ToastProps) => {
     }
 
     return () => clearTimeout(timeoutId);
-  }, [
-    expanded,
-    interacting,
-    expandByDefault,
-    toast,
-    duration,
-    deleteToast,
-    toast.promise,
-    promiseStatus,
-  ]);
+  }, [expanded, interacting, expandByDefault, toast, duration, deleteToast, toast.promise, promiseStatus]);
 
   React.useEffect(() => {
     const toastNode = toastRef.current;
@@ -242,6 +228,7 @@ const Toast = (props: ToastProps) => {
         } as React.CSSProperties
       }
       onPointerDown={(event) => {
+        if (disabled) return;
         setOffsetBeforeRemove(offset.current);
         // Ensure we maintain correct pointer capture even when going outside of the toast (e.g. when swiping)
         (event.target as HTMLElement).setPointerCapture(event.pointerId);
@@ -251,9 +238,7 @@ const Toast = (props: ToastProps) => {
       }}
       onPointerUp={() => {
         if (swipeOut) return;
-        const swipeAmount = Number(
-          toastRef.current?.style.getPropertyValue('--swipe-amount').replace('px', '') || 0
-        );
+        const swipeAmount = Number(toastRef.current?.style.getPropertyValue('--swipe-amount').replace('px', '') || 0);
 
         // Remove only if treshold is met
         if (Math.abs(swipeAmount) >= SWIPE_TRESHOLD) {
@@ -283,7 +268,12 @@ const Toast = (props: ToastProps) => {
       }}
     >
       {closeButton ? (
-        <button aria-label="Close toast" data-close-button onClick={deleteToast}>
+        <button
+          aria-label="Close toast"
+          data-disabled={disabled}
+          data-close-button
+          onClick={disabled ? undefined : deleteToast}
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="12"
@@ -393,7 +383,7 @@ const Toaster = (props: ToasterProps) => {
 
   const removeToast = React.useCallback(
     (toast: ToastT) => setToasts((toasts) => toasts.filter(({ id }) => id !== toast.id)),
-    []
+    [],
   );
 
   React.useEffect(() => {
@@ -420,8 +410,7 @@ const Toaster = (props: ToasterProps) => {
 
       if (
         event.code === 'Escape' &&
-        (document.activeElement === listRef.current ||
-          listRef.current.contains(document.activeElement))
+        (document.activeElement === listRef.current || listRef.current.contains(document.activeElement))
       ) {
         setExpanded(false);
       }
