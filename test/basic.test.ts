@@ -6,9 +6,8 @@ test.describe('basic behavior', async () => {
   })
 
   test('"Render a toast" btn should render a toast', async ({ page }) => {
-    const renderBtn = page.locator(`data-testid=render-btn`)
-    await renderBtn.click()
+    await page.getByTestId('render-btn').click()
 
-    expect(page.locator(`data-testid=toast`).isVisible)
+    await expect(page.getByTestId('toast')).toBeVisible()
   })
 })
