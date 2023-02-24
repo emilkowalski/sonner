@@ -8,7 +8,7 @@ export type PromiseData = {
   error: string | React.ReactNode;
 };
 
-export type PromiseT = () => Promise<any>;
+export type PromiseT = Promise<any> | (() => Promise<any>);
 
 export interface ToastT {
   id: number;
