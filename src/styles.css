@@ -240,7 +240,7 @@
   pointer-events: none;
 }
 
-[data-sonner-toast][data-expanded='true'] {
+[data-sonner-toast][data-mounted='true'][data-expanded='true'] {
   --y: translateY(calc(var(--lift) * var(--offset)));
   height: var(--initial-height);
 }
