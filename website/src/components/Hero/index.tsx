@@ -15,6 +15,7 @@ export const Hero = () => {
       <div className={styles.buttons}>
         <button
           data-primary=""
+          data-testid="render-btn"
           onClick={() => {
             toast('Sonner', {
               description: 'An opinionated toast component for React.',

@@ -226,6 +226,7 @@ const Toast = (props: ToastProps) => {
       data-invert={invert}
       data-swipe-out={swipeOut}
       data-expanded={Boolean(expanded || (expandByDefault && mounted))}
+      data-testid="toast"
       style={
         {
           '--index': index,
