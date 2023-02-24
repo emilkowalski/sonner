@@ -52,8 +52,7 @@
   flex-shrink: 0;
   font-family: inherit;
   box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.06), 0px 1px 0px 0px rgba(0, 0, 0, 0.08),
-    0px 2px 2px 0px rgba(0, 0, 0, 0.04), 0px 3px 3px 0px rgba(0, 0, 0, 0.02),
-    0px 4px 4px 0px rgba(0, 0, 0, 0.01);
+    0px 2px 2px 0px rgba(0, 0, 0, 0.04), 0px 3px 3px 0px rgba(0, 0, 0, 0.02), 0px 4px 4px 0px rgba(0, 0, 0, 0.01);
   position: relative;
   overflow: hidden;
   cursor: pointer;
@@ -73,8 +72,8 @@
 .button:focus-visible {
   outline: none;
   box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.06), 0px 1px 0px 0px rgba(0, 0, 0, 0.08),
-    0px 2px 2px 0px rgba(0, 0, 0, 0.04), 0px 3px 3px 0px rgba(0, 0, 0, 0.02),
-    0px 4px 4px 0px rgba(0, 0, 0, 0.01), 0 0 0 2px rgba(0, 0, 0, 0.15);
+    0px 2px 2px 0px rgba(0, 0, 0, 0.04), 0px 3px 3px 0px rgba(0, 0, 0, 0.02), 0px 4px 4px 0px rgba(0, 0, 0, 0.01),
+    0 0 0 2px rgba(0, 0, 0, 0.15);
 }
 
 .button:after {

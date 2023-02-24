@@ -31,13 +31,7 @@ export const Installation = () => {
           <MotionConfig transition={{ duration: 0.15 }}>
             <AnimatePresence initial={false} mode="wait">
               {copying ? (
-                <motion.div
-                  animate="visible"
-                  exit="hidden"
-                  initial="hidden"
-                  key="check"
-                  variants={variants}
-                >
+                <motion.div animate="visible" exit="hidden" initial="hidden" key="check" variants={variants}>
                   <svg
                     viewBox="0 0 24 24"
                     width="14"
@@ -53,13 +47,7 @@ export const Installation = () => {
                   </svg>
                 </motion.div>
               ) : (
-                <motion.div
-                  animate="visible"
-                  exit="hidden"
-                  initial="hidden"
-                  key="copy"
-                  variants={variants}
-                >
+                <motion.div animate="visible" exit="hidden" initial="hidden" key="copy" variants={variants}>
                   <svg
                     viewBox="0 0 24 24"
                     width="14"

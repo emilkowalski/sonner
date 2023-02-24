@@ -45,13 +45,7 @@ const theme = {
   ],
 };
 
-export const CodeBlock = ({
-  children,
-  initialHeight = 0,
-}: {
-  children: string;
-  initialHeight?: number;
-}) => {
+export const CodeBlock = ({ children, initialHeight = 0 }: { children: string; initialHeight?: number }) => {
   const [ref, bounds] = useMeasure();
   const [copying, setCopying] = React.useState<number>(0);
 
@@ -69,13 +63,7 @@ export const CodeBlock = ({
         <MotionConfig transition={{ duration: 0.15 }}>
           <AnimatePresence initial={false} mode="wait">
             {copying ? (
-              <motion.div
-                animate="visible"
-                exit="hidden"
-                initial="hidden"
-                key="check"
-                variants={variants}
-              >
+              <motion.div animate="visible" exit="hidden" initial="hidden" key="check" variants={variants}>
                 <svg
                   viewBox="0 0 24 24"
                   width="14"
@@ -91,13 +79,7 @@ export const CodeBlock = ({
                 </svg>
               </motion.div>
             ) : (
-              <motion.div
-                animate="visible"
-                exit="hidden"
-                initial="hidden"
-                key="copy"
-                variants={variants}
-              >
+              <motion.div animate="visible" exit="hidden" initial="hidden" key="copy" variants={variants}>
                 <svg
                   viewBox="0 0 24 24"
                   width="14"

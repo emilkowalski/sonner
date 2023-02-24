@@ -1,16 +1,9 @@
 import { toast } from 'sonner';
 import { CodeBlock } from '../CodeBlock';
 
-const positions = [
-  'top-left',
-  'top-center',
-  'top-right',
-  'bottom-left',
-  'bottom-center',
-  'bottom-right',
-] as const;
+const positions = ['top-left', 'top-center', 'top-right', 'bottom-left', 'bottom-center', 'bottom-right'] as const;
 
-export type Position = typeof positions[number];
+export type Position = (typeof positions)[number];
 
 export const Position = ({
   position: activePosition,
