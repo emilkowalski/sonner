@@ -115,7 +115,7 @@
 [data-sonner-toast][data-promise='true'] [data-icon] > svg {
   opacity: 0;
   transform: scale(0.8);
-  animation: fade-in 300ms ease forwards;
+  animation: sonner-fade-in 300ms ease forwards;
 }
 
 [data-sonner-toast] [data-icon] > * {
@@ -407,7 +407,7 @@
 }
 
 .sonner-loading-wrapper[data-visible='false'] {
-  animation: fade-out 0.2s ease forwards;
+  animation: sonner-fade-out 0.2s ease forwards;
 }
 
 .sonner-spinner {
@@ -419,7 +419,7 @@
 }
 
 .sonner-loading-bar {
-  animation: spin 1.2s linear infinite;
+  animation: sonner-spin 1.2s linear infinite;
   background: var(--gray11);
   border-radius: 6px;
   height: 8%;
@@ -490,7 +490,7 @@
   transform: rotate(330deg) translate(146%);
 }
 
-@keyframes fade-in {
+@keyframes sonner-fade-in {
   0% {
     opacity: 0;
     transform: scale(0.8);
@@ -501,7 +501,7 @@
   }
 }
 
-@keyframes fade-out {
+@keyframes sonner-fade-out {
   0% {
     opacity: 1;
     transform: scale(1);
@@ -512,7 +512,7 @@
   }
 }
 
-@keyframes spin {
+@keyframes sonner-spin {
   0% {
     opacity: 1;
   }
