@@ -320,7 +320,7 @@ const Toast = (props: ToastProps) => {
             {toast.description ? (
               <div
                 data-description=""
-                className={descriptionClassName + toast.descriptionClassName}
+                className={descriptionClassName + toastDescriptionClassname}
               >
                 {toast.description}
               </div>
@@ -359,6 +359,7 @@ const Toast = (props: ToastProps) => {
 
 interface ToastOptions {
   className?: string;
+  descriptionClassName?: string;
   style?: React.CSSProperties;
 }
 
@@ -482,6 +483,7 @@ const Toaster = (props: ToasterProps) => {
             toast={toast}
             duration={duration}
             className={toastOptions?.className}
+            descriptionClassName={toastOptions?.descriptionClassName}
             invert={invert}
             visibleToasts={visibleToasts}
             closeButton={closeButton}
