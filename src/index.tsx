@@ -43,6 +43,7 @@ interface ToastProps {
   style?: React.CSSProperties;
   duration?: number;
   className?: string;
+  descriptionClassName?: string;
 }
 
 const Toast = (props: ToastProps) => {
