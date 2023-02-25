@@ -132,7 +132,7 @@ Toasts can also be expanded by default through the `expand` prop. You can also c
 You can style your toasts globally with the `toastOptions` prop in the `Toaster` component.
 
 ```jsx
-<Toaster toastOptions={{ style: { background: 'red' }, className: 'my-toast' }} />
+<Toaster toastOptions={{ style: { background: 'red' }, className: 'my-toast', descriptionClassName: 'my-toast-description' }} />
 ```
 
 ### Styling for individual toast
@@ -143,6 +143,7 @@ toast('Event has been created', {
     background: 'red',
   },
   className: 'my-toast',
+  descriptionClassName: 'my-toast-description',
 });
 ```
 
