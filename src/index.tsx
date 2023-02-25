@@ -61,6 +61,7 @@ const Toast = (props: ToastProps) => {
     closeButton,
     style,
     className = '',
+    descriptionClassName = '',
     duration: durationFromToaster,
     position,
     expandByDefault,
@@ -77,6 +78,8 @@ const Toast = (props: ToastProps) => {
   const isVisible = index + 1 <= visibleToasts;
   const toastType = toast.type;
   const toastClassname = toast.className || '';
+  const toastDescriptionClassname = toast.descriptionClassName || '';
+
   // Height index is used to calculate the offset as it gets updated before the toast array, which means we can calculate the new layout faster.
   const heightIndex = React.useMemo(
     () => heights.findIndex((height) => height.toastId === toast.id) || 0,
@@ -314,7 +317,14 @@ const Toast = (props: ToastProps) => {
 
           <div data-content="">
             <div data-title="">{toast.title ?? promiseTitle}</div>
-            {toast.description ? <div data-description="">{toast.description}</div> : null}
+            {toast.description ? (
+              <div
+                data-description=""
+                className={descriptionClassName + toast.descriptionClassName}
+              >
+                {toast.description}
+              </div>
+              ) : null}
           </div>
           {toast.cancel ? (
             <button
