@@ -32,6 +32,7 @@ export interface ToastT {
   promiseData?: PromiseData;
   style?: React.CSSProperties;
   className?: string;
+  descriptionClassName?: string;
 }
 
 export type Position = 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right' | 'top-center' | 'bottom-center';
