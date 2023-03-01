@@ -19,6 +19,7 @@ export interface ToastT {
   invert?: boolean;
   description?: string;
   duration?: number;
+  delete?: boolean;
   important?: boolean;
   action?: {
     label: string;
