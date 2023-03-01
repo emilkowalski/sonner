@@ -1,17 +1,17 @@
 import React from 'react';
-import { ExternalToast, ToastT, PromiseData, PromiseT } from './types';
+import { ExternalToast, ToastT, PromiseData, PromiseT, ToastToDismiss } from './types';
 
 let toastsCounter = 0;
 
 class Observer {
-  subscribers: Array<(toast: ExternalToast) => void>;
+  subscribers: Array<(toast: ExternalToast | ToastToDismiss) => void>;
 
   constructor() {
     this.subscribers = [];
   }
 
   // We use arrow functions to maintain the correct `this` reference
-  subscribe = (subscriber: (toast: ToastT) => void) => {
+  subscribe = (subscriber: (toast: ToastT | ToastToDismiss) => void) => {
     this.subscribers.push(subscriber);
 
     return () => {
@@ -24,20 +24,33 @@ class Observer {
     this.subscribers.forEach((subscriber) => subscriber(data));
   };
 
+  dismiss = (id: number) => {
+    this.subscribers.forEach((subscriber) => subscriber({ id, dismiss: true }));
+    return id;
+  };
+
   message = (message: string, data?: ExternalToast) => {
-    this.publish({ ...data, id: toastsCounter++, title: message });
+    const id = toastsCounter++;
+    this.publish({ ...data, id, title: message });
+    return id;
   };
 
   error = (message: string, data?: ExternalToast) => {
-    this.publish({ ...data, id: toastsCounter++, type: 'error', title: message });
+    const id = toastsCounter++;
+    this.publish({ ...data, id, type: 'error', title: message });
+    return id;
   };
 
   success = (message: string, data?: ExternalToast) => {
-    this.publish({ ...data, id: toastsCounter++, type: 'success', title: message });
+    const id = toastsCounter++;
+    this.publish({ ...data, id, type: 'success', title: message });
+    return id;
   };
 
   promise = (promise: PromiseT, data?: PromiseData) => {
-    this.publish({ promiseData: data, promise, id: toastsCounter++ });
+    const id = toastsCounter++;
+    this.publish({ promiseData: data, promise, id });
+    return id;
   };
 
   // We can't provide the toast we just created as a prop as we didn't creat it yet, so we can create a default toast object, I just don't know how to use function in argument when calling()?
@@ -51,11 +64,13 @@ export const ToastState = new Observer();
 
 // bind this to the toast function
 const toastFunction = (message: string, data?: ExternalToast) => {
+  const id = toastsCounter++;
   ToastState.publish({
     title: message,
     ...data,
-    id: toastsCounter++,
+    id,
   });
+  return id;
 };
 
 const basicToast = toastFunction;
@@ -67,4 +82,5 @@ export const toast = Object.assign(basicToast, {
   custom: ToastState.custom,
   message: ToastState.message,
   promise: ToastState.promise,
+  dismiss: ToastState.dismiss,
 });
