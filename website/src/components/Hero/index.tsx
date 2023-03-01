@@ -14,17 +14,6 @@ export const Hero = () => {
       <p style={{ marginTop: 0, fontSize: 18 }}>An opinionated toast component for React.</p>
       <div className={styles.buttons}>
         <button
-          onClick={() => {
-            const toastId = toast('hello');
-            console.log(toastId);
-            setTimeout(() => {
-              toast.dismiss(toastId);
-            }, 200);
-          }}
-        >
-          dismiss
-        </button>
-        <button
           data-primary=""
           onClick={() => {
             toast('Sonner', {

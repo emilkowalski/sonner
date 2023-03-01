@@ -213,7 +213,7 @@ const Toast = (props: ToastProps) => {
         return null;
     }
   }, [toast.promiseData, promiseStatus]);
-  console.log(toast.delete);
+
   return (
     <li
       aria-live={toast.important ? 'assertive' : 'polite'}
@@ -414,7 +414,7 @@ const Toaster = (props: ToasterProps) => {
   React.useEffect(() => {
     return ToastState.subscribe((toast) => {
       if ((toast as ToastToDismiss).dismiss) {
-        setToasts((toasts) => toasts.map((t) => (t.id === (toast as ToastToDismiss).id ? { ...t, delete: true } : t)));
+        setToasts((toasts) => toasts.map((t) => (t.id === toast.id ? { ...t, delete: true } : t)));
         return;
       }
 
