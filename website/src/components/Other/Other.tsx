@@ -67,7 +67,7 @@ export const Other = ({
         ))}
       </div>
       <CodeBlock>
-        {`${activeType.snippet}
+        {`${activeType.snippet || ''}
 
 // ...
 
