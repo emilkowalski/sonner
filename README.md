@@ -132,7 +132,9 @@ Toasts can also be expanded by default through the `expand` prop. You can also c
 You can style your toasts globally with the `toastOptions` prop in the `Toaster` component.
 
 ```jsx
-<Toaster toastOptions={{ style: { background: 'red' }, className: 'my-toast', descriptionClassName: 'my-toast-description' }} />
+<Toaster
+  toastOptions={{ style: { background: 'red' }, className: 'my-toast', descriptionClassName: 'my-toast-description' }}
+/>
 ```
 
 ### Styling for individual toast
@@ -169,6 +171,16 @@ Offset from the edges of the screen.
 
 ```jsx
 <Toaster offset="80px" />
+```
+
+### Programmatically remove toast
+
+To remove a toast programmatically use `toast.dismiss(id)`.
+
+```jsx
+const toastId = toast('Event has been created');
+
+toast.dismiss(toastId);
 ```
 
 ## Keyboard focus

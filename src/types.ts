@@ -19,6 +19,7 @@ export interface ToastT {
   invert?: boolean;
   description?: string;
   duration?: number;
+  delete?: boolean;
   important?: boolean;
   action?: {
     label: string;
@@ -48,5 +49,10 @@ export enum SwipeStateTypes {
 }
 
 export type Theme = 'light' | 'dark';
+
+export interface ToastToDismiss {
+  id: number;
+  dismiss: boolean;
+}
 
 export type ExternalToast = Omit<ToastT, 'id' | 'type' | 'title'>;

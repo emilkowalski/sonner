@@ -4,7 +4,7 @@ import React from 'react';
 
 import './styles.css';
 import { getAsset, Loader } from './assets';
-import { HeightT, Position, ToastT } from './types';
+import { HeightT, Position, ToastT, ToastToDismiss } from './types';
 import { ToastState, toast } from './state';
 
 // Visible toasts amount
@@ -195,6 +195,12 @@ const Toast = (props: ToastProps) => {
     }
   }, [setHeights, toast.id]);
 
+  React.useEffect(() => {
+    if (toast.delete) {
+      deleteToast();
+    }
+  }, [toast.delete]);
+
   const promiseTitle = React.useMemo(() => {
     switch (promiseStatus) {
       case 'loading':
@@ -318,13 +324,10 @@ const Toast = (props: ToastProps) => {
           <div data-content="">
             <div data-title="">{toast.title ?? promiseTitle}</div>
             {toast.description ? (
-              <div
-                data-description=""
-                className={descriptionClassName + toastDescriptionClassname}
-              >
+              <div data-description="" className={descriptionClassName + toastDescriptionClassname}>
                 {toast.description}
               </div>
-              ) : null}
+            ) : null}
           </div>
           {toast.cancel ? (
             <button
@@ -410,6 +413,11 @@ const Toaster = (props: ToasterProps) => {
 
   React.useEffect(() => {
     return ToastState.subscribe((toast) => {
+      if ((toast as ToastToDismiss).dismiss) {
+        setToasts((toasts) => toasts.map((t) => (t.id === toast.id ? { ...t, delete: true } : t)));
+        return;
+      }
+
       setToasts((toasts) => [toast, ...toasts]);
     });
   }, []);
