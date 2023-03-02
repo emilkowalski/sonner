@@ -223,6 +223,7 @@ const Toast = (props: ToastProps) => {
       ref={toastRef}
       className={className + ' ' + toastClassname}
       data-sonner-toast=""
+      data-styled={!Boolean(toast.jsx)}
       data-mounted={mounted}
       data-promise={Boolean(toast.promise)}
       data-removed={removed}
