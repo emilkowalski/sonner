@@ -8,9 +8,7 @@ export const Types = () => {
   return (
     <div>
       <h2>Types</h2>
-      <p>
-        You can customize the type of toast you want to render, and pass an options object as the second argument.
-      </p>
+      <p>You can customize the type of toast you want to render, and pass an options object as the second argument.</p>
       <div className="buttons">
         {allTypes.map((type) => (
           <button
@@ -91,7 +89,7 @@ toast.promise(promise, {
   },
   {
     name: 'Custom',
-    snippet: `toast.custom(() => <div>This is a custom component</div>)`,
-    action: () => toast.custom(() => <div>This is a custom component</div>),
+    snippet: `toast(<div>A custom toast with default styling</div>)`,
+    action: () => toast(<div>A custom toast with default styling</div>),
   },
 ];

@@ -311,8 +311,8 @@ const Toast = (props: ToastProps) => {
           </svg>
         </button>
       ) : null}
-      {toast.jsx ? (
-        toast.jsx
+      {toast.jsx || React.isValidElement(toast.title) ? (
+        toast.jsx || toast.title
       ) : (
         <>
           {toastType || toast.icon || toast.promise ? (

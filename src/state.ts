@@ -29,19 +29,19 @@ class Observer {
     return id;
   };
 
-  message = (message: string, data?: ExternalToast) => {
+  message = (message: string | React.ReactNode, data?: ExternalToast) => {
     const id = toastsCounter++;
     this.publish({ ...data, id, title: message });
     return id;
   };
 
-  error = (message: string, data?: ExternalToast) => {
+  error = (message: string | React.ReactNode, data?: ExternalToast) => {
     const id = toastsCounter++;
     this.publish({ ...data, id, type: 'error', title: message });
     return id;
   };
 
-  success = (message: string, data?: ExternalToast) => {
+  success = (message: string | React.ReactNode, data?: ExternalToast) => {
     const id = toastsCounter++;
     this.publish({ ...data, id, type: 'success', title: message });
     return id;
@@ -63,7 +63,7 @@ class Observer {
 export const ToastState = new Observer();
 
 // bind this to the toast function
-const toastFunction = (message: string, data?: ExternalToast) => {
+const toastFunction = (message: string | React.ReactNode, data?: ExternalToast) => {
   const id = toastsCounter++;
   ToastState.publish({
     title: message,

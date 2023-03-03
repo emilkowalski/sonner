@@ -12,7 +12,7 @@ export type PromiseT = Promise<any> | (() => Promise<any>);
 
 export interface ToastT {
   id: number;
-  title?: string;
+  title?: string | React.ReactNode;
   type?: ToastTypes;
   icon?: React.ReactNode;
   jsx?: React.ReactNode;
