@@ -49,7 +49,7 @@ class Observer {
 
   promise = (promise: PromiseT, data?: PromiseData) => {
     const id = toastsCounter++;
-    this.publish({ promiseData: data, promise, id });
+    this.publish({ ...data, promise, id });
     return id;
   };
 

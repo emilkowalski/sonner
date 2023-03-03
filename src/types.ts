@@ -2,13 +2,13 @@ import React from 'react';
 
 export type ToastTypes = 'normal' | 'action' | 'success' | 'error' | 'loading';
 
-export type PromiseData = {
-  loading: string;
+export type PromiseT = Promise<any> | (() => Promise<any>);
+
+export type PromiseData = ExternalToast & {
+  loading: string | React.ReactNode;
   success: string | React.ReactNode;
   error: string | React.ReactNode;
 };
-
-export type PromiseT = Promise<any> | (() => Promise<any>);
 
 export interface ToastT {
   id: number;
@@ -30,7 +30,6 @@ export interface ToastT {
     onClick?: () => void;
   };
   promise?: PromiseT;
-  promiseData?: PromiseData;
   style?: React.CSSProperties;
   className?: string;
   descriptionClassName?: string;
