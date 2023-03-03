@@ -4,7 +4,7 @@ import React from 'react';
 
 import './styles.css';
 import { getAsset, Loader } from './assets';
-import { HeightT, Position, ToastT, ToastToDismiss } from './types';
+import { HeightT, Position, PromiseData, ToastT, ToastToDismiss } from './types';
 import { ToastState, toast } from './state';
 
 // Visible toasts amount
@@ -204,15 +204,15 @@ const Toast = (props: ToastProps) => {
   const promiseTitle = React.useMemo(() => {
     switch (promiseStatus) {
       case 'loading':
-        return toast.promiseData.loading;
+        return (toast as PromiseData).loading;
       case 'success':
-        return toast.promiseData.success;
+        return (toast as PromiseData).success;
       case 'error':
-        return toast.promiseData.error;
+        return (toast as PromiseData).error;
       default:
         return null;
     }
-  }, [toast.promiseData, promiseStatus]);
+  }, [promiseStatus]);
 
   return (
     <li
