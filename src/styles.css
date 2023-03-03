@@ -247,7 +247,7 @@
   transition: opacity 400ms;
 }
 
-[data-sonner-toast][data-expanded='false'][data-front='false'] > * {
+[data-sonner-toast][data-expanded='false'][data-front='false'][data-custom='false'] > * {
   opacity: 0;
 }
 

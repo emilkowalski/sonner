@@ -288,7 +288,7 @@ const Toast = (props: ToastProps) => {
         toastRef.current?.style.setProperty('--swipe-amount', `${yPosition}px`);
       }}
     >
-      {closeButton ? (
+      {closeButton && !toast.jsx ? (
         <button
           aria-label="Close toast"
           data-disabled={disabled}

@@ -1,0 +1,45 @@
+.headless {
+  padding: 16px;
+  width: 356px;
+  box-sizing: border-box;
+  border-radius: 8px;
+  background: var(--gray1);
+  border: 1px solid var(--gray4);
+  position: relative;
+}
+
+.headlessDescription {
+  margin: 0;
+  color: var(--gray10);
+  font-size: 14px;
+  line-height: 1;
+}
+
+.headlessTitle {
+  font-size: 14px;
+  margin: 0 0 8px;
+  color: var(--gray12);
+  font-weight: 500;
+  line-height: 1;
+}
+
+.headlessClose {
+  position: absolute;
+  cursor: pointer;
+  top: 6px;
+  height: 24px;
+  width: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  right: 6px;
+  color: var(--gray10);
+  padding: 0;
+  background: transparent;
+  border: none;
+  transition: color 200ms;
+}
+
+.headlessClose:hover {
+  color: var(--gray12);
+}

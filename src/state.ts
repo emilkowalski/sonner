@@ -54,9 +54,9 @@ class Observer {
   };
 
   // We can't provide the toast we just created as a prop as we didn't creat it yet, so we can create a default toast object, I just don't know how to use function in argument when calling()?
-  custom = (jsx: (id: number) => React.ReactElement) => {
+  custom = (jsx: (id: number) => React.ReactElement, data?: ExternalToast) => {
     const id = toastsCounter++;
-    this.publish({ jsx: jsx(id), id });
+    this.publish({ jsx: jsx(id), id, ...data });
   };
 }
 
