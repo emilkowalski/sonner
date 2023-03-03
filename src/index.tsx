@@ -204,11 +204,11 @@ const Toast = (props: ToastProps) => {
   const promiseTitle = React.useMemo(() => {
     switch (promiseStatus) {
       case 'loading':
-        return (toast as PromiseData).loading;
+        return (toast as unknown as PromiseData).loading;
       case 'success':
-        return (toast as PromiseData).success;
+        return (toast as unknown as PromiseData).success;
       case 'error':
-        return (toast as PromiseData).error;
+        return (toast as unknown as PromiseData).error;
       default:
         return null;
     }
