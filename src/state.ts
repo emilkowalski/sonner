@@ -29,19 +29,19 @@ class Observer {
     return id;
   };
 
-  message = (message: string, data?: ExternalToast) => {
+  message = (message: string | React.ReactNode, data?: ExternalToast) => {
     const id = toastsCounter++;
     this.publish({ ...data, id, title: message });
     return id;
   };
 
-  error = (message: string, data?: ExternalToast) => {
+  error = (message: string | React.ReactNode, data?: ExternalToast) => {
     const id = toastsCounter++;
     this.publish({ ...data, id, type: 'error', title: message });
     return id;
   };
 
-  success = (message: string, data?: ExternalToast) => {
+  success = (message: string | React.ReactNode, data?: ExternalToast) => {
     const id = toastsCounter++;
     this.publish({ ...data, id, type: 'success', title: message });
     return id;
@@ -54,16 +54,16 @@ class Observer {
   };
 
   // We can't provide the toast we just created as a prop as we didn't creat it yet, so we can create a default toast object, I just don't know how to use function in argument when calling()?
-  custom = (jsx: (id: number) => React.ReactElement) => {
+  custom = (jsx: (id: number) => React.ReactElement, data?: ExternalToast) => {
     const id = toastsCounter++;
-    this.publish({ jsx: jsx(id), id });
+    this.publish({ jsx: jsx(id), id, ...data });
   };
 }
 
 export const ToastState = new Observer();
 
 // bind this to the toast function
-const toastFunction = (message: string, data?: ExternalToast) => {
+const toastFunction = (message: string | React.ReactNode, data?: ExternalToast) => {
   const id = toastsCounter++;
   ToastState.publish({
     title: message,

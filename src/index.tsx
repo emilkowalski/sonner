@@ -223,6 +223,7 @@ const Toast = (props: ToastProps) => {
       ref={toastRef}
       className={className + ' ' + toastClassname}
       data-sonner-toast=""
+      data-styled={!Boolean(toast.jsx)}
       data-mounted={mounted}
       data-promise={Boolean(toast.promise)}
       data-removed={removed}
@@ -287,7 +288,7 @@ const Toast = (props: ToastProps) => {
         toastRef.current?.style.setProperty('--swipe-amount', `${yPosition}px`);
       }}
     >
-      {closeButton ? (
+      {closeButton && !toast.jsx ? (
         <button
           aria-label="Close toast"
           data-disabled={disabled}
@@ -310,8 +311,8 @@ const Toast = (props: ToastProps) => {
           </svg>
         </button>
       ) : null}
-      {toast.jsx ? (
-        toast.jsx
+      {toast.jsx || React.isValidElement(toast.title) ? (
+        toast.jsx || toast.title
       ) : (
         <>
           {toastType || toast.icon || toast.promise ? (

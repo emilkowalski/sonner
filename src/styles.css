@@ -49,12 +49,18 @@
   --y: translateY(100%);
   --lift-amount: calc(var(--lift) * var(--gap));
   z-index: var(--z-index);
-  display: flex;
-  align-items: center;
-  gap: 6px;
   position: absolute;
   opacity: 0;
   transform: var(--y);
+  /* https://stackoverflow.com/questions/48124372/pointermove-event-not-working-with-touch-why-not */
+  touch-action: none;
+  will-change: transform, opacity, height;
+  transition: transform 400ms, opacity 400ms, height 400ms, box-shadow 200ms;
+  box-sizing: border-box;
+  outline: none;
+}
+
+[data-sonner-toast][data-styled='true'] {
   padding: 16px;
   background: var(--normal-bg);
   border: 1px solid var(--normal-border);
@@ -63,12 +69,9 @@
   box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
   width: var(--width);
   font-size: 13px;
-  /* https://stackoverflow.com/questions/48124372/pointermove-event-not-working-with-touch-why-not */
-  touch-action: none;
-  will-change: transform, opacity, height;
-  transition: transform 400ms, opacity 400ms, height 400ms, box-shadow 200ms;
-  box-sizing: border-box;
-  outline: none;
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
 [data-sonner-toast]:focus-visible {
@@ -244,7 +247,7 @@
   transition: opacity 400ms;
 }
 
-[data-sonner-toast][data-expanded='false'][data-front='false'] > * {
+[data-sonner-toast][data-expanded='false'][data-front='false'][data-styled='true'] > * {
   opacity: 0;
 }
 

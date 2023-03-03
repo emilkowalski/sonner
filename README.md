@@ -90,15 +90,27 @@ toast.promise(() => new Promise((resolve) => setTimeout(resolve, 2000)), {
 });
 ```
 
-### Custom
+### Custom JSX
 
-Render custom JSX.
+You can pass jsx as the first argument instead of a string to render custom jsx while maintaining default styling. You can use the headless version below for a custom, unstyled toast.
 
 ```jsx
-toast.custom(() => <div>This is a custom component</div>);
+toast(<div>A custom toast with default styling</div>);
 ```
 
 ## Customization
+
+### Headless
+
+You can use `toast.custom` to render an unstyled toast with custom jsx while maintaining the functionality.
+
+```jsx
+toast.custom((t) => (
+  <div>
+    This is a custom component <button onClick={() => toast.dismiss(t)}>close</button>
+  </div>
+));
+```
 
 ### Theme
 
@@ -189,4 +201,8 @@ You can focus on the toast area by pressing ⌥/alt + T. You can override it by 
 
 ```jsx
 <Toaster hotkey={['KeyC']} />
+```
+
+```
+
 ```
