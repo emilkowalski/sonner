@@ -202,13 +202,17 @@ const Toast = (props: ToastProps) => {
   }, [toast.delete]);
 
   const promiseTitle = React.useMemo(() => {
+    const isPromise = (toast: ToastT): toast is PromiseData & { id: number } => Boolean(toast.promise);
+
+    if (!isPromise(toast)) return null;
+
     switch (promiseStatus) {
       case 'loading':
-        return (toast as unknown as PromiseData).loading;
+        return toast.loading;
       case 'success':
-        return (toast as unknown as PromiseData).success;
+        return toast.success;
       case 'error':
-        return (toast as unknown as PromiseData).error;
+        return toast.error;
       default:
         return null;
     }
