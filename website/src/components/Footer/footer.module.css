@@ -26,10 +26,3 @@
 .p a:hover {
   text-decoration: underline;
 }
-
-@media (max-width: 600px) {
-  .wrapper {
-    margin-top: 128px;
-    padding: 16px 0;
-  }
-}

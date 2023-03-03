@@ -131,6 +131,6 @@ code {
 
 @media (max-width: 600px) {
   .buttons {
-    mask-image: linear-gradient(to right, transparent, black 16px, black calc(100% - 16px), transparent);
+    mask-image: linear-gradient(to right, transparent, black 24px, black calc(100% - 24px), transparent);
   }
 }
