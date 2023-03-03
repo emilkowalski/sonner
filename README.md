@@ -104,12 +104,13 @@ toast(<div>A custom toast with default styling</div>);
 
 You can use `toast.custom` to render an unstyled toast with custom jsx while maintaining the functionality.
 
-````jsx
+```jsx
 toast.custom((t) => (
   <div>
     This is a custom component <button onClick={() => toast.dismiss(t)}>close</button>
   </div>
 ));
+```
 
 ### Theme
 
@@ -117,7 +118,7 @@ You can change the theme using the `theme` prop. Default theme is light.
 
 ```jsx
 <Toaster theme="dark" />
-````
+```
 
 ### Position
 
@@ -200,4 +201,8 @@ You can focus on the toast area by pressing ⌥/alt + T. You can override it by 
 
 ```jsx
 <Toaster hotkey={['KeyC']} />
+```
+
+```
+
 ```

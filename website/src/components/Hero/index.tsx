@@ -16,12 +16,9 @@ export const Hero = () => {
         <button
           data-primary=""
           onClick={() => {
-            toast.custom((t) => (
-              <div>
-                <h1>Custom toast</h1>
-                <button onClick={() => toast.dismiss(t)}>Dismiss</button>
-              </div>
-            ));
+            toast('Sonner', {
+              description: 'An opinionated toast component for React.',
+            });
           }}
           className={styles.button}
         >
