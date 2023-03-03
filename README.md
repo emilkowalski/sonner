@@ -90,12 +90,16 @@ toast.promise(() => new Promise((resolve) => setTimeout(resolve, 2000)), {
 });
 ```
 
-### Custom
+### Headless
 
-Render custom JSX.
+You can use `toast.custom` to render an unstyled toast with custom jsx while maintaining the functionality.
 
 ```jsx
-toast.custom(() => <div>This is a custom component</div>);
+toast.custom((t) => (
+  <div>
+    This is a custom component <button onClick={() => toast.dismiss(t)}>close</button>
+  </div>
+));
 ```
 
 ## Customization
