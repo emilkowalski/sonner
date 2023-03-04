@@ -71,7 +71,7 @@ export const Other = ({
     [setRichColors],
   );
 
-  const [activeType, setActiveType] = React.useState({} as (typeof allTypes)[0]);
+  const [activeType, setActiveType] = React.useState(allTypes[0]);
 
   const richColorsActive = activeType?.name?.includes('Rich');
   const closeButtonActive = activeType?.name?.includes('Close');
