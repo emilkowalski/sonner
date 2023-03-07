@@ -120,35 +120,26 @@ const Toast = (props: ToastProps) => {
   React.useEffect(() => {
     if (isPromise(toast)) {
       setPromiseStatus('loading');
+      const promiseHandler = (promise: Promise<any>) => {
+        promise
+          .then((data) => {
+            if (toast.success && typeof toast.success === 'function') {
+              setPromiseResult(toast.success(data));
+            }
+            setPromiseStatus('success');
+          })
+          .catch((error) => {
+            setPromiseStatus('error');
+            if (toast.error && typeof toast.error === 'function') {
+              setPromiseResult(toast.error(error));
+            }
+          });
+      };
+	  
       if (toast.promise instanceof Promise) {
-        toast.promise
-          .then((data) => {
-            if (toast.success && typeof toast.success === 'function') {
-              setPromiseResult(toast.success(data));
-            }
-            setPromiseStatus('success');
-          })
-          .catch((error) => {
-            setPromiseStatus('error');
-            if (toast.error && typeof toast.error === 'function') {
-              setPromiseResult(toast.error(error));
-            }
-          });
+        promiseHandler(toast.promise);
       } else if (typeof toast.promise === 'function') {
-        toast
-          .promise()
-          .then((data) => {
-            if (toast.success && typeof toast.success === 'function') {
-              setPromiseResult(toast.success(data));
-            }
-            setPromiseStatus('success');
-          })
-          .catch((error) => {
-            setPromiseStatus('error');
-            if (toast.error && typeof toast.error === 'function') {
-              setPromiseResult(toast.error(error));
-            }
-          });
+        promiseHandler(toast.promise());
       }
     }
   }, [toast]);
