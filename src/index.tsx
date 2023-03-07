@@ -4,7 +4,7 @@ import React from 'react';
 
 import './styles.css';
 import { getAsset, Loader } from './assets';
-import { HeightT, Position, PromiseData, ToastT, ToastToDismiss } from './types';
+import { HeightT, Position, PromiseData, ToastT, ToastToDismiss, ExternalToast } from './types';
 import { ToastState, toast } from './state';
 
 // Visible toasts amount
@@ -515,4 +515,4 @@ const Toaster = (props: ToasterProps) => {
     </div>
   );
 };
-export { toast, Toaster };
+export { toast, Toaster, ToastT, ExternalToast };
