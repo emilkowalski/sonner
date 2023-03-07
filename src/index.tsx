@@ -4,7 +4,7 @@ import React from 'react';
 
 import './styles.css';
 import { getAsset, Loader } from './assets';
-import { HeightT, Position, PromiseData, ToastT, ToastToDismiss } from './types';
+import { HeightT, Position, PromiseData, ToastT, ToastToDismiss, ExternalToast } from './types';
 import { ToastState, toast } from './state';
 
 // Visible toasts amount
@@ -25,6 +25,8 @@ const GAP = 14;
 const SWIPE_TRESHOLD = 20;
 
 const TIME_BEFORE_UNMOUNT = 200;
+
+const isPromise = (toast: ToastT): toast is PromiseData & { id: number } => Boolean(toast.promise);
 
 interface ToastProps {
   toast: ToastT;
@@ -73,6 +75,7 @@ const Toast = (props: ToastProps) => {
   const [promiseStatus, setPromiseStatus] = React.useState<'loading' | 'success' | 'error' | null>(null);
   const [offsetBeforeRemove, setOffsetBeforeRemove] = React.useState(0);
   const [initialHeight, setInitialHeight] = React.useState(0);
+  const [promiseResult, setPromiseResult] = React.useState<React.ReactNode | string>(null);
   const toastRef = React.useRef<HTMLLIElement>(null);
   const isFront = index === 0;
   const isVisible = index + 1 <= visibleToasts;
@@ -115,25 +118,28 @@ const Toast = (props: ToastProps) => {
   }, []);
 
   React.useEffect(() => {
-    if (toast.promise) {
+    if (isPromise(toast)) {
       setPromiseStatus('loading');
+      const promiseHandler = (promise: Promise<any>) => {
+        promise
+          .then((data) => {
+            if (toast.success && typeof toast.success === 'function') {
+              setPromiseResult(toast.success(data));
+            }
+            setPromiseStatus('success');
+          })
+          .catch((error) => {
+            setPromiseStatus('error');
+            if (toast.error && typeof toast.error === 'function') {
+              setPromiseResult(toast.error(error));
+            }
+          });
+      };
+	  
       if (toast.promise instanceof Promise) {
-        toast.promise
-          .then(() => {
-            setPromiseStatus('success');
-          })
-          .catch(() => {
-            setPromiseStatus('error');
-          });
+        promiseHandler(toast.promise);
       } else if (typeof toast.promise === 'function') {
-        toast
-          .promise()
-          .then(() => {
-            setPromiseStatus('success');
-          })
-          .catch(() => {
-            setPromiseStatus('error');
-          });
+        promiseHandler(toast.promise());
       }
     }
   }, [toast]);
@@ -202,21 +208,19 @@ const Toast = (props: ToastProps) => {
   }, [toast.delete]);
 
   const promiseTitle = React.useMemo(() => {
-    const isPromise = (toast: ToastT): toast is PromiseData & { id: number } => Boolean(toast.promise);
-
     if (!isPromise(toast)) return null;
 
     switch (promiseStatus) {
       case 'loading':
         return toast.loading;
       case 'success':
-        return toast.success;
+        return typeof toast.success === 'function' ? promiseResult : toast.success;
       case 'error':
-        return toast.error;
+        return typeof toast.error === 'function' ? promiseResult : toast.error;
       default:
         return null;
     }
-  }, [promiseStatus]);
+  }, [promiseStatus, promiseResult]);
 
   return (
     <li
@@ -237,7 +241,7 @@ const Toast = (props: ToastProps) => {
       data-index={index}
       data-front={isFront}
       data-swiping={swiping}
-      data-type={toastType}
+      data-type={promiseStatus !== 'loading' ? promiseStatus : toastType}
       data-invert={invert}
       data-swipe-out={swipeOut}
       data-expanded={Boolean(expanded || (expandByDefault && mounted))}
@@ -327,7 +331,9 @@ const Toast = (props: ToastProps) => {
           ) : null}
 
           <div data-content="">
-            <div data-title="">{toast.title ?? promiseTitle}</div>
+            <div data-title="">
+              <>{toast.title ?? promiseTitle}</>
+            </div>
             {toast.description ? (
               <div data-description="" className={descriptionClassName + toastDescriptionClassname}>
                 {toast.description}
@@ -515,4 +521,4 @@ const Toaster = (props: ToasterProps) => {
     </div>
   );
 };
-export { toast, Toaster };
+export { toast, Toaster, ToastT, ExternalToast };

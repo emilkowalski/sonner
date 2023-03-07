@@ -90,6 +90,18 @@ toast.promise(() => new Promise((resolve) => setTimeout(resolve, 2000)), {
 });
 ```
 
+You can pass a function to the success/error messages to incorporate the result/error of the promise.
+
+```jsx
+toast.promise(promise, {
+  loading: 'Loading...',
+  success: (data) => {
+    return `${data.name} has been added!`;
+  },
+  error: 'Error',
+});
+```
+
 ### Custom JSX
 
 You can pass jsx as the first argument instead of a string to render custom jsx while maintaining default styling. You can use the headless version below for a custom, unstyled toast.

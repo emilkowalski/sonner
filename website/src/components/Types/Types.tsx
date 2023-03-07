@@ -2,6 +2,8 @@ import React from 'react';
 import { toast } from 'sonner';
 import { CodeBlock } from '../CodeBlock';
 
+const promiseCode = '`${data.name} toast has been added`';
+
 export const Types = () => {
   const [activeType, setActiveType] = React.useState(allTypes[0]);
 
@@ -76,16 +78,28 @@ const allTypes = [
     snippet: `const promise = () => new Promise((resolve) => setTimeout(resolve, 2000));
 
 toast.promise(promise, {
-  loading: 'Loading',
-  success: 'Success',
+  loading: 'Loading...',
+  success: (data) => {
+    return ${promiseCode};
+  },
   error: 'Error',
 });`,
     action: () =>
-      toast.promise(() => new Promise((resolve) => setTimeout(resolve, 2000)), {
-        loading: 'Loading',
-        success: 'Success',
-        error: 'Error',
-      }),
+      toast.promise(
+        () =>
+          new Promise((resolve) => {
+            setTimeout(() => {
+              resolve({ name: 'Sonner' });
+            }, 2000);
+          }),
+        {
+          loading: 'Loading...',
+          success: (data) => {
+            return `${data.name} toast has been added`;
+          },
+          error: 'Error',
+        },
+      ),
   },
   {
     name: 'Custom',

@@ -6,8 +6,8 @@ export type PromiseT = Promise<any> | (() => Promise<any>);
 
 export type PromiseData = ExternalToast & {
   loading: string | React.ReactNode;
-  success: string | React.ReactNode;
-  error: string | React.ReactNode;
+  success: string | React.ReactNode | ((data: any) => React.ReactNode | string);
+  error: string | React.ReactNode | ((error: any) => React.ReactNode | string);
 };
 
 export interface ToastT {
