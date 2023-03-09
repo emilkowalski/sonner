@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import ReactDOM from 'react-dom';
 
 import './styles.css';
 import { getAsset, Loader } from './assets';
@@ -135,7 +136,7 @@ const Toast = (props: ToastProps) => {
             }
           });
       };
-	  
+
       if (toast.promise instanceof Promise) {
         promiseHandler(toast.promise);
       } else if (typeof toast.promise === 'function') {
@@ -241,7 +242,7 @@ const Toast = (props: ToastProps) => {
       data-index={index}
       data-front={isFront}
       data-swiping={swiping}
-      data-type={promiseStatus !== 'loading' ? promiseStatus : toastType}
+      data-type={promiseStatus !== 'loading' && promiseStatus ? promiseStatus : toastType}
       data-invert={invert}
       data-swipe-out={swipeOut}
       data-expanded={Boolean(expanded || (expandByDefault && mounted))}
@@ -429,7 +430,10 @@ const Toaster = (props: ToasterProps) => {
         return;
       }
 
-      setToasts((toasts) => [toast, ...toasts]);
+      // Don't batch update toasts to prevent wrong calculations
+      ReactDOM.flushSync(() => {
+        setToasts((toasts) => [toast, ...toasts]);
+      });
     });
   }, []);
 

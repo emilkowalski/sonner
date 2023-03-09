@@ -40,7 +40,7 @@ Most basic toast. You can customize it (and any other type) by passing an option
 toast('Event has been created');
 ```
 
-With icon and description:
+With custom icon and description:
 
 ```jsx
 toast('Event has been created', {

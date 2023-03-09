@@ -118,11 +118,16 @@
 [data-sonner-toast][data-promise='true'] [data-icon] > svg {
   opacity: 0;
   transform: scale(0.8);
+  transform-origin: center;
   animation: sonner-fade-in 300ms ease forwards;
 }
 
 [data-sonner-toast] [data-icon] > * {
   flex-shrink: 0;
+}
+
+[data-sonner-toast] [data-icon] svg {
+  margin-left: -1px;
 }
 
 [data-sonner-toast] [data-content] {
@@ -410,6 +415,7 @@
 }
 
 .sonner-loading-wrapper[data-visible='false'] {
+  transform-origin: center;
   animation: sonner-fade-out 0.2s ease forwards;
 }
 
