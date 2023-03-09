@@ -242,7 +242,7 @@ const Toast = (props: ToastProps) => {
       data-index={index}
       data-front={isFront}
       data-swiping={swiping}
-      data-type={promiseStatus !== 'loading' ? promiseStatus : toastType}
+      data-type={promiseStatus !== 'loading' && promiseStatus ? promiseStatus : toastType}
       data-invert={invert}
       data-swipe-out={swipeOut}
       data-expanded={Boolean(expanded || (expandByDefault && mounted))}

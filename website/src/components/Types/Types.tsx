@@ -90,7 +90,7 @@ toast.promise(promise, {
           new Promise((resolve) => {
             setTimeout(() => {
               resolve({ name: 'Sonner' });
-            }, 2000);
+            }, 5000);
           }),
         {
           loading: 'Loading...',
