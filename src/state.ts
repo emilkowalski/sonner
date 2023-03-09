@@ -21,9 +21,7 @@ class Observer {
   };
 
   publish = (data: ToastT) => {
-    setTimeout(() => {
-      this.subscribers.forEach((subscriber) => subscriber(data));
-    });
+    this.subscribers.forEach((subscriber) => subscriber(data));
   };
 
   dismiss = (id: number) => {
