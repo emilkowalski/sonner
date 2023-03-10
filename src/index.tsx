@@ -5,7 +5,7 @@ import ReactDOM from 'react-dom';
 
 import './styles.css';
 import { getAsset, Loader } from './assets';
-import { HeightT, Position, PromiseData, ToastT, ToastToDismiss, ExternalToast } from './types';
+import { HeightT, Position, PromiseData, ToastT, ToastToDismiss, ExternalToast, ToasterProps } from './types';
 import { ToastState, toast } from './state';
 
 // Visible toasts amount
@@ -372,28 +372,6 @@ const Toast = (props: ToastProps) => {
   );
 };
 
-interface ToastOptions {
-  className?: string;
-  descriptionClassName?: string;
-  style?: React.CSSProperties;
-}
-
-interface ToasterProps {
-  invert?: boolean;
-  theme?: 'light' | 'dark';
-  position?: Position;
-  hotkey?: string[];
-  richColors?: boolean;
-  expand?: boolean;
-  duration?: number;
-  visibleToasts?: number;
-  closeButton?: boolean;
-  toastOptions?: ToastOptions;
-  className?: string;
-  style?: React.CSSProperties;
-  offset?: number;
-}
-
 const Toaster = (props: ToasterProps) => {
   const {
     invert,
@@ -480,7 +458,7 @@ const Toaster = (props: ToasterProps) => {
         style={
           {
             '--front-toast-height': `${heights[0]?.height}px`,
-            '--offset': offset || VIEWPORT_OFFSET,
+            '--offset': typeof offset === 'number' ? `${offset}px` : offset || VIEWPORT_OFFSET,
             '--width': `${TOAST_WIDTH}px`,
             '--gap': `${GAP}px`,
             ...style,
