@@ -41,6 +41,28 @@ export interface HeightT {
   toastId: number;
 }
 
+interface ToastOptions {
+  className?: string;
+  descriptionClassName?: string;
+  style?: React.CSSProperties;
+}
+
+export interface ToasterProps {
+  invert?: boolean;
+  theme?: 'light' | 'dark';
+  position?: Position;
+  hotkey?: string[];
+  richColors?: boolean;
+  expand?: boolean;
+  duration?: number;
+  visibleToasts?: number;
+  closeButton?: boolean;
+  toastOptions?: ToastOptions;
+  className?: string;
+  style?: React.CSSProperties;
+  offset?: string | number;
+}
+
 export enum SwipeStateTypes {
   SwipedOut = 'SwipedOut',
   SwipedBack = 'SwipedBack',
