@@ -6,31 +6,36 @@ test.beforeEach(async ({ page }) => {
 
 test.describe('Basic functionality', () => {
   test('toast is rendered and disappears after the default timeout', async ({ page }) => {
-    await page.locator('button').click();
+    await page.getByTestId('default-button').click();
     await expect(page.locator('[data-sonner-toast]')).toHaveCount(0);
     // Wait for the toast to disappear
     await expect(page.locator('[data-sonner-toast]')).toHaveCount(0);
   });
 
   test('various toast types are rendered correctly', async ({ page }) => {
-    await page.getByText('Render Success Toast').click();
-    await expect(page.getByText('My Success Toast')).toHaveCount(1);
+    await page.getByTestId('success').click();
+    await expect(page.getByText('My Success Toast', { exact: true })).toHaveCount(1);
 
-    await page.getByText('Render Error Toast').click();
-    await expect(page.getByText('My Error Toast')).toHaveCount(1);
+    await page.getByTestId('error').click();
+    await expect(page.getByText('My Error Toast', { exact: true })).toHaveCount(1);
 
-    await page.getByText('Render Action Toast').click();
+    await page.getByTestId('action').click();
     await expect(page.locator('[data-button]')).toHaveCount(1);
   });
 
   test('show correct toast content based on promise state', async ({ page }) => {
-    await page.getByText('Render Promise Toast').click();
+    await page.getByTestId('promise').click();
     await expect(page.getByText('Loading...')).toHaveCount(1);
     await expect(page.getByText('Loaded')).toHaveCount(1);
   });
 
+  test('render custom jsx in toast', async ({ page }) => {
+    await page.getByTestId('custom').click();
+    await expect(page.getByText('jsx')).toHaveCount(1);
+  });
+
   test('toast is removed after swiping down', async ({ page }) => {
-    await page.locator('button').click();
+    await page.getByTestId('default-button').click();
     await page.hover('[data-sonner-toast]');
     await page.mouse.down();
     await page.mouse.move(0, 800);
@@ -39,7 +44,7 @@ test.describe('Basic functionality', () => {
   });
 
   test('toast is not removed when hovered', async ({ page }) => {
-    await page.locator('button').click();
+    await page.getByTestId('default-button').click();
     await page.hover('[data-sonner-toast]');
     const timeout = new Promise((resolve) => setTimeout(resolve, 5000));
     await timeout;
