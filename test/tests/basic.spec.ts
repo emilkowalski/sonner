@@ -12,6 +12,23 @@ test.describe('Basic functionality', () => {
     await expect(page.locator('[data-sonner-toast]')).toHaveCount(0);
   });
 
+  test('various toast types are rendered correctly', async ({ page }) => {
+    await page.getByText('Render Success Toast').click();
+    await expect(page.getByText('My Success Toast')).toHaveCount(1);
+
+    await page.getByText('Render Error Toast').click();
+    await expect(page.getByText('My Error Toast')).toHaveCount(1);
+
+    await page.getByText('Render Action Toast').click();
+    await expect(page.locator('[data-button]')).toHaveCount(1);
+  });
+
+  test('show correct toast content based on promise state', async ({ page }) => {
+    await page.getByText('Render Promise Toast').click();
+    await expect(page.getByText('Loading...')).toHaveCount(1);
+    await expect(page.getByText('Loaded')).toHaveCount(1);
+  });
+
   test('toast is removed after swiping down', async ({ page }) => {
     await page.locator('button').click();
     await page.hover('[data-sonner-toast]');
