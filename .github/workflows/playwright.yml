@@ -1,28 +1,27 @@
-name: Playwright Tests
+name: Run Playwright Tests
+
 on:
   push:
-    branches: [main, master]
+    branches: [main]
   pull_request:
-    branches: [main, master]
+    branches: [main]
+
 jobs:
   test:
-    timeout-minutes: 60
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
-        with:
-          node-version: 16
       - run: npm install pnpm -g
-      - name: Install dependencies
-        run: pnpm install
-      - name: Install Playwright Browsers
-        run: pnpm exec playwright install --with-deps
-      - name: Run Playwright tests
-        run: pnpm exec playwright test
-      - uses: actions/upload-artifact@v3
+      - run: pnpm install
+      - run: pnpm build
+      - run: pnpm test:format
+      - run: pnpm playwright install --with-deps
+      - run: pnpm test || exit 1
+      - name: Upload test results
         if: always()
+        uses: actions/upload-artifact@v2
         with:
           name: playwright-report
-          path: playwright-report/
-          retention-days: 30
+          path: playwright-report.json
