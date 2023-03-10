@@ -466,7 +466,12 @@ const Toaster = (props: ToasterProps) => {
         }
         onMouseEnter={() => setExpanded(true)}
         onMouseMove={() => setExpanded(true)}
-        onMouseLeave={() => {
+        onMouseLeave={(e) => {
+          // Avoid setting expanded to false when mouse goes outside of browser window when swiping (happens when swiping up on top toasts)
+          if (e.relatedTarget instanceof Node && e.relatedTarget.nodeName === 'HTML' && toasts.length > 0) {
+            return;
+          }
+
           // Avoid setting expanded to false when interacting with a toast, e.g. swiping
           if (!interacting) {
             setExpanded(false);
