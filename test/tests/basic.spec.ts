@@ -8,7 +8,6 @@ test.describe('Basic functionality', () => {
   test('toast is rendered and disappears after the default timeout', async ({ page }) => {
     await page.getByTestId('default-button').click();
     await expect(page.locator('[data-sonner-toast]')).toHaveCount(0);
-    // Wait for the toast to disappear
     await expect(page.locator('[data-sonner-toast]')).toHaveCount(0);
   });
 
