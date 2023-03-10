@@ -32,15 +32,15 @@ export default defineConfig({
   reporter: 'html',
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
-    /* Maximum time each action such as `click()` can take. Defaults to 0 (no limit). */
-    actionTimeout: 0,
-    /* Base URL to use in actions like `await page.goto('/')`. */
-    baseURL: 'http://localhost:3000',
-
-    /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
+    baseURL: 'http://localhost:3000',
   },
-
+  webServer: {
+    command: 'npm run dev',
+    url: 'http://localhost:3000',
+    cwd: './test',
+    reuseExistingServer: !process.env.CI,
+  },
   /* Configure projects for major browsers */
   projects: [
     {
@@ -78,13 +78,4 @@ export default defineConfig({
     //   use: { channel: 'chrome' },
     // },
   ],
-
-  /* Folder for test artifacts such as screenshots, videos, traces, etc. */
-  // outputDir: 'test-results/',
-
-  /* Run your local dev server before starting the tests */
-  webServer: {
-    command: 'npm run start',
-    port: 3000,
-  },
 });
