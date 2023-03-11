@@ -159,6 +159,10 @@
   margin-left: auto;
 }
 
+[data-sonner-toast]:hover {
+  background: red !important;
+}
+
 [data-sonner-toast] [data-cancel] {
   color: var(--color);
   background: var(--border-color);
