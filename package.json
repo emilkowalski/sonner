@@ -13,7 +13,8 @@
     "dev": "tsup src/index.tsx --watch",
     "dev:website": "turbo run dev --filter=website...",
     "dev:test": "turbo run dev --filter=test...",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "test": "playwright test"
   },
   "keywords": [
     "react",

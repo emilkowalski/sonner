@@ -14,12 +14,10 @@ jobs:
         with:
           node-version: 16
       - run: npm install pnpm -g
-      - name: Install dependencies
-        run: pnpm install
-      - name: Install Playwright Browsers
-        run: pnpm exec playwright install --with-deps
-      - name: Run Playwright tests
-        run: pnpm exec playwright test
+      - run: pnpm install
+      - run: pnpm build
+      - run: pnpm playwright install --with-deps
+      - run: pnpm test || exit 1
       - uses: actions/upload-artifact@v3
         if: always()
         with:
