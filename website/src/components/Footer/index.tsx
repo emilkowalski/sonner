@@ -11,7 +11,7 @@ export const Footer = () => {
           <span>
             Made by{' '}
             <a href="https://twitter.com/emilkowalski_" target="_blank">
-              Emil
+              Emil.
             </a>
           </span>
         </p>
