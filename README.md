@@ -51,7 +51,7 @@ toast('Event has been created', {
 
 ### Success
 
-Render a checkmark icon in front of the message.
+Renders a checkmark icon in front of the message.
 
 ```jsx
 toast.success('Event has been created');
