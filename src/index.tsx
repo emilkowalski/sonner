@@ -445,7 +445,7 @@ const Toaster = (props: ToasterProps) => {
 
   return (
     // Remove item from normal navigation flow, only available via hotkey
-    <div role="region" aria-label={`Notifications ${hotkeyLabel}`} tabIndex={-1}>
+    <section aria-label={`Notifications ${hotkeyLabel}`} tabIndex={-1}>
       <ol
         tabIndex={-1}
         ref={listRef}
@@ -500,7 +500,7 @@ const Toaster = (props: ToasterProps) => {
           />
         ))}
       </ol>
-    </div>
+    </section>
   );
 };
 export { toast, Toaster, ToastT, ExternalToast };
