@@ -61,7 +61,7 @@ export default function Home() {
       >
         Render Custom Toast
       </button>
-      <Toaster theme="dark" />
+      <Toaster />
     </>
   );
 }
