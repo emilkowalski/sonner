@@ -10,6 +10,9 @@ export const getAsset = (type: ToastTypes): JSX.Element | null => {
     case 'error':
       return ErrorIcon;
 
+    case 'warning':
+      return WarningIcon;
+
     default:
       null;
   }
@@ -34,6 +37,16 @@ const SuccessIcon = (
     <path
       fillRule="evenodd"
       d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z"
+      clipRule="evenodd"
+    />
+  </svg>
+);
+
+const WarningIcon = (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" height="16" width="20">
+    <path
+      fillRule="evenodd"
+      d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"
       clipRule="evenodd"
     />
   </svg>

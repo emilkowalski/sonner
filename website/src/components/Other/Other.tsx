@@ -30,6 +30,14 @@ export const Other = ({
         },
       },
       {
+        name: 'Rich Colors Warning',
+        snippet: `toast.warning('Event did something unexpected')`,
+        action: () => {
+          toast.warning('Event did something unexpected');
+          setRichColors(true);
+        },
+      },
+      {
         name: 'Close Button',
         snippet: `toast('Event has been created', {
   description: 'Monday, January 3rd at 6:00pm',

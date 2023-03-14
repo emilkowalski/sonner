@@ -47,6 +47,12 @@ class Observer {
     return id;
   };
 
+  warning = (message: string | React.ReactNode, data?: ExternalToast) => {
+    const id = toastsCounter++;
+    this.publish({ ...data, id, type: 'warning', title: message });
+    return id;
+  };
+
   promise = (promise: PromiseT, data?: PromiseData) => {
     const id = toastsCounter++;
     this.publish({ ...data, promise, id });
@@ -79,6 +85,7 @@ const basicToast = toastFunction;
 export const toast = Object.assign(basicToast, {
   success: ToastState.success,
   error: ToastState.error,
+  warning: ToastState.warning,
   custom: ToastState.custom,
   message: ToastState.message,
   promise: ToastState.promise,

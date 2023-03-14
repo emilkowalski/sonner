@@ -17,6 +17,9 @@ export default function Home() {
       <button data-testid="error" className="button" onClick={() => toast.error('My Error Toast')}>
         Render Error Toast
       </button>
+      <button data-testid="warning" className="button" onClick={() => toast.warning('My Warning Toast')}>
+        Render Warning Toast
+      </button>
       <button
         data-testid="action"
         className="button"
