@@ -1,6 +1,6 @@
 import React from 'react';
 
-export type ToastTypes = 'normal' | 'action' | 'success' | 'error' | 'loading';
+export type ToastTypes = 'normal' | 'action' | 'success' | 'error' | 'warning' | 'loading';
 
 export type PromiseT = Promise<any> | (() => Promise<any>);
 

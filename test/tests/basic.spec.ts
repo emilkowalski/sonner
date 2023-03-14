@@ -18,6 +18,9 @@ test.describe('Basic functionality', () => {
     await page.getByTestId('error').click();
     await expect(page.getByText('My Error Toast', { exact: true })).toHaveCount(1);
 
+    await page.getByTestId('warning').click();
+    await expect(page.getByText('My Warning Toast', { exact: true })).toHaveCount(1);
+
     await page.getByTestId('action').click();
     await expect(page.locator('[data-button]')).toHaveCount(1);
   });

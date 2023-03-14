@@ -58,6 +58,11 @@ const allTypes = [
     action: () => toast.error('Event has not been created'),
   },
   {
+    name: 'Warning',
+    snippet: `toast.warning('Event did something unexpected')`,
+    action: () => toast.warning('Event did something unexpected'),
+  },
+  {
     name: 'Action',
     snippet: `toast('Event has been created', {
   action: {

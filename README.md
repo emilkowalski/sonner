@@ -57,6 +57,14 @@ Renders a checkmark icon in front of the message.
 toast.success('Event has been created');
 ```
 
+### Warning
+
+Renders a warning icon in front of the message.
+
+```jsx
+toast.warning('Event did something unexpected');
+```
+
 ### Error
 
 Renders an error icon in front of the message.
