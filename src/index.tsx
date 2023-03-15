@@ -388,6 +388,7 @@ const Toaster = (props: ToasterProps) => {
     visibleToasts = VISIBLE_TOASTS_AMOUNT,
     toastOptions,
   } = props;
+  const [toastQueue, setToastQueue] = React.useState<ToastT[]>([]);
   const [toasts, setToasts] = React.useState<ToastT[]>([]);
   const [heights, setHeights] = React.useState<HeightT[]>([]);
   const [expanded, setExpanded] = React.useState(false);
@@ -400,6 +401,13 @@ const Toaster = (props: ToasterProps) => {
     (toast: ToastT) => setToasts((toasts) => toasts.filter(({ id }) => id !== toast.id)),
     [],
   );
+  
+  React.useEffect(() => {
+    if (toastQueue.length > 0) {
+      setToasts((toasts) => [toastQueue[0], ...toasts]);
+      setToastQueue((prevQueue) => prevQueue.slice(1));
+    }
+  }, [toastQueue]);
 
   React.useEffect(() => {
     return ToastState.subscribe((toast) => {
@@ -408,10 +416,7 @@ const Toaster = (props: ToasterProps) => {
         return;
       }
 
-      // Don't batch update toasts to prevent wrong calculations
-      ReactDOM.flushSync(() => {
-        setToasts((toasts) => [toast, ...toasts]);
-      });
+      setToastQueue((toasts) => [toast, ...toasts]);
     });
   }, []);
 
