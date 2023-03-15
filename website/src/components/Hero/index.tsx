@@ -24,6 +24,13 @@ export const Hero = () => {
         >
           Render a toast
         </button>
+        <button
+          onClick={() => {
+            new Array(20).fill(0).forEach(() => toast('hello'));
+          }}
+        >
+          Gimme
+        </button>
         <a className={styles.button} href="https://github.com/emilkowalski/sonner" target="_blank">
           GitHub
         </a>

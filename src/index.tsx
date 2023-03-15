@@ -407,11 +407,8 @@ const Toaster = (props: ToasterProps) => {
         setToasts((toasts) => toasts.map((t) => (t.id === toast.id ? { ...t, delete: true } : t)));
         return;
       }
-
-      // Don't batch update toasts to prevent wrong calculations
-      ReactDOM.flushSync(() => {
-        setToasts((toasts) => [toast, ...toasts]);
-      });
+	  
+      setToasts((toasts) => [toast, ...toasts]);
     });
   }, []);
 
