@@ -401,8 +401,9 @@ const Toaster = (props: ToasterProps) => {
     (toast: ToastT) => setToasts((toasts) => toasts.filter(({ id }) => id !== toast.id)),
     [],
   );
-  
+
   React.useEffect(() => {
+    // This prevents batched toast updates leading to wrong calculations
     if (toastQueue.length > 0) {
       setToasts((toasts) => [toastQueue[0], ...toasts]);
       setToastQueue((prevQueue) => prevQueue.slice(1));
