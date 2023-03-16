@@ -30,6 +30,9 @@
     "type": "git",
     "url": "git+https://github.com/emilkowalski/sonner.git"
   },
+  "bugs": {
+    "url": "https://github.com/emilkowalski/sonner/issues"
+  },
   "devDependencies": {
     "@playwright/test": "^1.30.0",
     "@types/node": "^18.11.13",
