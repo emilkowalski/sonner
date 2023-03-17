@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { expect, test } from '@playwright/test';
 
 test.beforeEach(async ({ page }) => {
   await page.goto('/');
@@ -45,6 +45,13 @@ test.describe('Basic functionality', () => {
   test('toast is not removed when hovered', async ({ page }) => {
     await page.getByTestId('default-button').click();
     await page.hover('[data-sonner-toast]');
+    const timeout = new Promise((resolve) => setTimeout(resolve, 5000));
+    await timeout;
+    await expect(page.locator('[data-sonner-toast]')).toHaveCount(1);
+  });
+
+  test('infinite toast is not disappear', async ({ page }) => {
+    await page.getByTestId('infinite').click();
     const timeout = new Promise((resolve) => setTimeout(resolve, 5000));
     await timeout;
     await expect(page.locator('[data-sonner-toast]')).toHaveCount(1);

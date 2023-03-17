@@ -11,6 +11,9 @@ export default function Home() {
       <button data-testid="default-button" className="button" onClick={() => toast('My Toast')}>
         Render Toast
       </button>
+      <button data-testid="infinite" className="button" onClick={() => toast('My Infinite Toast', { duration: 0 })}>
+        Render Infinite Toast
+      </button>
       <button data-testid="success" className="button" onClick={() => toast.success('My Success Toast')}>
         Render Success Toast
       </button>

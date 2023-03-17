@@ -90,7 +90,7 @@ const Toast = (props: ToastProps) => {
     [heights, toast.id],
   );
   const duration = React.useMemo(
-    () => toast.duration || durationFromToaster || TOAST_LIFETIME,
+    () => toast.duration ?? durationFromToaster ?? TOAST_LIFETIME,
     [toast.duration, durationFromToaster],
   );
   const closeTimerStartTimeRef = React.useRef(0);
@@ -175,9 +175,11 @@ const Toast = (props: ToastProps) => {
     const startTimer = () => {
       closeTimerStartTimeRef.current = new Date().getTime();
       // Let the toast know it has started
-      timeoutId = setTimeout(() => {
-        deleteToast();
-      }, closeTimerRemainingTimeRef.current);
+      if (closeTimerRemainingTimeRef.current) {
+        timeoutId = setTimeout(() => {
+          deleteToast();
+        }, closeTimerRemainingTimeRef.current);
+      }
     };
 
     if (expanded || interacting) {

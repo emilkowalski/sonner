@@ -1,5 +1,4 @@
-import React from 'react';
-import { useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { toast } from 'sonner';
 import { CodeBlock } from '../CodeBlock';
 import styles from './other.module.css';
@@ -27,6 +26,13 @@ export const Other = ({
         action: () => {
           toast.error('Event has not been created');
           setRichColors(true);
+        },
+      },
+      {
+        name: 'Infinitely Long',
+        snippet: `toast('Event has not been created', { duration: 0 })`,
+        action: () => {
+          toast('Event has not been created', { duration: 0 });
         },
       },
       {
