@@ -5,9 +5,11 @@ let toastsCounter = 0;
 
 class Observer {
   subscribers: Array<(toast: ExternalToast | ToastToDismiss) => void>;
+  toasts: Array<ToastT | ToastToDismiss>;
 
   constructor() {
     this.subscribers = [];
+    this.toasts = [];
   }
 
   // We use arrow functions to maintain the correct `this` reference
@@ -22,9 +24,16 @@ class Observer {
 
   publish = (data: ToastT) => {
     this.subscribers.forEach((subscriber) => subscriber(data));
+    this.toasts = [...this.toasts, data];
   };
 
-  dismiss = (id: number) => {
+  dismiss = (id?: number) => {
+    if (!id) {
+      this.toasts.forEach((toast) => {
+        this.subscribers.forEach((subscriber) => subscriber({ id: toast.id, dismiss: true }));
+      });
+    }
+
     this.subscribers.forEach((subscriber) => subscriber({ id, dismiss: true }));
     return id;
   };
