@@ -157,7 +157,7 @@ const Toast = (props: ToastProps) => {
   }, [toast, removeToast, setHeights, offset]);
 
   React.useEffect(() => {
-    if (toast.promise && promiseStatus === 'loading') return;
+    if ((toast.promise && promiseStatus === 'loading') || toast.duration === Infinity) return;
     let timeoutId: NodeJS.Timeout;
 
     // Pause the timer on each hover
