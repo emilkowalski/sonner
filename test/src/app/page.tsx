@@ -58,6 +58,9 @@ export default function Home() {
       >
         Render Custom Toast
       </button>
+      <button data-testid="infinity-toast" className="button" onClick={() => toast('My Toast', { duration: Infinity })}>
+        Render Infinity Toast
+      </button>
       <Toaster />
     </>
   );

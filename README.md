@@ -215,6 +215,25 @@ You can also use the dismiss method without the id to dismiss all toasts.
 toast.dismiss();
 ```
 
+### Programmatically remove toast
+
+You can change the duration of each toast by using the `duration` property, or change the duration of all toasts like this:
+
+```jsx
+<Toaster duration={10000} />
+```
+
+```jsx
+toast('Event has been created', {
+  duration: 10000,
+});
+
+// Persisent toast
+toast('Event has been created', {
+  duration: Infinity,
+});
+```
+
 ## Keyboard focus
 
 You can focus on the toast area by pressing ⌥/alt + T. You can override it by providing an array of event.code values for each key.

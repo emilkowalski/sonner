@@ -49,4 +49,12 @@ test.describe('Basic functionality', () => {
     await timeout;
     await expect(page.locator('[data-sonner-toast]')).toHaveCount(1);
   });
+
+  test('toast is not removed if duration is set to infinity', async ({ page }) => {
+    await page.getByTestId('infinity-toast').click();
+    await page.hover('[data-sonner-toast]');
+    const timeout = new Promise((resolve) => setTimeout(resolve, 5000));
+    await timeout;
+    await expect(page.locator('[data-sonner-toast]')).toHaveCount(1);
+  });
 });
