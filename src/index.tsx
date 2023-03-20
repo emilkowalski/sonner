@@ -408,9 +408,11 @@ const Toaster = (props: ToasterProps) => {
         return;
       }
 
-      // Don't batch update toasts to prevent wrong calculations
-      ReactDOM.flushSync(() => {
-        setToasts((toasts) => [toast, ...toasts]);
+      // Prevent batching, temp solution.
+      setTimeout(() => {
+        ReactDOM.flushSync(() => {
+          setToasts((toasts) => [toast, ...toasts]);
+        });
       });
     });
   }, []);
