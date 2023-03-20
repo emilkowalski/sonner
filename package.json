@@ -1,6 +1,6 @@
 {
   "name": "sonner",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "An opinionated toast component for React.",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
