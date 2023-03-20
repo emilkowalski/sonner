@@ -207,6 +207,14 @@ const toastId = toast('Event has been created');
 toast.dismiss(toastId);
 ```
 
+You can also use the dismiss method without the id to dismiss all toasts.
+
+```jsx
+// Removes all toasts
+
+toast.dismiss();
+```
+
 ## Keyboard focus
 
 You can focus on the toast area by pressing ⌥/alt + T. You can override it by providing an array of event.code values for each key.

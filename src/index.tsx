@@ -222,7 +222,7 @@ const Toast = (props: ToastProps) => {
         return null;
     }
   }, [promiseStatus, promiseResult]);
-
+  
   return (
     <li
       aria-live={toast.important ? 'assertive' : 'polite'}
