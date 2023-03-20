@@ -24,6 +24,7 @@ export const Hero = () => {
         >
           Render a toast
         </button>
+        <button onClick={() => toast.dismiss()}>Dismiss all</button>
         <a className={styles.button} href="https://github.com/emilkowalski/sonner" target="_blank">
           GitHub
         </a>

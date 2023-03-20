@@ -396,10 +396,9 @@ const Toaster = (props: ToasterProps) => {
   const listRef = React.useRef<HTMLOListElement>(null);
   const hotkeyLabel = hotkey.join('+').replace(/Key/g, '').replace(/Digit/g, '');
 
-  const removeToast = React.useCallback(
-    (toast: ToastT) => setToasts((toasts) => toasts.filter(({ id }) => id !== toast.id)),
-    [],
-  );
+  const removeToast = React.useCallback((toast: ToastT) => {
+    setToasts((toasts) => toasts.filter(({ id }) => id !== toast.id));
+  }, []);
 
   React.useEffect(() => {
     return ToastState.subscribe((toast) => {
