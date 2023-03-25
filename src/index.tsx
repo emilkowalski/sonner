@@ -176,6 +176,7 @@ const Toast = (props: ToastProps) => {
       closeTimerStartTimeRef.current = new Date().getTime();
       // Let the toast know it has started
       timeoutId = setTimeout(() => {
+        toast.onAutoClose?.(toast);
         deleteToast();
       }, closeTimerRemainingTimeRef.current);
     };
@@ -273,6 +274,7 @@ const Toast = (props: ToastProps) => {
         // Remove only if treshold is met
         if (Math.abs(swipeAmount) >= SWIPE_TRESHOLD) {
           setOffsetBeforeRemove(offset.current);
+          toast.onDismiss?.(toast);
           deleteToast();
           setSwipeOut(true);
           return;
@@ -302,7 +304,14 @@ const Toast = (props: ToastProps) => {
           aria-label="Close toast"
           data-disabled={disabled}
           data-close-button
-          onClick={disabled ? undefined : deleteToast}
+          onClick={
+            disabled
+              ? undefined
+              : () => {
+                  deleteToast();
+                  toast.onDismiss?.(toast);
+                }
+          }
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"

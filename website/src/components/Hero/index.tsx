@@ -19,6 +19,10 @@ export const Hero = () => {
             toast('Sonner', {
               description: 'An opinionated toast component for React.',
             });
+            toast('Event has been created', {
+              onDismiss: (t) => console.log(`Toast with id ${t.id} has been dismissed`),
+              onAutoClose: (t) => console.log(`Toast with id ${t.id} has been closed automatically`),
+            });
           }}
           className={styles.button}
         >
