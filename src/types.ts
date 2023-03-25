@@ -29,6 +29,8 @@ export interface ToastT {
     label: string;
     onClick?: () => void;
   };
+  onDismiss?: (toast: ToastT) => void;
+  onAutoClose?: (toast: ToastT) => void;
   promise?: PromiseT;
   style?: React.CSSProperties;
   className?: string;

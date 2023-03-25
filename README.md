@@ -234,6 +234,17 @@ toast('Event has been created', {
 });
 ```
 
+### On Close Callback
+
+You can pass `onDismiss` and `onAutoClose` callbacks. `onDismiss` gets fired when either the close button gets clicked or the toast is swiped. `onAutoClose` fires when the toast disappears automatically after it's timeout (`duration` prop).
+
+```jsx
+toast('Event has been created', {
+  onDismiss: (t) => console.log(`Toast with id ${t.id} has been dismissed`),
+  onAutoClose: (t) => console.log(`Toast with id ${t.id} has been closed automatically`),
+});
+```
+
 ## Keyboard focus
 
 You can focus on the toast area by pressing ⌥/alt + T. You can override it by providing an array of event.code values for each key.
