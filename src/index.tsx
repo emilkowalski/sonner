@@ -454,8 +454,6 @@ const Toaster = (props: ToasterProps) => {
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, [hotkey]);
 
-  if (!toasts.length) return null;
-
   return (
     // Remove item from normal navigation flow, only available via hotkey
     <section aria-label={`Notifications ${hotkeyLabel}`} tabIndex={-1}>
