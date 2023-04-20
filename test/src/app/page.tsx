@@ -11,7 +11,6 @@ export default function Home() {
 
   return (
     <>
-      <h1>tests</h1>
       <button data-testid="default-button" className="button" onClick={() => toast('My Toast')}>
         Render Toast
       </button>
