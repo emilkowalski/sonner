@@ -308,9 +308,9 @@ const Toast = (props: ToastProps) => {
             disabled
               ? undefined
               : () => {
-                deleteToast();
-                toast.onDismiss?.(toast);
-              }
+                  deleteToast();
+                  toast.onDismiss?.(toast);
+                }
           }
         >
           <svg
