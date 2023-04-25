@@ -308,9 +308,9 @@ const Toast = (props: ToastProps) => {
             disabled
               ? undefined
               : () => {
-                  deleteToast();
-                  toast.onDismiss?.(toast);
-                }
+                deleteToast();
+                toast.onDismiss?.(toast);
+              }
           }
         >
           <svg
@@ -444,7 +444,7 @@ const Toaster = (props: ToasterProps) => {
 
       if (
         event.code === 'Escape' &&
-        (document.activeElement === listRef.current || listRef.current.contains(document.activeElement))
+        (document.activeElement === listRef.current || listRef.current?.contains(document.activeElement))
       ) {
         setExpanded(false);
       }
