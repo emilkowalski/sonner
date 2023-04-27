@@ -11,7 +11,7 @@ export type PromiseData = ExternalToast & {
 };
 
 export interface ToastT {
-  id: number;
+  id: number | string;
   title?: string | React.ReactNode;
   type?: ToastTypes;
   icon?: React.ReactNode;
@@ -29,6 +29,8 @@ export interface ToastT {
     label: string;
     onClick?: () => void;
   };
+  onDismiss?: (toast: ToastT) => void;
+  onAutoClose?: (toast: ToastT) => void;
   promise?: PromiseT;
   style?: React.CSSProperties;
   className?: string;
@@ -38,7 +40,7 @@ export interface ToastT {
 export type Position = 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right' | 'top-center' | 'bottom-center';
 export interface HeightT {
   height: number;
-  toastId: number;
+  toastId: number | string;
 }
 
 interface ToastOptions {
@@ -72,8 +74,10 @@ export enum SwipeStateTypes {
 export type Theme = 'light' | 'dark';
 
 export interface ToastToDismiss {
-  id: number;
+  id: number | string;
   dismiss: boolean;
 }
 
-export type ExternalToast = Omit<ToastT, 'id' | 'type' | 'title'>;
+export type ExternalToast = Omit<ToastT, 'id' | 'type' | 'title'> & {
+  id?: number | string;
+};

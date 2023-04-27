@@ -1,13 +1,16 @@
 'use client';
 
+import React from 'react';
 import { Toaster, toast } from 'sonner';
 
 const promise = () => new Promise((resolve) => setTimeout(resolve, 2000));
 
 export default function Home() {
+  const [showAutoClose, setShowAutoClose] = React.useState(false);
+  const [showDismiss, setShowDismiss] = React.useState(false);
+
   return (
     <>
-      <h1>tests</h1>
       <button data-testid="default-button" className="button" onClick={() => toast('My Toast')}>
         Render Toast
       </button>
@@ -61,6 +64,33 @@ export default function Home() {
       >
         Render Custom Toast
       </button>
+      <button data-testid="infinity-toast" className="button" onClick={() => toast('My Toast', { duration: Infinity })}>
+        Render Infinity Toast
+      </button>
+      <button
+        data-testid="auto-close-toast-callback"
+        className="button"
+        onClick={() =>
+          toast('My Toast', {
+            onAutoClose: () => setShowAutoClose(true),
+          })
+        }
+      >
+        Render Toast With onAutoClose callback
+      </button>
+      <button
+        data-testid="dismiss-toast-callback"
+        className="button"
+        onClick={() =>
+          toast('My Toast', {
+            onDismiss: () => setShowDismiss(true),
+          })
+        }
+      >
+        Render Toast With onAutoClose callback
+      </button>
+      {showAutoClose ? <div data-testid="auto-close-el" /> : null}
+      {showDismiss ? <div data-testid="dismiss-el" /> : null}
       <Toaster />
     </>
   );

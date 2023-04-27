@@ -215,6 +215,44 @@ const toastId = toast('Event has been created');
 toast.dismiss(toastId);
 ```
 
+You can also use the dismiss method without the id to dismiss all toasts.
+
+```jsx
+// Removes all toasts
+
+toast.dismiss();
+```
+
+### Duration
+
+You can change the duration of each toast by using the `duration` property, or change the duration of all toasts like this:
+
+```jsx
+<Toaster duration={10000} />
+```
+
+```jsx
+toast('Event has been created', {
+  duration: 10000,
+});
+
+// Persisent toast
+toast('Event has been created', {
+  duration: Infinity,
+});
+```
+
+### On Close Callback
+
+You can pass `onDismiss` and `onAutoClose` callbacks. `onDismiss` gets fired when either the close button gets clicked or the toast is swiped. `onAutoClose` fires when the toast disappears automatically after it's timeout (`duration` prop).
+
+```jsx
+toast('Event has been created', {
+  onDismiss: (t) => console.log(`Toast with id ${t.id} has been dismissed`),
+  onAutoClose: (t) => console.log(`Toast with id ${t.id} has been closed automatically`),
+});
+```
+
 ## Keyboard focus
 
 You can focus on the toast area by pressing ⌥/alt + T. You can override it by providing an array of event.code values for each key.
@@ -222,3 +260,9 @@ You can focus on the toast area by pressing ⌥/alt + T. You can override it by 
 ```jsx
 <Toaster hotkey={['KeyC']} />
 ```
+
+## Ports
+
+### Vue Port
+
+https://github.com/xiaoluoboding/vue-sonner

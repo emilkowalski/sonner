@@ -100,6 +100,7 @@
 
 [data-sonner-toast] [data-title] {
   font-weight: 500;
+  line-height: 1.5;
   color: inherit;
 }
 
@@ -277,7 +278,9 @@
 }
 
 [data-sonner-toast][data-removed='true'][data-front='false'][data-swipe-out='false'][data-expanded='false'] {
+  --y: translateY(40%);
   opacity: 0;
+  transition: transform 500ms, opacity 200ms;
 }
 
 /* Bump up the height to make sure hover state doesn't get set to false */

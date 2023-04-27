@@ -157,7 +157,7 @@ const Toast = (props: ToastProps) => {
   }, [toast, removeToast, setHeights, offset]);
 
   React.useEffect(() => {
-    if (toast.promise && promiseStatus === 'loading') return;
+    if ((toast.promise && promiseStatus === 'loading') || toast.duration === Infinity) return;
     let timeoutId: NodeJS.Timeout;
 
     // Pause the timer on each hover
@@ -176,6 +176,7 @@ const Toast = (props: ToastProps) => {
       closeTimerStartTimeRef.current = new Date().getTime();
       // Let the toast know it has started
       timeoutId = setTimeout(() => {
+        toast.onAutoClose?.(toast);
         deleteToast();
       }, closeTimerRemainingTimeRef.current);
     };
@@ -273,6 +274,7 @@ const Toast = (props: ToastProps) => {
         // Remove only if treshold is met
         if (Math.abs(swipeAmount) >= SWIPE_TRESHOLD) {
           setOffsetBeforeRemove(offset.current);
+          toast.onDismiss?.(toast);
           deleteToast();
           setSwipeOut(true);
           return;
@@ -302,7 +304,14 @@ const Toast = (props: ToastProps) => {
           aria-label="Close toast"
           data-disabled={disabled}
           data-close-button
-          onClick={disabled ? undefined : deleteToast}
+          onClick={
+            disabled
+              ? undefined
+              : () => {
+                  deleteToast();
+                  toast.onDismiss?.(toast);
+                }
+          }
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -408,9 +417,11 @@ const Toaster = (props: ToasterProps) => {
         return;
       }
 
-      // Don't batch update toasts to prevent wrong calculations
-      ReactDOM.flushSync(() => {
-        setToasts((toasts) => [toast, ...toasts]);
+      // Prevent batching, temp solution.
+      setTimeout(() => {
+        ReactDOM.flushSync(() => {
+          setToasts((toasts) => [toast, ...toasts]);
+        });
       });
     });
   }, []);
@@ -433,7 +444,7 @@ const Toaster = (props: ToasterProps) => {
 
       if (
         event.code === 'Escape' &&
-        (document.activeElement === listRef.current || listRef.current.contains(document.activeElement))
+        (document.activeElement === listRef.current || listRef.current?.contains(document.activeElement))
       ) {
         setExpanded(false);
       }
@@ -442,6 +453,8 @@ const Toaster = (props: ToasterProps) => {
 
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, [hotkey]);
+
+  if (!toasts.length) return null;
 
   return (
     // Remove item from normal navigation flow, only available via hotkey

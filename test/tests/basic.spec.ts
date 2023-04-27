@@ -52,4 +52,26 @@ test.describe('Basic functionality', () => {
     await timeout;
     await expect(page.locator('[data-sonner-toast]')).toHaveCount(1);
   });
+
+  test('toast is not removed if duration is set to infinity', async ({ page }) => {
+    await page.getByTestId('infinity-toast').click();
+    await page.hover('[data-sonner-toast]');
+    const timeout = new Promise((resolve) => setTimeout(resolve, 5000));
+    await timeout;
+    await expect(page.locator('[data-sonner-toast]')).toHaveCount(1);
+  });
+
+  test("toast's auto close callback gets executed correctly", async ({ page }) => {
+    await page.getByTestId('auto-close-toast-callback').click();
+    await expect(page.getByTestId('auto-close-el')).toHaveCount(1);
+  });
+
+  test("toast's dismiss callback gets executed correctly", async ({ page }) => {
+    await page.getByTestId('dismiss-toast-callback').click();
+    await page.hover('[data-sonner-toast]');
+    await page.mouse.down();
+    await page.mouse.move(0, 800);
+    await page.mouse.up();
+    await expect(page.getByTestId('dismiss-el')).toHaveCount(1);
+  });
 });

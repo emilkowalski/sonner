@@ -5,9 +5,11 @@ let toastsCounter = 0;
 
 class Observer {
   subscribers: Array<(toast: ExternalToast | ToastToDismiss) => void>;
+  toasts: Array<ToastT | ToastToDismiss>;
 
   constructor() {
     this.subscribers = [];
+    this.toasts = [];
   }
 
   // We use arrow functions to maintain the correct `this` reference
@@ -22,27 +24,34 @@ class Observer {
 
   publish = (data: ToastT) => {
     this.subscribers.forEach((subscriber) => subscriber(data));
+    this.toasts = [...this.toasts, data];
   };
 
-  dismiss = (id: number) => {
+  dismiss = (id?: number | string) => {
+    if (!id) {
+      this.toasts.forEach((toast) => {
+        this.subscribers.forEach((subscriber) => subscriber({ id: toast.id, dismiss: true }));
+      });
+    }
+
     this.subscribers.forEach((subscriber) => subscriber({ id, dismiss: true }));
     return id;
   };
 
   message = (message: string | React.ReactNode, data?: ExternalToast) => {
-    const id = toastsCounter++;
+    const id = data?.id || toastsCounter++;
     this.publish({ ...data, id, title: message });
     return id;
   };
 
   error = (message: string | React.ReactNode, data?: ExternalToast) => {
-    const id = toastsCounter++;
+    const id = data?.id || toastsCounter++;
     this.publish({ ...data, id, type: 'error', title: message });
     return id;
   };
 
   success = (message: string | React.ReactNode, data?: ExternalToast) => {
-    const id = toastsCounter++;
+    const id = data?.id || toastsCounter++;
     this.publish({ ...data, id, type: 'success', title: message });
     return id;
   };
@@ -54,14 +63,14 @@ class Observer {
   };
 
   promise = (promise: PromiseT, data?: PromiseData) => {
-    const id = toastsCounter++;
+    const id = data?.id || toastsCounter++;
     this.publish({ ...data, promise, id });
     return id;
   };
 
   // We can't provide the toast we just created as a prop as we didn't creat it yet, so we can create a default toast object, I just don't know how to use function in argument when calling()?
-  custom = (jsx: (id: number) => React.ReactElement, data?: ExternalToast) => {
-    const id = toastsCounter++;
+  custom = (jsx: (id: number | string) => React.ReactElement, data?: ExternalToast) => {
+    const id = data?.id || toastsCounter++;
     this.publish({ jsx: jsx(id), id, ...data });
   };
 }
@@ -70,7 +79,8 @@ export const ToastState = new Observer();
 
 // bind this to the toast function
 const toastFunction = (message: string | React.ReactNode, data?: ExternalToast) => {
-  const id = toastsCounter++;
+  const id = data?.id || toastsCounter++;
+
   ToastState.publish({
     title: message,
     ...data,
