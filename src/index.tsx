@@ -73,7 +73,7 @@ const Toast = (props: ToastProps) => {
   const [removed, setRemoved] = React.useState(false);
   const [swiping, setSwiping] = React.useState(false);
   const [swipeOut, setSwipeOut] = React.useState(false);
-  const [promiseStatus, setPromiseStatus] = React.useState<'loading' | 'success' | 'error' | null>(null);
+  const [promiseStatus, setPromiseStatus] = React.useState<'loading' | 'success' | 'error' | null>('loading');
   const [offsetBeforeRemove, setOffsetBeforeRemove] = React.useState(0);
   const [initialHeight, setInitialHeight] = React.useState(0);
   const [promiseResult, setPromiseResult] = React.useState<React.ReactNode | string>(null);
@@ -110,7 +110,7 @@ const Toast = (props: ToastProps) => {
     }, 0);
   }, [heights, heightIndex]);
   const invert = toast.invert || ToasterInvert;
-  const disabled = promiseStatus === 'loading';
+  const disabled = isPromise(toast) && promiseStatus === 'loading';
   offset.current = React.useMemo(() => heightIndex * GAP + toastsHeightBefore, [heightIndex, toastsHeightBefore]);
 
   React.useEffect(() => {
