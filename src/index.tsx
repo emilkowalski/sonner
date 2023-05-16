@@ -220,7 +220,7 @@ const Toast = (props: ToastProps) => {
       case 'error':
         return typeof toast.error === 'function' ? promiseResult : toast.error;
       default:
-        return null;
+        return toast.loading;
     }
   }, [promiseStatus, promiseResult]);
 
