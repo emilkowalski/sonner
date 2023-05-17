@@ -1,5 +1,5 @@
 import React from 'react';
-import { ExternalToast, ToastT, PromiseData, PromiseT, ToastToDismiss } from './types';
+import { ExternalToast, ToastT, PromiseData, PromiseT, ToastToDismiss, ToastTypes } from './types';
 
 let toastsCounter = 0;
 
@@ -27,6 +27,29 @@ class Observer {
     this.toasts = [...this.toasts, data];
   };
 
+  create = (data: ExternalToast & { message?: string | React.ReactNode; type?: ToastTypes }) => {
+    const { message, ...rest } = data;
+    const id = typeof data?.id === 'number' || data?.id.length > 0 ? data.id : toastsCounter++;
+    const alreadyExists = this.toasts.find((toast) => {
+      return toast.id === id;
+    });
+
+    if (alreadyExists) {
+      this.toasts.map((toast) => {
+        if (toast.id === id) {
+          this.publish({ ...toast, ...data, id });
+          return { ...toast, ...data };
+        }
+
+        return toast;
+      });
+    } else {
+      this.publish({ title: message, ...rest, id });
+    }
+
+    return id;
+  };
+
   dismiss = (id?: number | string) => {
     if (!id) {
       this.toasts.forEach((toast) => {
@@ -39,27 +62,19 @@ class Observer {
   };
 
   message = (message: string | React.ReactNode, data?: ExternalToast) => {
-    const id = data?.id || toastsCounter++;
-    this.publish({ ...data, id, title: message });
-    return id;
+    return this.create({ ...data, message });
   };
 
   error = (message: string | React.ReactNode, data?: ExternalToast) => {
-    const id = data?.id || toastsCounter++;
-    this.publish({ ...data, id, type: 'error', title: message });
-    return id;
+    return this.create({ ...data, message, type: 'error' });
   };
 
   success = (message: string | React.ReactNode, data?: ExternalToast) => {
-    const id = data?.id || toastsCounter++;
-    this.publish({ ...data, id, type: 'success', title: message });
-    return id;
+    return this.create({ ...data, type: 'success', message });
   };
 
   promise = (promise: PromiseT, data?: PromiseData) => {
-    const id = data?.id || toastsCounter++;
-    this.publish({ ...data, promise, id });
-    return id;
+    return this.create({ ...data, promise });
   };
 
   // We can't provide the toast we just created as a prop as we didn't creat it yet, so we can create a default toast object, I just don't know how to use function in argument when calling()?
