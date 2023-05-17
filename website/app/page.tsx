@@ -10,6 +10,7 @@ import { ExpandModes } from '@/src/components/ExpandModes';
 import { Footer } from '@/src/components/Footer';
 import { Position } from '@/src/components/Position';
 import { Usage } from '@/src/components/Usage';
+import { Advanced } from '@/src/components/Advanced';
 import { Other } from '@/src/components/Other/Other';
 
 export default function Home() {
@@ -29,6 +30,7 @@ export default function Home() {
           <Types />
           <Position position={position} setPosition={setPosition} />
           <ExpandModes expand={expand} setExpand={setExpand} />
+          <Advanced />
           <Other setCloseButton={setCloseButton} setRichColors={setRichColors} />
         </div>
       </main>

@@ -50,10 +50,15 @@ p {
   line-height: 25px;
 }
 
+h3,
 h2 {
   font-size: 16px;
   color: var(--gray12);
   font-weight: 500;
+}
+
+h3 {
+  font-size: 12px;
 }
 
 h2 + p {
