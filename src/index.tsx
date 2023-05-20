@@ -119,6 +119,30 @@ const Toast = (props: ToastProps) => {
   }, []);
 
   React.useEffect(() => {
+    const toastNode = toastRef.current;
+    if (!toastNode) return;
+
+    const resizeObserver = new ResizeObserver(() => {
+      if (!expandByDefault && !expanded) {
+        const newHeight = toastNode.getBoundingClientRect().height;
+        setInitialHeight(newHeight);
+        const alreadyExists = heights.find((height) => height.toastId === toast.id);
+
+        if (!alreadyExists) {
+          setHeights((h) => [{ toastId: toast.id, height: newHeight }, ...h]);
+        } else {
+          setHeights((h) =>
+            h.map((height) => (height.toastId === toast.id ? { ...height, height: newHeight } : height)),
+          );
+        }
+      }
+    });
+
+    resizeObserver.observe(toastRef.current);
+    return () => resizeObserver.disconnect(); // clean up
+  }, []);
+
+  React.useEffect(() => {
     if (isPromise(toast)) {
       setPromiseStatus('loading');
       const promiseHandler = (promise: Promise<any>) => {

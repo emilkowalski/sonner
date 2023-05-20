@@ -23,6 +23,7 @@ export const Hero = () => {
             setTimeout(() => {
               toast.success('This is a test', {
                 id: toastId,
+                description: undefined,
               });
             }, 2000);
           }}
