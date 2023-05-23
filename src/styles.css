@@ -319,7 +319,7 @@
     width: 100%;
   }
 
-  [data-sonner-toast] {
+  [data-sonner-toaster] [data-sonner-toast] {
     left: 0;
     right: 0;
     width: calc(100% - 32px);
