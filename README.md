@@ -110,6 +110,18 @@ You can pass jsx as the first argument instead of a string to render custom jsx 
 toast(<div>A custom toast with default styling</div>);
 ```
 
+### Updating a toast
+
+You can update a toast by using the `toast` function and passing it the id of the toast you want to update, the rest stays the same.
+
+```jsx
+const toastId = toast('Sonner');
+
+toast.success('Toast has been updated', {
+  id: toastId,
+});
+```
+
 ## Customization
 
 ### Headless
