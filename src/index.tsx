@@ -113,12 +113,32 @@ const Toast = (props: ToastProps) => {
   }, [heights, heightIndex]);
   const invert = toast.invert || ToasterInvert;
   const disabled = promiseStatus === 'loading';
+
   offset.current = React.useMemo(() => heightIndex * GAP + toastsHeightBefore, [heightIndex, toastsHeightBefore]);
 
   React.useEffect(() => {
     // Trigger enter animation without using CSS animation
     setMounted(true);
   }, []);
+
+  React.useLayoutEffect(() => {
+    if (!mounted) return;
+    const toastNode = toastRef.current;
+    const originalHeight = toastNode.style.height;
+    toastNode.style.height = 'auto';
+    const newHeight = toastNode.getBoundingClientRect().height;
+    toastNode.style.height = originalHeight;
+
+    setInitialHeight(newHeight);
+
+    const alreadyExists = heights.find((height) => height.toastId === toast.id);
+
+    if (!alreadyExists) {
+      setHeights((h) => [{ toastId: toast.id, height: newHeight }, ...h]);
+    } else {
+      setHeights((h) => h.map((height) => (height.toastId === toast.id ? { ...height, height: newHeight } : height)));
+    }
+  }, [toast.title, toast.description]);
 
   React.useEffect(() => {
     if (isPromise(toast)) {
@@ -197,6 +217,7 @@ const Toast = (props: ToastProps) => {
 
     if (toastNode) {
       const height = toastNode.getBoundingClientRect().height;
+
       // Add toast height tot heights array after the toast is mounted
       setInitialHeight(height);
       setHeights((h) => [{ toastId: toast.id, height }, ...h]);
@@ -435,7 +456,20 @@ const Toaster = (props: ToasterProps) => {
       // Prevent batching, temp solution.
       setTimeout(() => {
         ReactDOM.flushSync(() => {
-          setToasts((toasts) => [toast, ...toasts]);
+          setToasts((toasts) => {
+            const indexOfExistingToast = toasts.findIndex((t) => t.id === toast.id);
+
+            // Upadte the toast if it already exists
+            if (indexOfExistingToast !== -1) {
+              return [
+                ...toasts.slice(0, indexOfExistingToast),
+                { ...toasts[indexOfExistingToast], ...toast },
+                ...toasts.slice(indexOfExistingToast + 1),
+              ];
+            }
+
+            return [toast, ...toasts];
+          });
         });
       });
     });
