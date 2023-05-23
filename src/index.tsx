@@ -111,6 +111,7 @@ const Toast = (props: ToastProps) => {
   }, [heights, heightIndex]);
   const invert = toast.invert || ToasterInvert;
   const disabled = promiseStatus === 'loading';
+
   offset.current = React.useMemo(() => heightIndex * GAP + toastsHeightBefore, [heightIndex, toastsHeightBefore]);
 
   React.useEffect(() => {
@@ -118,29 +119,24 @@ const Toast = (props: ToastProps) => {
     setMounted(true);
   }, []);
 
-  React.useEffect(() => {
+  React.useLayoutEffect(() => {
+    if (!mounted) return;
     const toastNode = toastRef.current;
-    if (!toastNode) return;
+    const originalHeight = toastNode.style.height;
+    toastNode.style.height = 'auto';
+    const newHeight = toastNode.getBoundingClientRect().height;
+    toastNode.style.height = originalHeight;
 
-    const resizeObserver = new ResizeObserver(() => {
-      if (!expandByDefault && !expanded) {
-        const newHeight = toastNode.getBoundingClientRect().height;
-        setInitialHeight(newHeight);
-        const alreadyExists = heights.find((height) => height.toastId === toast.id);
+    setInitialHeight(newHeight);
 
-        if (!alreadyExists) {
-          setHeights((h) => [{ toastId: toast.id, height: newHeight }, ...h]);
-        } else {
-          setHeights((h) =>
-            h.map((height) => (height.toastId === toast.id ? { ...height, height: newHeight } : height)),
-          );
-        }
-      }
-    });
+    const alreadyExists = heights.find((height) => height.toastId === toast.id);
 
-    resizeObserver.observe(toastRef.current);
-    return () => resizeObserver.disconnect(); // clean up
-  }, []);
+    if (!alreadyExists) {
+      setHeights((h) => [{ toastId: toast.id, height: newHeight }, ...h]);
+    } else {
+      setHeights((h) => h.map((height) => (height.toastId === toast.id ? { ...height, height: newHeight } : height)));
+    }
+  }, [toast.title, toast.description]);
 
   React.useEffect(() => {
     if (isPromise(toast)) {
@@ -219,6 +215,7 @@ const Toast = (props: ToastProps) => {
 
     if (toastNode) {
       const height = toastNode.getBoundingClientRect().height;
+
       // Add toast height tot heights array after the toast is mounted
       setInitialHeight(height);
       setHeights((h) => [{ toastId: toast.id, height }, ...h]);
