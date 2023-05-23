@@ -16,16 +16,9 @@ export const Hero = () => {
         <button
           data-primary=""
           onClick={() => {
-            const toastId = toast('Sonner', {
+            toast('Sonner', {
               description: 'An opinionated toast component for React.',
             });
-
-            setTimeout(() => {
-              toast.success('This is a test', {
-                id: toastId,
-                description: undefined,
-              });
-            }, 2000);
           }}
           className={styles.button}
         >
