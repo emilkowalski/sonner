@@ -129,14 +129,15 @@ const Toast = (props: ToastProps) => {
 
     setInitialHeight(newHeight);
 
-    const alreadyExists = heights.find((height) => height.toastId === toast.id);
-
-    if (!alreadyExists) {
-      setHeights((h) => [{ toastId: toast.id, height: newHeight }, ...h]);
-    } else {
-      setHeights((h) => h.map((height) => (height.toastId === toast.id ? { ...height, height: newHeight } : height)));
-    }
-  }, [toast.title, toast.description]);
+    setHeights(heights => {
+      const alreadyExists = heights.find((height) => height.toastId === toast.id);
+      if (!alreadyExists) {
+        return [{ toastId: toast.id, height: newHeight }, ...heights]
+      } else {
+        return heights.map((height) => (height.toastId === toast.id ? { ...height, height: newHeight } : height))
+      }
+    })
+  }, [mounted, toast.title, toast.description, setHeights, toast.id]);
 
   React.useEffect(() => {
     if (isPromise(toast)) {
@@ -228,7 +229,7 @@ const Toast = (props: ToastProps) => {
     if (toast.delete) {
       deleteToast();
     }
-  }, [toast.delete]);
+  }, [deleteToast, toast.delete]);
 
   const promiseTitle = React.useMemo(() => {
     if (!isPromise(toast)) return null;
@@ -243,7 +244,7 @@ const Toast = (props: ToastProps) => {
       default:
         return toast.loading;
     }
-  }, [promiseStatus, promiseResult]);
+  }, [toast, promiseStatus, promiseResult]);
 
   return (
     <li
