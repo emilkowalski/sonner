@@ -97,7 +97,7 @@ const Toast = (props: ToastProps) => {
   const offset = React.useRef(0);
   const closeTimerRemainingTimeRef = React.useRef(duration);
   const lastCloseTimerStartTimeRef = React.useRef(0);
-  const pointerStartYRef = React.useRef<number | null>(null);
+  const pointerStartRef = React.useRef<{ x: number; y: number } | null>(null);
   const [y, x] = position.split('-');
   const toastsHeightBefore = React.useMemo(() => {
     return heights.reduce((prev, curr, reducerIndex) => {
@@ -286,7 +286,7 @@ const Toast = (props: ToastProps) => {
         (event.target as HTMLElement).setPointerCapture(event.pointerId);
         if ((event.target as HTMLElement).tagName === 'BUTTON') return;
         setSwiping(true);
-        pointerStartYRef.current = event.clientY;
+        pointerStartRef.current = { x: event.clientX, y: event.clientY };
       }}
       onPointerUp={() => {
         if (swipeOut) return;
@@ -302,22 +302,27 @@ const Toast = (props: ToastProps) => {
         }
 
         toastRef.current?.style.setProperty('--swipe-amount', '0px');
-        pointerStartYRef.current = null;
+        pointerStartRef.current = null;
         setSwiping(false);
       }}
       onPointerMove={(event) => {
-        if (!pointerStartYRef.current) return;
+        if (!pointerStartRef.current) return;
 
-        const yPosition = event.clientY - pointerStartYRef.current;
+        const yPosition = event.clientY - pointerStartRef.current.y;
+        const xPosition = event.clientX - pointerStartRef.current.x;
 
-        const isAllowedToSwipe = y === 'top' ? yPosition < 0 : yPosition > 0;
-        // We don't want to swipe to the left and vice versa depending on toast position
-        if (!isAllowedToSwipe) {
-          toastRef.current?.style.setProperty('--swipe-amount', '0px');
-          return;
+        const clamp = y === 'top' ? Math.min : Math.max;
+        const clampedY = clamp(0, yPosition);
+        const swipeStartThreshold = event.pointerType === 'touch' ? 10 : 2;
+        const isAllowedToSwipe = clampedY > swipeStartThreshold;
+
+        if (isAllowedToSwipe) {
+          toastRef.current?.style.setProperty('--swipe-amount', `${yPosition}px`);
+        } else if (Math.abs(xPosition) > swipeStartThreshold) {
+          // User is swiping in wrong direction so we disable swipe gesture
+          // for the current pointer down interaction
+          pointerStartRef.current = null;
         }
-
-        toastRef.current?.style.setProperty('--swipe-amount', `${yPosition}px`);
       }}
     >
       {closeButton && !toast.jsx ? (
