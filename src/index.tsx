@@ -78,7 +78,6 @@ const Toast = (props: ToastProps) => {
   const [initialHeight, setInitialHeight] = React.useState(0);
   const [promiseResult, setPromiseResult] = React.useState<React.ReactNode | string>(null);
   const toastRef = React.useRef<HTMLLIElement>(null);
-  const swipeDeltaYRef = React.useRef<number | null>(null);
   const isFront = index === 0;
   const isVisible = index + 1 <= visibleToasts;
   const toastType = toast.type;
@@ -98,8 +97,7 @@ const Toast = (props: ToastProps) => {
   const offset = React.useRef(0);
   const closeTimerRemainingTimeRef = React.useRef(duration);
   const lastCloseTimerStartTimeRef = React.useRef(0);
-  const pointerStartYRef = React.useRef<number | null>(null);
-  const pointerStartXRef = React.useRef<number | null>(null);
+  const pointerStartRef = React.useRef<{ x: number; y: number } | null>(null);
   const [y, x] = position.split('-');
   const toastsHeightBefore = React.useMemo(() => {
     return heights.reduce((prev, curr, reducerIndex) => {
@@ -288,8 +286,7 @@ const Toast = (props: ToastProps) => {
         (event.target as HTMLElement).setPointerCapture(event.pointerId);
         if ((event.target as HTMLElement).tagName === 'BUTTON') return;
         setSwiping(true);
-        pointerStartYRef.current = event.clientY;
-        pointerStartXRef.current = event.clientX;
+        pointerStartRef.current = { x: event.clientX, y: event.clientY };
       }}
       onPointerUp={() => {
         if (swipeOut) return;
@@ -305,33 +302,26 @@ const Toast = (props: ToastProps) => {
         }
 
         toastRef.current?.style.setProperty('--swipe-amount', '0px');
-        pointerStartYRef.current = null;
-        pointerStartXRef.current = null;
-        swipeDeltaYRef.current = null;
+        pointerStartRef.current = null;
         setSwiping(false);
       }}
       onPointerMove={(event) => {
-        if (!pointerStartYRef.current) return;
+        if (!pointerStartRef.current) return;
 
-        const yPosition = event.clientY - pointerStartYRef.current;
-        const xPosition = event.clientX - pointerStartXRef.current;
-        const hasSwipeMoveStarted = Boolean(swipeDeltaYRef.current);
+        const yPosition = event.clientY - pointerStartRef.current.y;
+        const xPosition = event.clientX - pointerStartRef.current.x;
+
         const clamp = y === 'top' ? Math.min : Math.max;
         const clampedY = clamp(0, yPosition);
         const swipeStartThreshold = event.pointerType === 'touch' ? 10 : 2;
-        const isDeltaInDirection = Math.abs(clampedY) > swipeStartThreshold;
+        const isAllowedToSwipe = clampedY > swipeStartThreshold;
 
-        swipeDeltaYRef.current = clampedY;
-        if (hasSwipeMoveStarted) {
+        if (isAllowedToSwipe) {
           toastRef.current?.style.setProperty('--swipe-amount', `${yPosition}px`);
-        } else if (isDeltaInDirection) {
-          swipeDeltaYRef.current = clampedY;
-          (event.target as HTMLElement).setPointerCapture(event.pointerId);
-        } else if (Math.abs(xPosition) > swipeStartThreshold || Math.abs(yPosition) > swipeStartThreshold) {
+        } else if (Math.abs(xPosition) > swipeStartThreshold) {
           // User is swiping in wrong direction so we disable swipe gesture
           // for the current pointer down interaction
-          pointerStartYRef.current = null;
-          pointerStartXRef.current = null;
+          pointerStartRef.current = null;
         }
       }}
     >
