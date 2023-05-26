@@ -290,6 +290,8 @@ const Toast = (props: ToastProps) => {
       }}
       onPointerUp={() => {
         if (swipeOut) return;
+
+        pointerStartRef.current = null;
         const swipeAmount = Number(toastRef.current?.style.getPropertyValue('--swipe-amount').replace('px', '') || 0);
 
         // Remove only if treshold is met
@@ -302,7 +304,6 @@ const Toast = (props: ToastProps) => {
         }
 
         toastRef.current?.style.setProperty('--swipe-amount', '0px');
-        pointerStartRef.current = null;
         setSwiping(false);
       }}
       onPointerMove={(event) => {
