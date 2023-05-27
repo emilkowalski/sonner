@@ -85,7 +85,7 @@ toast.promise(promise, {
   error: 'Error',
 });`,
     action: () =>
-      toast.promise(
+      toast.promise<{ name: string }>(
         () =>
           new Promise((resolve) => {
             setTimeout(() => {
