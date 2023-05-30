@@ -73,7 +73,7 @@ class Observer {
     return this.create({ ...data, type: 'success', message });
   };
 
-  promise = (promise: PromiseT, data?: PromiseData) => {
+  promise = <ToastData>(promise: PromiseT<ToastData>, data?: PromiseData<ToastData>) => {
     return this.create({ ...data, promise });
   };
 
