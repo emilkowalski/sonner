@@ -58,6 +58,12 @@ test.describe('Basic functionality', () => {
     await expect(page.locator('[data-sonner-toast]')).toHaveCount(1);
   });
 
+  test('toast is not removed when event prevented in action', async ({ page }) => {
+    await page.getByTestId('action-prevent').click();
+    await page.locator('[data-button]').click();
+    await expect(page.locator('[data-sonner-toast]')).toHaveCount(1);
+  });
+
   test("toast's auto close callback gets executed correctly", async ({ page }) => {
     await page.getByTestId('auto-close-toast-callback').click();
     await expect(page.getByTestId('auto-close-el')).toHaveCount(1);
