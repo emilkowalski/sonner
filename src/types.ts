@@ -23,7 +23,7 @@ export interface ToastT {
   important?: boolean;
   action?: {
     label: string;
-    onClick: () => void;
+    onClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
   };
   cancel?: {
     label: string;

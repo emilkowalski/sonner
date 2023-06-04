@@ -24,6 +24,10 @@ class Observer {
 
   publish = (data: ToastT) => {
     this.subscribers.forEach((subscriber) => subscriber(data));
+  };
+
+  addToast = (data: ToastT) => {
+    this.publish(data);
     this.toasts = [...this.toasts, data];
   };
 
@@ -35,16 +39,16 @@ class Observer {
     });
 
     if (alreadyExists) {
-      this.toasts.map((toast) => {
+      this.toasts = this.toasts.map((toast) => {
         if (toast.id === id) {
-          this.publish({ ...toast, ...data, id });
-          return { ...toast, ...data };
+          this.publish({ ...toast, ...data, id, title: message });
+          return { ...toast, ...data, id, title: message };
         }
 
         return toast;
       });
     } else {
-      this.publish({ title: message, ...rest, id });
+      this.addToast({ title: message, ...rest, id });
     }
 
     return id;
@@ -74,7 +78,16 @@ class Observer {
   };
 
   promise = <ToastData>(promise: PromiseT<ToastData>, data?: PromiseData<ToastData>) => {
-    return this.create({ ...data, promise });
+    const id = this.create({ ...data, promise, type: 'loading', message: data.loading });
+    const p = promise instanceof Promise ? promise : promise();
+    p.then((promiseData) => {
+      const message = typeof data.success === 'function' ? data.success(promiseData) : data.success;
+      this.create({ id, type: 'success', message });
+    }).catch((error) => {
+      const message = typeof data.error === 'function' ? data.error(error) : data.error;
+      this.create({ id, type: 'error', message });
+    });
+    return id;
   };
 
   // We can't provide the toast we just created as a prop as we didn't creat it yet, so we can create a default toast object, I just don't know how to use function in argument when calling()?
@@ -90,7 +103,7 @@ export const ToastState = new Observer();
 const toastFunction = (message: string | React.ReactNode, data?: ExternalToast) => {
   const id = data?.id || toastsCounter++;
 
-  ToastState.publish({
+  ToastState.addToast({
     title: message,
     ...data,
     id,
