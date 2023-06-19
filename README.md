@@ -1,6 +1,4 @@
-https://user-images.githubusercontent.com/36730035/220868994-f0c92862-7e7d-487c-ab3a-540e7b48ab4a.mp4
-
-# Introduction
+https://github.com/vallezw/sonner/assets/50796600/59b95cb7-9068-4f3e-8469-0b35d9de5cf0
 
 [Sonner](https://sonner.emilkowal.ski/) is an opinionated toast component for React. It's customizable, but styled by default. Comes with a swipe to dismiss animation.
 
