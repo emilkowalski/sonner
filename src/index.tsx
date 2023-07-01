@@ -269,7 +269,7 @@ const Toast = (props: ToastProps) => {
         const clamp = y === 'top' ? Math.min : Math.max;
         const clampedY = clamp(0, yPosition);
         const swipeStartThreshold = event.pointerType === 'touch' ? 10 : 2;
-        const isAllowedToSwipe = clampedY > swipeStartThreshold;
+        const isAllowedToSwipe = Math.abs(clampedY) > swipeStartThreshold;
 
         if (isAllowedToSwipe) {
           toastRef.current?.style.setProperty('--swipe-amount', `${yPosition}px`);
