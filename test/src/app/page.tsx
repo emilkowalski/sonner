@@ -35,6 +35,23 @@ export default function Home() {
         Render Action Toast
       </button>
       <button
+        data-testid="action-prevent"
+        className="button"
+        onClick={() =>
+          toast('My Message', {
+            action: {
+              label: 'Action',
+              onClick: (event) => {
+                event.preventDefault();
+                console.log('Action');
+              },
+            },
+          })
+        }
+      >
+        Render Action Toast
+      </button>
+      <button
         data-testid="promise"
         className="button"
         onClick={() =>
