@@ -11,7 +11,7 @@ export const getAsset = (type: ToastTypes): JSX.Element | null => {
       return ErrorIcon;
 
     default:
-      null;
+      return null;
   }
 };
 
