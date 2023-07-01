@@ -268,3 +268,7 @@ You can focus on the toast area by pressing ⌥/alt + T. You can override it by 
 ### Vue Port
 
 https://github.com/xiaoluoboding/vue-sonner
+
+### Solid Port
+
+https://github.com/wobsoriano/solid-sonner
