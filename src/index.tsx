@@ -125,14 +125,15 @@ const Toast = (props: ToastProps) => {
 
     setInitialHeight(newHeight);
 
-    const alreadyExists = heights.find((height) => height.toastId === toast.id);
-
-    if (!alreadyExists) {
-      setHeights((h) => [{ toastId: toast.id, height: newHeight }, ...h]);
-    } else {
-      setHeights((h) => h.map((height) => (height.toastId === toast.id ? { ...height, height: newHeight } : height)));
-    }
-  }, [toast.title, toast.description]);
+    setHeights(heights => {
+      const alreadyExists = heights.find((height) => height.toastId === toast.id);
+      if (!alreadyExists) {
+        return [{ toastId: toast.id, height: newHeight }, ...heights]
+      } else {
+        return heights.map((height) => (height.toastId === toast.id ? { ...height, height: newHeight } : height))
+      }
+    })
+  }, [mounted, toast.title, toast.description, setHeights, toast.id]);
 
   const deleteToast = React.useCallback(() => {
     // Save the offset for the exit swipe animation
@@ -197,7 +198,7 @@ const Toast = (props: ToastProps) => {
     if (toast.delete) {
       deleteToast();
     }
-  }, [toast.delete]);
+  }, [deleteToast, toast.delete]);
 
   return (
     <li
