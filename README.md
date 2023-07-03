@@ -272,3 +272,7 @@ https://github.com/xiaoluoboding/vue-sonner
 ### Solid Port
 
 https://github.com/wobsoriano/solid-sonner
+
+### Svelte Port
+
+https://github.com/wobsoriano/svelte-sonner
