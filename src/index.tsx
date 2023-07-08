@@ -382,7 +382,7 @@ const Toaster = (props: ToasterProps) => {
   const [heights, setHeights] = React.useState<HeightT[]>([]);
   const [expanded, setExpanded] = React.useState(false);
   const [interacting, setInteracting] = React.useState(false);
-  const [actualTheme, setActualTheme] = React.useState(() =>
+  const [actualTheme, setActualTheme] = React.useState(
     window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light',
   );
   const [y, x] = position.split('-');
