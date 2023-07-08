@@ -125,14 +125,14 @@ const Toast = (props: ToastProps) => {
 
     setInitialHeight(newHeight);
 
-    setHeights(heights => {
+    setHeights((heights) => {
       const alreadyExists = heights.find((height) => height.toastId === toast.id);
       if (!alreadyExists) {
-        return [{ toastId: toast.id, height: newHeight }, ...heights]
+        return [{ toastId: toast.id, height: newHeight }, ...heights];
       } else {
-        return heights.map((height) => (height.toastId === toast.id ? { ...height, height: newHeight } : height))
+        return heights.map((height) => (height.toastId === toast.id ? { ...height, height: newHeight } : height));
       }
-    })
+    });
   }, [mounted, toast.title, toast.description, setHeights, toast.id]);
 
   const deleteToast = React.useCallback(() => {
@@ -382,7 +382,15 @@ const Toaster = (props: ToasterProps) => {
   const [heights, setHeights] = React.useState<HeightT[]>([]);
   const [expanded, setExpanded] = React.useState(false);
   const [interacting, setInteracting] = React.useState(false);
+  const [actualTheme, setActualTheme] = React.useState(
+    typeof window !== 'undefined'
+      ? window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        ? 'dark'
+        : 'light'
+      : 'light',
+  );
   const [y, x] = position.split('-');
+
   const listRef = React.useRef<HTMLOListElement>(null);
   const hotkeyLabel = hotkey.join('+').replace(/Key/g, '').replace(/Digit/g, '');
 
@@ -419,6 +427,18 @@ const Toaster = (props: ToasterProps) => {
       });
     });
   }, []);
+
+  React.useEffect(() => {
+    if (theme !== 'system' || typeof window === 'undefined') return;
+
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', ({ matches }) => {
+      if (matches) {
+        setActualTheme('dark');
+      } else {
+        setActualTheme('light');
+      }
+    });
+  }, [theme]);
 
   React.useEffect(() => {
     // Ensure expanded is always false when no toasts are present / only one left
@@ -458,7 +478,7 @@ const Toaster = (props: ToasterProps) => {
         ref={listRef}
         className={className}
         data-sonner-toaster
-        data-theme={theme}
+        data-theme={actualTheme}
         data-rich-colors={richColors}
         data-y-position={y}
         data-x-position={x}

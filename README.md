@@ -139,7 +139,7 @@ toast.custom((t) => (
 You can change the theme using the `theme` prop. Default theme is light.
 
 ```jsx
-<Toaster theme="dark" />
+<Toaster theme="system" />
 ```
 
 ### Position
