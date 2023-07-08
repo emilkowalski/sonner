@@ -383,7 +383,7 @@ const Toaster = (props: ToasterProps) => {
   const [expanded, setExpanded] = React.useState(false);
   const [interacting, setInteracting] = React.useState(false);
   const [actualTheme, setActualTheme] = React.useState(
-    window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light',
+    window?.matchMedia && window?.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light',
   );
   const [y, x] = position.split('-');
 
@@ -425,7 +425,7 @@ const Toaster = (props: ToasterProps) => {
   }, []);
 
   React.useEffect(() => {
-    if (theme !== 'system') return;
+    if (theme !== 'system' || !window) return;
 
     window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', ({ matches }) => {
       if (matches) {
