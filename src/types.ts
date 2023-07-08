@@ -51,7 +51,7 @@ interface ToastOptions {
 
 export interface ToasterProps {
   invert?: boolean;
-  theme?: 'light' | 'dark';
+  theme?: 'light' | 'dark' | 'system';
   position?: Position;
   hotkey?: string[];
   richColors?: boolean;
