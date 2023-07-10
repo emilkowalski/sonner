@@ -383,6 +383,7 @@ const Toaster = (props: ToasterProps) => {
   const [expanded, setExpanded] = React.useState(false);
   const [interacting, setInteracting] = React.useState(false);
   const [actualTheme, setActualTheme] = React.useState(
+    theme ||
     typeof window !== 'undefined'
       ? window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
         ? 'dark'
