@@ -431,7 +431,12 @@ const Toaster = (props: ToasterProps) => {
   }, []);
 
   React.useEffect(() => {
-    if (theme !== 'system' || typeof window === 'undefined') return;
+    if (theme !== 'system') {
+      setActualTheme(theme);
+      return;
+    }
+
+    if (typeof window === 'undefined') return;
 
     window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', ({ matches }) => {
       if (matches) {
