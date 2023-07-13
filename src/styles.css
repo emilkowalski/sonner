@@ -185,12 +185,21 @@
   z-index: 1;
   transition: opacity 100ms, background 200ms, border-color 200ms;
 }
+[data-sonner-toast] [data-close-button]:focus-visible {
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1), 0 0 0 2px rgba(0, 0, 0, 0.2);
+}
 
 [data-sonner-toast] [data-disabled='true'] {
   cursor: not-allowed;
 }
 
 [data-sonner-toast]:hover [data-close-button] {
+  opacity: 1;
+}
+[data-sonner-toast]:focus [data-close-button] {
+  opacity: 1;
+}
+[data-sonner-toast]:focus-within [data-close-button] {
   opacity: 1;
 }
 
