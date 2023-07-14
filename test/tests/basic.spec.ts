@@ -77,4 +77,14 @@ test.describe('Basic functionality', () => {
     await page.mouse.up();
     await expect(page.getByTestId('dismiss-el')).toHaveCount(1);
   });
+
+  test('return focus to the previous focused element', async ({ page }) => {
+    await page.getByTestId('custom').focus();
+    await page.keyboard.press('Enter');
+    await expect(page.locator('[data-sonner-toast]')).toHaveCount(1);
+    await page.getByTestId('dismiss-button').focus();
+    await page.keyboard.press('Enter');
+    await expect(page.locator('[data-sonner-toast]')).toHaveCount(0);
+    await expect(page.getByTestId('custom')).toBeFocused();
+  });
 });

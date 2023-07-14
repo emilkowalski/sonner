@@ -71,7 +71,9 @@ export default function Home() {
           toast.custom((t) => (
             <div>
               <h1>jsx</h1>
-              <button onClick={() => toast.dismiss(t)}>Dismiss</button>
+              <button data-testid="dismiss-button" onClick={() => toast.dismiss(t)}>
+                Dismiss
+              </button>
             </div>
           ))
         }
