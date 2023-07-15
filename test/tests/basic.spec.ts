@@ -105,4 +105,14 @@ test.describe('Basic functionality', () => {
     await page.getByTestId('theme-button').click();
     await expect(page.locator('[data-sonner-toaster]')).toHaveAttribute('data-theme', 'dark');
   });
+
+  test('return focus to the previous focused element', async ({ page }) => {
+    await page.getByTestId('custom').focus();
+    await page.keyboard.press('Enter');
+    await expect(page.locator('[data-sonner-toast]')).toHaveCount(1);
+    await page.getByTestId('dismiss-button').focus();
+    await page.keyboard.press('Enter');
+    await expect(page.locator('[data-sonner-toast]')).toHaveCount(0);
+    await expect(page.getByTestId('custom')).toBeFocused();
+  });
 });
