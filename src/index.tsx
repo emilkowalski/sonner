@@ -395,6 +395,8 @@ const Toaster = (props: ToasterProps) => {
 
   const listRef = React.useRef<HTMLOListElement>(null);
   const hotkeyLabel = hotkey.join('+').replace(/Key/g, '').replace(/Digit/g, '');
+  const lastFocusedElementRef = React.useRef<HTMLElement>(null);
+  const isFocusWithinRef = React.useRef(false);
 
   const removeToast = React.useCallback(
     (toast: ToastT) => setToasts((toasts) => toasts.filter(({ id }) => id !== toast.id)),
@@ -475,6 +477,18 @@ const Toaster = (props: ToasterProps) => {
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, [hotkey]);
 
+  React.useEffect(() => {
+    if (listRef.current) {
+      return () => {
+        if (lastFocusedElementRef.current) {
+          lastFocusedElementRef.current.focus({ preventScroll: true });
+          lastFocusedElementRef.current = null;
+          isFocusWithinRef.current = false;
+        }
+      };
+    }
+  }, [listRef.current]);
+
   if (!toasts.length) return null;
 
   return (
@@ -498,6 +512,21 @@ const Toaster = (props: ToasterProps) => {
             ...style,
           } as React.CSSProperties
         }
+        onBlur={(event) => {
+          if (isFocusWithinRef.current && !event.currentTarget.contains(event.relatedTarget)) {
+            isFocusWithinRef.current = false;
+            if (lastFocusedElementRef.current) {
+              lastFocusedElementRef.current.focus({ preventScroll: true });
+              lastFocusedElementRef.current = null;
+            }
+          }
+        }}
+        onFocus={(event) => {
+          if (!isFocusWithinRef.current) {
+            isFocusWithinRef.current = true;
+            lastFocusedElementRef.current = event.relatedTarget as HTMLElement;
+          }
+        }}
         onMouseEnter={() => setExpanded(true)}
         onMouseMove={() => setExpanded(true)}
         onMouseLeave={() => {
