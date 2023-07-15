@@ -42,6 +42,16 @@ test.describe('Basic functionality', () => {
     await expect(page.locator('[data-sonner-toast]')).toHaveCount(0);
   });
 
+  test('toast is removed after swiping up', async ({ page }) => {
+    await page.goto('/?position=top-left');
+    await page.getByTestId('default-button').click();
+    await page.hover('[data-sonner-toast]');
+    await page.mouse.down();
+    await page.mouse.move(0, -800);
+    await page.mouse.up();
+    await expect(page.locator('[data-sonner-toast]')).toHaveCount(0);
+  });
+
   test('toast is not removed when hovered', async ({ page }) => {
     await page.getByTestId('default-button').click();
     await page.hover('[data-sonner-toast]');
@@ -76,5 +86,23 @@ test.describe('Basic functionality', () => {
     await page.mouse.move(0, 800);
     await page.mouse.up();
     await expect(page.getByTestId('dismiss-el')).toHaveCount(1);
+  });
+
+  test("toaster's theme should be light", async ({ page }) => {
+    await page.getByTestId('infinity-toast').click();
+    await expect(page.locator('[data-sonner-toaster]')).toHaveAttribute('data-theme', 'light');
+  });
+
+  test("toaster's theme should be dark", async ({ page }) => {
+    await page.goto('/?theme=dark');
+    await page.getByTestId('infinity-toast').click();
+    await expect(page.locator('[data-sonner-toaster]')).toHaveAttribute('data-theme', 'dark');
+  });
+
+  test("toaster's theme should be changed", async ({ page }) => {
+    await page.getByTestId('infinity-toast').click();
+    await expect(page.locator('[data-sonner-toaster]')).toHaveAttribute('data-theme', 'light');
+    await page.getByTestId('theme-button').click();
+    await expect(page.locator('[data-sonner-toaster]')).toHaveAttribute('data-theme', 'dark');
   });
 });

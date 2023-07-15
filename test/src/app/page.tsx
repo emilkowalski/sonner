@@ -5,14 +5,21 @@ import { Toaster, toast } from 'sonner';
 
 const promise = () => new Promise((resolve) => setTimeout(resolve, 2000));
 
-export default function Home() {
+export default function Home({ searchParams }: any) {
   const [showAutoClose, setShowAutoClose] = React.useState(false);
   const [showDismiss, setShowDismiss] = React.useState(false);
+  const [theme, setTheme] = React.useState(searchParams.theme || 'light');
 
   return (
     <>
+      <button data-testid="theme-button" className="button" onClick={() => setTheme('dark')}>
+        Change theme
+      </button>
       <button data-testid="default-button" className="button" onClick={() => toast('My Toast')}>
         Render Toast
+      </button>
+      <button data-testid="default-button-top" className="button" onClick={() => toast('My Toast')}>
+        Render Toast Top
       </button>
       <button data-testid="success" className="button" onClick={() => toast.success('My Success Toast')}>
         Render Success Toast
@@ -105,7 +112,7 @@ export default function Home() {
       </button>
       {showAutoClose ? <div data-testid="auto-close-el" /> : null}
       {showDismiss ? <div data-testid="dismiss-el" /> : null}
-      <Toaster />
+      <Toaster position={searchParams.position || 'bottom-right'} theme={theme} />
     </>
   );
 }
