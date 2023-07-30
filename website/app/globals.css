@@ -39,7 +39,7 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-// Disable double-tap zoom
+/* Disable double-tap zoom */
 * {
   touch-action: manipulation;
 }
