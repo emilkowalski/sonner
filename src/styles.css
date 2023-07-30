@@ -115,7 +115,7 @@
   margin-left: -3px;
   margin-right: 4px;
 }
-html:dir(rtl) [data-sonner-toast] [data-icon] {
+html[dir='rtl'] [data-sonner-toast] [data-icon] {
   margin-left: 4px;
   margin-right: -3px;
 }
@@ -135,7 +135,7 @@ html:dir(rtl) [data-sonner-toast] [data-icon] {
   margin-left: -1px;
 }
 
-html:dir(rtl) [data-sonner-toast] [data-icon] svg {
+html[dir='rtl'] [data-sonner-toast] [data-icon] svg {
   margin-left: 0;
   margin-right: -1px;
 }
@@ -161,7 +161,7 @@ html:dir(rtl) [data-sonner-toast] [data-icon] svg {
   transition: opacity 400ms, box-shadow 200ms;
 }
 
-html:dir(rtl) [data-sonner-toast] [data-button] {
+html[dir='rtl'] [data-sonner-toast] [data-button] {
   margin-left: 0;
   margin-right: auto;
 }
@@ -174,7 +174,7 @@ html:dir(rtl) [data-sonner-toast] [data-button] {
   margin-left: auto;
 }
 
-[data-sonner-toast]:dir(rtl) [data-button]:first-of-type {
+html[dir='rtl'] [data-sonner-toast] [data-button]:first-of-type {
   margin-left: 0;
   margin-right: auto;
 }
