@@ -45,6 +45,7 @@ interface ToastProps {
   duration?: number;
   className?: string;
   descriptionClassName?: string;
+  dir?: 'rtl' | 'ltr';
 }
 
 const Toast = (props: ToastProps) => {
@@ -66,6 +67,7 @@ const Toast = (props: ToastProps) => {
     duration: durationFromToaster,
     position,
     expandByDefault,
+    dir = (document.documentElement.getAttribute('dir') as ToastProps['dir']) || 'ltr',
   } = props;
   const [mounted, setMounted] = React.useState(false);
   const [removed, setRemoved] = React.useState(false);
@@ -202,6 +204,7 @@ const Toast = (props: ToastProps) => {
 
   return (
     <li
+      dir={dir}
       aria-live={toast.important ? 'assertive' : 'polite'}
       aria-atomic="true"
       role="status"
@@ -377,6 +380,7 @@ const Toaster = (props: ToasterProps) => {
     style,
     visibleToasts = VISIBLE_TOASTS_AMOUNT,
     toastOptions,
+    dir = (document.documentElement.getAttribute('dir') as ToastProps['dir']) || 'ltr',
   } = props;
   const [toasts, setToasts] = React.useState<ToastT[]>([]);
   const [heights, setHeights] = React.useState<HeightT[]>([]);
@@ -495,6 +499,7 @@ const Toaster = (props: ToasterProps) => {
     // Remove item from normal navigation flow, only available via hotkey
     <section aria-label={`Notifications ${hotkeyLabel}`} tabIndex={-1}>
       <ol
+        dir={dir}
         tabIndex={-1}
         ref={listRef}
         className={className}
@@ -560,6 +565,7 @@ const Toaster = (props: ToasterProps) => {
             setHeights={setHeights}
             expandByDefault={expand}
             expanded={expanded}
+            dir={dir}
           />
         ))}
       </ol>

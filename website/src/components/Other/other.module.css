@@ -1,3 +1,13 @@
+ol[dir='ltr'] .headlessClose {
+  --headless-close-start: unset;
+  --headless-close-end: 6px;
+}
+
+ol[dir='rtl'] .headlessClose {
+  --headless-close-start: 6px;
+  --headless-close-end: unset;
+}
+
 .headless {
   padding: 16px;
   width: 356px;
@@ -32,17 +42,13 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  right: 6px;
+  left: var(--headless-close-start);
+  right: var(--headless-close-end);
   color: var(--gray10);
   padding: 0;
   background: transparent;
   border: none;
   transition: color 200ms;
-}
-
-html[dir='rtl'] .headlessClose {
-  right: unset;
-  left: 6px;
 }
 
 .headlessClose:hover {
