@@ -63,7 +63,7 @@ export interface ToasterProps {
   className?: string;
   style?: React.CSSProperties;
   offset?: string | number;
-  dir?: 'rtl' | 'ltr';
+  dir?: 'rtl' | 'ltr' | 'auto';
 }
 
 export enum SwipeStateTypes {
