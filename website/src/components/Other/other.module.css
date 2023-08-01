@@ -40,6 +40,11 @@
   transition: color 200ms;
 }
 
+html[dir='rtl'] .headlessClose {
+  right: unset;
+  left: 6px;
+}
+
 .headlessClose:hover {
   color: var(--gray12);
 }

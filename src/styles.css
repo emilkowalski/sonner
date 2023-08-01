@@ -204,6 +204,13 @@ html[dir='rtl'] [data-sonner-toast] [data-button]:first-of-type {
   z-index: 1;
   transition: opacity 100ms, background 200ms, border-color 200ms;
 }
+
+html[dir='rtl'] [data-sonner-toast] [data-close-button] {
+  left: unset;
+  right: 0;
+  transform: translate(35%, -35%);
+}
+
 [data-sonner-toast] [data-close-button]:focus-visible {
   box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1), 0 0 0 2px rgba(0, 0, 0, 0.2);
 }
