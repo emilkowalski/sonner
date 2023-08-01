@@ -380,7 +380,7 @@ const Toaster = (props: ToasterProps) => {
     style,
     visibleToasts = VISIBLE_TOASTS_AMOUNT,
     toastOptions,
-    dir = (document.documentElement.getAttribute('dir') as ToastProps['dir']) || 'ltr',
+    dir = (document.documentElement.getAttribute('dir') as ToasterProps['dir']) || 'ltr',
   } = props;
   const [toasts, setToasts] = React.useState<ToastT[]>([]);
   const [heights, setHeights] = React.useState<HeightT[]>([]);
