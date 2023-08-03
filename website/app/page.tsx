@@ -9,18 +9,27 @@ import { Types } from '@/src/components/Types/Types';
 import { ExpandModes } from '@/src/components/ExpandModes';
 import { Footer } from '@/src/components/Footer';
 import { Position } from '@/src/components/Position';
+import { Direction } from '@/src/components/Direction';
 import { Usage } from '@/src/components/Usage';
 import { Other } from '@/src/components/Other/Other';
 
 export default function Home() {
   const [expand, setExpand] = React.useState(false);
   const [position, setPosition] = React.useState<Position>('bottom-right');
+  const [direction, setDirection] = React.useState<Direction>('ltr');
   const [richColors, setRichColors] = React.useState(false);
   const [closeButton, setCloseButton] = React.useState(false);
 
   return (
     <>
-      <Toaster theme="light" richColors={richColors} closeButton={closeButton} expand={expand} position={position} />
+      <Toaster
+        theme="light"
+        richColors={richColors}
+        closeButton={closeButton}
+        expand={expand}
+        position={position}
+        dir={direction}
+      />
       <main className="container">
         <Hero />
         <div className="content">
@@ -28,6 +37,7 @@ export default function Home() {
           <Usage />
           <Types />
           <Position position={position} setPosition={setPosition} />
+          <Direction direction={direction} setDirection={setDirection} />
           <ExpandModes expand={expand} setExpand={setExpand} />
           <Other setCloseButton={setCloseButton} setRichColors={setRichColors} />
         </div>
