@@ -2,13 +2,20 @@ https://github.com/vallezw/sonner/assets/50796600/59b95cb7-9068-4f3e-8469-0b35d9
 
 [Sonner](https://sonner.emilkowal.ski/) is an opinionated toast component for React. It's customizable, but styled by default. Comes with a swipe to dismiss animation.
 
-## Usage
+## Installation
 
-To start using the library, install it in your project:
+The package can be installed via [npm](https://github.com/npm/cli):
 
 ```bash
 npm install sonner
 ```
+
+or via [yarn](https://github.com/yarnpkg/yarn)
+
+```bash
+yarn add sonner
+```
+## Usage
 
 Add `<Toaster />` to your app, it will be the place where all your toasts will be rendered.
 After that you can use `toast()` from anywhere in your app.
