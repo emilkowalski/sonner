@@ -325,9 +325,9 @@ const Toast = (props: ToastProps) => {
           <article data-content="">
             <h3 data-title="">{toast.title}</h3>
             {toast.description ? (
-              <pre data-description="" className={descriptionClassName + toastDescriptionClassname}>
+              <p data-description="" className={descriptionClassName + toastDescriptionClassname}>
                 {toast.description}
-              </pre>
+              </p>
             ) : null}
           </article>
           {toast.cancel ? (
