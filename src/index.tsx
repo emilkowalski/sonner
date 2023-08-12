@@ -322,14 +322,14 @@ const Toast = (props: ToastProps) => {
             </div>
           ) : null}
 
-          <div data-content="">
-            <div data-title="">{toast.title}</div>
+          <article data-content="">
+            <h3 data-title="">{toast.title}</h3>
             {toast.description ? (
-              <div data-description="" className={descriptionClassName + toastDescriptionClassname}>
+              <pre data-description="" className={descriptionClassName + toastDescriptionClassname}>
                 {toast.description}
-              </div>
+              </pre>
             ) : null}
-          </div>
+          </article>
           {toast.cancel ? (
             <button
               data-button
