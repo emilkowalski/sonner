@@ -26,6 +26,7 @@ test.describe('Basic functionality', () => {
     await page.getByTestId('promise').click();
     await expect(page.getByText('Loading...')).toHaveCount(1);
     await expect(page.getByText('Loaded')).toHaveCount(1);
+    await expect(page.getByTestId('promise')).toHaveAttribute('data-finally', '1');
   });
 
   test('render custom jsx in toast', async ({ page }) => {
