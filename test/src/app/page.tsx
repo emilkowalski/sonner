@@ -9,6 +9,7 @@ export default function Home({ searchParams }: any) {
   const [showAutoClose, setShowAutoClose] = React.useState(false);
   const [showDismiss, setShowDismiss] = React.useState(false);
   const [theme, setTheme] = React.useState(searchParams.theme || 'light');
+  const [isFinally, setIsFinally] = React.useState(false);
 
   return (
     <>
@@ -60,12 +61,14 @@ export default function Home({ searchParams }: any) {
       </button>
       <button
         data-testid="promise"
+        data-finally={isFinally ? '1' : '0'}
         className="button"
         onClick={() =>
           toast.promise(promise, {
             loading: 'Loading...',
             success: 'Loaded',
             error: 'Error',
+            finally: () => setIsFinally(true),
           })
         }
       >
