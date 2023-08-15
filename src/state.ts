@@ -83,10 +83,12 @@ class Observer {
     p.then((promiseData) => {
       const message = typeof data.success === 'function' ? data.success(promiseData) : data.success;
       this.create({ id, type: 'success', message });
-    }).catch((error) => {
-      const message = typeof data.error === 'function' ? data.error(error) : data.error;
-      this.create({ id, type: 'error', message });
-    });
+    })
+      .catch((error) => {
+        const message = typeof data.error === 'function' ? data.error(error) : data.error;
+        this.create({ id, type: 'error', message });
+      })
+      .finally(data.finally);
     return id;
   };
 
