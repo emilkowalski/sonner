@@ -81,9 +81,15 @@ test.describe('Basic functionality', () => {
 
   test("toast's dismiss callback gets executed correctly", async ({ page }) => {
     await page.getByTestId('dismiss-toast-callback').click();
-    await page.hover('[data-sonner-toast]');
+    const toast = page.locator('[data-sonner-toast]');
+    const dragBoundingBox = await toast.boundingBox();
+
+    if (!dragBoundingBox) return;
+    await page.mouse.move(dragBoundingBox.x + dragBoundingBox.width / 2, dragBoundingBox.y);
+
     await page.mouse.down();
-    await page.mouse.move(0, 800);
+    await page.mouse.move(0, dragBoundingBox.y + 300);
+
     await page.mouse.up();
     await expect(page.getByTestId('dismiss-el')).toHaveCount(1);
   });
