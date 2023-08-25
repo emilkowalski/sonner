@@ -153,6 +153,16 @@ You can change the position through the `position` prop on the `<Toaster />` com
 <Toaster position="top-center" />
 ```
 
+### Direction
+
+You can change the direction through the `dir` prop on the `<Toaster />` component. Default is `ltr`.
+
+```jsx
+// rtl, ltr, auto
+
+<Toaster dir="rtl" />
+```
+
 ### Expanded
 
 Toasts can also be expanded by default through the `expand` prop. You can also change the amount of visible toasts which is 3 by default.

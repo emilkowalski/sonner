@@ -117,7 +117,7 @@ export default function Home({ searchParams }: any) {
       </button>
       {showAutoClose ? <div data-testid="auto-close-el" /> : null}
       {showDismiss ? <div data-testid="dismiss-el" /> : null}
-      <Toaster position={searchParams.position || 'bottom-right'} theme={theme} />
+      <Toaster position={searchParams.position || 'bottom-right'} theme={theme} dir={searchParams.dir || 'auto'} />
     </>
   );
 }
