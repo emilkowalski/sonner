@@ -41,7 +41,7 @@ html[dir='rtl'],
   --gray10: hsl(0, 0%, 52.3%);
   --gray11: hsl(0, 0%, 43.5%);
   --gray12: hsl(0, 0%, 9%);
-  --border-radius: 6px;
+  --border-radius: 8px;
   box-sizing: border-box;
   padding: 0;
   margin: 0;
@@ -386,7 +386,7 @@ html[dir='rtl'],
 
 [data-sonner-toaster][data-theme='light'] {
   --normal-bg: #fff;
-  --normal-border: var(--gray3);
+  --normal-border: var(--gray4);
   --normal-text: var(--gray12);
 
   --success-bg: hsl(143, 85%, 96%);
