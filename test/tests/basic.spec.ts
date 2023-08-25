@@ -121,4 +121,27 @@ test.describe('Basic functionality', () => {
     await expect(page.locator('[data-sonner-toast]')).toHaveCount(0);
     await expect(page.getByTestId('custom')).toBeFocused();
   });
+
+  test("toaster's dir prop is reflected correctly", async ({ page }) => {
+    await page.goto('/?dir=rtl');
+    await page.getByTestId('default-button').click();
+    await expect(page.locator('[data-sonner-toaster]')).toHaveAttribute('dir', 'rtl');
+  });
+
+  test("toaster respects the HTML's dir attribute", async ({ page }) => {
+    await page.evaluate(() => {
+      document.documentElement.setAttribute('dir', 'rtl');
+    });
+    await page.getByTestId('default-button').click();
+    await expect(page.locator('[data-sonner-toaster]')).toHaveAttribute('dir', 'rtl');
+  });
+
+  test("toaster respects its own dir attribute over HTML's", async ({ page }) => {
+    await page.goto('/?dir=ltr');
+    await page.evaluate(() => {
+      document.documentElement.setAttribute('dir', 'rtl');
+    });
+    await page.getByTestId('default-button').click();
+    await expect(page.locator('[data-sonner-toaster]')).toHaveAttribute('dir', 'ltr');
+  });
 });
