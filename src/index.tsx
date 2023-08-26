@@ -23,7 +23,7 @@ const TOAST_WIDTH = 356;
 // Default gap between toasts
 const GAP = 14;
 
-const SWIPE_TRESHOLD = 20;
+const SWIPE_THRESHOLD = 20;
 
 const TIME_BEFORE_UNMOUNT = 200;
 
@@ -73,6 +73,7 @@ const Toast = (props: ToastProps) => {
   const [swipeOut, setSwipeOut] = React.useState(false);
   const [offsetBeforeRemove, setOffsetBeforeRemove] = React.useState(0);
   const [initialHeight, setInitialHeight] = React.useState(0);
+  const dragStartTime = React.useRef<Date | null>(null);
   const toastRef = React.useRef<HTMLLIElement>(null);
   const isFront = index === 0;
   const isVisible = index + 1 <= visibleToasts;
@@ -97,7 +98,7 @@ const Toast = (props: ToastProps) => {
   const [y, x] = position.split('-');
   const toastsHeightBefore = React.useMemo(() => {
     return heights.reduce((prev, curr, reducerIndex) => {
-      // Calculate offset up untill current  toast
+      // Calculate offset up until current  toast
       if (reducerIndex >= heightIndex) {
         return prev;
       }
@@ -236,6 +237,7 @@ const Toast = (props: ToastProps) => {
       }
       onPointerDown={(event) => {
         if (disabled) return;
+        dragStartTime.current = new Date();
         setOffsetBeforeRemove(offset.current);
         // Ensure we maintain correct pointer capture even when going outside of the toast (e.g. when swiping)
         (event.target as HTMLElement).setPointerCapture(event.pointerId);
@@ -248,9 +250,11 @@ const Toast = (props: ToastProps) => {
 
         pointerStartRef.current = null;
         const swipeAmount = Number(toastRef.current?.style.getPropertyValue('--swipe-amount').replace('px', '') || 0);
+        const timeTaken = new Date().getTime() - dragStartTime.current.getTime();
+        const velocity = Math.abs(swipeAmount) / timeTaken;
 
-        // Remove only if treshold is met
-        if (Math.abs(swipeAmount) >= SWIPE_TRESHOLD) {
+        // Remove only if threshold is met
+        if (Math.abs(swipeAmount) >= SWIPE_THRESHOLD || velocity > 0.11) {
           setOffsetBeforeRemove(offset.current);
           toast.onDismiss?.(toast);
           deleteToast();
@@ -429,7 +433,7 @@ const Toaster = (props: ToasterProps) => {
           setToasts((toasts) => {
             const indexOfExistingToast = toasts.findIndex((t) => t.id === toast.id);
 
-            // Upadte the toast if it already exists
+            // Update the toast if it already exists
             if (indexOfExistingToast !== -1) {
               return [
                 ...toasts.slice(0, indexOfExistingToast),
