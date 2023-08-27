@@ -84,6 +84,7 @@ html[dir='rtl'],
   transition: transform 400ms, opacity 400ms, height 400ms, box-shadow 200ms;
   box-sizing: border-box;
   outline: none;
+  box-shadow: 0px 0px 8px 1px blueviolet;
 }
 
 [data-sonner-toast][data-styled='true'] {
