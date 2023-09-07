@@ -455,6 +455,17 @@ const Toaster = (props: ToasterProps) => {
       return;
     }
 
+    if (theme === 'system') {
+      // check if current preference is dark
+      if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        // it's currently dark
+        setActualTheme('dark');
+      } else {
+        // it's not dark
+        setActualTheme('light');
+      }
+    }
+
     if (typeof window === 'undefined') return;
 
     window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', ({ matches }) => {
