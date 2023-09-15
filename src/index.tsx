@@ -250,7 +250,7 @@ const Toast = (props: ToastProps) => {
 
         pointerStartRef.current = null;
         const swipeAmount = Number(toastRef.current?.style.getPropertyValue('--swipe-amount').replace('px', '') || 0);
-        const timeTaken = new Date().getTime() - dragStartTime.current.getTime();
+        const timeTaken = new Date().getTime() - dragStartTime.current?.getTime();
         const velocity = Math.abs(swipeAmount) / timeTaken;
 
         // Remove only if threshold is met
