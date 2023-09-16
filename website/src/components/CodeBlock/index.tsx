@@ -98,7 +98,7 @@ export const CodeBlock = ({ children, initialHeight = 0 }: { children: string; i
           </AnimatePresence>
         </MotionConfig>
       </button>
-
+      {/* @ts-ignore */}
       <Highlight {...defaultProps} theme={theme} code={children} language="jsx">
         {({ className, tokens, getLineProps, getTokenProps }) => (
           <motion.pre
