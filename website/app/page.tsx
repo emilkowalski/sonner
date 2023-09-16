@@ -20,7 +20,6 @@ export default function Home() {
 
   return (
     <>
-      <Toaster theme="light" richColors={richColors} closeButton={closeButton} expand={expand} position={position} />
       <main className="container">
         <Hero />
         <div className="content">
