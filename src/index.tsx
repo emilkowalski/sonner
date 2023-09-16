@@ -78,6 +78,7 @@ const Toast = (props: ToastProps) => {
   const isFront = index === 0;
   const isVisible = index + 1 <= visibleToasts;
   const toastType = toast.type;
+  const dismissible = toast.dismissible !== false;
   const toastClassname = toast.className || '';
   const toastDescriptionClassname = toast.descriptionClassName || '';
 
@@ -236,7 +237,7 @@ const Toast = (props: ToastProps) => {
         } as React.CSSProperties
       }
       onPointerDown={(event) => {
-        if (disabled) return;
+        if (disabled || !dismissible) return;
         dragStartTime.current = new Date();
         setOffsetBeforeRemove(offset.current);
         // Ensure we maintain correct pointer capture even when going outside of the toast (e.g. when swiping)
@@ -246,7 +247,7 @@ const Toast = (props: ToastProps) => {
         pointerStartRef.current = { x: event.clientX, y: event.clientY };
       }}
       onPointerUp={() => {
-        if (swipeOut) return;
+        if (swipeOut || !dismissible) return;
 
         pointerStartRef.current = null;
         const swipeAmount = Number(toastRef.current?.style.getPropertyValue('--swipe-amount').replace('px', '') || 0);
@@ -266,7 +267,7 @@ const Toast = (props: ToastProps) => {
         setSwiping(false);
       }}
       onPointerMove={(event) => {
-        if (!pointerStartRef.current) return;
+        if (!pointerStartRef.current || !dismissible) return;
 
         const yPosition = event.clientY - pointerStartRef.current.y;
         const xPosition = event.clientX - pointerStartRef.current.x;
@@ -291,7 +292,7 @@ const Toast = (props: ToastProps) => {
           data-disabled={disabled}
           data-close-button
           onClick={
-            disabled
+            disabled || !dismissible
               ? undefined
               : () => {
                   deleteToast();
@@ -339,6 +340,7 @@ const Toast = (props: ToastProps) => {
               data-button
               data-cancel
               onClick={() => {
+                if (!dismissible) return;
                 deleteToast();
                 if (toast.cancel?.onClick) {
                   toast.cancel.onClick();

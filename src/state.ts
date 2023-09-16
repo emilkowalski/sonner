@@ -37,18 +37,19 @@ class Observer {
     const alreadyExists = this.toasts.find((toast) => {
       return toast.id === id;
     });
+    const dismissible = data.dismissible === undefined ? true : data.dismissible;
 
     if (alreadyExists) {
       this.toasts = this.toasts.map((toast) => {
         if (toast.id === id) {
           this.publish({ ...toast, ...data, id, title: message });
-          return { ...toast, ...data, id, title: message };
+          return { ...toast, ...data, id, dismissible, title: message };
         }
 
         return toast;
       });
     } else {
-      this.addToast({ title: message, ...rest, id });
+      this.addToast({ title: message, ...rest, dismissible, id });
     }
 
     return id;
