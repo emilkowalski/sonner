@@ -54,7 +54,7 @@ importers:
   website:
     specifiers:
       '@types/node': 18.11.18
-      '@types/react': 18.0.27
+      '@types/react': 18.2.0
       '@types/react-dom': 18.0.10
       '@vercel/analytics': ^0.1.11
       copy-to-clipboard: ^3.3.3
@@ -70,7 +70,7 @@ importers:
       typescript: 4.9.5
     dependencies:
       '@types/node': 18.11.18
-      '@types/react': 18.0.27
+      '@types/react': 18.2.0
       '@types/react-dom': 18.0.10
       '@vercel/analytics': 0.1.11_react@18.2.0
       copy-to-clipboard: 3.3.3
@@ -411,7 +411,7 @@ packages:
       react: '>=16'
     dependencies:
       '@types/mdx': 2.0.5
-      '@types/react': 18.0.27
+      '@types/react': 18.2.8
       react: 18.2.0
     dev: false
 
@@ -758,7 +758,7 @@ packages:
   /@types/react-dom/18.0.10:
     resolution: {integrity: sha512-E42GW/JA4Qv15wQdqJq8DL4JhNpB3prJgjgapN3qJT9K2zO5IIAQh4VXvCEDupoqAwnz0cY4RlXeC/ajX5SFHg==}
     dependencies:
-      '@types/react': 18.0.27
+      '@types/react': 18.2.8
     dev: false
 
   /@types/react-dom/18.0.11:
@@ -767,16 +767,16 @@ packages:
       '@types/react': 18.0.28
     dev: false
 
-  /@types/react/18.0.27:
-    resolution: {integrity: sha512-3vtRKHgVxu3Jp9t718R9BuzoD4NcQ8YJ5XRzsSKxNDiDonD2MXIT1TmSkenxuCycZJoQT5d2vE8LwWJxBC1gmA==}
+  /@types/react/18.0.28:
+    resolution: {integrity: sha512-RD0ivG1kEztNBdoAK7lekI9M+azSnitIn85h4iOiaLjaTrMjzslhaqCGaI4IyCJ1RljWiLCEu4jyrLLgqxBTew==}
     dependencies:
       '@types/prop-types': 15.7.5
       '@types/scheduler': 0.16.3
       csstype: 3.1.2
     dev: false
 
-  /@types/react/18.0.28:
-    resolution: {integrity: sha512-RD0ivG1kEztNBdoAK7lekI9M+azSnitIn85h4iOiaLjaTrMjzslhaqCGaI4IyCJ1RljWiLCEu4jyrLLgqxBTew==}
+  /@types/react/18.2.0:
+    resolution: {integrity: sha512-0FLj93y5USLHdnhIhABk83rm8XEGA7kH3cr+YUlvxoUGp1xNt/DINUMvqPxLyOQMzLmZe8i4RTHbvb8MC7NmrA==}
     dependencies:
       '@types/prop-types': 15.7.5
       '@types/scheduler': 0.16.3
@@ -789,7 +789,6 @@ packages:
       '@types/prop-types': 15.7.5
       '@types/scheduler': 0.16.3
       csstype: 3.1.2
-    dev: true
 
   /@types/scheduler/0.16.3:
     resolution: {integrity: sha512-5cJ8CB4yAx7BH1oMvdU0Jh9lrEXyPkar6F9G/ERswkCuvP4KQZfZkSjcMbAICCpQTN4OuZn8tz0HiKv9TGZgrQ==}

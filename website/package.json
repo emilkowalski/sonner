@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "@types/node": "18.11.18",
-    "@types/react": "18.0.27",
+    "@types/react": "18.2.0",
     "@types/react-dom": "18.0.10",
     "@vercel/analytics": "^0.1.11",
     "copy-to-clipboard": "^3.3.3",
