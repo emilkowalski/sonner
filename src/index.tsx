@@ -221,6 +221,7 @@ const Toast = (props: ToastProps) => {
       data-index={index}
       data-front={isFront}
       data-swiping={swiping}
+      data-dismissible={dismissible}
       data-type={toastType}
       data-invert={invert}
       data-swipe-out={swipeOut}
@@ -520,6 +521,7 @@ const Toaster = (props: ToasterProps) => {
   }, [listRef.current]);
 
   if (!toasts.length) return null;
+  console.log({ expanded, interacting });
 
   return (
     // Remove item from normal navigation flow, only available via hotkey
@@ -553,6 +555,10 @@ const Toaster = (props: ToasterProps) => {
           }
         }}
         onFocus={(event) => {
+          const isNotDismissible = event.target instanceof HTMLElement && event.target.dataset.dismissible === 'false';
+
+          if (isNotDismissible) return;
+
           if (!isFocusWithinRef.current) {
             isFocusWithinRef.current = true;
             lastFocusedElementRef.current = event.relatedTarget as HTMLElement;
@@ -566,7 +572,10 @@ const Toaster = (props: ToasterProps) => {
             setExpanded(false);
           }
         }}
-        onPointerDown={() => {
+        onPointerDown={(event) => {
+          const isNotDismissible = event.target instanceof HTMLElement && event.target.dataset.dismissible === 'false';
+
+          if (isNotDismissible) return;
           setInteracting(true);
         }}
         onPointerUp={() => setInteracting(false)}
