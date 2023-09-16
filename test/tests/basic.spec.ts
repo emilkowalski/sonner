@@ -42,6 +42,21 @@ test.describe('Basic functionality', () => {
     await expect(page.locator('[data-sonner-toast]')).toHaveCount(0);
   });
 
+  test('dismissible toast is not removed when dragged', async ({ page }) => {
+    await page.getByTestId('non-dismissible-toast').click();
+    const toast = page.locator('[data-sonner-toast]');
+    const dragBoundingBox = await toast.boundingBox();
+
+    if (!dragBoundingBox) return;
+    await page.mouse.move(dragBoundingBox.x + dragBoundingBox.width / 2, dragBoundingBox.y);
+
+    await page.mouse.down();
+    await page.mouse.move(0, dragBoundingBox.y + 300);
+
+    await page.mouse.up();
+    await expect(page.getByTestId('non-dismissible-toast')).toHaveCount(1);
+  });
+
   test('toast is removed after swiping up', async ({ page }) => {
     await page.goto('/?position=top-left');
     await page.getByTestId('default-button').click();

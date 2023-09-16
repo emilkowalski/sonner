@@ -78,6 +78,7 @@ const Toast = (props: ToastProps) => {
   const isFront = index === 0;
   const isVisible = index + 1 <= visibleToasts;
   const toastType = toast.type;
+  const dismissible = toast.dismissible !== false;
   const toastClassname = toast.className || '';
   const toastDescriptionClassname = toast.descriptionClassName || '';
 
@@ -220,6 +221,7 @@ const Toast = (props: ToastProps) => {
       data-index={index}
       data-front={isFront}
       data-swiping={swiping}
+      data-dismissible={dismissible}
       data-type={toastType}
       data-invert={invert}
       data-swipe-out={swipeOut}
@@ -236,7 +238,7 @@ const Toast = (props: ToastProps) => {
         } as React.CSSProperties
       }
       onPointerDown={(event) => {
-        if (disabled) return;
+        if (disabled || !dismissible) return;
         dragStartTime.current = new Date();
         setOffsetBeforeRemove(offset.current);
         // Ensure we maintain correct pointer capture even when going outside of the toast (e.g. when swiping)
@@ -246,7 +248,7 @@ const Toast = (props: ToastProps) => {
         pointerStartRef.current = { x: event.clientX, y: event.clientY };
       }}
       onPointerUp={() => {
-        if (swipeOut) return;
+        if (swipeOut || !dismissible) return;
 
         pointerStartRef.current = null;
         const swipeAmount = Number(toastRef.current?.style.getPropertyValue('--swipe-amount').replace('px', '') || 0);
@@ -266,7 +268,7 @@ const Toast = (props: ToastProps) => {
         setSwiping(false);
       }}
       onPointerMove={(event) => {
-        if (!pointerStartRef.current) return;
+        if (!pointerStartRef.current || !dismissible) return;
 
         const yPosition = event.clientY - pointerStartRef.current.y;
         const xPosition = event.clientX - pointerStartRef.current.x;
@@ -291,7 +293,7 @@ const Toast = (props: ToastProps) => {
           data-disabled={disabled}
           data-close-button
           onClick={
-            disabled
+            disabled || !dismissible
               ? undefined
               : () => {
                   deleteToast();
@@ -339,6 +341,7 @@ const Toast = (props: ToastProps) => {
               data-button
               data-cancel
               onClick={() => {
+                if (!dismissible) return;
                 deleteToast();
                 if (toast.cancel?.onClick) {
                   toast.cancel.onClick();
@@ -518,6 +521,7 @@ const Toaster = (props: ToasterProps) => {
   }, [listRef.current]);
 
   if (!toasts.length) return null;
+  console.log({ expanded, interacting });
 
   return (
     // Remove item from normal navigation flow, only available via hotkey
@@ -551,6 +555,10 @@ const Toaster = (props: ToasterProps) => {
           }
         }}
         onFocus={(event) => {
+          const isNotDismissible = event.target instanceof HTMLElement && event.target.dataset.dismissible === 'false';
+
+          if (isNotDismissible) return;
+
           if (!isFocusWithinRef.current) {
             isFocusWithinRef.current = true;
             lastFocusedElementRef.current = event.relatedTarget as HTMLElement;
@@ -564,7 +572,10 @@ const Toaster = (props: ToasterProps) => {
             setExpanded(false);
           }
         }}
-        onPointerDown={() => {
+        onPointerDown={(event) => {
+          const isNotDismissible = event.target instanceof HTMLElement && event.target.dataset.dismissible === 'false';
+
+          if (isNotDismissible) return;
           setInteracting(true);
         }}
         onPointerUp={() => setInteracting(false)}

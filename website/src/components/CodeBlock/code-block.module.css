@@ -37,6 +37,10 @@
   transition: background 200ms, box-shadow 200ms, opacity 200ms;
 }
 
+.copyButton:focus-visible {
+  opacity: 1;
+}
+
 .copyButton:hover {
   background: var(--gray1);
 }
