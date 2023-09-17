@@ -3,5 +3,11 @@ export default {
   project: {
     link: 'https://github.com/emilkowalski/sonner',
   },
+  docsRepositoryBase: 'https://github.com/emilkowalski/sonner',
+  useNextSeoProps() {
+    return {
+      titleTemplate: '%s – Sonner',
+    };
+  },
   // ... other theme options
 };
