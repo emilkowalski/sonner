@@ -2,19 +2,65 @@
 
 This component renders all the toasts, you can place it anywhere in your app.
 
+## Customization
+
+You can see examples of most of the scenarios described below on the [homepage](/).
+
+### Expanded
+
+When you hover on one of the toasts, they will expand. You can make that the default behavior by setting the `expand` prop to `true`, and customize it even further with the `visibleToasts` prop.
+
+```jsx
+// 9 toasts will be visible instead of the default, which is 3.
+<Toaster expand visibleToasts={9} />
+```
+
+### Position
+
+Changes the place where all toasts will be rendered.
+
+```jsx
+// Available positions:
+// top-left, top-center, top-right, bottom-left, bottom-center, bottom-right
+<Toaster position="top-center" />
+```
+
+### Styling all toasts
+
+You can customzie all toasts at once with `toastOptions` prop. These options witll act as the default for all toasts.
+
+```jsx
+<Toaster
+  toastOptions={{
+    style: { background: 'red' },
+    className: 'my-toast',
+  }}
+/>
+```
+
+### dir
+
+Changes the directionality of the toast's text.
+
+```jsx
+// rtl, ltr, auto
+
+<Toaster dir="rtl" />
+```
+
 ## API Reference
 
-| Property      |                                     Description                                      |        Default |
-| :------------ | :----------------------------------------------------------------------------------: | -------------: |
-| theme         |                  Toast's theme, either `light`, `dark`, or `system`                  |        `light` |
-| richColors    |                     Makes error and success state more colorful                      |        `false` |
-| expand        |                          Toasts will be expanded by default                          |        `false` |
-| visibleToasts |                               Amount of visible toasts                               |            `3` |
-| style         |                           Styles that apply to all toasts                            |            `-` |
-| position      |                       Place where the toasts will be rendered                        | `bottom-right` |
-| closeButton   |                  Adds a close button to all toasts, shows on hover                   |        `false` |
-| offset        |                         Offset from the edges of the screen.                         |         `32px` |
-| dir           |                            Directionality of toast's text                            |          `ltr` |
-| hotkey        |             Keyboard shortcut that will move focus to the toaster area.              |    `⌥/alt + T` |
-| invert        |                      Dark toasts in light mode and vice versa.                       |        `false` |
-| duration      | The time in milliseconds that should elapse before automatically closing each toast. |         `4000` |
+| Property      |                                            Description                                             |        Default |
+| :------------ | :------------------------------------------------------------------------------------------------: | -------------: |
+| theme         |                         Toast's theme, either `light`, `dark`, or `system`                         |        `light` |
+| richColors    |                            Makes error and success state more colorful                             |        `false` |
+| expand        |                                 Toasts will be expanded by default                                 |        `false` |
+| visibleToasts |                                      Amount of visible toasts                                      |            `3` |
+| position      |                              Place where the toasts will be rendered                               | `bottom-right` |
+| closeButton   |                         Adds a close button to all toasts, shows on hover                          |        `false` |
+| offset        |                                Offset from the edges of the screen.                                |         `32px` |
+| dir           |                                   Directionality of toast's text                                   |          `ltr` |
+| hotkey        |                    Keyboard shortcut that will move focus to the toaster area.                     |    `⌥/alt + T` |
+| invert        |                             Dark toasts in light mode and vice versa.                              |        `false` |
+| duration      |        The time in milliseconds that should elapse before automatically closing each toast.        |         `4000` |
+| toastOptions  | These will act as default options for all toasts. See [toast()](/toast) for all available options. |         `4000` |

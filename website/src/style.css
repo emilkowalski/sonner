@@ -24,6 +24,23 @@
     Segoe UI Symbol, Noto Color Emoji;
   --font-mono: 'SF Mono', ui-monospace, SFMono-Regular, Menlo, Monaco,
     Consolas, Liberation Mono, Courier New, monospace;
+  --shiki-token-comment: var(--gray11) !important;
+}
+
+.dark {
+  --gray0: #000;
+  --gray1: hsl(0, 0%, 9.5%);
+  --gray2: hsl(0, 0%, 10.5%);
+  --gray3: hsl(0, 0%, 15.8%);
+  --gray4: hsl(0, 0%, 18.9%);
+  --gray5: hsl(0, 0%, 21.7%);
+  --gray6: hsl(0, 0%, 24.7%);
+  --gray7: hsl(0, 0%, 29.1%);
+  --gray8: hsl(0, 0%, 37.5%);
+  --gray9: hsl(0, 0%, 43%);
+  --gray10: hsl(0, 0%, 50.7%);
+  --gray11: hsl(0, 0%, 69.5%);
+  --gray12: hsl(0, 0%, 93.5%);
 }
 
 body {
@@ -82,12 +99,12 @@ body {
 }
 
 aside li.active a {
-  background: var(--gray3);
-  color: var(--gray12);
+  background: var(--gray3) !important;
+  color: var(--gray12) !important;
 }
 
 aside li:not(.active) a:hover {
-  background: var(--gray2);
+  background: var(--gray2) !important;
 }
 
 pre {
@@ -107,5 +124,13 @@ main > p {
 }
 
 .nx-text-primary-600 {
+  color: var(--gray12) !important;
+}
+
+div > a:hover {
+  color: var(--gray12) !important;
+}
+
+p {
   color: var(--gray12) !important;
 }

@@ -34,10 +34,6 @@ toast('My toast', {
 
 Renders a checkmark icon in front of the message.
 
-<Button onClick={() => toast.success('My success toast')}>
-  Render me
-</Button>
-
 ```jsx
 toast.success('My success toast');
 ```
@@ -46,10 +42,6 @@ toast.success('My success toast');
 
 Renders an error icon in front of the message.
 
-<Button onClick={() => toast.error('My error toast')}>
-  Render me
-</Button>
-
 ```jsx
 toast.error('My error toast');
 ```
@@ -57,19 +49,6 @@ toast.error('My error toast');
 ### Action
 
 Renders a primary button, clicking it will close the toast and run the callback passed via `onClick`.
-
-<Button
-  onClick={() =>
-    toast('My action toast', {
-      action: {
-        label: 'Action',
-        onClick: () => console.log('Action!'),
-      },
-    })
-  }
->
-  Render me
-</Button>
 
 ```jsx
 toast('My action toast', {
@@ -83,19 +62,6 @@ toast('My action toast', {
 ### Cancel
 
 Renders a secondary button, clicking it will close the toast and run the callback passed via `onClick`.
-
-<Button
-  onClick={() =>
-    toast('My action toast', {
-      cancel: {
-        label: 'Action',
-        onClick: () => console.log('Action!'),
-      },
-    })
-  }
->
-  Render me
-</Button>
 
 ```jsx
 toast('My cancel toast', {
@@ -111,26 +77,6 @@ toast('My cancel toast', {
 Starts in a loading state and will update automatically after the promise resolves or fails.
 You can pass a function to the success/error messages to incorporate the result/error of the promise.
 
-<Button
-  onClick={() =>
-    toast.promise(
-      () =>
-        new Promise((resolve) =>
-          setTimeout(() => resolve({ name: 'Sonner' }), 2000),
-        ),
-      {
-        loading: 'Loading...',
-        success: (data) => {
-          return `${data.name} toast has been added`;
-        },
-        error: 'Error',
-      },
-    )
-  }
->
-  Render me
-</Button>
-
 ```jsx
 toast.promise(myPromise, {
   loading: 'Loading...',
@@ -144,14 +90,6 @@ toast.promise(myPromise, {
 ### Custom
 
 You can pass jsx as the first argument instead of a string to render a custom toast while maintaining default styling.
-
-<Button
-  onClick={() =>
-    toast(<div>A custom toast with default styling</div>)
-  }
->
-  Render me
-</Button>
 
 ```jsx
 toast(<div>A custom toast with default styling</div>);
@@ -213,7 +151,3 @@ toast.dismiss(toastId);
 | id          |                                        Custom id for the toast.                                        |     `-` |
 | onDismiss   |       The function gets called when either the close button is clicked, or the toast is swiped.        |     `-` |
 | onAutoClose | Function that gets called when the toast disappears automatically after it's timeout (duration` prop). |     `-` |
-
-```
-
-```
