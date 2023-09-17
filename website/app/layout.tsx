@@ -1,13 +1,27 @@
+import type { Metadata } from 'next';
 import './globals.css';
 import { Analytics } from '@vercel/analytics/react';
+
+export const metadata: Metadata = {
+  title: 'Sonner',
+  description: 'An opinionated toast component for React.',
+  openGraph: {
+    title: 'Sonner',
+    description: 'An opinionated toast component for React.',
+    url: 'https://sonner.emilkowal.ski/',
+    siteName: 'Sonner',
+    locale: 'en_US',
+    type: 'website',
+  },
+  twitter: {
+    title: 'Sonner',
+    card: 'summary_large_image',
+  },
+};
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      {/*
-        <head /> will contain the components returned by the nearest parent
-        head.tsx. Find out more at https://beta.nextjs.org/docs/api-reference/file-conventions/head
-      */}
       <head />
       <body>{children}</body>
       <Analytics />
