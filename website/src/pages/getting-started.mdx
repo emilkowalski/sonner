@@ -1,11 +1,10 @@
-import { Tab, Tabs } from 'nextra-theme-docs';
-import { Button } from '../components/Button';
-import { toast } from 'sonner';
-import { Cards, Card } from '../components/Cards';
+import { Tab, Tabs, Cards, Card, Steps } from 'nextra-theme-docs'
+import { Button } from '../components/Button'
+import { toast } from 'sonner'
 
 # Getting Started
 
-Sonner is an opinionated toast component for React. It's focused on doing one thing well, and that's stacking toasts on top of each other.
+Sonner is an opinionated toast component for React. You can read more about why and how it was built [here](https://emilkowal.ski/ui/building-a-toast-component).
 
 <Button
   onClick={() =>
@@ -16,8 +15,7 @@ Sonner is an opinionated toast component for React. It's focused on doing one th
 >
   Render a toast
 </Button>
-
-<div className="steps-container">
+<Steps>
 ### Install
 
 <Tabs items={['pnpm', 'npm', 'yarn', 'bun']}>
@@ -49,12 +47,12 @@ Sonner is an opinionated toast component for React. It's focused on doing one th
 It can be placed anywhere, even in server components such as `layout.tsx`.
 
 ```tsx
-import { Toaster } from 'sonner';
+import { Toaster } from 'sonner'
 
 export default function RootLayout({
-  children,
+  children
 }: {
-  children: React.ReactNode;
+  children: React.ReactNode
 }) {
   return (
     <html lang="en">
@@ -63,25 +61,25 @@ export default function RootLayout({
         <Toaster />
       </body>
     </html>
-  );
+  )
 }
 ```
 
 ### Render a toast
 
 ```tsx
-import { toast } from 'sonner';
+import { toast } from 'sonner'
 
 function MyToast() {
   return (
     <button onClick={() => toast('This is a sonner toast')}>
       Render my toast
     </button>
-  );
+  )
 }
 ```
 
-</div>
+</Steps>
 
 You can check out one of the sections below to learn more.
 

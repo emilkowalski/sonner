@@ -1,0 +1,219 @@
+import { Button } from '../components/Button';
+import { toast } from 'sonner';
+
+# Toast()
+
+Use it to render a toast. You can call it from anywhere, even outside of React.
+
+## Rendering the toast
+
+You can call it with just a string.
+
+```jsx
+import { toast } from 'sonner';
+
+toast('Hello World!');
+```
+
+Or provide an object as the second argument with more options. They will overwrite the options passed to [`<Toaster />`](/toaster) if you have provided any.
+
+```jsx
+import { toast } from 'sonner';
+
+toast('My toast', {
+  className: 'my-classname',
+  description: 'My description',
+  duration: 5000,
+  icon: <MyIcon />,
+});
+```
+
+## Creating toasts
+
+### Success
+
+Renders a checkmark icon in front of the message.
+
+<Button onClick={() => toast.success('My success toast')}>
+  Render me
+</Button>
+
+```jsx
+toast.success('My success toast');
+```
+
+### Error
+
+Renders an error icon in front of the message.
+
+<Button onClick={() => toast.error('My error toast')}>
+  Render me
+</Button>
+
+```jsx
+toast.error('My error toast');
+```
+
+### Action
+
+Renders a primary button, clicking it will close the toast and run the callback passed via `onClick`.
+
+<Button
+  onClick={() =>
+    toast('My action toast', {
+      action: {
+        label: 'Action',
+        onClick: () => console.log('Action!'),
+      },
+    })
+  }
+>
+  Render me
+</Button>
+
+```jsx
+toast('My action toast', {
+  action: {
+    label: 'Action',
+    onClick: () => console.log('Action!'),
+  },
+});
+```
+
+### Cancel
+
+Renders a secondary button, clicking it will close the toast and run the callback passed via `onClick`.
+
+<Button
+  onClick={() =>
+    toast('My action toast', {
+      cancel: {
+        label: 'Action',
+        onClick: () => console.log('Action!'),
+      },
+    })
+  }
+>
+  Render me
+</Button>
+
+```jsx
+toast('My cancel toast', {
+  action: {
+    label: 'Cancel',
+    onClick: () => console.log('Cancel!'),
+  },
+});
+```
+
+### Promise
+
+Starts in a loading state and will update automatically after the promise resolves or fails.
+You can pass a function to the success/error messages to incorporate the result/error of the promise.
+
+<Button
+  onClick={() =>
+    toast.promise(
+      () =>
+        new Promise((resolve) =>
+          setTimeout(() => resolve({ name: 'Sonner' }), 2000),
+        ),
+      {
+        loading: 'Loading...',
+        success: (data) => {
+          return `${data.name} toast has been added`;
+        },
+        error: 'Error',
+      },
+    )
+  }
+>
+  Render me
+</Button>
+
+```jsx
+toast.promise(myPromise, {
+  loading: 'Loading...',
+  success: (data) => {
+    return `${data.name} toast has been added`;
+  },
+  error: 'Error',
+});
+```
+
+### Custom
+
+You can pass jsx as the first argument instead of a string to render a custom toast while maintaining default styling.
+
+<Button
+  onClick={() =>
+    toast(<div>A custom toast with default styling</div>)
+  }
+>
+  Render me
+</Button>
+
+```jsx
+toast(<div>A custom toast with default styling</div>);
+```
+
+### Headless
+
+Use it to render an unstyled toast with custom jsx while maintaining the functionality. This function receives the `Toast` as an argument, giving you access to all properties.
+
+```jsx
+toast.custom((t) => (
+  <div>
+    This is a custom component{' '}
+    <button onClick={() => toast.dismiss(t)}>close</button>
+  </div>
+));
+```
+
+## Other
+
+### On Close Callback
+
+You can pass `onDismiss` and `onAutoClose` callbacks to each toast. `onDismiss` gets fired when either the close button gets clicked or the toast is swiped. `onAutoClose` fires when the toast disappears automatically after it's timeout (`duration` prop).
+
+```jsx
+toast('Event has been created', {
+  onDismiss: (t) =>
+    console.log(`Toast with id ${t.id} has been dismissed`),
+  onAutoClose: (t) =>
+    console.log(
+      `Toast with id ${t.id} has been closed automatically`,
+    ),
+});
+```
+
+### Dismissing toasts programmatically
+
+To remove a toast programmatically use `toast.dismiss(id)`. The `toast()` function return the id of the toast.
+
+```jsx
+const toastId = toast('Event has been created');
+
+toast.dismiss(toastId);
+```
+
+## API Reference
+
+| Property    |                                              Description                                               | Default |
+| :---------- | :----------------------------------------------------------------------------------------------------: | ------: |
+| description |                           Toast's description, renders underneath the title.                           |     `-` |
+| closeButton |                               Adds a close button which shows on hover.                                | `false` |
+| invert      |                                Dark toast in light mode and vice versa.                                | `false` |
+| important   |                        Control the sensitivity of the toast for screen readers                         | `false` |
+| duration    |            Time in milliseconds that should elapse before automatically closing the toast.             |  `4000` |
+| dismissible |                     If `false`, it'll prevent the user from dismissing the toast.                      |  `true` |
+| icon        |                      Icon displayed in front of toast's text, aligned vertically.                      |     `-` |
+| action      |                      Renders a primary button, clicking it will close the toast.                       |     `-` |
+| cancel      |                     Renders a secondary button, clicking it will close the toast.                      |     `-` |
+| id          |                                        Custom id for the toast.                                        |     `-` |
+| onDismiss   |       The function gets called when either the close button is clicked, or the toast is swiped.        |     `-` |
+| onAutoClose | Function that gets called when the toast disappears automatically after it's timeout (duration` prop). |     `-` |
+
+```
+
+```

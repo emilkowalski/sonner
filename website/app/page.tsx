@@ -14,13 +14,20 @@ import { Other } from '@/src/components/Other/Other';
 
 export default function Home() {
   const [expand, setExpand] = React.useState(false);
-  const [position, setPosition] = React.useState<Position>('bottom-right');
+  const [position, setPosition] =
+    React.useState<Position>('bottom-right');
   const [richColors, setRichColors] = React.useState(false);
   const [closeButton, setCloseButton] = React.useState(false);
 
   return (
     <>
-      <Toaster theme="light" richColors={richColors} closeButton={closeButton} expand={expand} position={position} />
+      <Toaster
+        theme="light"
+        richColors={richColors}
+        closeButton={closeButton}
+        expand={expand}
+        position={position}
+      />
       <main className="container">
         <Hero />
         <div className="content">
@@ -29,7 +36,10 @@ export default function Home() {
           <Types />
           <Position position={position} setPosition={setPosition} />
           <ExpandModes expand={expand} setExpand={setExpand} />
-          <Other setCloseButton={setCloseButton} setRichColors={setRichColors} />
+          <Other
+            setCloseButton={setCloseButton}
+            setRichColors={setRichColors}
+          />
         </div>
       </main>
       <Footer />

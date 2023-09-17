@@ -1,13 +1,26 @@
 import React from 'react';
 
-export type ToastTypes = 'normal' | 'action' | 'success' | 'error' | 'loading';
+export type ToastTypes =
+  | 'normal'
+  | 'action'
+  | 'success'
+  | 'error'
+  | 'loading';
 
-export type PromiseT<Data = any> = Promise<Data> | (() => Promise<Data>);
+export type PromiseT<Data = any> =
+  | Promise<Data>
+  | (() => Promise<Data>);
 
 export type PromiseData<ToastData = any> = ExternalToast & {
   loading: string | React.ReactNode;
-  success: string | React.ReactNode | ((data: ToastData) => React.ReactNode | string);
-  error: string | React.ReactNode | ((error: any) => React.ReactNode | string);
+  success:
+    | string
+    | React.ReactNode
+    | ((data: ToastData) => React.ReactNode | string);
+  error:
+    | string
+    | React.ReactNode
+    | ((error: any) => React.ReactNode | string);
   finally?: () => void | Promise<void>;
 };
 
@@ -39,7 +52,13 @@ export interface ToastT {
   descriptionClassName?: string;
 }
 
-export type Position = 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right' | 'top-center' | 'bottom-center';
+export type Position =
+  | 'top-left'
+  | 'top-right'
+  | 'bottom-left'
+  | 'bottom-right'
+  | 'top-center'
+  | 'bottom-center';
 export interface HeightT {
   height: number;
   toastId: number | string;
@@ -81,6 +100,9 @@ export interface ToastToDismiss {
   dismiss: boolean;
 }
 
-export type ExternalToast = Omit<ToastT, 'id' | 'type' | 'title'> & {
+export type ExternalToast = Omit<
+  ToastT,
+  'id' | 'type' | 'title' | 'jsx' | 'delete' | 'promise'
+> & {
   id?: number | string;
 };
