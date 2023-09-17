@@ -11,6 +11,7 @@ export default function Nextra({
   return (
     <>
       <Toaster />
+      {/* @ts-ignore */}
       <Component {...pageProps} />
     </>
   );
