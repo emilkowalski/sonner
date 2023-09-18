@@ -8,9 +8,4 @@ export default defineConfig({
   dts: true,
   format: ['esm', 'cjs'],
   injectStyle: true,
-  esbuildOptions(options) {
-    options.banner = {
-      js: '"use client"',
-    };
-  },
 });
