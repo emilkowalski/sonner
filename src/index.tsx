@@ -521,7 +521,6 @@ const Toaster = (props: ToasterProps) => {
   }, [listRef.current]);
 
   if (!toasts.length) return null;
-  console.log({ expanded, interacting });
 
   return (
     // Remove item from normal navigation flow, only available via hotkey
