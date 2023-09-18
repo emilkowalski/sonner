@@ -1,8 +1,6 @@
-'use client';
-
 import React from 'react';
 import { Toaster } from 'sonner';
-
+import '../globals.css';
 import { Installation } from '@/src/components/Installation';
 import { Hero } from '@/src/components/Hero';
 import { Types } from '@/src/components/Types/Types';
@@ -14,20 +12,13 @@ import { Other } from '@/src/components/Other/Other';
 
 export default function Home() {
   const [expand, setExpand] = React.useState(false);
-  const [position, setPosition] =
-    React.useState<Position>('bottom-right');
+  const [position, setPosition] = React.useState<Position>('bottom-right');
   const [richColors, setRichColors] = React.useState(false);
   const [closeButton, setCloseButton] = React.useState(false);
 
   return (
-    <>
-      <Toaster
-        theme="light"
-        richColors={richColors}
-        closeButton={closeButton}
-        expand={expand}
-        position={position}
-      />
+    <div className="wrapper">
+      <Toaster theme="light" richColors={richColors} closeButton={closeButton} expand={expand} position={position} />
       <main className="container">
         <Hero />
         <div className="content">
@@ -36,13 +27,10 @@ export default function Home() {
           <Types />
           <Position position={position} setPosition={setPosition} />
           <ExpandModes expand={expand} setExpand={setExpand} />
-          <Other
-            setCloseButton={setCloseButton}
-            setRichColors={setRichColors}
-          />
+          <Other setCloseButton={setCloseButton} setRichColors={setRichColors} />
         </div>
       </main>
       <Footer />
-    </>
+    </div>
   );
 }

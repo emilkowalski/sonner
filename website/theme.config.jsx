@@ -9,5 +9,19 @@ export default {
       titleTemplate: '%s – Sonner',
     };
   },
+  feedback: {
+    content: null,
+  },
+  footer: {
+    text: (
+      <span>
+        MIT {new Date().getFullYear()} ©{' '}
+        <a href="https://sonner.emilkowal.ski" target="_blank">
+          Sonner
+        </a>
+        .
+      </span>
+    ),
+  },
   // ... other theme options
 };

@@ -18,12 +18,9 @@
   --gray12: hsl(0, 0%, 9%);
   --hover: rgb(40, 40, 40);
   --border-radius: 6px;
-  --font-sans: ui-sans-serif, system-ui, -apple-system,
-    BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Arial,
-    Noto Sans, sans-serif, Apple Color Emoji, Segoe UI Emoji,
-    Segoe UI Symbol, Noto Color Emoji;
-  --font-mono: 'SF Mono', ui-monospace, SFMono-Regular, Menlo, Monaco,
-    Consolas, Liberation Mono, Courier New, monospace;
+  --font-sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Arial,
+    Noto Sans, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
+  --font-mono: 'SF Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace;
   --shiki-token-comment: var(--gray11) !important;
 }
 
@@ -79,22 +76,14 @@ body {
 
 .button:focus-visible {
   outline: none;
-  box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.06),
-    0px 1px 0px 0px rgba(0, 0, 0, 0.08),
-    0px 2px 2px 0px rgba(0, 0, 0, 0.04),
-    0px 3px 3px 0px rgba(0, 0, 0, 0.02),
-    0px 4px 4px 0px rgba(0, 0, 0, 0.01), 0 0 0 2px rgba(0, 0, 0, 0.15);
+  box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.06), 0px 1px 0px 0px rgba(0, 0, 0, 0.08),
+    0px 2px 2px 0px rgba(0, 0, 0, 0.04), 0px 3px 3px 0px rgba(0, 0, 0, 0.02), 0px 4px 4px 0px rgba(0, 0, 0, 0.01),
+    0 0 0 2px rgba(0, 0, 0, 0.15);
 }
 
 @media (max-width: 600px) {
   .buttons {
-    mask-image: linear-gradient(
-      to right,
-      transparent,
-      black 16px,
-      black calc(100% - 16px),
-      transparent
-    );
+    mask-image: linear-gradient(to right, transparent, black 16px, black calc(100% - 16px), transparent);
   }
 }
 
@@ -133,4 +122,8 @@ div > a:hover {
 
 p {
   color: var(--gray12) !important;
+}
+
+footer > div {
+  padding: 32px 24px !important;
 }
