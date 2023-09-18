@@ -399,6 +399,11 @@ const Toaster = (props: ToasterProps) => {
     dir = getDocumentDirection(),
   } = props;
   const [toasts, setToasts] = React.useState<ToastT[]>([]);
+  const possiblePositions = React.useMemo(() => {
+    return Array.from(
+      new Set([position].concat(toasts.filter((toast) => toast.position).map((toast) => toast.position))),
+    );
+  }, [toasts, position]);
   const [heights, setHeights] = React.useState<HeightT[]>([]);
   const [expanded, setExpanded] = React.useState(false);
   const [interacting, setInteracting] = React.useState(false);
@@ -411,7 +416,6 @@ const Toaster = (props: ToasterProps) => {
         : 'light'
       : 'light',
   );
-  const [y, x] = position.split('-');
 
   const listRef = React.useRef<HTMLOListElement>(null);
   const hotkeyLabel = hotkey.join('+').replace(/Key/g, '').replace(/Digit/g, '');
@@ -525,83 +529,93 @@ const Toaster = (props: ToasterProps) => {
   return (
     // Remove item from normal navigation flow, only available via hotkey
     <section aria-label={`Notifications ${hotkeyLabel}`} tabIndex={-1}>
-      <ol
-        dir={dir === 'auto' ? getDocumentDirection() : dir}
-        tabIndex={-1}
-        ref={listRef}
-        className={className}
-        data-sonner-toaster
-        data-theme={actualTheme}
-        data-rich-colors={richColors}
-        data-y-position={y}
-        data-x-position={x}
-        style={
-          {
-            '--front-toast-height': `${heights[0]?.height}px`,
-            '--offset': typeof offset === 'number' ? `${offset}px` : offset || VIEWPORT_OFFSET,
-            '--width': `${TOAST_WIDTH}px`,
-            '--gap': `${GAP}px`,
-            ...style,
-          } as React.CSSProperties
-        }
-        onBlur={(event) => {
-          if (isFocusWithinRef.current && !event.currentTarget.contains(event.relatedTarget)) {
-            isFocusWithinRef.current = false;
-            if (lastFocusedElementRef.current) {
-              lastFocusedElementRef.current.focus({ preventScroll: true });
-              lastFocusedElementRef.current = null;
+      {possiblePositions.map((position, index) => {
+        const [y, x] = position.split('-');
+        return (
+          <ol
+            key={position}
+            dir={dir === 'auto' ? getDocumentDirection() : dir}
+            tabIndex={-1}
+            ref={listRef}
+            className={className}
+            data-sonner-toaster
+            data-theme={actualTheme}
+            data-rich-colors={richColors}
+            data-y-position={y}
+            data-x-position={x}
+            style={
+              {
+                '--front-toast-height': `${heights[0]?.height}px`,
+                '--offset': typeof offset === 'number' ? `${offset}px` : offset || VIEWPORT_OFFSET,
+                '--width': `${TOAST_WIDTH}px`,
+                '--gap': `${GAP}px`,
+                ...style,
+              } as React.CSSProperties
             }
-          }
-        }}
-        onFocus={(event) => {
-          const isNotDismissible = event.target instanceof HTMLElement && event.target.dataset.dismissible === 'false';
+            onBlur={(event) => {
+              if (isFocusWithinRef.current && !event.currentTarget.contains(event.relatedTarget)) {
+                isFocusWithinRef.current = false;
+                if (lastFocusedElementRef.current) {
+                  lastFocusedElementRef.current.focus({ preventScroll: true });
+                  lastFocusedElementRef.current = null;
+                }
+              }
+            }}
+            onFocus={(event) => {
+              const isNotDismissible =
+                event.target instanceof HTMLElement && event.target.dataset.dismissible === 'false';
 
-          if (isNotDismissible) return;
+              if (isNotDismissible) return;
 
-          if (!isFocusWithinRef.current) {
-            isFocusWithinRef.current = true;
-            lastFocusedElementRef.current = event.relatedTarget as HTMLElement;
-          }
-        }}
-        onMouseEnter={() => setExpanded(true)}
-        onMouseMove={() => setExpanded(true)}
-        onMouseLeave={() => {
-          // Avoid setting expanded to false when interacting with a toast, e.g. swiping
-          if (!interacting) {
-            setExpanded(false);
-          }
-        }}
-        onPointerDown={(event) => {
-          const isNotDismissible = event.target instanceof HTMLElement && event.target.dataset.dismissible === 'false';
+              if (!isFocusWithinRef.current) {
+                isFocusWithinRef.current = true;
+                lastFocusedElementRef.current = event.relatedTarget as HTMLElement;
+              }
+            }}
+            onMouseEnter={() => setExpanded(true)}
+            onMouseMove={() => setExpanded(true)}
+            onMouseLeave={() => {
+              // Avoid setting expanded to false when interacting with a toast, e.g. swiping
+              if (!interacting) {
+                setExpanded(false);
+              }
+            }}
+            onPointerDown={(event) => {
+              const isNotDismissible =
+                event.target instanceof HTMLElement && event.target.dataset.dismissible === 'false';
 
-          if (isNotDismissible) return;
-          setInteracting(true);
-        }}
-        onPointerUp={() => setInteracting(false)}
-      >
-        {toasts.map((toast, index) => (
-          <Toast
-            key={toast.id}
-            index={index}
-            toast={toast}
-            duration={duration}
-            className={toastOptions?.className}
-            descriptionClassName={toastOptions?.descriptionClassName}
-            invert={invert}
-            visibleToasts={visibleToasts}
-            closeButton={closeButton}
-            interacting={interacting}
-            position={position}
-            style={toastOptions?.style}
-            removeToast={removeToast}
-            toasts={toasts}
-            heights={heights}
-            setHeights={setHeights}
-            expandByDefault={expand}
-            expanded={expanded}
-          />
-        ))}
-      </ol>
+              if (isNotDismissible) return;
+              setInteracting(true);
+            }}
+            onPointerUp={() => setInteracting(false)}
+          >
+            {toasts
+              .filter((toast) => (!toast.position && index === 0) || toast.position === position)
+              .map((toast, index) => (
+                <Toast
+                  key={toast.id}
+                  index={index}
+                  toast={toast}
+                  duration={duration}
+                  className={toastOptions?.className}
+                  descriptionClassName={toastOptions?.descriptionClassName}
+                  invert={invert}
+                  visibleToasts={visibleToasts}
+                  closeButton={closeButton}
+                  interacting={interacting}
+                  position={position}
+                  style={toastOptions?.style}
+                  removeToast={removeToast}
+                  toasts={toasts}
+                  heights={heights}
+                  setHeights={setHeights}
+                  expandByDefault={expand}
+                  expanded={expanded}
+                />
+              ))}
+          </ol>
+        );
+      })}
     </section>
   );
 };

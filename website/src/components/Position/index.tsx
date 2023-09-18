@@ -1,5 +1,6 @@
 import { toast } from 'sonner';
 import { CodeBlock } from '../CodeBlock';
+import React from 'react';
 
 const positions = ['top-left', 'top-center', 'top-right', 'bottom-left', 'bottom-center', 'bottom-right'] as const;
 
@@ -38,6 +39,39 @@ export const Position = ({
         ))}
       </div>
       <CodeBlock>{`<Toaster position="${activePosition}" />`}</CodeBlock>
+    </div>
+  );
+};
+
+export const DynamicPosition = () => {
+  const [currentPosition, setCurrentPosition] = React.useState<Position>('bottom-right');
+  return (
+    <div>
+      <h2>Dynamic Position</h2>
+      <p>
+        You can change the position of the toast dynamically by passing a <code>position</code> prop to the toast
+        function.
+      </p>
+      <div className="buttons">
+        {positions.map((position) => (
+          <button
+            className="button"
+            data-active={position === currentPosition}
+            onClick={() => {
+              setCurrentPosition(position);
+              toast('Event has been created', {
+                position,
+              });
+            }}
+            key={position}
+          >
+            {position}
+          </button>
+        ))}
+      </div>
+      <CodeBlock>{`toast('Event has been created', {
+  position: '${currentPosition}',
+})`}</CodeBlock>
     </div>
   );
 };
