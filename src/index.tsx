@@ -5,14 +5,7 @@ import ReactDOM from 'react-dom';
 
 import './styles.css';
 import { getAsset, Loader } from './assets';
-import {
-  HeightT,
-  Position,
-  ToastT,
-  ToastToDismiss,
-  ExternalToast,
-  ToasterProps,
-} from './types';
+import { HeightT, Position, ToastT, ToastToDismiss, ExternalToast, ToasterProps } from './types';
 import { ToastState, toast } from './state';
 
 // Visible toasts amount
@@ -117,10 +110,7 @@ const Toast = (props: ToastProps) => {
   const invert = toast.invert || ToasterInvert;
   const disabled = toastType === 'loading';
 
-  offset.current = React.useMemo(
-    () => heightIndex * GAP + toastsHeightBefore,
-    [heightIndex, toastsHeightBefore],
-  );
+  offset.current = React.useMemo(() => heightIndex * GAP + toastsHeightBefore, [heightIndex, toastsHeightBefore]);
 
   React.useEffect(() => {
     // Trigger enter animation without using CSS animation
@@ -138,17 +128,11 @@ const Toast = (props: ToastProps) => {
     setInitialHeight(newHeight);
 
     setHeights((heights) => {
-      const alreadyExists = heights.find(
-        (height) => height.toastId === toast.id,
-      );
+      const alreadyExists = heights.find((height) => height.toastId === toast.id);
       if (!alreadyExists) {
         return [{ toastId: toast.id, height: newHeight }, ...heights];
       } else {
-        return heights.map((height) =>
-          height.toastId === toast.id
-            ? { ...height, height: newHeight }
-            : height,
-        );
+        return heights.map((height) => (height.toastId === toast.id ? { ...height, height: newHeight } : height));
       }
     });
   }, [mounted, toast.title, toast.description, setHeights, toast.id]);
@@ -165,22 +149,16 @@ const Toast = (props: ToastProps) => {
   }, [toast, removeToast, setHeights, offset]);
 
   React.useEffect(() => {
-    if (
-      (toast.promise && toastType === 'loading') ||
-      toast.duration === Infinity
-    )
-      return;
+    if ((toast.promise && toastType === 'loading') || toast.duration === Infinity) return;
     let timeoutId: NodeJS.Timeout;
 
     // Pause the timer on each hover
     const pauseTimer = () => {
       if (lastCloseTimerStartTimeRef.current < closeTimerStartTimeRef.current) {
         // Get the elapsed time since the timer started
-        const elapsedTime =
-          new Date().getTime() - closeTimerStartTimeRef.current;
+        const elapsedTime = new Date().getTime() - closeTimerStartTimeRef.current;
 
-        closeTimerRemainingTimeRef.current =
-          closeTimerRemainingTimeRef.current - elapsedTime;
+        closeTimerRemainingTimeRef.current = closeTimerRemainingTimeRef.current - elapsedTime;
       }
 
       lastCloseTimerStartTimeRef.current = new Date().getTime();
@@ -202,16 +180,7 @@ const Toast = (props: ToastProps) => {
     }
 
     return () => clearTimeout(timeoutId);
-  }, [
-    expanded,
-    interacting,
-    expandByDefault,
-    toast,
-    duration,
-    deleteToast,
-    toast.promise,
-    toastType,
-  ]);
+  }, [expanded, interacting, expandByDefault, toast, duration, deleteToast, toast.promise, toastType]);
 
   React.useEffect(() => {
     const toastNode = toastRef.current;
@@ -223,8 +192,7 @@ const Toast = (props: ToastProps) => {
       setInitialHeight(height);
       setHeights((h) => [{ toastId: toast.id, height }, ...h]);
 
-      return () =>
-        setHeights((h) => h.filter((height) => height.toastId !== toast.id));
+      return () => setHeights((h) => h.filter((height) => height.toastId !== toast.id));
     }
   }, [setHeights, toast.id]);
 
@@ -283,13 +251,8 @@ const Toast = (props: ToastProps) => {
         if (swipeOut || !dismissible) return;
 
         pointerStartRef.current = null;
-        const swipeAmount = Number(
-          toastRef.current?.style
-            .getPropertyValue('--swipe-amount')
-            .replace('px', '') || 0,
-        );
-        const timeTaken =
-          new Date().getTime() - dragStartTime.current?.getTime();
+        const swipeAmount = Number(toastRef.current?.style.getPropertyValue('--swipe-amount').replace('px', '') || 0);
+        const timeTaken = new Date().getTime() - dragStartTime.current?.getTime();
         const velocity = Math.abs(swipeAmount) / timeTaken;
 
         // Remove only if threshold is met
@@ -316,10 +279,7 @@ const Toast = (props: ToastProps) => {
         const isAllowedToSwipe = Math.abs(clampedY) > swipeStartThreshold;
 
         if (isAllowedToSwipe) {
-          toastRef.current?.style.setProperty(
-            '--swipe-amount',
-            `${yPosition}px`,
-          );
+          toastRef.current?.style.setProperty('--swipe-amount', `${yPosition}px`);
         } else if (Math.abs(xPosition) > swipeStartThreshold) {
           // User is swiping in wrong direction so we disable swipe gesture
           // for the current pointer down interaction
@@ -363,9 +323,7 @@ const Toast = (props: ToastProps) => {
         <>
           {toastType || toast.icon || toast.promise ? (
             <div data-icon="">
-              {toast.promise || toast.type === 'loading' ? (
-                <Loader visible={toastType === 'loading'} />
-              ) : null}
+              {toast.promise || toast.type === 'loading' ? <Loader visible={toastType === 'loading'} /> : null}
               {toast.icon || getAsset(toastType)}
             </div>
           ) : null}
@@ -373,10 +331,7 @@ const Toast = (props: ToastProps) => {
           <div data-content="">
             <div data-title="">{toast.title}</div>
             {toast.description ? (
-              <div
-                data-description=""
-                className={descriptionClassName + toastDescriptionClassname}
-              >
+              <div data-description="" className={descriptionClassName + toastDescriptionClassname}>
                 {toast.description}
               </div>
             ) : null}
@@ -420,8 +375,7 @@ function getDocumentDirection(): ToasterProps['dir'] {
   const dirAttribute = document.documentElement.getAttribute('dir');
 
   if (dirAttribute === 'auto' || !dirAttribute) {
-    return window.getComputedStyle(document.documentElement)
-      .direction as ToasterProps['dir'];
+    return window.getComputedStyle(document.documentElement).direction as ToasterProps['dir'];
   }
 
   return dirAttribute as ToasterProps['dir'];
@@ -445,6 +399,11 @@ const Toaster = (props: ToasterProps) => {
     dir = getDocumentDirection(),
   } = props;
   const [toasts, setToasts] = React.useState<ToastT[]>([]);
+  const possiblePositions = React.useMemo(() => {
+    return Array.from(
+      new Set([position].concat(toasts.filter((toast) => toast.position).map((toast) => toast.position))),
+    );
+  }, [toasts, position]);
   const [heights, setHeights] = React.useState<HeightT[]>([]);
   const [expanded, setExpanded] = React.useState(false);
   const [interacting, setInteracting] = React.useState(false);
@@ -452,34 +411,26 @@ const Toaster = (props: ToasterProps) => {
     theme !== 'system'
       ? theme
       : typeof window !== 'undefined'
-      ? window.matchMedia &&
-        window.matchMedia('(prefers-color-scheme: dark)').matches
+      ? window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
         ? 'dark'
         : 'light'
       : 'light',
   );
-  const [y, x] = position.split('-');
 
   const listRef = React.useRef<HTMLOListElement>(null);
-  const hotkeyLabel = hotkey
-    .join('+')
-    .replace(/Key/g, '')
-    .replace(/Digit/g, '');
+  const hotkeyLabel = hotkey.join('+').replace(/Key/g, '').replace(/Digit/g, '');
   const lastFocusedElementRef = React.useRef<HTMLElement>(null);
   const isFocusWithinRef = React.useRef(false);
 
   const removeToast = React.useCallback(
-    (toast: ToastT) =>
-      setToasts((toasts) => toasts.filter(({ id }) => id !== toast.id)),
+    (toast: ToastT) => setToasts((toasts) => toasts.filter(({ id }) => id !== toast.id)),
     [],
   );
 
   React.useEffect(() => {
     return ToastState.subscribe((toast) => {
       if ((toast as ToastToDismiss).dismiss) {
-        setToasts((toasts) =>
-          toasts.map((t) => (t.id === toast.id ? { ...t, delete: true } : t)),
-        );
+        setToasts((toasts) => toasts.map((t) => (t.id === toast.id ? { ...t, delete: true } : t)));
         return;
       }
 
@@ -487,9 +438,7 @@ const Toaster = (props: ToasterProps) => {
       setTimeout(() => {
         ReactDOM.flushSync(() => {
           setToasts((toasts) => {
-            const indexOfExistingToast = toasts.findIndex(
-              (t) => t.id === toast.id,
-            );
+            const indexOfExistingToast = toasts.findIndex((t) => t.id === toast.id);
 
             // Update the toast if it already exists
             if (indexOfExistingToast !== -1) {
@@ -515,10 +464,7 @@ const Toaster = (props: ToasterProps) => {
 
     if (theme === 'system') {
       // check if current preference is dark
-      if (
-        window.matchMedia &&
-        window.matchMedia('(prefers-color-scheme: dark)').matches
-      ) {
+      if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
         // it's currently dark
         setActualTheme('dark');
       } else {
@@ -529,15 +475,13 @@ const Toaster = (props: ToasterProps) => {
 
     if (typeof window === 'undefined') return;
 
-    window
-      .matchMedia('(prefers-color-scheme: dark)')
-      .addEventListener('change', ({ matches }) => {
-        if (matches) {
-          setActualTheme('dark');
-        } else {
-          setActualTheme('light');
-        }
-      });
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', ({ matches }) => {
+      if (matches) {
+        setActualTheme('dark');
+      } else {
+        setActualTheme('light');
+      }
+    });
   }, [theme]);
 
   React.useEffect(() => {
@@ -549,9 +493,7 @@ const Toaster = (props: ToasterProps) => {
 
   React.useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
-      const isHotkeyPressed = hotkey.every(
-        (key) => (event as any)[key] || event.code === key,
-      );
+      const isHotkeyPressed = hotkey.every((key) => (event as any)[key] || event.code === key);
 
       if (isHotkeyPressed) {
         setExpanded(true);
@@ -560,8 +502,7 @@ const Toaster = (props: ToasterProps) => {
 
       if (
         event.code === 'Escape' &&
-        (document.activeElement === listRef.current ||
-          listRef.current?.contains(document.activeElement))
+        (document.activeElement === listRef.current || listRef.current?.contains(document.activeElement))
       ) {
         setExpanded(false);
       }
@@ -584,98 +525,97 @@ const Toaster = (props: ToasterProps) => {
   }, [listRef.current]);
 
   if (!toasts.length) return null;
-  console.log({ expanded, interacting });
 
   return (
     // Remove item from normal navigation flow, only available via hotkey
     <section aria-label={`Notifications ${hotkeyLabel}`} tabIndex={-1}>
-      <ol
-        dir={dir === 'auto' ? getDocumentDirection() : dir}
-        tabIndex={-1}
-        ref={listRef}
-        className={className}
-        data-sonner-toaster
-        data-theme={actualTheme}
-        data-rich-colors={richColors}
-        data-y-position={y}
-        data-x-position={x}
-        style={
-          {
-            '--front-toast-height': `${heights[0]?.height}px`,
-            '--offset':
-              typeof offset === 'number'
-                ? `${offset}px`
-                : offset || VIEWPORT_OFFSET,
-            '--width': `${TOAST_WIDTH}px`,
-            '--gap': `${GAP}px`,
-            ...style,
-          } as React.CSSProperties
-        }
-        onBlur={(event) => {
-          if (
-            isFocusWithinRef.current &&
-            !event.currentTarget.contains(event.relatedTarget)
-          ) {
-            isFocusWithinRef.current = false;
-            if (lastFocusedElementRef.current) {
-              lastFocusedElementRef.current.focus({ preventScroll: true });
-              lastFocusedElementRef.current = null;
+      {possiblePositions.map((position, index) => {
+        const [y, x] = position.split('-');
+        return (
+          <ol
+            key={position}
+            dir={dir === 'auto' ? getDocumentDirection() : dir}
+            tabIndex={-1}
+            ref={listRef}
+            className={className}
+            data-sonner-toaster
+            data-theme={actualTheme}
+            data-rich-colors={richColors}
+            data-y-position={y}
+            data-x-position={x}
+            style={
+              {
+                '--front-toast-height': `${heights[0]?.height}px`,
+                '--offset': typeof offset === 'number' ? `${offset}px` : offset || VIEWPORT_OFFSET,
+                '--width': `${TOAST_WIDTH}px`,
+                '--gap': `${GAP}px`,
+                ...style,
+              } as React.CSSProperties
             }
-          }
-        }}
-        onFocus={(event) => {
-          const isNotDismissible =
-            event.target instanceof HTMLElement &&
-            event.target.dataset.dismissible === 'false';
+            onBlur={(event) => {
+              if (isFocusWithinRef.current && !event.currentTarget.contains(event.relatedTarget)) {
+                isFocusWithinRef.current = false;
+                if (lastFocusedElementRef.current) {
+                  lastFocusedElementRef.current.focus({ preventScroll: true });
+                  lastFocusedElementRef.current = null;
+                }
+              }
+            }}
+            onFocus={(event) => {
+              const isNotDismissible =
+                event.target instanceof HTMLElement && event.target.dataset.dismissible === 'false';
 
-          if (isNotDismissible) return;
+              if (isNotDismissible) return;
 
-          if (!isFocusWithinRef.current) {
-            isFocusWithinRef.current = true;
-            lastFocusedElementRef.current = event.relatedTarget as HTMLElement;
-          }
-        }}
-        onMouseEnter={() => setExpanded(true)}
-        onMouseMove={() => setExpanded(true)}
-        onMouseLeave={() => {
-          // Avoid setting expanded to false when interacting with a toast, e.g. swiping
-          if (!interacting) {
-            setExpanded(false);
-          }
-        }}
-        onPointerDown={(event) => {
-          const isNotDismissible =
-            event.target instanceof HTMLElement &&
-            event.target.dataset.dismissible === 'false';
+              if (!isFocusWithinRef.current) {
+                isFocusWithinRef.current = true;
+                lastFocusedElementRef.current = event.relatedTarget as HTMLElement;
+              }
+            }}
+            onMouseEnter={() => setExpanded(true)}
+            onMouseMove={() => setExpanded(true)}
+            onMouseLeave={() => {
+              // Avoid setting expanded to false when interacting with a toast, e.g. swiping
+              if (!interacting) {
+                setExpanded(false);
+              }
+            }}
+            onPointerDown={(event) => {
+              const isNotDismissible =
+                event.target instanceof HTMLElement && event.target.dataset.dismissible === 'false';
 
-          if (isNotDismissible) return;
-          setInteracting(true);
-        }}
-        onPointerUp={() => setInteracting(false)}
-      >
-        {toasts.map((toast, index) => (
-          <Toast
-            key={toast.id}
-            index={index}
-            toast={toast}
-            duration={duration}
-            className={toastOptions?.className}
-            descriptionClassName={toastOptions?.descriptionClassName}
-            invert={invert}
-            visibleToasts={visibleToasts}
-            closeButton={closeButton}
-            interacting={interacting}
-            position={position}
-            style={toastOptions?.style}
-            removeToast={removeToast}
-            toasts={toasts}
-            heights={heights}
-            setHeights={setHeights}
-            expandByDefault={expand}
-            expanded={expanded}
-          />
-        ))}
-      </ol>
+              if (isNotDismissible) return;
+              setInteracting(true);
+            }}
+            onPointerUp={() => setInteracting(false)}
+          >
+            {toasts
+              .filter((toast) => (!toast.position && index === 0) || toast.position === position)
+              .map((toast, index) => (
+                <Toast
+                  key={toast.id}
+                  index={index}
+                  toast={toast}
+                  duration={duration}
+                  className={toastOptions?.className}
+                  descriptionClassName={toastOptions?.descriptionClassName}
+                  invert={invert}
+                  visibleToasts={visibleToasts}
+                  closeButton={closeButton}
+                  interacting={interacting}
+                  position={position}
+                  style={toastOptions?.style}
+                  removeToast={removeToast}
+                  toasts={toasts}
+                  heights={heights}
+                  setHeights={setHeights}
+                  expandByDefault={expand}
+                  expanded={expanded}
+                />
+              ))}
+          </ol>
+        );
+      })}
     </section>
   );
 };

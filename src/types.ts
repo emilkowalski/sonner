@@ -50,6 +50,7 @@ export interface ToastT {
   style?: React.CSSProperties;
   className?: string;
   descriptionClassName?: string;
+  position?: Position;
 }
 
 export type Position =
