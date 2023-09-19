@@ -61,7 +61,9 @@
   font-size: 13px;
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   transition: box-shadow 200ms, background 200ms;
+  width: 152px;
 }
 
 .button[data-primary] {
@@ -129,4 +131,10 @@
   .toastWrapper {
     width: 100%;
   }
+}
+
+.link {
+  color: var(--gray11) !important;
+  font-size: 14px;
+  text-decoration: underline;
 }

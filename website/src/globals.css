@@ -24,7 +24,7 @@
 }
 
 .container {
-  max-width: 610px;
+  max-width: 642px;
   margin: 0 auto;
   padding-left: max(var(--side-padding), env(safe-area-inset-left));
   padding-right: max(var(--side-padding), env(safe-area-inset-right));
@@ -47,7 +47,6 @@
 h1,
 p {
   color: var(--gray12);
-  line-height: 25px;
 }
 
 h2 {
@@ -68,7 +67,6 @@ a {
   color: inherit;
   text-decoration-color: var(--gray10);
   text-underline-position: from-font;
-  text-decoration-thickness: 1.25px;
 }
 
 code {
@@ -133,4 +131,54 @@ code {
   .buttons {
     mask-image: linear-gradient(to right, transparent, black 16px, black calc(100% - 16px), transparent);
   }
+}
+
+.wrapper h1,
+.wrapper p {
+  color: var(--gray12);
+  line-height: 25px;
+}
+m .wrapper h2 {
+  font-size: 16px;
+  color: var(--gray12);
+  font-weight: 500;
+}
+
+.wrapper h2 + p {
+  margin-top: -4px;
+}
+
+.wrapper h2 {
+  margin: 12px 0;
+}
+
+.wrapper p {
+  font-size: 16px;
+  margin-bottom: 16px;
+}
+
+.wrapper a {
+  color: inherit;
+  text-decoration-color: var(--gray10);
+  text-underline-position: from-font;
+}
+
+.wrapper .content {
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+  margin-top: 96px;
+}
+
+.wrapper footer {
+  padding: 0;
+}
+
+.wrapper footer .container {
+  padding: 32px 16px !important;
+}
+
+.wrapper footer p {
+  margin: 0;
+  font-size: 14px;
 }

@@ -6,7 +6,7 @@ import { Hero } from '@/src/components/Hero';
 import { Types } from '@/src/components/Types/Types';
 import { ExpandModes } from '@/src/components/ExpandModes';
 import { Footer } from '@/src/components/Footer';
-import { DynamicPosition, Position } from '@/src/components/Position';
+import { Position } from '@/src/components/Position';
 import { Usage } from '@/src/components/Usage';
 import { Other } from '@/src/components/Other/Other';
 
@@ -26,7 +26,6 @@ export default function Home() {
           <Usage />
           <Types />
           <Position position={position} setPosition={setPosition} />
-          <DynamicPosition />
           <ExpandModes expand={expand} setExpand={setExpand} />
           <Other setCloseButton={setCloseButton} setRichColors={setRichColors} />
         </div>
