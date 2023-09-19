@@ -1,6 +1,5 @@
 import React from 'react';
 import { Toaster } from 'sonner';
-import '../globals.css';
 import { Installation } from '@/src/components/Installation';
 import { Hero } from '@/src/components/Hero';
 import { Types } from '@/src/components/Types/Types';
