@@ -194,3 +194,7 @@ hr {
 .nx-border-primary-500 {
   border-color: var(--gray12) !important;
 }
+
+.nx-bg-primary-500\/10 {
+  background: var(--gray3) !important;
+}
