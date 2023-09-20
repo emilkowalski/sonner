@@ -596,7 +596,7 @@ const Toaster = (props: ToasterProps) => {
                   key={toast.id}
                   index={index}
                   toast={toast}
-                  duration={toastOptions.duration ?? duration}
+                  duration={toastOptions?.duration ?? duration}
                   className={toastOptions?.className}
                   descriptionClassName={toastOptions?.descriptionClassName}
                   invert={invert}
