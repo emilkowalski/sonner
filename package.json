@@ -1,12 +1,12 @@
 {
   "name": "sonner",
-  "version": "0.7.4",
+  "version": "1.0.2",
   "description": "An opinionated toast component for React.",
   "exports": {
+    "types": "./dist/index.d.ts",
     "import": "./dist/index.mjs",
     "require": "./dist/index.js"
   },
-  "types": "./dist/index.d.ts",
   "files": [
     "dist"
   ],
