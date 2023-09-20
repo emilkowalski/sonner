@@ -12,6 +12,7 @@ export default {
   feedback: {
     content: null,
   },
+  darkMode: false,
   footer: {
     text: (
       <span>

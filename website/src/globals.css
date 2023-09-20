@@ -182,3 +182,15 @@ m .wrapper h2 {
   margin: 0;
   font-size: 14px;
 }
+
+footer {
+  background: var(--gray1) !important;
+}
+
+hr {
+  background: var(--gray3) !important;
+}
+
+.nx-border-primary-500 {
+  border-color: var(--gray12) !important;
+}
