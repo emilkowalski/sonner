@@ -1,6 +1,6 @@
 https://github.com/vallezw/sonner/assets/50796600/59b95cb7-9068-4f3e-8469-0b35d9de5cf0
 
-[Sonner](https://sonner.emilkowal.ski/) is an opinionated toast component for React. [Documentation](https://sonner.emilkowal.ski/getting-started)
+[Sonner](https://sonner.emilkowal.ski/) is an opinionated toast component for React.
 
 ## Usage
 
@@ -27,3 +27,7 @@ function App() {
   );
 }
 ```
+
+## Documentation
+
+You can find out more about the API and implementation in the [Documentation](https://sonner.emilkowal.ski/getting-started).
