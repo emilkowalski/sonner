@@ -13,19 +13,39 @@ export default function Home({ searchParams }: any) {
 
   return (
     <>
-      <button data-testid="theme-button" className="button" onClick={() => setTheme('dark')}>
+      <button
+        data-testid="theme-button"
+        className="button"
+        onClick={() => setTheme('dark')}
+      >
         Change theme
       </button>
-      <button data-testid="default-button" className="button" onClick={() => toast('My Toast')}>
+      <button
+        data-testid="default-button"
+        className="button"
+        onClick={() => toast('My Toast')}
+      >
         Render Toast
       </button>
-      <button data-testid="default-button-top" className="button" onClick={() => toast('My Toast')}>
+      <button
+        data-testid="default-button-top"
+        className="button"
+        onClick={() => toast('My Toast')}
+      >
         Render Toast Top
       </button>
-      <button data-testid="success" className="button" onClick={() => toast.success('My Success Toast')}>
+      <button
+        data-testid="success"
+        className="button"
+        onClick={() => toast.success('My Success Toast')}
+      >
         Render Success Toast
       </button>
-      <button data-testid="error" className="button" onClick={() => toast.error('My Error Toast')}>
+      <button
+        data-testid="error"
+        className="button"
+        onClick={() => toast.error('My Error Toast')}
+      >
         Render Error Toast
       </button>
       <button
@@ -81,7 +101,10 @@ export default function Home({ searchParams }: any) {
           toast.custom((t) => (
             <div>
               <h1>jsx</h1>
-              <button data-testid="dismiss-button" onClick={() => toast.dismiss(t)}>
+              <button
+                data-testid="dismiss-button"
+                onClick={() => toast.dismiss(t)}
+              >
                 Dismiss
               </button>
             </div>
@@ -90,7 +113,11 @@ export default function Home({ searchParams }: any) {
       >
         Render Custom Toast
       </button>
-      <button data-testid="infinity-toast" className="button" onClick={() => toast('My Toast', { duration: Infinity })}>
+      <button
+        data-testid="infinity-toast"
+        className="button"
+        onClick={() => toast('My Toast', { duration: Infinity })}
+      >
         Render Infinity Toast
       </button>
       <button
@@ -128,7 +155,11 @@ export default function Home({ searchParams }: any) {
       </button>
       {showAutoClose ? <div data-testid="auto-close-el" /> : null}
       {showDismiss ? <div data-testid="dismiss-el" /> : null}
-      <Toaster position={searchParams.position || 'bottom-right'} theme={theme} dir={searchParams.dir || 'auto'} />
+      <Toaster
+        position={searchParams.position || 'bottom-right'}
+        theme={theme}
+        dir={searchParams.dir || 'auto'}
+      />
     </>
   );
 }

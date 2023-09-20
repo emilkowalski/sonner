@@ -27,8 +27,10 @@ html[dir='rtl'],
 [data-sonner-toaster] {
   position: fixed;
   width: var(--width);
-  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Arial,
-    Noto Sans, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
+  font-family: ui-sans-serif, system-ui, -apple-system,
+    BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue,
+    Arial, Noto Sans, sans-serif, Apple Color Emoji,
+    Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
   --gray1: hsl(0, 0%, 99%);
   --gray2: hsl(0, 0%, 97.3%);
   --gray3: hsl(0, 0%, 95.1%);
@@ -81,7 +83,8 @@ html[dir='rtl'],
   /* https://stackoverflow.com/questions/48124372/pointermove-event-not-working-with-touch-why-not */
   touch-action: none;
   will-change: transform, opacity, height;
-  transition: transform 400ms, opacity 400ms, height 400ms, box-shadow 200ms;
+  transition: transform 400ms, opacity 400ms, height 400ms,
+    box-shadow 200ms;
   box-sizing: border-box;
   outline: none;
 }
@@ -101,7 +104,8 @@ html[dir='rtl'],
 }
 
 [data-sonner-toast]:focus-visible {
-  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1), 0 0 0 2px rgba(0, 0, 0, 0.2);
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1),
+    0 0 0 2px rgba(0, 0, 0, 0.2);
 }
 
 [data-sonner-toast][data-y-position='top'] {
@@ -190,8 +194,12 @@ html[dir='rtl'],
 }
 
 [data-sonner-toast] [data-cancel] {
-  color: var(--color);
-  background: var(--border-color);
+  color: var(--normal-text);
+  background: rgba(0, 0, 0, 0.08);
+}
+
+[data-sonner-toast][data-theme='dark'] [data-cancel] {
+  background: rgba(255, 255, 255, 0.3);
 }
 
 [data-sonner-toast] [data-close-button] {
@@ -213,11 +221,13 @@ html[dir='rtl'],
   opacity: 0;
   cursor: pointer;
   z-index: 1;
-  transition: opacity 100ms, background 200ms, border-color 200ms;
+  transition: opacity 100ms, background 200ms,
+    border-color 200ms;
 }
 
 [data-sonner-toast] [data-close-button]:focus-visible {
-  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1), 0 0 0 2px rgba(0, 0, 0, 0.2);
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1),
+    0 0 0 2px rgba(0, 0, 0, 0.2);
 }
 
 [data-sonner-toast] [data-disabled='true'] {
@@ -285,7 +295,10 @@ html[dir='rtl'],
 
 [data-sonner-toast][data-expanded='false'][data-front='false'] {
   --scale: var(--toasts-before) * 0.05 + 1;
-  --y: translateY(calc(var(--lift-amount) * var(--toasts-before))) scale(calc(-1 * var(--scale)));
+  --y: translateY(
+      calc(var(--lift-amount) * var(--toasts-before))
+    )
+    scale(calc(-1 * var(--scale)));
   height: var(--front-toast-height);
 }
 
@@ -293,7 +306,8 @@ html[dir='rtl'],
   transition: opacity 400ms;
 }
 
-[data-sonner-toast][data-expanded='false'][data-front='false'][data-styled='true'] > * {
+[data-sonner-toast][data-expanded='false'][data-front='false'][data-styled='true']
+  > * {
   opacity: 0;
 }
 
@@ -313,7 +327,9 @@ html[dir='rtl'],
 }
 
 [data-sonner-toast][data-removed='true'][data-front='false'][data-swipe-out='false'][data-expanded='true'] {
-  --y: translateY(calc(var(--lift) * var(--offset) + var(--lift) * -100%));
+  --y: translateY(
+    calc(var(--lift) * var(--offset) + var(--lift) * -100%)
+  );
   opacity: 0;
 }
 
@@ -340,12 +356,21 @@ html[dir='rtl'],
 
 @keyframes swipe-out {
   from {
-    transform: translateY(calc(var(--lift) * var(--offset) + var(--swipe-amount)));
+    transform: translateY(
+      calc(
+        var(--lift) * var(--offset) + var(--swipe-amount)
+      )
+    );
     opacity: 1;
   }
 
   to {
-    transform: translateY(calc(var(--lift) * var(--offset) + var(--swipe-amount) + var(--lift) * -100%));
+    transform: translateY(
+      calc(
+        var(--lift) * var(--offset) + var(--swipe-amount) +
+          var(--lift) * -100%
+      )
+    );
     opacity: 0;
   }
 }
@@ -398,13 +423,15 @@ html[dir='rtl'],
   --error-text: hsl(360, 100%, 45%);
 }
 
-[data-sonner-toaster][data-theme='light'] [data-sonner-toast][data-invert='true'] {
+[data-sonner-toaster][data-theme='light']
+  [data-sonner-toast][data-invert='true'] {
   --normal-bg: #000;
   --normal-border: hsl(0, 0%, 20%);
   --normal-text: var(--gray1);
 }
 
-[data-sonner-toaster][data-theme='dark'] [data-sonner-toast][data-invert='true'] {
+[data-sonner-toaster][data-theme='dark']
+  [data-sonner-toast][data-invert='true'] {
   --normal-bg: #fff;
   --normal-border: var(--gray3);
   --normal-text: var(--gray12);
@@ -424,25 +451,31 @@ html[dir='rtl'],
   --error-text: hsl(358, 100%, 81%);
 }
 
-[data-rich-colors='true'] [data-sonner-toast][data-type='success'] {
+[data-rich-colors='true']
+  [data-sonner-toast][data-type='success'] {
   background: var(--success-bg);
   border-color: var(--success-border);
   color: var(--success-text);
 }
 
-[data-rich-colors='true'] [data-sonner-toast][data-type='success'] [data-close-button] {
+[data-rich-colors='true']
+  [data-sonner-toast][data-type='success']
+  [data-close-button] {
   background: var(--success-bg);
   border-color: var(--success-border);
   color: var(--success-text);
 }
 
-[data-rich-colors='true'] [data-sonner-toast][data-type='error'] {
+[data-rich-colors='true']
+  [data-sonner-toast][data-type='error'] {
   background: var(--error-bg);
   border-color: var(--error-border);
   color: var(--error-text);
 }
 
-[data-rich-colors='true'] [data-sonner-toast][data-type='error'] [data-close-button] {
+[data-rich-colors='true']
+  [data-sonner-toast][data-type='error']
+  [data-close-button] {
   background: var(--error-bg);
   border-color: var(--error-border);
   color: var(--error-text);

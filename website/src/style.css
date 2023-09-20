@@ -1,0 +1,129 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --gray0: #fff;
+  --gray1: hsl(0, 0%, 99%);
+  --gray2: hsl(0, 0%, 97.3%);
+  --gray3: hsl(0, 0%, 95.1%);
+  --gray4: hsl(0, 0%, 93%);
+  --gray5: hsl(0, 0%, 90.9%);
+  --gray6: hsl(0, 0%, 88.7%);
+  --gray7: hsl(0, 0%, 85.8%);
+  --gray8: hsl(0, 0%, 78%);
+  --gray9: hsl(0, 0%, 56.1%);
+  --gray10: hsl(0, 0%, 52.3%);
+  --gray11: hsl(0, 0%, 43.5%);
+  --gray12: hsl(0, 0%, 9%);
+  --hover: rgb(40, 40, 40);
+  --border-radius: 6px;
+  --font-sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Arial,
+    Noto Sans, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
+  --font-mono: 'SF Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace;
+  --shiki-token-comment: var(--gray11) !important;
+}
+
+.dark {
+  --gray0: #000;
+  --gray1: hsl(0, 0%, 9.5%);
+  --gray2: hsl(0, 0%, 10.5%);
+  --gray3: hsl(0, 0%, 15.8%);
+  --gray4: hsl(0, 0%, 18.9%);
+  --gray5: hsl(0, 0%, 21.7%);
+  --gray6: hsl(0, 0%, 24.7%);
+  --gray7: hsl(0, 0%, 29.1%);
+  --gray8: hsl(0, 0%, 37.5%);
+  --gray9: hsl(0, 0%, 43%);
+  --gray10: hsl(0, 0%, 50.7%);
+  --gray11: hsl(0, 0%, 69.5%);
+  --gray12: hsl(0, 0%, 93.5%);
+}
+
+body {
+  padding-top: 0;
+}
+
+.button {
+  padding: 8px 12px;
+  margin: 0;
+  background: var(--gray1);
+  border: 1px solid var(--gray3);
+  white-space: nowrap;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  font-family: var(--font-sans);
+  cursor: pointer;
+  color: var(--gray12);
+  transition: border-color 200ms, background 200ms, box-shadow 200ms;
+  margin: 1.5rem 0 0;
+}
+
+.button p {
+  line-height: 1.5;
+}
+
+.button:hover {
+  background: var(--gray2);
+  border-color: var(--gray4);
+}
+
+.button[data-active='true'] {
+  background: var(--gray3);
+  border-color: var(--gray7);
+}
+
+.button:focus-visible {
+  outline: none;
+  box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.06), 0px 1px 0px 0px rgba(0, 0, 0, 0.08),
+    0px 2px 2px 0px rgba(0, 0, 0, 0.04), 0px 3px 3px 0px rgba(0, 0, 0, 0.02), 0px 4px 4px 0px rgba(0, 0, 0, 0.01),
+    0 0 0 2px rgba(0, 0, 0, 0.15);
+}
+
+@media (max-width: 600px) {
+  .buttons {
+    mask-image: linear-gradient(to right, transparent, black 16px, black calc(100% - 16px), transparent);
+  }
+}
+
+aside li.active a {
+  background: var(--gray3) !important;
+  color: var(--gray12) !important;
+}
+
+aside li:not(.active) a:hover {
+  background: var(--gray2) !important;
+}
+
+pre {
+  background-color: var(--gray0) !important;
+  border: 1px solid var(--gray4);
+  margin-bottom: 2rem !important;
+}
+
+button[title='Copy code'] {
+  background: var(--gray2);
+  color: var(--gray10);
+}
+
+main > p {
+  line-height: 1.5rem !important;
+  margin-top: 1rem !important;
+}
+
+.nx-text-primary-600 {
+  color: var(--gray12) !important;
+}
+
+div > a:hover {
+  color: var(--gray12) !important;
+}
+
+p {
+  color: var(--gray12) !important;
+}
+
+footer > div {
+  padding: 32px 24px !important;
+}

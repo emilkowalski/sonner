@@ -18,14 +18,14 @@ ol[dir='rtl'] .headlessClose {
   position: relative;
 }
 
-.headlessDescription {
+.headless .headlessDescription {
   margin: 0;
   color: var(--gray10);
   font-size: 14px;
   line-height: 1;
 }
 
-.headlessTitle {
+.headless .headlessTitle {
   font-size: 14px;
   margin: 0 0 8px;
   color: var(--gray12);

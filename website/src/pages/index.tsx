@@ -1,14 +1,11 @@
-'use client';
-
 import React from 'react';
 import { Toaster } from 'sonner';
-
 import { Installation } from '@/src/components/Installation';
 import { Hero } from '@/src/components/Hero';
 import { Types } from '@/src/components/Types/Types';
 import { ExpandModes } from '@/src/components/ExpandModes';
 import { Footer } from '@/src/components/Footer';
-import { DynamicPosition, Position } from '@/src/components/Position';
+import { Position } from '@/src/components/Position';
 import { Usage } from '@/src/components/Usage';
 import { Other } from '@/src/components/Other/Other';
 
@@ -19,7 +16,7 @@ export default function Home() {
   const [closeButton, setCloseButton] = React.useState(false);
 
   return (
-    <>
+    <div className="wrapper">
       <Toaster theme="light" richColors={richColors} closeButton={closeButton} expand={expand} position={position} />
       <main className="container">
         <Hero />
@@ -28,12 +25,11 @@ export default function Home() {
           <Usage />
           <Types />
           <Position position={position} setPosition={setPosition} />
-          <DynamicPosition />
           <ExpandModes expand={expand} setExpand={setExpand} />
           <Other setCloseButton={setCloseButton} setRichColors={setRichColors} />
         </div>
       </main>
       <Footer />
-    </>
+    </div>
   );
 }

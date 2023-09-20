@@ -50,6 +50,7 @@ interface ToastOptions {
   className?: string;
   descriptionClassName?: string;
   style?: React.CSSProperties;
+  duration?: number;
 }
 
 export interface ToasterProps {
@@ -82,6 +83,6 @@ export interface ToastToDismiss {
   dismiss: boolean;
 }
 
-export type ExternalToast = Omit<ToastT, 'id' | 'type' | 'title'> & {
+export type ExternalToast = Omit<ToastT, 'id' | 'type' | 'title' | 'jsx' | 'delete' | 'promise'> & {
   id?: number | string;
 };

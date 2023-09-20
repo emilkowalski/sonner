@@ -16,6 +16,7 @@
   border-radius: 6px;
   margin-top: 16px;
   border: 1px solid var(--gray3);
+  padding: 0 !important;
 }
 
 .copyButton {

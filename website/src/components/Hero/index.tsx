@@ -1,6 +1,7 @@
 import { toast } from 'sonner';
 
 import styles from './hero.module.css';
+import Link from 'next/link';
 
 export const Hero = () => {
   return (
@@ -28,6 +29,9 @@ export const Hero = () => {
           GitHub
         </a>
       </div>
+      <Link href="/getting-started" className={styles.link}>
+        Documentation
+      </Link>
     </div>
   );
 };
