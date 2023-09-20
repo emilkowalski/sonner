@@ -6,7 +6,7 @@ This component renders all the toasts, you can place it anywhere in your app.
 
 You can see examples of most of the scenarios described below on the [homepage](/).
 
-### Expanded
+### Expand
 
 When you hover on one of the toasts, they will expand. You can make that the default behavior by setting the `expand` prop to `true`, and customize it even further with the `visibleToasts` prop.
 
@@ -44,7 +44,6 @@ Changes the directionality of the toast's text.
 
 ```jsx
 // rtl, ltr, auto
-
 <Toaster dir="rtl" />
 ```
 
@@ -62,5 +61,4 @@ Changes the directionality of the toast's text.
 | dir           |                                   Directionality of toast's text                                   |          `ltr` |
 | hotkey        |                    Keyboard shortcut that will move focus to the toaster area.                     |    `⌥/alt + T` |
 | invert        |                             Dark toasts in light mode and vice versa.                              |        `false` |
-| duration      |        The time in milliseconds that should elapse before automatically closing each toast.        |         `4000` |
 | toastOptions  | These will act as default options for all toasts. See [toast()](/toast) for all available options. |         `4000` |

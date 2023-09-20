@@ -101,10 +101,22 @@ Use it to render an unstyled toast with custom jsx while maintaining the functio
 ```jsx
 toast.custom((t) => (
   <div>
-    This is a custom component{' '}
-    <button onClick={() => toast.dismiss(t)}>close</button>
+    This is a custom component <button onClick={() => toast.dismiss(t)}>close</button>
   </div>
 ));
+```
+
+### Dynamic Position
+
+You can change the position of the toast dynamically by passing a `position` prop to the toast
+function. It will not affect the positioning of other toasts.
+
+```jsx
+// Available positions:
+// top-left, top-center, top-right, bottom-left, bottom-center, bottom-right
+toast('Hello World', {
+  position: 'top-center',
+});
 ```
 
 ## Other
@@ -115,12 +127,8 @@ You can pass `onDismiss` and `onAutoClose` callbacks to each toast. `onDismiss` 
 
 ```jsx
 toast('Event has been created', {
-  onDismiss: (t) =>
-    console.log(`Toast with id ${t.id} has been dismissed`),
-  onAutoClose: (t) =>
-    console.log(
-      `Toast with id ${t.id} has been closed automatically`,
-    ),
+  onDismiss: (t) => console.log(`Toast with id ${t.id} has been dismissed`),
+  onAutoClose: (t) => console.log(`Toast with id ${t.id} has been closed automatically`),
 });
 ```
 
@@ -136,17 +144,18 @@ toast.dismiss(toastId);
 
 ## API Reference
 
-| Property    |                                              Description                                               | Default |
-| :---------- | :----------------------------------------------------------------------------------------------------: | ------: |
-| description |                           Toast's description, renders underneath the title.                           |     `-` |
-| closeButton |                               Adds a close button which shows on hover.                                | `false` |
-| invert      |                                Dark toast in light mode and vice versa.                                | `false` |
-| important   |                        Control the sensitivity of the toast for screen readers                         | `false` |
-| duration    |            Time in milliseconds that should elapse before automatically closing the toast.             |  `4000` |
-| dismissible |                     If `false`, it'll prevent the user from dismissing the toast.                      |  `true` |
-| icon        |                      Icon displayed in front of toast's text, aligned vertically.                      |     `-` |
-| action      |                      Renders a primary button, clicking it will close the toast.                       |     `-` |
-| cancel      |                     Renders a secondary button, clicking it will close the toast.                      |     `-` |
-| id          |                                        Custom id for the toast.                                        |     `-` |
-| onDismiss   |       The function gets called when either the close button is clicked, or the toast is swiped.        |     `-` |
-| onAutoClose | Function that gets called when the toast disappears automatically after it's timeout (duration` prop). |     `-` |
+| Property    |                                              Description                                               |        Default |
+| :---------- | :----------------------------------------------------------------------------------------------------: | -------------: |
+| description |                           Toast's description, renders underneath the title.                           |            `-` |
+| closeButton |                               Adds a close button which shows on hover.                                |        `false` |
+| invert      |                                Dark toast in light mode and vice versa.                                |        `false` |
+| important   |                        Control the sensitivity of the toast for screen readers                         |        `false` |
+| duration    |            Time in milliseconds that should elapse before automatically closing the toast.             |         `4000` |
+| position    |                                         Position of the toast.                                         | `bottom-right` |
+| dismissible |                     If `false`, it'll prevent the user from dismissing the toast.                      |         `true` |
+| icon        |                      Icon displayed in front of toast's text, aligned vertically.                      |            `-` |
+| action      |                      Renders a primary button, clicking it will close the toast.                       |            `-` |
+| cancel      |                     Renders a secondary button, clicking it will close the toast.                      |            `-` |
+| id          |                                        Custom id for the toast.                                        |            `-` |
+| onDismiss   |       The function gets called when either the close button is clicked, or the toast is swiped.        |            `-` |
+| onAutoClose | Function that gets called when the toast disappears automatically after it's timeout (duration` prop). |            `-` |
