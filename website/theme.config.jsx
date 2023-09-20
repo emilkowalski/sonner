@@ -13,6 +13,9 @@ export default {
     content: null,
   },
   darkMode: false,
+  nextThemes: {
+    forcedTheme: 'light',
+  },
   footer: {
     text: (
       <span>
