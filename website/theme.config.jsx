@@ -12,10 +12,6 @@ export default {
   feedback: {
     content: null,
   },
-  darkMode: false,
-  nextThemes: {
-    forcedTheme: 'light',
-  },
   footer: {
     text: (
       <span>
