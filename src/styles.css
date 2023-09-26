@@ -87,6 +87,7 @@ html[dir='rtl'],
     box-shadow 200ms;
   box-sizing: border-box;
   outline: none;
+  overflow-wrap: anywhere;
 }
 
 [data-sonner-toast][data-styled='true'] {
