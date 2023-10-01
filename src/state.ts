@@ -8,7 +8,7 @@ import {
   ToastTypes,
 } from './types';
 
-let toastsCounter = 0;
+let toastsCounter = 1;
 
 class Observer {
   subscribers: Array<(toast: ExternalToast | ToastToDismiss) => void>;
