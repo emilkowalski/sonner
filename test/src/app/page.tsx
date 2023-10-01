@@ -126,6 +126,21 @@ export default function Home({ searchParams }: any) {
       >
         Non-dismissible Toast
       </button>
+      <button
+        data-testid="update-toast"
+        className="button"
+        onClick={() => {
+          const toastId = toast('My Unupdated Toast', {
+            duration: 10000,
+        });
+        toast('My Updated Toast', {
+            id: toastId,
+            duration: 10000,
+          });
+        }}
+      >
+        Updated Toast
+      </button>
       {showAutoClose ? <div data-testid="auto-close-el" /> : null}
       {showDismiss ? <div data-testid="dismiss-el" /> : null}
       <Toaster position={searchParams.position || 'bottom-right'} theme={theme} dir={searchParams.dir || 'auto'} />
