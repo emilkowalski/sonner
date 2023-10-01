@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { expect, test } from '@playwright/test';
 
 test.beforeEach(async ({ page }) => {
   await page.goto('/');
@@ -158,5 +158,11 @@ test.describe('Basic functionality', () => {
     });
     await page.getByTestId('default-button').click();
     await expect(page.locator('[data-sonner-toaster]')).toHaveAttribute('dir', 'ltr');
+  });
+
+  test('show correct toast content when updating', async ({ page }) => {
+    await page.getByTestId('update-toast').click();
+    await expect(page.getByText('My Unupdated Toast')).toHaveCount(0);
+    await expect(page.getByText('My Updated Toast')).toHaveCount(1);
   });
 });
