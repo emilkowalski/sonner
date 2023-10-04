@@ -3,14 +3,9 @@
   "version": "1.0.3",
   "description": "An opinionated toast component for React.",
   "exports": {
-    "import": {
-      "default": "./dist/index.mjs",
-      "types": "./dist/index.d.ts"
-    },
-    "require": {
-      "default": "./dist/index.js",
-      "types": "./dist/index.d.ts"
-    }
+    "types": "./dist/index.d.ts",
+    "import": "./dist/index.mjs",
+    "require": "./dist/index.js"
   },
   "types": "./dist/index.d.ts",
   "files": [
