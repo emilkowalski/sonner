@@ -435,25 +435,19 @@ const Toaster = (props: ToasterProps) => {
         setToasts((toasts) => toasts.map((t) => (t.id === toast.id ? { ...t, delete: true } : t)));
         return;
       }
+      setToasts((toasts) => {
+        const indexOfExistingToast = toasts.findIndex((t) => t.id === toast.id);
 
-      // Prevent batching, temp solution.
-      setTimeout(() => {
-        ReactDOM.flushSync(() => {
-          setToasts((toasts) => {
-            const indexOfExistingToast = toasts.findIndex((t) => t.id === toast.id);
+        // Update the toast if it already exists
+        if (indexOfExistingToast !== -1) {
+          return [
+            ...toasts.slice(0, indexOfExistingToast),
+            { ...toasts[indexOfExistingToast], ...toast },
+            ...toasts.slice(indexOfExistingToast + 1),
+          ];
+        }
 
-            // Update the toast if it already exists
-            if (indexOfExistingToast !== -1) {
-              return [
-                ...toasts.slice(0, indexOfExistingToast),
-                { ...toasts[indexOfExistingToast], ...toast },
-                ...toasts.slice(indexOfExistingToast + 1),
-              ];
-            }
-
-            return [toast, ...toasts];
-          });
-        });
+        return [toast, ...toasts];
       });
     });
   }, []);
