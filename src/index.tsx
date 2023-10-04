@@ -117,6 +117,11 @@ const Toast = (props: ToastProps) => {
     setMounted(true);
   }, []);
 
+  // Update offsetBeforeRemove whenever offset.current changes
+  React.useEffect(() => {
+    setOffsetBeforeRemove(offset.current);
+  }, [offset.current]);
+
   React.useLayoutEffect(() => {
     if (!mounted) return;
     const toastNode = toastRef.current;
@@ -140,7 +145,6 @@ const Toast = (props: ToastProps) => {
   const deleteToast = React.useCallback(() => {
     // Save the offset for the exit swipe animation
     setRemoved(true);
-    setOffsetBeforeRemove(offset.current);
     setHeights((h) => h.filter((height) => height.toastId !== toast.id));
 
     setTimeout(() => {
@@ -240,7 +244,6 @@ const Toast = (props: ToastProps) => {
       onPointerDown={(event) => {
         if (disabled || !dismissible) return;
         dragStartTime.current = new Date();
-        setOffsetBeforeRemove(offset.current);
         // Ensure we maintain correct pointer capture even when going outside of the toast (e.g. when swiping)
         (event.target as HTMLElement).setPointerCapture(event.pointerId);
         if ((event.target as HTMLElement).tagName === 'BUTTON') return;
@@ -257,7 +260,6 @@ const Toast = (props: ToastProps) => {
 
         // Remove only if threshold is met
         if (Math.abs(swipeAmount) >= SWIPE_THRESHOLD || velocity > 0.11) {
-          setOffsetBeforeRemove(offset.current);
           toast.onDismiss?.(toast);
           deleteToast();
           setSwipeOut(true);
