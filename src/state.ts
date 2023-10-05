@@ -127,28 +127,49 @@ class Observer {
     promise: PromiseT<ToastData>,
     data?: PromiseData<ToastData>,
   ) => {
-    const id = this.create({
-      ...data,
-      promise,
-      type: 'loading',
-      message: data.loading,
-    });
+    if (!data) {
+      // Nothing to show
+      return;
+    }
+
+    let id: string | number | undefined = undefined;
+    if (data.loading !== undefined) {
+      id = this.create({
+        ...data,
+        promise,
+        type: 'loading',
+        message: data.loading,
+      });
+    }
+
     const p = promise instanceof Promise ? promise : promise();
+
+    let shouldDismiss = id !== undefined;
+
     p.then((promiseData) => {
-      const message =
-        typeof data.success === 'function'
-          ? data.success(promiseData)
-          : data.success;
-      this.create({ id, type: 'success', message });
+      if (data.success !== undefined) {
+        shouldDismiss = false;
+        const message = typeof data.success === 'function' ? data.success(promiseData) : data.success;
+        this.create({ id, type: 'success', message });
+      }
     })
       .catch((error) => {
-        const message =
-          typeof data.error === 'function'
-            ? data.error(error)
-            : data.error;
-        this.create({ id, type: 'error', message });
+        if (data.error !== undefined) {
+          shouldDismiss = false;
+          const message = typeof data.error === 'function' ? data.error(error) : data.error;
+          this.create({ id, type: 'error', message });
+        }
       })
-      .finally(data.finally);
+      .finally(() => {
+        if (shouldDismiss) {
+          // Toast is still in load state (and will be indefinitely — dismiss it)
+          this.dismiss(id);
+          id = undefined;
+        }
+
+        data.finally?.();
+      });
+
     return id;
   };
 
