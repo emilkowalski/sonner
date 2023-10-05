@@ -132,14 +132,32 @@ export default function Home({ searchParams }: any) {
         onClick={() => {
           const toastId = toast('My Unupdated Toast', {
             duration: 10000,
-        });
-        toast('My Updated Toast', {
+          });
+          toast('My Updated Toast', {
             id: toastId,
             duration: 10000,
           });
         }}
       >
         Updated Toast
+      </button>
+      <button
+        onClick={() => {
+          toast('My action toast', {
+            action: {
+              label: 'Action',
+              onClick: () => console.log('Action!'),
+            },
+          });
+          toast('My action toast', {
+            action: {
+              label: 'Action',
+              onClick: () => console.log('Action!'),
+            },
+          });
+        }}
+      >
+        Multiple Toasts
       </button>
       {showAutoClose ? <div data-testid="auto-close-el" /> : null}
       {showDismiss ? <div data-testid="dismiss-el" /> : null}
