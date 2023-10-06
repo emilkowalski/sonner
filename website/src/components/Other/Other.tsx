@@ -4,13 +4,12 @@ import { toast } from 'sonner';
 import { CodeBlock } from '../CodeBlock';
 import styles from './other.module.css';
 
-export const Other = ({
-  setRichColors,
-  setCloseButton,
-}: {
+type OtherProps = {
   setRichColors: React.Dispatch<React.SetStateAction<boolean>>;
   setCloseButton: React.Dispatch<React.SetStateAction<boolean>>;
-}) => {
+};
+
+export const Other = ({ setRichColors, setCloseButton }: OtherProps) => {
   const allTypes = useMemo(
     () => [
       {
