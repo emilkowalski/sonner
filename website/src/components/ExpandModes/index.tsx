@@ -1,13 +1,12 @@
 import { toast } from 'sonner';
 import { CodeBlock } from '../CodeBlock';
 
-export const ExpandModes = ({
-  expand,
-  setExpand,
-}: {
+type ExpandModesProps = {
   expand: boolean;
   setExpand: React.Dispatch<React.SetStateAction<boolean>>;
-}) => {
+};
+
+export const ExpandModes = ({ expand, setExpand }: ExpandModesProps) => {
   return (
     <div>
       <h2>Expand</h2>
