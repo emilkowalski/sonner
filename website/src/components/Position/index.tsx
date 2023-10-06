@@ -6,13 +6,12 @@ const positions = ['top-left', 'top-center', 'top-right', 'bottom-left', 'bottom
 
 export type Position = (typeof positions)[number];
 
-export const Position = ({
-  position: activePosition,
-  setPosition,
-}: {
+type PositionProps = {
   position: Position;
   setPosition: React.Dispatch<React.SetStateAction<Position>>;
-}) => {
+};
+
+export const Position = ({ position: activePosition, setPosition }: PositionProps) => {
   return (
     <div>
       <h2>Position</h2>
