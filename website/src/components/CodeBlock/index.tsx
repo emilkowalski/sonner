@@ -45,7 +45,9 @@ const theme = {
   ],
 };
 
-export const CodeBlock = ({ children, initialHeight = 0 }: { children: string; initialHeight?: number }) => {
+type CodeBlockProps = { children: string; initialHeight?: number };
+
+export const CodeBlock = ({ children, initialHeight = 0 }: CodeBlockProps) => {
   const [ref, bounds] = useMeasure();
   const [copying, setCopying] = React.useState<number>(0);
 
