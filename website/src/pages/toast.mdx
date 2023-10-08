@@ -47,7 +47,7 @@ toast.error('My error toast');
 
 ### Action
 
-Renders a primary button, clicking it will close the toast and run the callback passed via `onClick`.
+Renders a primary button, clicking it will close the toast and run the callback passed via `onClick`. You can prevent the toast from closing by calling `event.preventDefault()` in the `onClick` callback.
 
 ```jsx
 toast('My action toast', {
@@ -84,6 +84,14 @@ toast.promise(myPromise, {
   },
   error: 'Error',
 });
+```
+
+### Loading
+
+Renders a toast with a loading spinner. Useful when you want to handle various states yourself instead of using a promise toast.
+
+```jsx
+toast.loading('Loading data');
 ```
 
 ### Custom
