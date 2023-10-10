@@ -36,6 +36,7 @@ interface ToastProps {
   heights: HeightT[];
   setHeights: React.Dispatch<React.SetStateAction<HeightT[]>>;
   removeToast: (toast: ToastT) => void;
+  gap?: number;
   position: Position;
   visibleToasts: number;
   expandByDefault: boolean;
@@ -65,6 +66,7 @@ const Toast = (props: ToastProps) => {
     descriptionClassName = '',
     duration: durationFromToaster,
     position,
+    gap = GAP,
     expandByDefault,
   } = props;
   const [mounted, setMounted] = React.useState(false);
@@ -110,7 +112,7 @@ const Toast = (props: ToastProps) => {
   const invert = toast.invert || ToasterInvert;
   const disabled = toastType === 'loading';
 
-  offset.current = React.useMemo(() => heightIndex * GAP + toastsHeightBefore, [heightIndex, toastsHeightBefore]);
+  offset.current = React.useMemo(() => heightIndex * gap + toastsHeightBefore, [heightIndex, toastsHeightBefore]);
 
   React.useEffect(() => {
     // Trigger enter animation without using CSS animation
@@ -399,6 +401,7 @@ const Toaster = (props: ToasterProps) => {
     visibleToasts = VISIBLE_TOASTS_AMOUNT,
     toastOptions,
     dir = getDocumentDirection(),
+    gap,
   } = props;
   const [toasts, setToasts] = React.useState<ToastT[]>([]);
   const possiblePositions = React.useMemo(() => {
@@ -612,6 +615,7 @@ const Toaster = (props: ToasterProps) => {
                   heights={heights}
                   setHeights={setHeights}
                   expandByDefault={expand}
+                  gap={gap}
                   expanded={expanded}
                 />
               ))}
