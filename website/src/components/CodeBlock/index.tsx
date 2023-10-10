@@ -55,7 +55,7 @@ export const CodeBlock = ({ children, initialHeight = 0 }: { children: string; i
     setTimeout(() => {
       setCopying((c) => c - 1);
     }, 2000);
-  }, []);
+  }, [children]);
 
   return (
     <div className={styles.outerWrapper}>
