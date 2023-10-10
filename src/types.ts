@@ -61,6 +61,7 @@ export interface ToasterProps {
   richColors?: boolean;
   expand?: boolean;
   duration?: number;
+  gap?: number;
   visibleToasts?: number;
   closeButton?: boolean;
   toastOptions?: ToastOptions;
