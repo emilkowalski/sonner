@@ -5,7 +5,7 @@ import ReactDOM from 'react-dom';
 
 import './styles.css';
 import { getAsset, Loader } from './assets';
-import { HeightT, Position, ToastT, ToastToDismiss, ExternalToast, ToasterProps } from './types';
+import type { HeightT, Position, ToastT, ToastToDismiss, ExternalToast, ToasterProps } from './types';
 import { ToastState, toast } from './state';
 
 // Visible toasts amount

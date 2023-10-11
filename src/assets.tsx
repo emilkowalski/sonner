@@ -1,6 +1,6 @@
 'use client';
 import React from 'react';
-import { ToastTypes } from './types';
+import type { ToastTypes } from './types';
 
 export const getAsset = (type: ToastTypes): JSX.Element | null => {
   switch (type) {
