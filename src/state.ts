@@ -1,12 +1,5 @@
 import React from 'react';
-import type {
-  ExternalToast,
-  ToastT,
-  PromiseData,
-  PromiseT,
-  ToastToDismiss,
-  ToastTypes,
-} from './types';
+import type { ExternalToast, ToastT, PromiseData, PromiseT, ToastToDismiss, ToastTypes } from './types';
 
 let toastsCounter = 1;
 
@@ -20,9 +13,7 @@ class Observer {
   }
 
   // We use arrow functions to maintain the correct `this` reference
-  subscribe = (
-    subscriber: (toast: ToastT | ToastToDismiss) => void,
-  ) => {
+  subscribe = (subscriber: (toast: ToastT | ToastToDismiss) => void) => {
     this.subscribers.push(subscriber);
 
     return () => {
@@ -48,15 +39,11 @@ class Observer {
     },
   ) => {
     const { message, ...rest } = data;
-    const id =
-      typeof data?.id === 'number' || data.id?.length > 0
-        ? data.id
-        : toastsCounter++;
+    const id = typeof data?.id === 'number' || data.id?.length > 0 ? data.id : toastsCounter++;
     const alreadyExists = this.toasts.find((toast) => {
       return toast.id === id;
     });
-    const dismissible =
-      data.dismissible === undefined ? true : data.dismissible;
+    const dismissible = data.dismissible === undefined ? true : data.dismissible;
 
     if (alreadyExists) {
       this.toasts = this.toasts.map((toast) => {
@@ -83,50 +70,31 @@ class Observer {
   dismiss = (id?: number | string) => {
     if (!id) {
       this.toasts.forEach((toast) => {
-        this.subscribers.forEach((subscriber) =>
-          subscriber({ id: toast.id, dismiss: true }),
-        );
+        this.subscribers.forEach((subscriber) => subscriber({ id: toast.id, dismiss: true }));
       });
     }
 
-    this.subscribers.forEach((subscriber) =>
-      subscriber({ id, dismiss: true }),
-    );
+    this.subscribers.forEach((subscriber) => subscriber({ id, dismiss: true }));
     return id;
   };
 
-  message = (
-    message: string | React.ReactNode,
-    data?: ExternalToast,
-  ) => {
+  message = (message: string | React.ReactNode, data?: ExternalToast) => {
     return this.create({ ...data, message });
   };
 
-  error = (
-    message: string | React.ReactNode,
-    data?: ExternalToast,
-  ) => {
+  error = (message: string | React.ReactNode, data?: ExternalToast) => {
     return this.create({ ...data, message, type: 'error' });
   };
 
-  success = (
-    message: string | React.ReactNode,
-    data?: ExternalToast,
-  ) => {
+  success = (message: string | React.ReactNode, data?: ExternalToast) => {
     return this.create({ ...data, type: 'success', message });
   };
 
-  loading = (
-    message: string | React.ReactNode,
-    data?: ExternalToast,
-  ) => {
+  loading = (message: string | React.ReactNode, data?: ExternalToast) => {
     return this.create({ ...data, type: 'loading', message });
   };
 
-  promise = <ToastData>(
-    promise: PromiseT<ToastData>,
-    data?: PromiseData<ToastData>,
-  ) => {
+  promise = <ToastData>(promise: PromiseT<ToastData>, data?: PromiseData<ToastData>) => {
     if (!data) {
       // Nothing to show
       return;
@@ -174,10 +142,7 @@ class Observer {
   };
 
   // We can't provide the toast we just created as a prop as we didn't create it yet, so we can create a default toast object, I just don't know how to use function in argument when calling()?
-  custom = (
-    jsx: (id: number | string) => React.ReactElement,
-    data?: ExternalToast,
-  ) => {
+  custom = (jsx: (id: number | string) => React.ReactElement, data?: ExternalToast) => {
     const id = data?.id || toastsCounter++;
     this.publish({ jsx: jsx(id), id, ...data });
   };
@@ -186,10 +151,7 @@ class Observer {
 export const ToastState = new Observer();
 
 // bind this to the toast function
-const toastFunction = (
-  message: string | React.ReactNode,
-  data?: ExternalToast,
-) => {
+const toastFunction = (message: string | React.ReactNode, data?: ExternalToast) => {
   const id = data?.id || toastsCounter++;
 
   ToastState.addToast({
