@@ -35,6 +35,7 @@ export interface ToastT {
   onAutoClose?: (toast: ToastT) => void;
   promise?: PromiseT;
   style?: React.CSSProperties;
+  unstyled?: boolean;
   className?: string;
   descriptionClassName?: string;
   position?: Position;
@@ -51,6 +52,7 @@ interface ToastOptions {
   descriptionClassName?: string;
   style?: React.CSSProperties;
   duration?: number;
+  unstyled?: boolean;
 }
 
 export interface ToasterProps {

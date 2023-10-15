@@ -45,6 +45,7 @@ interface ToastProps {
   style?: React.CSSProperties;
   duration?: number;
   className?: string;
+  unstyled?: boolean;
   descriptionClassName?: string;
 }
 
@@ -213,7 +214,7 @@ const Toast = (props: ToastProps) => {
       ref={toastRef}
       className={className + ' ' + toastClassname}
       data-sonner-toast=""
-      data-styled={!Boolean(toast.jsx)}
+      data-styled={!Boolean(toast.jsx || toast.unstyled)}
       data-mounted={mounted}
       data-promise={Boolean(toast.promise)}
       data-removed={removed}
