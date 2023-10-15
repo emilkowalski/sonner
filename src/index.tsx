@@ -296,7 +296,7 @@ const Toast = (props: ToastProps) => {
           data-close-button
           onClick={
             disabled || !dismissible
-              ? undefined
+              ? () => {}
               : () => {
                   deleteToast();
                   toast.onDismiss?.(toast);
