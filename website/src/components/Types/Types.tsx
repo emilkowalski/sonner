@@ -53,6 +53,16 @@ const allTypes = [
     action: () => toast.success('Event has been created'),
   },
   {
+    name: 'Info',
+    snippet: `toast.info('Be at the area 10 minutes before the event time')`,
+    action: () => toast.info('Be at the area 10 minutes before the event time'),
+  },
+  {
+    name: 'Warning',
+    snippet: `toast.warning('Event start time cannot be earlier than 8am')`,
+    action: () => toast.warning('Event start time cannot be earlier than 8am'),
+  },
+  {
     name: 'Error',
     snippet: `toast.error('Event has not been created')`,
     action: () => toast.error('Event has not been created'),
