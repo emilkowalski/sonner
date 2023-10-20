@@ -30,6 +30,22 @@ export const Other = ({
         },
       },
       {
+        name: 'Rich Colors Info',
+        snippet: `toast.info('Be at the area 10 minutes before the event time')`,
+        action: () => {
+          toast.info('Be at the area 10 minutes before the event time');
+          setRichColors(true);
+        },
+      },
+      {
+        name: 'Rich Colors Warning',
+        snippet: `toast.warning('Event start time cannot be earlier than 8am')`,
+        action: () => {
+          toast.warning('Event start time cannot be earlier than 8am');
+          setRichColors(true);
+        },
+      },
+      {
         name: 'Close Button',
         snippet: `toast('Event has been created', {
   description: 'Monday, January 3rd at 6:00pm',
