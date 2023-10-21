@@ -104,6 +104,7 @@ code {
 
 .buttons {
   display: flex;
+  flex-wrap: wrap;
   gap: 8px;
   overflow: auto;
   margin: 0 calc(-1 * var(--side-padding));
