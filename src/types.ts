@@ -5,9 +5,9 @@ export type ToastTypes = 'normal' | 'action' | 'success' | 'info' | 'warning' | 
 export type PromiseT<Data = any> = Promise<Data> | (() => Promise<Data>);
 
 export type PromiseData<ToastData = any> = ExternalToast & {
-  loading: string | React.ReactNode;
-  success: string | React.ReactNode | ((data: ToastData) => React.ReactNode | string);
-  error: string | React.ReactNode | ((error: any) => React.ReactNode | string);
+  loading?: string | React.ReactNode;
+  success?: string | React.ReactNode | ((data: ToastData) => React.ReactNode | string);
+  error?: string | React.ReactNode | ((error: any) => React.ReactNode | string);
   finally?: () => void | Promise<void>;
 };
 
