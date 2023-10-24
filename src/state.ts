@@ -153,6 +153,7 @@ class Observer {
   custom = (jsx: (id: number | string) => React.ReactElement, data?: ExternalToast) => {
     const id = data?.id || toastsCounter++;
     this.publish({ jsx: jsx(id), id, ...data });
+    return id;
   };
 }
 
