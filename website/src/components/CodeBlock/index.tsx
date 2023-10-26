@@ -25,9 +25,9 @@ const theme = {
       },
     },
     {
-      types: ['atrule', 'keyword', 'attr-name', 'selector'],
+      types: ['atrule', 'keyword', 'attr-name', 'selector', 'string'],
       style: {
-        color: 'var(--gray10)',
+        color: 'var(--gray11)',
       },
     },
     {
