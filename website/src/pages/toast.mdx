@@ -129,6 +129,18 @@ toast('Hello World', {
 
 ## Other
 
+### Updating toasts
+
+You can update a toast by using the `toast` function and passing it the id of the toast you want to update, the rest stays the same.
+
+```jsx
+const toastId = toast('Sonner');
+
+toast.success('Toast has been updated', {
+  id: toastId,
+});
+```
+
 ### On Close Callback
 
 You can pass `onDismiss` and `onAutoClose` callbacks to each toast. `onDismiss` gets fired when either the close button gets clicked or the toast is swiped. `onAutoClose` fires when the toast disappears automatically after it's timeout (`duration` prop).

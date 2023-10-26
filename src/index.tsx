@@ -154,14 +154,14 @@ const Toast = (props: ToastProps) => {
   React.useEffect(() => {
     if ((toast.promise && toastType === 'loading') || toast.duration === Infinity) return;
     let timeoutId: NodeJS.Timeout;
-
+    let remainingTime = duration;
     // Pause the timer on each hover
     const pauseTimer = () => {
       if (lastCloseTimerStartTimeRef.current < closeTimerStartTimeRef.current) {
         // Get the elapsed time since the timer started
         const elapsedTime = new Date().getTime() - closeTimerStartTimeRef.current;
 
-        closeTimerRemainingTimeRef.current = closeTimerRemainingTimeRef.current - elapsedTime;
+        remainingTime = remainingTime - elapsedTime;
       }
 
       lastCloseTimerStartTimeRef.current = new Date().getTime();
@@ -169,11 +169,12 @@ const Toast = (props: ToastProps) => {
 
     const startTimer = () => {
       closeTimerStartTimeRef.current = new Date().getTime();
+
       // Let the toast know it has started
       timeoutId = setTimeout(() => {
         toast.onAutoClose?.(toast);
         deleteToast();
-      }, closeTimerRemainingTimeRef.current);
+      }, remainingTime);
     };
 
     if (expanded || interacting) {

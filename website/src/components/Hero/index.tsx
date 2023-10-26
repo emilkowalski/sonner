@@ -4,6 +4,14 @@ import styles from './hero.module.css';
 import Link from 'next/link';
 
 export const Hero = () => {
+  function handleToast() {
+    const id = toast.loading('I am loading...', { duration: Infinity });
+
+    setTimeout(() => {
+      toast.success('YAY', { duration: 4000, id });
+    }, 3000);
+  }
+
   return (
     <div className={styles.wrapper}>
       <div className={styles.toastWrapper}>
@@ -17,9 +25,7 @@ export const Hero = () => {
         <button
           data-primary=""
           onClick={() => {
-            toast('Sonner', {
-              description: 'An opinionated toast component for React.',
-            });
+            handleToast();
           }}
           className={styles.button}
         >
