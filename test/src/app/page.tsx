@@ -16,7 +16,7 @@ export default function Home({ searchParams }: any) {
       <button data-testid="theme-button" className="button" onClick={() => setTheme('dark')}>
         Change theme
       </button>
-      <button data-testid="default-button" className="button" onClick={() => toast('My Toast', { duration: 4000 })}>
+      <button data-testid="default-button" className="button" onClick={() => toast('My Toast')}>
         Render Toast
       </button>
       <button data-testid="default-button-top" className="button" onClick={() => toast('My Toast')}>
