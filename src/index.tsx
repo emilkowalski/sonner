@@ -43,6 +43,8 @@ interface ToastProps {
   closeButton: boolean;
   interacting: boolean;
   style?: React.CSSProperties;
+  cancelButtonStyle?: React.CSSProperties;
+  actionButtonStyle?: React.CSSProperties;
   duration?: number;
   className?: string;
   unstyled?: boolean;
@@ -63,6 +65,8 @@ const Toast = (props: ToastProps) => {
     removeToast,
     closeButton,
     style,
+    cancelButtonStyle,
+    actionButtonStyle,
     className = '',
     descriptionClassName = '',
     duration: durationFromToaster,
@@ -346,6 +350,7 @@ const Toast = (props: ToastProps) => {
             <button
               data-button
               data-cancel
+              style={cancelButtonStyle}
               onClick={() => {
                 if (!dismissible) return;
                 deleteToast();
@@ -360,6 +365,7 @@ const Toast = (props: ToastProps) => {
           {toast.action ? (
             <button
               data-button=""
+              style={actionButtonStyle}
               onClick={(event) => {
                 toast.action?.onClick(event);
                 if (event.defaultPrevented) return;
@@ -612,6 +618,8 @@ const Toaster = (props: ToasterProps) => {
                   interacting={interacting}
                   position={position}
                   style={toastOptions?.style}
+                  cancelButtonStyle={toastOptions?.cancelButtonStyle}
+                  actionButtonStyle={toastOptions?.actionButtonStyle}
                   removeToast={removeToast}
                   toasts={toasts}
                   heights={heights}
