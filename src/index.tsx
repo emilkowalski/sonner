@@ -361,7 +361,7 @@ const Toast = (props: ToastProps) => {
             <button
               data-button
               data-cancel
-              style={cancelButtonStyle}
+              style={toast.cancelButtonStyle || cancelButtonStyle}
               onClick={() => {
                 if (!dismissible) return;
                 deleteToast();
@@ -376,7 +376,7 @@ const Toast = (props: ToastProps) => {
           {toast.action ? (
             <button
               data-button=""
-              style={actionButtonStyle}
+              style={toast.actionButtonStyle || actionButtonStyle}
               onClick={(event) => {
                 toast.action?.onClick(event);
                 if (event.defaultPrevented) return;

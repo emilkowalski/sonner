@@ -34,6 +34,8 @@ export interface ToastT {
   onDismiss?: (toast: ToastT) => void;
   onAutoClose?: (toast: ToastT) => void;
   promise?: PromiseT;
+  cancelButtonStyle?: React.CSSProperties;
+  actionButtonStyle?: React.CSSProperties;
   style?: React.CSSProperties;
   unstyled?: boolean;
   className?: string;
