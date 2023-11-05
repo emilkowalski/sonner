@@ -132,8 +132,8 @@ export default function Home({ searchParams }: any) {
         onClick={() => {
           const toastId = toast('My Unupdated Toast', {
             duration: 10000,
-        });
-        toast('My Updated Toast', {
+          });
+          toast('My Updated Toast', {
             id: toastId,
             duration: 10000,
           });

@@ -71,6 +71,7 @@ export interface ToasterProps {
   style?: React.CSSProperties;
   offset?: string | number;
   dir?: 'rtl' | 'ltr' | 'auto';
+  loadingIcon?: React.ReactNode;
 }
 
 export enum SwipeStateTypes {
