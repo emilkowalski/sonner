@@ -51,6 +51,8 @@ interface ToastOptions {
   className?: string;
   descriptionClassName?: string;
   style?: React.CSSProperties;
+  cancelButtonStyle?: React.CSSProperties;
+  actionButtonStyle?: React.CSSProperties;
   duration?: number;
   unstyled?: boolean;
 }

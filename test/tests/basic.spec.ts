@@ -7,7 +7,7 @@ test.beforeEach(async ({ page }) => {
 test.describe('Basic functionality', () => {
   test('toast is rendered and disappears after the default timeout', async ({ page }) => {
     await page.getByTestId('default-button').click();
-    await expect(page.locator('[data-sonner-toast]')).toHaveCount(0);
+    await expect(page.locator('[data-sonner-toast]')).toHaveCount(1);
     await expect(page.locator('[data-sonner-toast]')).toHaveCount(0);
   });
 
@@ -164,5 +164,19 @@ test.describe('Basic functionality', () => {
     await page.getByTestId('update-toast').click();
     await expect(page.getByText('My Unupdated Toast')).toHaveCount(0);
     await expect(page.getByText('My Updated Toast')).toHaveCount(1);
+  });
+
+  test('cancel button is rendered with custom styles', async ({ page }) => {
+    await page.getByTestId('custom-cancel-button-toast').click();
+    const button = await page.locator('[data-cancel]');
+
+    await expect(button).toHaveCSS('background-color', 'rgb(254, 226, 226)');
+  });
+
+  test('action button is rendered with custom styles', async ({ page }) => {
+    await page.getByTestId('action').click();
+    const button = await page.locator('[data-button]');
+
+    await expect(button).toHaveCSS('background-color', 'rgb(219, 239, 255)');
   });
 });
