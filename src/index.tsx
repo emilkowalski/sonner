@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useMemo } from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom';
 
 import './styles.css';
@@ -208,7 +208,7 @@ const Toast = (props: ToastProps) => {
     }
   }, [deleteToast, toast.delete]);
 
-  const loadingIcon = useMemo(() => {
+  function getLoadingIcon() {
     if (loadingIconProp) {
       return (
         <div className="loader" data-visible={toastType === 'loading'}>
@@ -217,7 +217,7 @@ const Toast = (props: ToastProps) => {
       );
     }
     return <Loader visible={toastType === 'loading'} />;
-  }, [loadingIconProp, toastType]);
+  }
 
   return (
     <li
@@ -340,7 +340,7 @@ const Toast = (props: ToastProps) => {
         <>
           {toastType || toast.icon || toast.promise ? (
             <div data-icon="">
-              {(toast.promise || toast.type === 'loading') && !toast.icon ? loadingIcon : null}
+              {(toast.promise || toast.type === 'loading') && !toast.icon ? getLoadingIcon() : null}
               {toast.icon || getAsset(toastType)}
             </div>
           ) : null}
