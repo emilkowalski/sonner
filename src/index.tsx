@@ -47,6 +47,7 @@ interface ToastProps {
   className?: string;
   unstyled?: boolean;
   descriptionClassName?: string;
+  loadingIcon?: React.ReactNode;
 }
 
 const Toast = (props: ToastProps) => {
@@ -68,6 +69,7 @@ const Toast = (props: ToastProps) => {
     duration: durationFromToaster,
     position,
     gap = GAP,
+    loadingIcon: loadingIconProp,
     expandByDefault,
   } = props;
   const [mounted, setMounted] = React.useState(false);
@@ -206,6 +208,17 @@ const Toast = (props: ToastProps) => {
     }
   }, [deleteToast, toast.delete]);
 
+  function getLoadingIcon() {
+    if (loadingIconProp) {
+      return (
+        <div className="loader" data-visible={toastType === 'loading'}>
+          {loadingIconProp}
+        </div>
+      );
+    }
+    return <Loader visible={toastType === 'loading'} />;
+  }
+
   return (
     <li
       aria-live={toast.important ? 'assertive' : 'polite'}
@@ -327,9 +340,7 @@ const Toast = (props: ToastProps) => {
         <>
           {toastType || toast.icon || toast.promise ? (
             <div data-icon="">
-              {(toast.promise || toast.type === 'loading') && !toast.icon ? (
-                <Loader visible={toastType === 'loading'} />
-              ) : null}
+              {(toast.promise || toast.type === 'loading') && !toast.icon ? getLoadingIcon() : null}
               {toast.icon || getAsset(toastType)}
             </div>
           ) : null}
@@ -404,6 +415,7 @@ const Toaster = (props: ToasterProps) => {
     toastOptions,
     dir = getDocumentDirection(),
     gap,
+    loadingIcon,
   } = props;
   const [toasts, setToasts] = React.useState<ToastT[]>([]);
   const possiblePositions = React.useMemo(() => {
@@ -618,6 +630,7 @@ const Toaster = (props: ToasterProps) => {
                   setHeights={setHeights}
                   expandByDefault={expand}
                   gap={gap}
+                  loadingIcon={loadingIcon}
                   expanded={expanded}
                 />
               ))}
