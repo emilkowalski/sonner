@@ -103,7 +103,10 @@ class Observer {
     return this.create({ ...data, type: 'loading', message });
   };
 
-  promise = <ToastData>(promise: PromiseT<ToastData>, data?: PromiseData<ToastData>) => {
+  promise = <ToastData>(
+    promise: PromiseT<ToastData & { ok?: boolean; status?: string }>,
+    data?: PromiseData<ToastData>,
+  ) => {
     if (!data) {
       // Nothing to show
       return;
@@ -123,10 +126,15 @@ class Observer {
 
     let shouldDismiss = id !== undefined;
 
-    p.then((promiseData) => {
-      if (data.success !== undefined) {
+    p.then((response) => {
+      if (response.ok !== undefined && !response.ok) {
         shouldDismiss = false;
-        const message = typeof data.success === 'function' ? data.success(promiseData) : data.success;
+        const message =
+          typeof data.error === 'function' ? data.error(`HTTP error! status: ${response.status}`) : data.error;
+        this.create({ id, type: 'error', message });
+      } else if (data.success !== undefined) {
+        shouldDismiss = false;
+        const message = typeof data.success === 'function' ? data.success(response) : data.success;
         this.create({ id, type: 'success', message });
       }
     })
