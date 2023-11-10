@@ -123,10 +123,18 @@ class Observer {
 
     let shouldDismiss = id !== undefined;
 
-    p.then((promiseData) => {
-      if (data.success !== undefined) {
+    p.then((response) => {
+      // TODO: Clean up TS here, response has incorrect type
+      // @ts-expect-error
+      if (response && typeof response.ok === 'boolean' && !response.ok) {
         shouldDismiss = false;
-        const message = typeof data.success === 'function' ? data.success(promiseData) : data.success;
+        const message =
+          // @ts-expect-error
+          typeof data.error === 'function' ? data.error(`HTTP error! status: ${response.status}`) : data.error;
+        this.create({ id, type: 'error', message });
+      } else if (data.success !== undefined) {
+        shouldDismiss = false;
+        const message = typeof data.success === 'function' ? data.success(response) : data.success;
         this.create({ id, type: 'success', message });
       }
     })
