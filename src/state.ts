@@ -103,10 +103,7 @@ class Observer {
     return this.create({ ...data, type: 'loading', message });
   };
 
-  promise = <ToastData>(
-    promise: PromiseT<ToastData & { ok?: boolean; status?: string }>,
-    data?: PromiseData<ToastData>,
-  ) => {
+  promise = <ToastData>(promise: PromiseT<ToastData>, data?: PromiseData<ToastData>) => {
     if (!data) {
       // Nothing to show
       return;
@@ -127,9 +124,12 @@ class Observer {
     let shouldDismiss = id !== undefined;
 
     p.then((response) => {
-      if (response.ok !== undefined && !response.ok) {
+      // TODO: Clean up TS here, response has incorrect type
+      // @ts-expect-error
+      if (response && typeof response.ok === 'boolean' && !response.ok) {
         shouldDismiss = false;
         const message =
+          // @ts-expect-error
           typeof data.error === 'function' ? data.error(`HTTP error! status: ${response.status}`) : data.error;
         this.create({ id, type: 'error', message });
       } else if (data.success !== undefined) {
