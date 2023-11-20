@@ -360,7 +360,7 @@ const Toast = (props: ToastProps) => {
           ) : null}
 
           <div data-content="">
-            <div data-title="" className={cn(classNames?.title, toast.classNames.title)}>
+            <div data-title="" className={cn(classNames?.title, toast?.classNames?.title)}>
               {toast.title}
             </div>
             {toast.description ? (

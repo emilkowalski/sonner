@@ -20,16 +20,7 @@ export default function Home() {
   return (
     <div className="wrapper">
       <Head />
-      <Toaster
-        theme="light"
-        richColors={richColors}
-        closeButton={closeButton}
-        expand={expand}
-        position={position}
-        toastOptions={{
-          classNames: {},
-        }}
-      />
+      <Toaster theme="light" richColors={richColors} closeButton={closeButton} expand={expand} position={position} />
       <main className="container">
         <Hero />
         <div className="content">
