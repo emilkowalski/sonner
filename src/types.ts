@@ -25,6 +25,7 @@ export interface ToastClassnames {
   warning?: string;
 }
 
+// TODO: CLEANUP TYPES
 export interface ToastT {
   id: number | string;
   title?: string | React.ReactNode;
