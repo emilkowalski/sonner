@@ -58,6 +58,21 @@ toast('Hello World', {
 });
 ```
 
+Styling per toast type is also possible.
+
+```jsx
+<Toaster
+  toastOptions={{
+    classNames: {
+      error: '!bg-red-400',
+      success: '!text-green-400',
+      warning: '!text-yellow-400',
+      info: '!bg-blue-400',
+    },
+  }}
+/>
+```
+
 ## No styles
 
 You can also disable default styles by going headless.

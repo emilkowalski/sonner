@@ -19,6 +19,10 @@ export interface ToastClassnames {
   closeButton?: string;
   cancelButton?: string;
   actionButton?: string;
+  success?: string;
+  error?: string;
+  info?: string;
+  warning?: string;
 }
 
 export interface ToastT {

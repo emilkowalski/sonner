@@ -239,7 +239,14 @@ const Toast = (props: ToastProps) => {
       role="status"
       tabIndex={0}
       ref={toastRef}
-      className={cn(className, toastClassname, classNames?.toast, toast?.classNames?.toast)}
+      className={cn(
+        className,
+        toastClassname,
+        classNames?.toast,
+        toast?.classNames?.toast,
+        classNames?.[toastType],
+        toast?.classNames?.[toastType],
+      )}
       data-sonner-toast=""
       data-styled={!Boolean(toast.jsx || toast.unstyled)}
       data-mounted={mounted}
