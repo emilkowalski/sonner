@@ -11,6 +11,21 @@ export type PromiseData<ToastData = any> = ExternalToast & {
   finally?: () => void | Promise<void>;
 };
 
+export interface ToastClassnames {
+  toast?: string;
+  title?: string;
+  description?: string;
+  loader?: string;
+  closeButton?: string;
+  cancelButton?: string;
+  actionButton?: string;
+  success?: string;
+  error?: string;
+  info?: string;
+  warning?: string;
+}
+
+// TODO: CLEANUP TYPES
 export interface ToastT {
   id: number | string;
   title?: string | React.ReactNode;
@@ -39,6 +54,7 @@ export interface ToastT {
   style?: React.CSSProperties;
   unstyled?: boolean;
   className?: string;
+  classNames?: ToastClassnames;
   descriptionClassName?: string;
   position?: Position;
 }
@@ -57,6 +73,7 @@ interface ToastOptions {
   actionButtonStyle?: React.CSSProperties;
   duration?: number;
   unstyled?: boolean;
+  classNames?: ToastClassnames;
 }
 
 export interface ToasterProps {

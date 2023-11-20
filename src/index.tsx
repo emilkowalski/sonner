@@ -5,7 +5,7 @@ import ReactDOM from 'react-dom';
 
 import './styles.css';
 import { getAsset, Loader } from './assets';
-import type { HeightT, Position, ToastT, ToastToDismiss, ExternalToast, ToasterProps } from './types';
+import type { HeightT, Position, ToastT, ToastToDismiss, ExternalToast, ToasterProps, ToastClassnames } from './types';
 import { ToastState, toast } from './state';
 
 // Visible toasts amount
@@ -50,6 +50,11 @@ interface ToastProps {
   unstyled?: boolean;
   descriptionClassName?: string;
   loadingIcon?: React.ReactNode;
+  classNames?: ToastClassnames;
+}
+
+function cn(...classes: (string | undefined)[]) {
+  return classes.filter(Boolean).join(' ');
 }
 
 const Toast = (props: ToastProps) => {
@@ -75,6 +80,7 @@ const Toast = (props: ToastProps) => {
     gap = GAP,
     loadingIcon: loadingIconProp,
     expandByDefault,
+    classNames,
   } = props;
   const [mounted, setMounted] = React.useState(false);
   const [removed, setRemoved] = React.useState(false);
@@ -90,7 +96,6 @@ const Toast = (props: ToastProps) => {
   const dismissible = toast.dismissible !== false;
   const toastClassname = toast.className || '';
   const toastDescriptionClassname = toast.descriptionClassName || '';
-
   // Height index is used to calculate the offset as it gets updated before the toast array, which means we can calculate the new layout faster.
   const heightIndex = React.useMemo(
     () => heights.findIndex((height) => height.toastId === toast.id) || 0,
@@ -120,6 +125,7 @@ const Toast = (props: ToastProps) => {
   const disabled = toastType === 'loading';
 
   offset.current = React.useMemo(() => heightIndex * gap + toastsHeightBefore, [heightIndex, toastsHeightBefore]);
+  console.log(classNames);
 
   React.useEffect(() => {
     // Trigger enter animation without using CSS animation
@@ -215,7 +221,10 @@ const Toast = (props: ToastProps) => {
   function getLoadingIcon() {
     if (loadingIconProp) {
       return (
-        <div className="loader" data-visible={toastType === 'loading'}>
+        <div
+          className={cn('loader', classNames?.toast, toast?.classNames?.toast)}
+          data-visible={toastType === 'loading'}
+        >
           {loadingIconProp}
         </div>
       );
@@ -230,7 +239,14 @@ const Toast = (props: ToastProps) => {
       role="status"
       tabIndex={0}
       ref={toastRef}
-      className={className + ' ' + toastClassname}
+      className={cn(
+        className,
+        toastClassname,
+        classNames?.toast,
+        toast?.classNames?.toast,
+        classNames?.[toastType],
+        toast?.classNames?.[toastType],
+      )}
       data-sonner-toast=""
       data-styled={!Boolean(toast.jsx || toast.unstyled)}
       data-mounted={mounted}
@@ -321,6 +337,7 @@ const Toast = (props: ToastProps) => {
                   toast.onDismiss?.(toast);
                 }
           }
+          className={cn(classNames?.closeButton, toast?.classNames?.closeButton)}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -350,9 +367,19 @@ const Toast = (props: ToastProps) => {
           ) : null}
 
           <div data-content="">
-            <div data-title="">{toast.title}</div>
+            <div data-title="" className={cn(classNames?.title, toast?.classNames?.title)}>
+              {toast.title}
+            </div>
             {toast.description ? (
-              <div data-description="" className={descriptionClassName + toastDescriptionClassname}>
+              <div
+                data-description=""
+                className={cn(
+                  descriptionClassName,
+                  toastDescriptionClassname,
+                  classNames?.description,
+                  toast?.classNames?.description,
+                )}
+              >
                 {toast.description}
               </div>
             ) : null}
@@ -369,6 +396,7 @@ const Toast = (props: ToastProps) => {
                   toast.cancel.onClick();
                 }
               }}
+              className={cn(classNames?.cancelButton, toast?.classNames?.cancelButton)}
             >
               {toast.cancel.label}
             </button>
@@ -382,6 +410,7 @@ const Toast = (props: ToastProps) => {
                 if (event.defaultPrevented) return;
                 deleteToast();
               }}
+              className={cn(classNames?.actionButton, toast?.classNames?.actionButton)}
             >
               {toast.action.label}
             </button>
@@ -630,6 +659,7 @@ const Toaster = (props: ToasterProps) => {
                   interacting={interacting}
                   position={position}
                   style={toastOptions?.style}
+                  classNames={toastOptions?.classNames}
                   cancelButtonStyle={toastOptions?.cancelButtonStyle}
                   actionButtonStyle={toastOptions?.actionButtonStyle}
                   removeToast={removeToast}

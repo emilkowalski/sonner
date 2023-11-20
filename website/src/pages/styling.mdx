@@ -1,0 +1,86 @@
+# Styling
+
+Styling can be done globally via `toastOptions`, this way every toast will have the same styling.
+
+```jsx
+<Toaster
+  toastOptions={{
+    style: {
+      background: 'red',
+    },
+    className: 'class',
+  }}
+/>
+```
+
+You can also use the same props when calling `toast` to style a specific toast.
+
+```jsx
+toast('Hello World', {
+  style: {
+    background: 'red',
+  },
+  className: 'class',
+});
+```
+
+## Tailwind CSS
+
+The preferred way to style the toasts with tailwind is by using the `classNames` prop. Exclamation mark in front of the class is required to override the default styles.
+
+```jsx
+<Toaster
+  toastOptions={{
+    classNames: {
+      toast: '!bg-blue-400',
+      title: '!text-red-400',
+      description: '!text-red-400',
+      actionButton: '!bg-zinc-400',
+      cancelButton: '!bg-orange-400',
+      closeButton: '!bg-lime-400',
+    },
+  }}
+/>
+```
+
+You can do the same when calling `toast()`.
+
+```jsx
+toast('Hello World', {
+  classNames: {
+    toast: '!bg-blue-400',
+    title: '!text-red-400 !text-2xl',
+    description: '!text-red-400',
+    actionButton: '!bg-zinc-400',
+    cancelButton: '!bg-orange-400',
+    closeButton: '!bg-lime-400',
+  },
+});
+```
+
+Styling per toast type is also possible.
+
+```jsx
+<Toaster
+  toastOptions={{
+    classNames: {
+      error: '!bg-red-400',
+      success: '!text-green-400',
+      warning: '!text-yellow-400',
+      info: '!bg-blue-400',
+    },
+  }}
+/>
+```
+
+## No styles
+
+You can also disable default styles by going headless.
+
+```jsx
+toast.custom((t) => (
+  <div>
+    This is a custom component <button onClick={() => toast.dismiss(t)}>close</button>
+  </div>
+));
+```

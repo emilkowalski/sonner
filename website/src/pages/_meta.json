@@ -14,5 +14,13 @@
   "toaster": {
     "title": "Toaster",
     "href": "/toaster"
+  },
+  "-- GUIDES": {
+    "type": "separator",
+    "title": "Guides"
+  },
+  "styling": {
+    "title": "Styling",
+    "href": "/styling"
   }
 }
