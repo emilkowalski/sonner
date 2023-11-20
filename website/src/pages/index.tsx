@@ -27,9 +27,7 @@ export default function Home() {
         expand={expand}
         position={position}
         toastOptions={{
-          classNames: {
-            toast: '!bg-red-400',
-          },
+          classNames: {},
         }}
       />
       <main className="container">

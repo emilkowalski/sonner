@@ -53,6 +53,10 @@ interface ToastProps {
   classNames?: ToastClassnames;
 }
 
+function cn(...classes: (string | undefined)[]) {
+  return classes.filter(Boolean).join(' ');
+}
+
 const Toast = (props: ToastProps) => {
   const {
     invert: ToasterInvert,
@@ -217,7 +221,10 @@ const Toast = (props: ToastProps) => {
   function getLoadingIcon() {
     if (loadingIconProp) {
       return (
-        <div className="loader" data-visible={toastType === 'loading'}>
+        <div
+          className={cn('loader', classNames?.toast, toast?.classNames?.toast)}
+          data-visible={toastType === 'loading'}
+        >
           {loadingIconProp}
         </div>
       );
@@ -232,7 +239,7 @@ const Toast = (props: ToastProps) => {
       role="status"
       tabIndex={0}
       ref={toastRef}
-      className={className + ' ' + toastClassname + ' ' + classNames?.toast}
+      className={cn(className, toastClassname, classNames?.toast, toast?.classNames?.toast)}
       data-sonner-toast=""
       data-styled={!Boolean(toast.jsx || toast.unstyled)}
       data-mounted={mounted}
@@ -323,7 +330,7 @@ const Toast = (props: ToastProps) => {
                   toast.onDismiss?.(toast);
                 }
           }
-          className={classNames?.closeButton}
+          className={cn(classNames?.closeButton, toast?.classNames?.closeButton)}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -353,13 +360,18 @@ const Toast = (props: ToastProps) => {
           ) : null}
 
           <div data-content="">
-            <div data-title="" className={classNames?.title}>
+            <div data-title="" className={cn(classNames?.title, toast.classNames.title)}>
               {toast.title}
             </div>
             {toast.description ? (
               <div
                 data-description=""
-                className={descriptionClassName + toastDescriptionClassname + classNames?.description}
+                className={cn(
+                  descriptionClassName,
+                  toastDescriptionClassname,
+                  classNames?.description,
+                  toast?.classNames?.description,
+                )}
               >
                 {toast.description}
               </div>
@@ -377,7 +389,7 @@ const Toast = (props: ToastProps) => {
                   toast.cancel.onClick();
                 }
               }}
-              className={classNames?.cancelButton}
+              className={cn(classNames?.cancelButton, toast?.classNames?.cancelButton)}
             >
               {toast.cancel.label}
             </button>
@@ -391,7 +403,7 @@ const Toast = (props: ToastProps) => {
                 if (event.defaultPrevented) return;
                 deleteToast();
               }}
-              className={classNames?.actionButton}
+              className={cn(classNames?.actionButton, toast?.classNames?.actionButton)}
             >
               {toast.action.label}
             </button>
