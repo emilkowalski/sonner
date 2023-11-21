@@ -125,7 +125,7 @@ const Toast = (props: ToastProps) => {
   const disabled = toastType === 'loading';
 
   offset.current = React.useMemo(() => heightIndex * gap + toastsHeightBefore, [heightIndex, toastsHeightBefore]);
-  console.log(classNames);
+ 
 
   React.useEffect(() => {
     // Trigger enter animation without using CSS animation
