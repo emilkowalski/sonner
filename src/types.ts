@@ -25,7 +25,6 @@ export interface ToastClassnames {
   warning?: string;
 }
 
-// TODO: CLEANUP TYPES
 export interface ToastT {
   id: number | string;
   title?: string | React.ReactNode;
@@ -94,6 +93,33 @@ export interface ToasterProps {
   dir?: 'rtl' | 'ltr' | 'auto';
   loadingIcon?: React.ReactNode;
   containerAriaLabel?: string;
+}
+
+export interface ToastProps {
+  toast: ToastT;
+  toasts: ToastT[];
+  index: number;
+  expanded: boolean;
+  invert: boolean;
+  heights: HeightT[];
+  setHeights: React.Dispatch<React.SetStateAction<HeightT[]>>;
+  removeToast: (toast: ToastT) => void;
+  gap?: number;
+  position: Position;
+  visibleToasts: number;
+  expandByDefault: boolean;
+  closeButton: boolean;
+  interacting: boolean;
+  style?: React.CSSProperties;
+  cancelButtonStyle?: React.CSSProperties;
+  actionButtonStyle?: React.CSSProperties;
+  duration?: number;
+  className?: string;
+  unstyled?: boolean;
+  descriptionClassName?: string;
+  loadingIcon?: React.ReactNode;
+  classNames?: ToastClassnames;
+  closeButtonAriaLabel?: string;
 }
 
 export enum SwipeStateTypes {
