@@ -92,6 +92,7 @@ export interface ToasterProps {
   offset?: string | number;
   dir?: 'rtl' | 'ltr' | 'auto';
   loadingIcon?: React.ReactNode;
+  containerAriaLabel?: string;
 }
 
 export interface ToastProps {
