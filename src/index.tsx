@@ -5,7 +5,7 @@ import ReactDOM from 'react-dom';
 
 import './styles.css';
 import { getAsset, Loader } from './assets';
-import type { HeightT, Position, ToastT, ToastToDismiss, ExternalToast, ToasterProps, ToastClassnames } from './types';
+import type { HeightT, ToastT, ToastToDismiss, ExternalToast, ToasterProps, ToastProps } from './types';
 import { ToastState, toast } from './state';
 
 // Visible toasts amount
@@ -27,32 +27,6 @@ const SWIPE_THRESHOLD = 20;
 
 const TIME_BEFORE_UNMOUNT = 200;
 
-interface ToastProps {
-  toast: ToastT;
-  toasts: ToastT[];
-  index: number;
-  expanded: boolean;
-  invert: boolean;
-  heights: HeightT[];
-  setHeights: React.Dispatch<React.SetStateAction<HeightT[]>>;
-  removeToast: (toast: ToastT) => void;
-  gap?: number;
-  position: Position;
-  visibleToasts: number;
-  expandByDefault: boolean;
-  closeButton: boolean;
-  interacting: boolean;
-  style?: React.CSSProperties;
-  cancelButtonStyle?: React.CSSProperties;
-  actionButtonStyle?: React.CSSProperties;
-  duration?: number;
-  className?: string;
-  unstyled?: boolean;
-  descriptionClassName?: string;
-  loadingIcon?: React.ReactNode;
-  classNames?: ToastClassnames;
-}
-
 function cn(...classes: (string | undefined)[]) {
   return classes.filter(Boolean).join(' ');
 }
@@ -61,6 +35,7 @@ const Toast = (props: ToastProps) => {
   const {
     invert: ToasterInvert,
     toast,
+    unstyled,
     interacting,
     setHeights,
     visibleToasts,
@@ -247,7 +222,7 @@ const Toast = (props: ToastProps) => {
         toast?.classNames?.[toastType],
       )}
       data-sonner-toast=""
-      data-styled={!Boolean(toast.jsx || toast.unstyled)}
+      data-styled={!Boolean(toast.jsx || toast.unstyled || unstyled)}
       data-mounted={mounted}
       data-promise={Boolean(toast.promise)}
       data-removed={removed}
@@ -658,6 +633,7 @@ const Toaster = (props: ToasterProps) => {
                   interacting={interacting}
                   position={position}
                   style={toastOptions?.style}
+                  unstyled={toastOptions?.unstyled}
                   classNames={toastOptions?.classNames}
                   cancelButtonStyle={toastOptions?.cancelButtonStyle}
                   actionButtonStyle={toastOptions?.actionButtonStyle}
