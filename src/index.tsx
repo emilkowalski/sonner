@@ -51,6 +51,7 @@ interface ToastProps {
   descriptionClassName?: string;
   loadingIcon?: React.ReactNode;
   classNames?: ToastClassnames;
+  closeButtonAriaLabel?: string;
 }
 
 function cn(...classes: (string | undefined)[]) {
@@ -81,6 +82,7 @@ const Toast = (props: ToastProps) => {
     loadingIcon: loadingIconProp,
     expandByDefault,
     classNames,
+    closeButtonAriaLabel = 'Close toast',
   } = props;
   const [mounted, setMounted] = React.useState(false);
   const [removed, setRemoved] = React.useState(false);
@@ -325,7 +327,7 @@ const Toast = (props: ToastProps) => {
     >
       {closeButton && !toast.jsx ? (
         <button
-          aria-label="Close toast"
+          aria-label={closeButtonAriaLabel}
           data-disabled={disabled}
           data-close-button
           onClick={
@@ -450,6 +452,7 @@ const Toaster = (props: ToasterProps) => {
     dir = getDocumentDirection(),
     gap,
     loadingIcon,
+    containerAriaLabel = 'Notifications',
   } = props;
   const [toasts, setToasts] = React.useState<ToastT[]>([]);
   const possiblePositions = React.useMemo(() => {
@@ -581,7 +584,7 @@ const Toaster = (props: ToasterProps) => {
 
   return (
     // Remove item from normal navigation flow, only available via hotkey
-    <section aria-label={`Notifications ${hotkeyLabel}`} tabIndex={-1}>
+    <section aria-label={`${containerAriaLabel} ${hotkeyLabel}`} tabIndex={-1}>
       {possiblePositions.map((position, index) => {
         const [y, x] = position.split('-');
         return (
