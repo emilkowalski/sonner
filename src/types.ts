@@ -119,6 +119,7 @@ export interface ToastProps {
   descriptionClassName?: string;
   loadingIcon?: React.ReactNode;
   classNames?: ToastClassnames;
+  closeButtonAriaLabel?: string;
 }
 
 export enum SwipeStateTypes {
