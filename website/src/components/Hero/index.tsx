@@ -18,8 +18,7 @@ export const Hero = () => {
           data-primary=""
           onClick={() => {
             toast('Sonner', {
-              description: 'An opinionated toast component for React.',
-              unstyled: true,
+              description: 'An opinionated toast component for React.'
             });
           }}
           className={styles.button}
