@@ -1,6 +1,6 @@
 import React from 'react';
 
-export type ToastTypes = 'normal' | 'action' | 'success' | 'info' | 'warning' | 'error' | 'loading';
+export type ToastTypes = 'normal' | 'action' | 'success' | 'info' | 'warning' | 'error' | 'loading' | 'default';
 
 export type PromiseT<Data = any> = Promise<Data> | (() => Promise<Data>);
 
@@ -23,6 +23,7 @@ export interface ToastClassnames {
   error?: string;
   info?: string;
   warning?: string;
+  default?: string;
 }
 
 export interface ToastT {
