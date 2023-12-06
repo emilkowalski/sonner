@@ -165,7 +165,7 @@ html[dir='rtl'],
   gap: 2px;
 }
 
-[data-sonner-toast] [data-button] {
+[data-sonner-toast][data-styled='true'] [data-button] {
   border-radius: 4px;
   padding-left: 8px;
   padding-right: 8px;
@@ -184,7 +184,7 @@ html[dir='rtl'],
   transition: opacity 400ms, box-shadow 200ms;
 }
 
-[data-sonner-toast] [data-button]:focus-visible {
+[data-sonner-toast][data-styled='true'] [data-button]:focus-visible {
   box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.4);
 }
 
