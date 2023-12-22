@@ -85,7 +85,7 @@ const allTypes = [
   },
   {
     name: 'Promise',
-    snippet: `const promise = () => new Promise((resolve) => setTimeout(resolve, 2000));
+    snippet: `const promise = () => new Promise((resolve) => setTimeout(() => resolve({ name: 'Sonner' }), 2000));
 
 toast.promise(promise, {
   loading: 'Loading...',
