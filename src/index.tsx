@@ -398,6 +398,7 @@ const Toast = (props: ToastProps) => {
 
 function getDocumentDirection(): ToasterProps['dir'] {
   if (typeof window === 'undefined') return 'ltr';
+  if (typeof document === 'undefined') return 'ltr';  // For Fresh purpose
 
   const dirAttribute = document.documentElement.getAttribute('dir');
 
