@@ -10,6 +10,7 @@ import { Usage } from '@/src/components/Usage';
 import { Other } from '@/src/components/Other/Other';
 import Head from '../components/Head';
 import { How } from '../components/How/How';
+import { CustomStyling } from '../components/CustomStyling';
 
 export default function Home() {
   const [expand, setExpand] = React.useState(false);
@@ -30,6 +31,7 @@ export default function Home() {
           <Position position={position} setPosition={setPosition} />
           <ExpandModes expand={expand} setExpand={setExpand} />
           <Other setCloseButton={setCloseButton} setRichColors={setRichColors} />
+          <CustomStyling />
           <How />
         </div>
       </main>
