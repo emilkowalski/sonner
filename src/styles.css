@@ -218,7 +218,6 @@ html[dir='rtl'],
   border: 1px solid var(--gray4);
   transform: var(--toast-close-button-transform);
   border-radius: 50%;
-  opacity: 0;
   cursor: pointer;
   z-index: 1;
   transition: opacity 100ms, background 200ms, border-color 200ms;
@@ -230,16 +229,6 @@ html[dir='rtl'],
 
 [data-sonner-toast] [data-disabled='true'] {
   cursor: not-allowed;
-}
-
-[data-sonner-toast]:hover [data-close-button] {
-  opacity: 1;
-}
-[data-sonner-toast]:focus [data-close-button] {
-  opacity: 1;
-}
-[data-sonner-toast]:focus-within [data-close-button] {
-  opacity: 1;
 }
 
 [data-sonner-toast]:hover [data-close-button]:hover {
