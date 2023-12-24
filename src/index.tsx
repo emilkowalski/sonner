@@ -656,4 +656,9 @@ const Toaster = (props: ToasterProps) => {
     </section>
   );
 };
-export { toast, Toaster, ToastT, ExternalToast };
+export {
+  toast,
+  Toaster,
+  type ToastT,
+  type ExternalToast
+};
