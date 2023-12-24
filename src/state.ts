@@ -1,5 +1,6 @@
+import type { ExternalToast, PromiseData, PromiseT, ToastT, ToastToDismiss, ToastTypes } from './types';
+
 import React from 'react';
-import type { ExternalToast, ToastT, PromiseData, PromiseT, ToastToDismiss, ToastTypes } from './types';
 
 let toastsCounter = 1;
 
@@ -181,15 +182,21 @@ const toastFunction = (message: string | React.ReactNode, data?: ExternalToast) 
 
 const basicToast = toastFunction;
 
+const getHistory = () => ToastState.toasts;
+
 // We use `Object.assign` to maintain the correct types as we would lose them otherwise
-export const toast = Object.assign(basicToast, {
-  success: ToastState.success,
-  info: ToastState.info,
-  warning: ToastState.warning,
-  error: ToastState.error,
-  custom: ToastState.custom,
-  message: ToastState.message,
-  promise: ToastState.promise,
-  dismiss: ToastState.dismiss,
-  loading: ToastState.loading,
-});
+export const toast = Object.assign(
+  basicToast,
+  {
+    success: ToastState.success,
+    info: ToastState.info,
+    warning: ToastState.warning,
+    error: ToastState.error,
+    custom: ToastState.custom,
+    message: ToastState.message,
+    promise: ToastState.promise,
+    dismiss: ToastState.dismiss,
+    loading: ToastState.loading,
+  },
+  { getHistory },
+);
