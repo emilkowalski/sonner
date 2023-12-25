@@ -196,10 +196,7 @@ const Toast = (props: ToastProps) => {
   function getLoadingIcon() {
     if (loadingIconProp) {
       return (
-        <div
-          className={cn('loader', classNames?.toast, toast?.classNames?.toast)}
-          data-visible={toastType === 'loading'}
-        >
+        <div className="loader" data-visible={toastType === 'loading'}>
           {loadingIconProp}
         </div>
       );
@@ -398,7 +395,7 @@ const Toast = (props: ToastProps) => {
 
 function getDocumentDirection(): ToasterProps['dir'] {
   if (typeof window === 'undefined') return 'ltr';
-  if (typeof document === 'undefined') return 'ltr';  // For Fresh purpose
+  if (typeof document === 'undefined') return 'ltr'; // For Fresh purpose
 
   const dirAttribute = document.documentElement.getAttribute('dir');
 
