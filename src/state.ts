@@ -174,6 +174,7 @@ const toastFunction = (message: string | React.ReactNode, data?: ExternalToast) 
   ToastState.addToast({
     title: message,
     ...data,
+    type: 'default',
     id,
   });
   return id;
