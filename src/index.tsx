@@ -56,6 +56,7 @@ const Toast = (props: ToastProps) => {
     loadingIcon: loadingIconProp,
     expandByDefault,
     classNames,
+    icons,
     closeButtonAriaLabel = 'Close toast',
   } = props;
   const [mounted, setMounted] = React.useState(false);
@@ -194,6 +195,13 @@ const Toast = (props: ToastProps) => {
   }, [deleteToast, toast.delete]);
 
   function getLoadingIcon() {
+    if (icons.loading) {
+      return (
+        <div className="loader" data-visible={toastType === 'loading'}>
+          {icons.loading}
+        </div>
+      );
+    }
     if (loadingIconProp) {
       return (
         <div className="loader" data-visible={toastType === 'loading'}>
@@ -333,8 +341,9 @@ const Toast = (props: ToastProps) => {
         <>
           {toastType || toast.icon || toast.promise ? (
             <div data-icon="">
-              {(toast.promise || toast.type === 'loading') && !toast.icon ? getLoadingIcon() : null}
-              {toast.icon || getAsset(toastType)}
+              {toast.promise || toastType === 'loading'
+                ? toast.icon || icons.loading || getLoadingIcon()
+                : toast.icon || icons[toastType] || getAsset(toastType)}
             </div>
           ) : null}
 
@@ -424,6 +433,7 @@ const Toaster = (props: ToasterProps) => {
     dir = getDocumentDirection(),
     gap,
     loadingIcon,
+    icons,
     containerAriaLabel = 'Notifications',
   } = props;
   const [toasts, setToasts] = React.useState<ToastT[]>([]);
@@ -644,6 +654,7 @@ const Toaster = (props: ToasterProps) => {
                   expandByDefault={expand}
                   gap={gap}
                   loadingIcon={loadingIcon}
+                  icons={icons}
                   expanded={expanded}
                 />
               ))}
@@ -653,9 +664,4 @@ const Toaster = (props: ToasterProps) => {
     </section>
   );
 };
-export {
-  toast,
-  Toaster,
-  type ToastT,
-  type ExternalToast
-};
+export { toast, Toaster, type ToastT, type ExternalToast };
