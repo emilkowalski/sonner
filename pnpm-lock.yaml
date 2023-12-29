@@ -7,7 +7,7 @@ importers:
       '@playwright/test': ^1.30.0
       '@types/node': ^18.11.13
       '@types/react': ^18.0.26
-      bunchee: ^4.2.6
+      bunchee: ^4.2.11
       prettier: ^2.8.4
       react: ^18.2.0
       react-dom: ^18.2.0
@@ -17,7 +17,7 @@ importers:
       '@playwright/test': 1.34.3
       '@types/node': 18.16.16
       '@types/react': 18.2.8
-      bunchee: 4.2.6_typescript@4.9.5
+      bunchee: 4.2.11_typescript@4.9.5
       prettier: 2.8.8
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
@@ -1384,8 +1384,8 @@ packages:
     engines: {node: '>=6'}
     dev: true
 
-  /bunchee/4.2.6_typescript@4.9.5:
-    resolution: {integrity: sha512-Gcid8dqk3U6h3mVzjgs+hHKmnVpmGD/bEO2TKgUB9gmdMUFgEU8js427kPvEuV11vl09H/qyuSsNWA6G8IL/+Q==}
+  /bunchee/4.2.11_typescript@4.9.5:
+    resolution: {integrity: sha512-hd4M7s3F8rXgN+sRBblDuSpb+3mXvOL9oY4Tmj84kn9D9euVQbnlkiX0BCvK2dQckohdgs9JA1JquqZavRrD9A==}
     engines: {node: '>= 18.0.0'}
     hasBin: true
     peerDependencies:
@@ -1411,7 +1411,7 @@ packages:
       rollup: 4.9.1
       rollup-plugin-dts: 6.1.0_rollup@4.9.1+typescript@4.9.5
       rollup-plugin-swc3: 0.11.0_@swc+core@1.3.101+rollup@4.9.1
-      rollup-preserve-directives: 1.1.0_rollup@4.9.1
+      rollup-preserve-directives: 1.1.1_rollup@4.9.1
       tslib: 2.6.2
       typescript: 4.9.5
     dev: true
@@ -5245,11 +5245,11 @@ packages:
       '@swc/core': 1.3.101_@swc+helpers@0.5.3
       get-tsconfig: 4.7.2
       rollup: 4.9.1
-      rollup-preserve-directives: 1.1.0_rollup@4.9.1
+      rollup-preserve-directives: 1.1.1_rollup@4.9.1
     dev: true
 
-  /rollup-preserve-directives/1.1.0_rollup@4.9.1:
-    resolution: {integrity: sha512-LL8yNGqtOrSL104TlTX12Ih5wgLHRFL/V2TY9DjGW0EKER5KQcLuYh3iL5T4L/YPP9TR4pvyh+imA+OetYNcyA==}
+  /rollup-preserve-directives/1.1.1_rollup@4.9.1:
+    resolution: {integrity: sha512-+eQafbuEfDPfxQ9hQPlwaROfin4yiVRxap8hnrvvvcSGoukv1tTiYpAW9mvm3uR8J+fe4xd8FdVd5rz9q7jZ+Q==}
     peerDependencies:
       rollup: ^2.0.0 || ^3.0.0 || ^4.0.0
     dependencies:
