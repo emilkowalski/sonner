@@ -365,7 +365,7 @@ const Toast = (props: ToastProps) => {
                 if (!dismissible) return;
                 deleteToast();
                 if (toast.cancel?.onClick) {
-                  toast.cancel.onClick();
+                  toast.cancel.onClick(event);
                 }
               }}
               className={cn(classNames?.cancelButton, toast?.classNames?.cancelButton)}
