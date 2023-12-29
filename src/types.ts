@@ -44,7 +44,7 @@ export interface ToastT {
   };
   cancel?: {
     label: React.ReactNode;
-    onClick?: () => void;
+    onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
   };
   onDismiss?: (toast: ToastT) => void;
   onAutoClose?: (toast: ToastT) => void;
