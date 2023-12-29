@@ -7,7 +7,7 @@ importers:
       '@playwright/test': ^1.30.0
       '@types/node': ^18.11.13
       '@types/react': ^18.0.26
-      bunchee: ^4.2.9
+      bunchee: ^4.2.10
       prettier: ^2.8.4
       react: ^18.2.0
       react-dom: ^18.2.0
@@ -17,7 +17,7 @@ importers:
       '@playwright/test': 1.34.3
       '@types/node': 18.16.16
       '@types/react': 18.2.8
-      bunchee: 4.2.9_typescript@4.9.5
+      bunchee: 4.2.10_typescript@4.9.5
       prettier: 2.8.8
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
@@ -1384,8 +1384,8 @@ packages:
     engines: {node: '>=6'}
     dev: true
 
-  /bunchee/4.2.9_typescript@4.9.5:
-    resolution: {integrity: sha512-/pjmelJLmyJxFzpsYGHz/BFB4yLzfMzmiCJnabLEk92Al3EDuJkWu60GDyDCdxm9BkpjHDE0sLFkKovAe8wvvQ==}
+  /bunchee/4.2.10_typescript@4.9.5:
+    resolution: {integrity: sha512-f1ut+3JbsZxv0sf7kHRNm/r9fiEY8tWVUZm0h3PNOCbfmkxgCYeXCDO4ls5mHEisr0fufs/9ACVkYBXU/rv1iw==}
     engines: {node: '>= 18.0.0'}
     hasBin: true
     peerDependencies:
