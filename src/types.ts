@@ -39,11 +39,11 @@ export interface ToastT {
   delete?: boolean;
   important?: boolean;
   action?: {
-    label: string;
+    label: React.ReactNode;
     onClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
   };
   cancel?: {
-    label: string;
+    label: React.ReactNode;
     onClick?: () => void;
   };
   onDismiss?: (toast: ToastT) => void;
