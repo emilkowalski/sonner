@@ -50,7 +50,7 @@
     "@playwright/test": "^1.30.0",
     "@types/node": "^18.11.13",
     "@types/react": "^18.0.26",
-    "bunchee": "^4.2.6",
+    "bunchee": "^4.2.11",
     "prettier": "^2.8.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
