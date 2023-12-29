@@ -116,6 +116,7 @@ class Observer {
         promise,
         type: 'loading',
         message: data.loading,
+        description: typeof data.description !== 'function' ? data.description : undefined,
       });
     }
 
@@ -131,18 +132,22 @@ class Observer {
         const message =
           // @ts-expect-error
           typeof data.error === 'function' ? data.error(`HTTP error! status: ${response.status}`) : data.error;
-        this.create({ id, type: 'error', message });
+          // @ts-expect-error
+          const description = typeof data.description === 'function' ? data.description(`HTTP error! status: ${response.status}`) : data.description;
+        this.create({ id, type: 'error', message, description });
       } else if (data.success !== undefined) {
         shouldDismiss = false;
         const message = typeof data.success === 'function' ? data.success(response) : data.success;
-        this.create({ id, type: 'success', message });
+        const description = typeof data.description === 'function' ? data.description(response) : data.description;
+        this.create({ id, type: 'success', message, description });
       }
     })
       .catch((error) => {
         if (data.error !== undefined) {
           shouldDismiss = false;
           const message = typeof data.error === 'function' ? data.error(error) : data.error;
-          this.create({ id, type: 'error', message });
+          const description = typeof data.description === 'function' ? data.description(error) : data.description;
+          this.create({ id, type: 'error', message, description});
         }
       })
       .finally(() => {
