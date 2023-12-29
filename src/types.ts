@@ -4,7 +4,7 @@ export type ToastTypes = 'normal' | 'action' | 'success' | 'info' | 'warning' | 
 
 export type PromiseT<Data = any> = Promise<Data> | (() => Promise<Data>);
 
-export type PromiseExternalToast = Omit<ExternalToast, 'description'>
+export type PromiseExternalToast = Omit<ExternalToast, 'description'>;
 
 export type PromiseData<ToastData = any> = PromiseExternalToast & {
   loading?: string | React.ReactNode;
