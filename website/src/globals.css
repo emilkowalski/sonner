@@ -1,4 +1,5 @@
-:root {
+:root,
+.light {
   --gray0: #fff;
   --gray1: hsl(0, 0%, 99%);
   --gray2: hsl(0, 0%, 97.3%);
@@ -48,6 +49,7 @@
 
 .wrapper {
   --side-padding: 16px;
+  background: var(--gray0);
   margin: 0;
   padding: 0;
   padding-top: 100px;
@@ -175,7 +177,6 @@ m .wrapper h2 {
 }
 
 .wrapper a {
-  color: inherit;
   text-decoration-color: var(--gray10);
   text-underline-position: from-font;
 }
