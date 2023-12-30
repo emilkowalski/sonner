@@ -18,7 +18,7 @@ export default function Home() {
   const [closeButton, setCloseButton] = React.useState(false);
 
   return (
-    <div className="wrapper">
+    <div className="wrapper light">
       <Head />
       <Toaster theme="light" richColors={richColors} closeButton={closeButton} expand={expand} position={position} />
       <main className="container">
