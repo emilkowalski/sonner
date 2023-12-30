@@ -439,10 +439,10 @@ const Toaster = (props: ToasterProps) => {
     theme !== 'system'
       ? theme
       : typeof window !== 'undefined'
-      ? window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
-        ? 'dark'
-        : 'light'
-      : 'light',
+        ? window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+          ? 'dark'
+          : 'light'
+        : 'light',
   );
 
   const listRef = React.useRef<HTMLOListElement>(null);
@@ -653,9 +653,4 @@ const Toaster = (props: ToasterProps) => {
     </section>
   );
 };
-export {
-  toast,
-  Toaster,
-  type ToastT,
-  type ExternalToast
-};
+export { toast, Toaster, type ToastT, type ExternalToast };
