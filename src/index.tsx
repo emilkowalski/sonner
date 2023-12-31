@@ -83,7 +83,6 @@ const Toast = (props: ToastProps) => {
   );
   const closeTimerStartTimeRef = React.useRef(0);
   const offset = React.useRef(0);
-  const closeTimerRemainingTimeRef = React.useRef(duration);
   const lastCloseTimerStartTimeRef = React.useRef(0);
   const pointerStartRef = React.useRef<{ x: number; y: number } | null>(null);
   const [y, x] = position.split('-');
