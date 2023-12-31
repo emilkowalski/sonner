@@ -360,11 +360,11 @@ const Toast = (props: ToastProps) => {
               data-button
               data-cancel
               style={toast.cancelButtonStyle || cancelButtonStyle}
-              onClick={() => {
+              onClick={(event) => {
                 if (!dismissible) return;
                 deleteToast();
                 if (toast.cancel?.onClick) {
-                  toast.cancel.onClick();
+                  toast.cancel.onClick(event);
                 }
               }}
               className={cn(classNames?.cancelButton, toast?.classNames?.cancelButton)}
