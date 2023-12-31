@@ -16,7 +16,7 @@ jobs:
       - run: npm install pnpm -g
       - run: pnpm install --no-frozen-lockfile
       - run: pnpm build
-      - run: pnpm playwright install --with-deps
+      - run: npx playwright install --with-deps
       - run: pnpm test || exit 1
       - uses: actions/upload-artifact@v3
         if: always()
