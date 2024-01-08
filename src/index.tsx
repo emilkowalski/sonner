@@ -84,7 +84,6 @@ const Toast = (props: ToastProps) => {
   );
   const closeTimerStartTimeRef = React.useRef(0);
   const offset = React.useRef(0);
-  const closeTimerRemainingTimeRef = React.useRef(duration);
   const lastCloseTimerStartTimeRef = React.useRef(0);
   const pointerStartRef = React.useRef<{ x: number; y: number } | null>(null);
   const [y, x] = position.split('-');
@@ -370,11 +369,11 @@ const Toast = (props: ToastProps) => {
               data-button
               data-cancel
               style={toast.cancelButtonStyle || cancelButtonStyle}
-              onClick={() => {
+              onClick={(event) => {
                 if (!dismissible) return;
                 deleteToast();
                 if (toast.cancel?.onClick) {
-                  toast.cancel.onClick();
+                  toast.cancel.onClick(event);
                 }
               }}
               className={cn(classNames?.cancelButton, toast?.classNames?.cancelButton)}

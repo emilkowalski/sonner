@@ -4,10 +4,13 @@ export type ToastTypes = 'normal' | 'action' | 'success' | 'info' | 'warning' | 
 
 export type PromiseT<Data = any> = Promise<Data> | (() => Promise<Data>);
 
-export type PromiseData<ToastData = any> = ExternalToast & {
+export type PromiseExternalToast = Omit<ExternalToast, 'description'>;
+
+export type PromiseData<ToastData = any> = PromiseExternalToast & {
   loading?: string | React.ReactNode;
   success?: string | React.ReactNode | ((data: ToastData) => React.ReactNode | string);
   error?: string | React.ReactNode | ((error: any) => React.ReactNode | string);
+  description?: string | React.ReactNode | ((data: any) => React.ReactNode | string);
   finally?: () => void | Promise<void>;
 };
 
@@ -47,12 +50,12 @@ export interface ToastT {
   delete?: boolean;
   important?: boolean;
   action?: {
-    label: string;
+    label: React.ReactNode;
     onClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
   };
   cancel?: {
-    label: string;
-    onClick?: () => void;
+    label: React.ReactNode;
+    onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
   };
   onDismiss?: (toast: ToastT) => void;
   onAutoClose?: (toast: ToastT) => void;

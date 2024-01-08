@@ -10,6 +10,7 @@
   border: 1px solid var(--gray3);
   display: flex;
   align-items: center;
+  color: var(--gray12);
 }
 
 .copy {
