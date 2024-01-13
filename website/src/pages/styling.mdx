@@ -75,3 +75,27 @@ Styling per toast type is also possible.
   }}
 />
 ```
+
+## Changing Icons
+
+You can change the default icons using the `icons` prop:
+
+```jsx
+<Toaster
+  icons={{
+    success: <SuccessIcon />,
+    info: <InfoIcon />,
+    warning: <WarningIcon />,
+    error: <ErrorIcon />,
+    loading: <LoadingIcon />,
+  }}
+/>
+```
+
+You can also set an icon for each toast:
+
+```jsx
+toast('Hello World', {
+  icon: <Icon />
+});
+```
