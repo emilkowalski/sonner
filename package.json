@@ -26,8 +26,7 @@
     "dev:website": "turbo run dev --filter=website...",
     "dev:test": "turbo run dev --filter=test...",
     "format": "prettier --write .",
-    "test": "playwright test",
-    "prepublishOnly": "rm -rf dist && pnpm build"
+    "test": "playwright test"
   },
   "keywords": [
     "react",
@@ -50,7 +49,7 @@
     "@playwright/test": "^1.40.1",
     "@types/node": "^20.10.6",
     "@types/react": "^18.2.46",
-    "bunchee": "^4.2.11",
+    "bunchee": "^4.4.0",
     "prettier": "^3.1.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
