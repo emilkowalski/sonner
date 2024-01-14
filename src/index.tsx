@@ -342,7 +342,7 @@ const Toast = (props: ToastProps) => {
             <div data-icon="">
               {toast.promise || toastType === 'loading'
                 ? toast.icon || icons.loading || getLoadingIcon()
-                : toast.icon || icons[toastType] || getAsset(toastType)}
+                : toast.icon || icons?.[toastType] || getAsset(toastType)}
             </div>
           ) : null}
 
