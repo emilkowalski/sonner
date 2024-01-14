@@ -26,6 +26,7 @@ export interface ToastClassnames {
   error?: string;
   info?: string;
   warning?: string;
+  loading?: string;
   default?: string;
 }
 
