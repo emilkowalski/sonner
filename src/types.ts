@@ -29,14 +29,6 @@ export interface ToastClassnames {
   default?: string;
 }
 
-export interface ToastIcons {
-  success?: React.ReactNode;
-  info?: React.ReactNode;
-  warning?: React.ReactNode;
-  error?: React.ReactNode;
-  loading?: React.ReactNode;
-}
-
 export interface ToastT {
   id: number | string;
   title?: string | React.ReactNode;
@@ -103,17 +95,8 @@ export interface ToasterProps {
   style?: React.CSSProperties;
   offset?: string | number;
   dir?: 'rtl' | 'ltr' | 'auto';
-  /**
-   * @deprecated Please use the `icons` prop instead:
-   * ```jsx
-   * <Toaster
-   *   icons={{ loading: <LoadingIcon /> }}
-   * />
-   * ```
-   */
   loadingIcon?: React.ReactNode;
   containerAriaLabel?: string;
-  icons?: ToastIcons;
 }
 
 export interface ToastProps {
@@ -140,7 +123,6 @@ export interface ToastProps {
   descriptionClassName?: string;
   loadingIcon?: React.ReactNode;
   classNames?: ToastClassnames;
-  icons?: ToastIcons;
   closeButtonAriaLabel?: string;
 }
 
