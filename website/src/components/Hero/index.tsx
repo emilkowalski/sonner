@@ -17,7 +17,7 @@ export const Hero = () => {
         <button
           data-primary=""
           onClick={() => {
-            toast.loading('Sonner', {
+            toast('Sonner', {
               description: 'An opinionated toast component for React.',
             });
           }}
