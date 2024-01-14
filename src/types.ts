@@ -26,6 +26,7 @@ export interface ToastClassnames {
   error?: string;
   info?: string;
   warning?: string;
+  loading?: string;
   default?: string;
 }
 
@@ -36,6 +37,7 @@ export interface ToastT {
   icon?: React.ReactNode;
   jsx?: React.ReactNode;
   invert?: boolean;
+  closeButton?: boolean;
   dismissible?: boolean;
   description?: React.ReactNode;
   duration?: number;

@@ -138,7 +138,7 @@ const Toast = (props: ToastProps) => {
   }, [toast, removeToast, setHeights, offset]);
 
   React.useEffect(() => {
-    if ((toast.promise && toastType === 'loading') || toast.duration === Infinity) return;
+    if ((toast.promise && toastType === 'loading') || toast.duration === Infinity || toast.type === 'loading') return;
     let timeoutId: NodeJS.Timeout;
     let remainingTime = duration;
     // Pause the timer on each hover
@@ -295,7 +295,7 @@ const Toast = (props: ToastProps) => {
         }
       }}
     >
-      {closeButton && !toast.jsx ? (
+      {(closeButton || toast.closeButton) && !toast.jsx ? (
         <button
           aria-label={closeButtonAriaLabel}
           data-disabled={disabled}
@@ -652,9 +652,4 @@ const Toaster = (props: ToasterProps) => {
     </section>
   );
 };
-export {
-  toast,
-  Toaster,
-  type ToastT,
-  type ExternalToast
-};
+export { toast, Toaster, type ToastT, type ExternalToast };
