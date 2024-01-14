@@ -520,7 +520,6 @@ html[dir='rtl'],
 
 .sonner-loading-bar:nth-child(1) {
   animation-delay: -1.2s;
-  /* Rotate trick to avoid adding an additional pixel in some sizes */
   transform: rotate(0.0001deg) translate(146%);
 }
 
