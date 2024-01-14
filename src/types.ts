@@ -36,6 +36,7 @@ export interface ToastT {
   icon?: React.ReactNode;
   jsx?: React.ReactNode;
   invert?: boolean;
+  closeButton?: boolean;
   dismissible?: boolean;
   description?: React.ReactNode;
   duration?: number;

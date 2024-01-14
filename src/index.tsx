@@ -295,7 +295,7 @@ const Toast = (props: ToastProps) => {
         }
       }}
     >
-      {closeButton && !toast.jsx ? (
+      {(closeButton || toast.closeButton) && !toast.jsx ? (
         <button
           aria-label={closeButtonAriaLabel}
           data-disabled={disabled}
