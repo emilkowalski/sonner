@@ -35,7 +35,10 @@
   cursor: pointer;
   opacity: 0;
   color: var(--gray12);
-  transition: background 200ms, box-shadow 200ms, opacity 200ms;
+  transition:
+    background 200ms,
+    box-shadow 200ms,
+    opacity 200ms;
 }
 
 .copyButton:focus-visible {
