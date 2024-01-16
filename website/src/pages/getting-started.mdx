@@ -39,11 +39,7 @@ It can be placed anywhere, even in server components such as `layout.tsx`.
 ```tsx
 import { Toaster } from 'sonner';
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
       <body>
@@ -61,11 +57,7 @@ export default function RootLayout({
 import { toast } from 'sonner';
 
 function MyToast() {
-  return (
-    <button onClick={() => toast('This is a sonner toast')}>
-      Render my toast
-    </button>
-  );
+  return <button onClick={() => toast('This is a sonner toast')}>Render my toast</button>;
 }
 ```
 

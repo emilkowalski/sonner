@@ -19,8 +19,5 @@
     "sonner": "workspace:*",
     "react-dom": "18.2.0",
     "typescript": "4.9.5"
-  },
-  "devDependencies": {
-    "@playwright/test": "^1.30.0"
   }
 }
