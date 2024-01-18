@@ -99,6 +99,7 @@ export interface ToasterProps {
   dir?: 'rtl' | 'ltr' | 'auto';
   loadingIcon?: React.ReactNode;
   containerAriaLabel?: string;
+  pauseWhenDocumentHidden?: boolean;
 }
 
 export interface ToastProps {
@@ -126,6 +127,7 @@ export interface ToastProps {
   loadingIcon?: React.ReactNode;
   classNames?: ToastClassnames;
   closeButtonAriaLabel?: string;
+  pauseWhenDocumentHidden: boolean;
 }
 
 export enum SwipeStateTypes {
