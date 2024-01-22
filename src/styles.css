@@ -269,6 +269,7 @@ html[dir='rtl'],
   left: 0;
   right: 0;
   height: 100%;
+  z-index: -1;
 }
 
 [data-sonner-toast][data-y-position='top'][data-swiping='true']:before {
