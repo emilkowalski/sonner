@@ -22,7 +22,7 @@
   border-radius: 50%;
   border: none;
   border: 1px solid var(--gray4);
-  background: #fff;
+  background: var(--gray0);
   color: var(--gray12);
   border-radius: 5px;
   width: 26px;

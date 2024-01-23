@@ -34,6 +34,7 @@
   --gray10: hsl(0, 0%, 50.7%);
   --gray11: hsl(0, 0%, 69.5%);
   --gray12: hsl(0, 0%, 93.5%);
+  --hover: rgb(220, 220, 220);
 }
 
 ::selection {
@@ -49,7 +50,6 @@
 
 .wrapper {
   --side-padding: 16px;
-  background: var(--gray0);
   margin: 0;
   padding: 0;
   padding-top: 100px;

@@ -1,3 +1,5 @@
+import { Footer } from '@/src/components/Footer';
+
 export default {
   logo: <span style={{ fontWeight: 600 }}>Sonner</span>,
   project: {
@@ -13,15 +15,9 @@ export default {
     content: null,
   },
   footer: {
-    text: (
-      <span>
-        MIT {new Date().getFullYear()} ©{' '}
-        <a href="https://sonner.emilkowal.ski" target="_blank">
-          Sonner
-        </a>
-        .
-      </span>
-    ),
+    // Use text here instead of component, component overrides the entire
+    // theme-switcher and requires us to re-implement
+    text: Footer,
   },
   // ... other theme options
 };

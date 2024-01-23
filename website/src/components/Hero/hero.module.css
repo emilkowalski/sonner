@@ -66,9 +66,6 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  transition:
-    box-shadow 200ms,
-    background 200ms;
   width: 152px;
 }
 
@@ -88,43 +85,9 @@
     0 0 0 2px rgba(0, 0, 0, 0.15);
 }
 
-.button:after {
-  content: '';
-  position: absolute;
-  top: 100%;
-  background: blue;
-  left: 0;
-  width: 100%;
-  height: 35%;
-  background: linear-gradient(
-    to top,
-    hsl(0, 0%, 91%) 0%,
-    hsla(0, 0%, 91%, 0.987) 8.1%,
-    hsla(0, 0%, 91%, 0.951) 15.5%,
-    hsla(0, 0%, 91%, 0.896) 22.5%,
-    hsla(0, 0%, 91%, 0.825) 29%,
-    hsla(0, 0%, 91%, 0.741) 35.3%,
-    hsla(0, 0%, 91%, 0.648) 41.2%,
-    hsla(0, 0%, 91%, 0.55) 47.1%,
-    hsla(0, 0%, 91%, 0.45) 52.9%,
-    hsla(0, 0%, 91%, 0.352) 58.8%,
-    hsla(0, 0%, 91%, 0.259) 64.7%,
-    hsla(0, 0%, 91%, 0.175) 71%,
-    hsla(0, 0%, 91%, 0.104) 77.5%,
-    hsla(0, 0%, 91%, 0.049) 84.5%,
-    hsla(0, 0%, 91%, 0.013) 91.9%,
-    hsla(0, 0%, 91%, 0) 100%
-  );
-  opacity: 0.6;
-  transition: transform 200ms;
-}
-
-.button:hover:not([data-primary]):after {
-  transform: translateY(-100%);
-}
-
-.button[data-primary]:hover {
+.button:hover {
   background: var(--hover);
+  color: var(--gray0) !important;
 }
 
 .heading {

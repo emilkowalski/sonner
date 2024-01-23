@@ -25,13 +25,13 @@ export const Hero = () => {
         >
           Render a toast
         </button>
-        <a className={styles.button} href="https://github.com/emilkowalski/sonner" target="_blank">
-          GitHub
-        </a>
+        <Link data-secondary="" className={styles.button} href="/getting-started">
+          Get Started
+        </Link>
       </div>
-      <Link href="/getting-started" className={styles.link}>
-        Documentation
-      </Link>
+      <a href="https://github.com/emilkowalski/sonner" target="_blank" className={styles.link}>
+        Github
+      </a>
     </div>
   );
 };

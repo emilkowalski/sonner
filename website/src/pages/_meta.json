@@ -1,4 +1,13 @@
 {
+  "index": {
+    "type": "page",
+    "title": "Sonner",
+    "display": "hidden",
+    "theme": {
+      "layout": "full",
+      "typesetting": "article"
+    }
+  },
   "getting-started": {
     "title": "Getting Started",
     "href": "/getting-started"
