@@ -8,10 +8,10 @@ import { Footer } from '@/src/components/Footer';
 import { Position } from '@/src/components/Position';
 import { Usage } from '@/src/components/Usage';
 import { Other } from '@/src/components/Other/Other';
-import Head from '../components/Head';
-import { How } from '../components/How/How';
+import Head from '@/src/components/Head';
+import { How } from '@/src/components/How/How';
 
-export default function Home() {
+export function HomePage() {
   const [expand, setExpand] = React.useState(false);
   const [position, setPosition] = React.useState<Position>('bottom-right');
   const [richColors, setRichColors] = React.useState(false);
