@@ -72,6 +72,7 @@ export interface HeightT {
 
 interface ToastOptions {
   className?: string;
+  closeButton?: boolean;
   descriptionClassName?: string;
   style?: React.CSSProperties;
   cancelButtonStyle?: React.CSSProperties;

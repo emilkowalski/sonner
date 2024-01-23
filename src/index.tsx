@@ -44,7 +44,7 @@ const Toast = (props: ToastProps) => {
     toasts,
     expanded,
     removeToast,
-    closeButton,
+    closeButton: closeButtonFromToaster,
     style,
     cancelButtonStyle,
     actionButtonStyle,
@@ -76,6 +76,10 @@ const Toast = (props: ToastProps) => {
   const heightIndex = React.useMemo(
     () => heights.findIndex((height) => height.toastId === toast.id) || 0,
     [heights, toast.id],
+  );
+  const closeButton = React.useMemo(
+    () => toast.closeButton ?? closeButtonFromToaster,
+    [toast.closeButton, closeButtonFromToaster],
   );
   const duration = React.useMemo(
     () => toast.duration || durationFromToaster || TOAST_LIFETIME,
@@ -295,7 +299,7 @@ const Toast = (props: ToastProps) => {
         }
       }}
     >
-      {(closeButton || toast.closeButton) && !toast.jsx ? (
+      {closeButton && !toast.jsx ? (
         <button
           aria-label={closeButtonAriaLabel}
           data-disabled={disabled}
@@ -628,7 +632,7 @@ const Toaster = (props: ToasterProps) => {
                   descriptionClassName={toastOptions?.descriptionClassName}
                   invert={invert}
                   visibleToasts={visibleToasts}
-                  closeButton={closeButton}
+                  closeButton={toastOptions?.closeButton ?? closeButton}
                   interacting={interacting}
                   position={position}
                   style={toastOptions?.style}
