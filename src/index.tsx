@@ -641,8 +641,8 @@ const Toaster = (props: ToasterProps) => {
                   cancelButtonStyle={toastOptions?.cancelButtonStyle}
                   actionButtonStyle={toastOptions?.actionButtonStyle}
                   removeToast={removeToast}
-                  toasts={toasts}
-                  heights={heights}
+                  toasts={toasts.filter(t => t.position == toast.position)}
+                  heights={heights.filter(h => h.position == toast.position)}
                   setHeights={setHeights}
                   expandByDefault={expand}
                   gap={gap}
