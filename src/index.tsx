@@ -123,7 +123,7 @@ const Toast = (props: ToastProps) => {
     setHeights((heights) => {
       const alreadyExists = heights.find((height) => height.toastId === toast.id);
       if (!alreadyExists) {
-        return [{ toastId: toast.id, height: newHeight }, ...heights];
+        return [{ toastId: toast.id, height: newHeight, position: toast.position }, ...heights];
       } else {
         return heights.map((height) => (height.toastId === toast.id ? { ...height, height: newHeight } : height));
       }
@@ -184,7 +184,7 @@ const Toast = (props: ToastProps) => {
 
       // Add toast height tot heights array after the toast is mounted
       setInitialHeight(height);
-      setHeights((h) => [{ toastId: toast.id, height }, ...h]);
+      setHeights((h) => [{ toastId: toast.id, height, position: toast.position }, ...h]);
 
       return () => setHeights((h) => h.filter((height) => height.toastId !== toast.id));
     }
@@ -641,8 +641,8 @@ const Toaster = (props: ToasterProps) => {
                   cancelButtonStyle={toastOptions?.cancelButtonStyle}
                   actionButtonStyle={toastOptions?.actionButtonStyle}
                   removeToast={removeToast}
-                  toasts={toasts}
-                  heights={heights}
+                  toasts={toasts.filter(t => t.position == toast.position)}
+                  heights={heights.filter(h => h.position == toast.position)}
                   setHeights={setHeights}
                   expandByDefault={expand}
                   gap={gap}
