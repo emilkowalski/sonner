@@ -68,6 +68,7 @@ export type Position = 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right'
 export interface HeightT {
   height: number;
   toastId: number | string;
+  position: Position;
 }
 
 interface ToastOptions {
