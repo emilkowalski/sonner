@@ -646,7 +646,7 @@ html[dir='rtl'],
   }
 }
 
-.loader {
+.sonner-loader {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -657,7 +657,7 @@ html[dir='rtl'],
     transform 200ms;
 }
 
-.loader[data-visible='false'] {
+.sonner-loader[data-visible='false'] {
   opacity: 0;
   transform: scale(0.8) translate(-50%, -50%);
 }
