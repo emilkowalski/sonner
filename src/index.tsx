@@ -58,7 +58,7 @@ const Toast = (props: ToastProps) => {
     expandByDefault,
     classNames,
     closeButtonAriaLabel = 'Close toast',
-    pauseWhenDocumentHidden,
+    pauseWhenPageIsHidden,
   } = props;
   const [mounted, setMounted] = React.useState(false);
   const [removed, setRemoved] = React.useState(false);
@@ -168,7 +168,7 @@ const Toast = (props: ToastProps) => {
       }, remainingTime);
     };
 
-    if (expanded || interacting || (pauseWhenDocumentHidden && isDocumentHidden)) {
+    if (expanded || interacting || (pauseWhenPageIsHidden && isDocumentHidden)) {
       pauseTimer();
     } else {
       startTimer();
@@ -184,7 +184,7 @@ const Toast = (props: ToastProps) => {
     deleteToast,
     toast.promise,
     toastType,
-    pauseWhenDocumentHidden,
+    pauseWhenPageIsHidden,
     isDocumentHidden,
   ]);
 
@@ -440,7 +440,7 @@ const Toaster = (props: ToasterProps) => {
     gap,
     loadingIcon,
     containerAriaLabel = 'Notifications',
-    pauseWhenDocumentHidden,
+    pauseWhenPageIsHidden,
   } = props;
   const [toasts, setToasts] = React.useState<ToastT[]>([]);
   const possiblePositions = React.useMemo(() => {
@@ -661,7 +661,7 @@ const Toaster = (props: ToasterProps) => {
                   gap={gap}
                   loadingIcon={loadingIcon}
                   expanded={expanded}
-                  pauseWhenDocumentHidden={pauseWhenDocumentHidden}
+                  pauseWhenPageIsHidden={pauseWhenPageIsHidden}
                 />
               ))}
           </ol>
