@@ -68,10 +68,12 @@ export type Position = 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right'
 export interface HeightT {
   height: number;
   toastId: number | string;
+  position: Position;
 }
 
 interface ToastOptions {
   className?: string;
+  closeButton?: boolean;
   descriptionClassName?: string;
   style?: React.CSSProperties;
   cancelButtonStyle?: React.CSSProperties;
