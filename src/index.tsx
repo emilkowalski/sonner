@@ -5,6 +5,7 @@ import ReactDOM from 'react-dom';
 
 import './styles.css';
 import { getAsset, Loader } from './assets';
+import { useIsDocumentHidden } from './hooks';
 import type { HeightT, ToastT, ToastToDismiss, ExternalToast, ToasterProps, ToastProps } from './types';
 import { ToastState, toast } from './state';
 
@@ -57,6 +58,7 @@ const Toast = (props: ToastProps) => {
     expandByDefault,
     classNames,
     closeButtonAriaLabel = 'Close toast',
+    pauseWhenPageIsHidden,
   } = props;
   const [mounted, setMounted] = React.useState(false);
   const [removed, setRemoved] = React.useState(false);
@@ -100,6 +102,8 @@ const Toast = (props: ToastProps) => {
       return prev + curr.height;
     }, 0);
   }, [heights, heightIndex]);
+  const isDocumentHidden = useIsDocumentHidden();
+
   const invert = toast.invert || ToasterInvert;
   const disabled = toastType === 'loading';
 
@@ -145,6 +149,7 @@ const Toast = (props: ToastProps) => {
     if ((toast.promise && toastType === 'loading') || toast.duration === Infinity || toast.type === 'loading') return;
     let timeoutId: NodeJS.Timeout;
     let remainingTime = duration;
+
     // Pause the timer on each hover
     const pauseTimer = () => {
       if (lastCloseTimerStartTimeRef.current < closeTimerStartTimeRef.current) {
@@ -167,14 +172,25 @@ const Toast = (props: ToastProps) => {
       }, remainingTime);
     };
 
-    if (expanded || interacting) {
+    if (expanded || interacting || (pauseWhenPageIsHidden && isDocumentHidden)) {
       pauseTimer();
     } else {
       startTimer();
     }
 
     return () => clearTimeout(timeoutId);
-  }, [expanded, interacting, expandByDefault, toast, duration, deleteToast, toast.promise, toastType]);
+  }, [
+    expanded,
+    interacting,
+    expandByDefault,
+    toast,
+    duration,
+    deleteToast,
+    toast.promise,
+    toastType,
+    pauseWhenPageIsHidden,
+    isDocumentHidden,
+  ]);
 
   React.useEffect(() => {
     const toastNode = toastRef.current;
@@ -428,6 +444,7 @@ const Toaster = (props: ToasterProps) => {
     gap,
     loadingIcon,
     containerAriaLabel = 'Notifications',
+    pauseWhenPageIsHidden,
   } = props;
   const [toasts, setToasts] = React.useState<ToastT[]>([]);
   const possiblePositions = React.useMemo(() => {
@@ -648,6 +665,7 @@ const Toaster = (props: ToasterProps) => {
                   gap={gap}
                   loadingIcon={loadingIcon}
                   expanded={expanded}
+                  pauseWhenPageIsHidden={pauseWhenPageIsHidden}
                 />
               ))}
           </ol>

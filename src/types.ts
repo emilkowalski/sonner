@@ -101,6 +101,7 @@ export interface ToasterProps {
   dir?: 'rtl' | 'ltr' | 'auto';
   loadingIcon?: React.ReactNode;
   containerAriaLabel?: string;
+  pauseWhenPageIsHidden?: boolean;
 }
 
 export interface ToastProps {
@@ -128,6 +129,7 @@ export interface ToastProps {
   loadingIcon?: React.ReactNode;
   classNames?: ToastClassnames;
   closeButtonAriaLabel?: string;
+  pauseWhenPageIsHidden: boolean;
 }
 
 export enum SwipeStateTypes {
