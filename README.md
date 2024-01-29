@@ -30,4 +30,4 @@ function App() {
 
 ## Documentation
 
-You can find out more about the API and implementation in the [Documentation](https://sonner.emilkowal.ski/getting-started).
+Find the full API reference in the [documentation](https://sonner.emilkowal.ski/getting-started).
