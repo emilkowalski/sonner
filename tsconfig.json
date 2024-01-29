@@ -3,7 +3,6 @@
     "jsx": "react",
     "moduleResolution": "node",
     "esModuleInterop": true,
-    "target": "ES2018",
-    "lib": ["es2015", "dom"]
-  }
+    "lib": ["es2015", "dom"],
+  },
 }
