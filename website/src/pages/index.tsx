@@ -4,7 +4,6 @@ import { Installation } from '@/src/components/Installation';
 import { Hero } from '@/src/components/Hero';
 import { Types } from '@/src/components/Types/Types';
 import { ExpandModes } from '@/src/components/ExpandModes';
-import { Footer } from '@/src/components/Footer';
 import { Position } from '@/src/components/Position';
 import { Usage } from '@/src/components/Usage';
 import { Other } from '@/src/components/Other/Other';

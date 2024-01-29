@@ -1,5 +1,6 @@
 import { toast } from 'sonner';
 
+import { track } from '@vercel/analytics';
 import styles from './hero.module.css';
 import Link from 'next/link';
 
@@ -17,6 +18,7 @@ export const Hero = () => {
         <a
           href="https://emilkowal.ski/"
           target="_blank"
+          onClick={() => track('emilkowal.ski click')}
           style={{ textDecoration: 'underline', textDecorationThickness: 1 }}
         >
           Emil
