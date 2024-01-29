@@ -9,6 +9,7 @@ import { Usage } from '@/src/components/Usage';
 import { Other } from '@/src/components/Other/Other';
 import Head from '../components/Head';
 import { How } from '../components/How/How';
+import { Footer } from '../components/Footer';
 
 export default function Home() {
   const [expand, setExpand] = React.useState(false);
@@ -20,7 +21,7 @@ export default function Home() {
     <div className="wrapper light">
       <Head />
       <Toaster theme="light" richColors={richColors} closeButton={closeButton} expand={expand} position={position} />
-      <main className="container" style={{ marginBottom: 100 }}>
+      <main className="container">
         <Hero />
         <div className="content">
           <Installation />
@@ -32,6 +33,7 @@ export default function Home() {
           <How />
         </div>
       </main>
+      <Footer />
     </div>
   );
 }
