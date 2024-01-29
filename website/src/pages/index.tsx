@@ -21,7 +21,7 @@ export default function Home() {
     <div className="wrapper light">
       <Head />
       <Toaster theme="light" richColors={richColors} closeButton={closeButton} expand={expand} position={position} />
-      <main className="container">
+      <main className="container" style={{ marginBottom: 100 }}>
         <Hero />
         <div className="content">
           <Installation />
@@ -33,7 +33,6 @@ export default function Home() {
           <How />
         </div>
       </main>
-      <Footer />
     </div>
   );
 }

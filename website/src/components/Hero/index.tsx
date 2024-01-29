@@ -12,7 +12,17 @@ export const Hero = () => {
         <div className={styles.toast} />
       </div>
       <h1 className={styles.heading}>Sonner</h1>
-      <p style={{ marginTop: 0, fontSize: 18 }}>An opinionated toast component for React.</p>
+      <p style={{ marginTop: 0, fontSize: 18, textAlign: 'center' }}>
+        An opinionated toast component for React, by{' '}
+        <a
+          href="https://emilkowal.ski/"
+          target="_blank"
+          style={{ textDecoration: 'underline', textDecorationThickness: 1 }}
+        >
+          Emil
+        </a>
+        .
+      </p>
       <div className={styles.buttons}>
         <button
           data-primary=""
