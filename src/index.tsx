@@ -57,6 +57,7 @@ const Toast = (props: ToastProps) => {
     loadingIcon: loadingIconProp,
     expandByDefault,
     classNames,
+    icons,
     closeButtonAriaLabel = 'Close toast',
     pauseWhenPageIsHidden,
   } = props;
@@ -213,6 +214,14 @@ const Toast = (props: ToastProps) => {
   }, [deleteToast, toast.delete]);
 
   function getLoadingIcon() {
+    if (icons?.loading) {
+      return (
+        <div className="loader" data-visible={toastType === 'loading'}>
+          {icons.loading}
+        </div>
+      );
+    }
+
     if (loadingIconProp) {
       return (
         <div className="sonner-loader" data-visible={toastType === 'loading'}>
@@ -353,8 +362,9 @@ const Toast = (props: ToastProps) => {
         <>
           {toastType || toast.icon || toast.promise ? (
             <div data-icon="">
-              {(toast.promise || toast.type === 'loading') && !toast.icon ? getLoadingIcon() : null}
-              {toast.icon || getAsset(toastType)}
+              {toast.promise || toastType === 'loading'
+                ? toast.icon || icons?.loading || getLoadingIcon()
+                : toast.icon || icons?.[toastType] || getAsset(toastType)}
             </div>
           ) : null}
 
@@ -444,6 +454,7 @@ const Toaster = (props: ToasterProps) => {
     dir = getDocumentDirection(),
     gap,
     loadingIcon,
+    icons,
     containerAriaLabel = 'Notifications',
     pauseWhenPageIsHidden,
   } = props;
@@ -643,6 +654,7 @@ const Toaster = (props: ToasterProps) => {
               .map((toast, index) => (
                 <Toast
                   key={toast.id}
+                  icons={icons}
                   index={index}
                   toast={toast}
                   duration={toastOptions?.duration ?? duration}
