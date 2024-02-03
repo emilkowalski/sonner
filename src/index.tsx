@@ -235,6 +235,7 @@ const Toast = (props: ToastProps) => {
         toastClassname,
         classNames?.toast,
         toast?.classNames?.toast,
+        classNames?.default,
         classNames?.[toastType],
         toast?.classNames?.[toastType],
       )}
@@ -459,10 +460,10 @@ const Toaster = (props: ToasterProps) => {
     theme !== 'system'
       ? theme
       : typeof window !== 'undefined'
-        ? window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
-          ? 'dark'
-          : 'light'
-        : 'light',
+      ? window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        ? 'dark'
+        : 'light'
+      : 'light',
   );
 
   const listRef = React.useRef<HTMLOListElement>(null);
@@ -658,8 +659,8 @@ const Toaster = (props: ToasterProps) => {
                   cancelButtonStyle={toastOptions?.cancelButtonStyle}
                   actionButtonStyle={toastOptions?.actionButtonStyle}
                   removeToast={removeToast}
-                  toasts={toasts.filter(t => t.position == toast.position)}
-                  heights={heights.filter(h => h.position == toast.position)}
+                  toasts={toasts.filter((t) => t.position == toast.position)}
+                  heights={heights.filter((h) => h.position == toast.position)}
                   setHeights={setHeights}
                   expandByDefault={expand}
                   gap={gap}
