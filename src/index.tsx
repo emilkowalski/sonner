@@ -28,7 +28,7 @@ const SWIPE_THRESHOLD = 20;
 
 const TIME_BEFORE_UNMOUNT = 200;
 
-function cn(...classes: (string | undefined)[]) {
+function _cn(...classes: (string | undefined)[]) {
   return classes.filter(Boolean).join(' ');
 }
 
@@ -60,6 +60,7 @@ const Toast = (props: ToastProps) => {
     icons,
     closeButtonAriaLabel = 'Close toast',
     pauseWhenPageIsHidden,
+    cn,
   } = props;
   const [mounted, setMounted] = React.useState(false);
   const [removed, setRemoved] = React.useState(false);
@@ -457,6 +458,7 @@ const Toaster = (props: ToasterProps) => {
     icons,
     containerAriaLabel = 'Notifications',
     pauseWhenPageIsHidden,
+    cn = _cn,
   } = props;
   const [toasts, setToasts] = React.useState<ToastT[]>([]);
   const possiblePositions = React.useMemo(() => {
@@ -471,10 +473,10 @@ const Toaster = (props: ToasterProps) => {
     theme !== 'system'
       ? theme
       : typeof window !== 'undefined'
-      ? window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
-        ? 'dark'
-        : 'light'
-      : 'light',
+        ? window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+          ? 'dark'
+          : 'light'
+        : 'light',
   );
 
   const listRef = React.useRef<HTMLOListElement>(null);
@@ -679,6 +681,7 @@ const Toaster = (props: ToasterProps) => {
                   loadingIcon={loadingIcon}
                   expanded={expanded}
                   pauseWhenPageIsHidden={pauseWhenPageIsHidden}
+                  cn={cn}
                 />
               ))}
           </ol>
