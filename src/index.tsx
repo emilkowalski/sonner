@@ -437,7 +437,7 @@ const Toast = (props: ToastProps) => {
           ) : toast.action && isAction(toast.action) ? (
             <button
               data-button
-							data-action
+              data-action
               style={toast.actionButtonStyle || actionButtonStyle}
               onClick={(event) => {
                 // We need to check twice because typescript
@@ -468,6 +468,33 @@ function getDocumentDirection(): ToasterProps['dir'] {
   }
 
   return dirAttribute as ToasterProps['dir'];
+}
+
+function useSonner() {
+  const [activeToasts, setActiveToasts] = React.useState<ToastT[]>([]);
+
+  React.useEffect(() => {
+    return ToastState.subscribe((toast) => {
+      setActiveToasts((currentToasts) => {
+        if ('dismiss' in toast && toast.dismiss) {
+          return currentToasts.filter((t) => t.id !== toast.id);
+        }
+
+        const existingToastIndex = currentToasts.findIndex((t) => t.id === toast.id);
+        if (existingToastIndex !== -1) {
+          const updatedToasts = [...currentToasts];
+          updatedToasts[existingToastIndex] = { ...updatedToasts[existingToastIndex], ...toast };
+          return updatedToasts;
+        } else {
+          return [toast, ...currentToasts];
+        }
+      });
+    });
+  }, []);
+
+  return {
+    toasts: activeToasts,
+  };
 }
 
 const Toaster = (props: ToasterProps) => {
@@ -518,8 +545,12 @@ const Toaster = (props: ToasterProps) => {
   const isFocusWithinRef = React.useRef(false);
 
   const removeToast = React.useCallback(
-    (toast: ToastT) => setToasts((toasts) => toasts.filter(({ id }) => id !== toast.id)),
-    [],
+    (toastToRemove: ToastT) => {
+      if (!toasts.find((toast) => toast.id === toastToRemove.id)?.delete) {
+        ToastState.dismiss(toastToRemove.id);
+      }
+    },
+    [toasts],
   );
 
   React.useEffect(() => {
@@ -723,4 +754,4 @@ const Toaster = (props: ToasterProps) => {
     </section>
   );
 };
-export { toast, Toaster, type ExternalToast, type ToastT, type ToasterProps };
+export { toast, Toaster, type ExternalToast, type ToastT, type ToasterProps, useSonner };
