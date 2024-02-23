@@ -1,6 +1,6 @@
 {
   "name": "sonner",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "description": "An opinionated toast component for React.",
   "exports": {
     "types": "./dist/index.d.ts",
