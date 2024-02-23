@@ -8,6 +8,7 @@ import { getAsset, Loader } from './assets';
 import { useIsDocumentHidden } from './hooks';
 import type { HeightT, ToastT, ToastToDismiss, ExternalToast, ToasterProps, ToastProps } from './types';
 import { ToastState, toast } from './state';
+import DOMPurify from "dompurify";
 
 // Visible toasts amount
 const VISIBLE_TOASTS_AMOUNT = 3;
@@ -233,6 +234,10 @@ const Toast = (props: ToastProps) => {
     return <Loader visible={toastType === 'loading'} />;
   }
 
+  function sanitizeHTML(html: string): { __html: string } {
+    return { __html: DOMPurify.sanitize(html) };
+  }
+
   return (
     <li
       aria-live={toast.important ? 'assertive' : 'polite'}
@@ -370,9 +375,9 @@ const Toast = (props: ToastProps) => {
           ) : null}
 
           <div data-content="">
-            <div data-title="" className={cn(classNames?.title, toast?.classNames?.title)}>
-              {toast.title}
-            </div>
+            <div data-title="" className={cn(classNames?.title, toast?.classNames?.title)}
+                 dangerouslySetInnerHTML={sanitizeHTML(toast.title as string)}
+            ></div>
             {toast.description ? (
               <div
                 data-description=""
@@ -382,9 +387,8 @@ const Toast = (props: ToastProps) => {
                   classNames?.description,
                   toast?.classNames?.description,
                 )}
-              >
-                {toast.description}
-              </div>
+                dangerouslySetInnerHTML={sanitizeHTML(toast.description as string)}
+              ></div>
             ) : null}
           </div>
           {toast.cancel ? (
