@@ -437,33 +437,6 @@ function getDocumentDirection(): ToasterProps['dir'] {
   return dirAttribute as ToasterProps['dir'];
 }
 
-function useSonner() {
-  const [activeToasts, setActiveToasts] = React.useState<ToastT[]>([]);
-
-  React.useEffect(() => {
-    return ToastState.subscribe((toast) => {
-      setActiveToasts((currentToasts) => {
-        if ('dismiss' in toast && toast.dismiss) {
-          return currentToasts.filter((t) => t.id !== toast.id);
-        }
-
-        const existingToastIndex = currentToasts.findIndex((t) => t.id === toast.id);
-        if (existingToastIndex !== -1) {
-          const updatedToasts = [...currentToasts];
-          updatedToasts[existingToastIndex] = { ...updatedToasts[existingToastIndex], ...toast };
-          return updatedToasts;
-        } else {
-          return [toast, ...currentToasts];
-        }
-      });
-    });
-  }, []);
-
-  return {
-    toasts: activeToasts,
-  };
-}
-
 const Toaster = (props: ToasterProps) => {
   const {
     invert,
@@ -500,10 +473,10 @@ const Toaster = (props: ToasterProps) => {
     theme !== 'system'
       ? theme
       : typeof window !== 'undefined'
-        ? window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
-          ? 'dark'
-          : 'light'
-        : 'light',
+      ? window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        ? 'dark'
+        : 'light'
+      : 'light',
   );
 
   const listRef = React.useRef<HTMLOListElement>(null);
@@ -512,12 +485,8 @@ const Toaster = (props: ToasterProps) => {
   const isFocusWithinRef = React.useRef(false);
 
   const removeToast = React.useCallback(
-    (toastToRemove: ToastT) => {
-      if (!toasts.find((toast) => toast.id === toastToRemove.id)?.delete) {
-        ToastState.dismiss(toastToRemove.id);
-      }
-    },
-    [toasts],
+    (toast: ToastT) => setToasts((toasts) => toasts.filter(({ id }) => id !== toast.id)),
+    [],
   );
 
   React.useEffect(() => {
@@ -721,4 +690,4 @@ const Toaster = (props: ToasterProps) => {
     </section>
   );
 };
-export { toast, Toaster, type ToastT, type ExternalToast, useSonner };
+export { toast, Toaster, type ToastT, type ExternalToast };
