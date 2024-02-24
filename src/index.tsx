@@ -363,9 +363,10 @@ const Toast = (props: ToastProps) => {
         <>
           {toastType || toast.icon || toast.promise ? (
             <div data-icon="">
-              {toast.promise || toastType === 'loading'
+              {toast.promise && toast.type === 'loading' && !toast.icon
                 ? toast.icon || icons?.loading || getLoadingIcon()
-                : toast.icon || icons?.[toastType] || getAsset(toastType)}
+                : null}
+              {toast.type !== 'loading' ? toast.icon || icons?.[toastType] || getAsset(toastType) : null}
             </div>
           ) : null}
 
@@ -607,7 +608,7 @@ const Toaster = (props: ToasterProps) => {
             data-x-position={x}
             style={
               {
-                '--front-toast-height': `${heights[0]?.height}px`,
+                '--front-toast-height': `${heights[0]?.height || 0}px`,
                 '--offset': typeof offset === 'number' ? `${offset}px` : offset || VIEWPORT_OFFSET,
                 '--width': `${TOAST_WIDTH}px`,
                 '--gap': `${GAP}px`,
