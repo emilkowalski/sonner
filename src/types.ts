@@ -18,6 +18,7 @@ export interface ToastClassnames {
   toast?: string;
   title?: string;
   description?: string;
+  icon?: string;
   loader?: string;
   closeButton?: string;
   cancelButton?: string;
