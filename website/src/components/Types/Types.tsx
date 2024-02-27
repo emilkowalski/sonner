@@ -84,6 +84,26 @@ const allTypes = [
       }),
   },
   {
+    name: 'Loading',
+    snippet: `
+const loadingId = toast.loading('Loading...');
+...
+toast.success('Done loading', {
+	id: loadingId
+})
+`,
+    action: () => {
+      const loadingId = toast.loading('Loading...');
+      new Promise((resolve) => {
+        setTimeout(() => {
+          toast.success('Done loading', {
+            id: loadingId,
+          });
+        }, 2000);
+      });
+    },
+  },
+  {
     name: 'Promise',
     snippet: `const promise = () => new Promise((resolve) => setTimeout(() => resolve({ name: 'Sonner' }), 2000));
 
