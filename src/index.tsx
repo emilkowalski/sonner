@@ -90,8 +90,9 @@ const Toast = (props: ToastProps) => {
     () => toast.duration || durationFromToaster || TOAST_LIFETIME,
     [toast.duration, durationFromToaster],
   );
-  const timerRef = React.useRef<{ start: number | null; remaining: number; id: NodeJS.Timeout | null }>({
-    start: null, // maybe we can use Date.now() as well instead of null
+  const timerRef = React.useRef<{ start: number; end: number; remaining: number; id: NodeJS.Timeout | null }>({
+    start: 0, // maybe we can use Date.now() as well instead of 0
+    end: 0,
     id: null,
     remaining: duration,
   });
@@ -156,10 +157,12 @@ const Toast = (props: ToastProps) => {
 
     // Pause the timer on each hover
     const pauseTimer = () => {
-      // Pause only when we have a start time
-      timerRef.current.start && (timerRef.current = {
+      const end = Date.now();
+      
+      timerRef.current.end < timerRef.current.start && (timerRef.current = {
           ...timerRef.current,
-          remaining: timerRef.current.remaining - (Date.now() - timerRef.current.start),
+          end,
+          remaining: timerRef.current.remaining - (end - timerRef.current.start),
       });
     };
 
