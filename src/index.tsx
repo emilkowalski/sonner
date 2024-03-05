@@ -25,8 +25,10 @@ const TOAST_WIDTH = 356;
 // Default gap between toasts
 const GAP = 14;
 
+// Threshold to dismiss a toast
 const SWIPE_THRESHOLD = 20;
 
+// Equal to exit animation duration
 const TIME_BEFORE_UNMOUNT = 200;
 
 function _cn(...classes: (string | undefined)[]) {

@@ -2,19 +2,17 @@ import React from 'react';
 
 export const How = () => {
   return (
-    <div>
-      <h2>How is it made?</h2>
-      <p>
-        You can read about why and how it was built{' '}
-        <a
-          href="https://emilkowal.ski/ui/building-a-toast-component"
-          target="_blank"
-          style={{ textDecoration: 'underline' }}
-        >
-          here
-        </a>
-        .
-      </p>
-    </div>
+    <>
+      <div>
+        <h2>Want to learn how to make components like this one?</h2>
+        <p>
+          I&apos;m working on a course about animations on the web, you can check it out{' '}
+          <a href="https://animations.dev/" target="_blank" style={{ textDecoration: 'underline' }}>
+            here
+          </a>
+          .
+        </p>
+      </div>
+    </>
   );
 };
