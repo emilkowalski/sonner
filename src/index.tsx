@@ -219,7 +219,7 @@ const Toast = (props: ToastProps) => {
   function getLoadingIcon() {
     if (icons?.loading) {
       return (
-        <div className="loader" data-visible={toastType === 'loading'}>
+        <div className="sonner-loader" data-visible={toastType === 'loading'}>
           {icons.loading}
         </div>
       );
@@ -366,7 +366,7 @@ const Toast = (props: ToastProps) => {
           {toastType || toast.icon || toast.promise ? (
             <div data-icon="">
               {toast.promise || (toast.type === 'loading' && !toast.icon)
-                ? toast.icon || icons?.loading || getLoadingIcon()
+                ? toast.icon || getLoadingIcon()
                 : null}
               {toast.type !== 'loading' ? toast.icon || icons?.[toastType] || getAsset(toastType) : null}
             </div>
