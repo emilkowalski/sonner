@@ -2,12 +2,6 @@
   "name": "test",
   "version": "0.1.0",
   "private": true,
-  "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint"
-  },
   "dependencies": {
     "@types/node": "18.15.0",
     "@types/react": "18.0.28",
