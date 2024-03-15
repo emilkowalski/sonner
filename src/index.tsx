@@ -3,12 +3,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import './styles.css';
+import DOMPurify from "dompurify";
 import { getAsset, Loader } from './assets';
 import { useIsDocumentHidden } from './hooks';
-import type { HeightT, ToastT, ToastToDismiss, ExternalToast, ToasterProps, ToastProps } from './types';
-import { ToastState, toast } from './state';
-import DOMPurify from "dompurify";
+import { toast, ToastState } from './state';
+import './styles.css';
+import type { ExternalToast, HeightT, ToasterProps, ToastProps, ToastT, ToastToDismiss } from './types';
 
 // Visible toasts amount
 const VISIBLE_TOASTS_AMOUNT = 3;
@@ -369,7 +369,7 @@ const Toast = (props: ToastProps) => {
       ) : (
         <>
           {toastType || toast.icon || toast.promise ? (
-            <div data-icon="">
+            <div data-icon="" className={cn(classNames?.icon)}>
               {toast.promise || (toast.type === 'loading' && !toast.icon)
                 ? toast.icon || getLoadingIcon()
                 : null}
@@ -377,7 +377,7 @@ const Toast = (props: ToastProps) => {
             </div>
           ) : null}
 
-          <div data-content="">
+          <div data-content="" className={cn(classNames?.content)}>
             <div data-title="" className={cn(classNames?.title, toast?.classNames?.title)}
                  dangerouslySetInnerHTML={sanitizeHTML(toast.title as string)}
             ></div>
@@ -697,4 +697,5 @@ const Toaster = (props: ToasterProps) => {
     </section>
   );
 };
-export { toast, Toaster, type ToastT, type ExternalToast };
+export { toast, Toaster, type ExternalToast, type ToastT };
+
