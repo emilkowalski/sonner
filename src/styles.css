@@ -360,7 +360,7 @@ html[dir='rtl'],
   [data-sonner-toaster] [data-sonner-toast] {
     left: 0;
     right: 0;
-    width: calc(100% - 32px);
+    width: calc(100% - var(--mobile-offset) * 2);
   }
 
   [data-sonner-toaster][data-x-position='left'] {
