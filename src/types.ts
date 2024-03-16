@@ -28,6 +28,8 @@ export interface ToastClassnames {
   warning?: string;
   loading?: string;
   default?: string;
+  content?: string;
+  icon?: string;
 }
 
 export interface ToastIcons {
