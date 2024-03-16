@@ -152,6 +152,7 @@ export interface ToastProps {
   classNames?: ToastClassnames;
   icons?: ToastIcons;
   closeButtonAriaLabel?: string;
+  recalculateRemainingTime?: boolean;
   pauseWhenPageIsHidden: boolean;
   cn: CnFunction;
 }

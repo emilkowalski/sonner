@@ -49,6 +49,7 @@ const Toast = (props: ToastProps) => {
     expanded,
     removeToast,
     closeButton: closeButtonFromToaster,
+    recalculateRemainingTime = false,
     style,
     cancelButtonStyle,
     actionButtonStyle,
@@ -92,9 +93,13 @@ const Toast = (props: ToastProps) => {
     () => toast.duration || durationFromToaster || TOAST_LIFETIME,
     [toast.duration, durationFromToaster],
   );
-  const closeTimerStartTimeRef = React.useRef(0);
+  const timerRef = React.useRef<{ start: number; end: number; remaining: number; id: NodeJS.Timeout | null }>({
+    start: 0, // maybe we can use Date.now() as well instead of 0
+    end: 0,
+    id: null,
+    remaining: duration,
+  });
   const offset = React.useRef(0);
-  const lastCloseTimerStartTimeRef = React.useRef(0);
   const pointerStartRef = React.useRef<{ x: number; y: number } | null>(null);
   const [y, x] = position.split('-');
   const toastsHeightBefore = React.useMemo(() => {
@@ -152,38 +157,34 @@ const Toast = (props: ToastProps) => {
 
   React.useEffect(() => {
     if ((toast.promise && toastType === 'loading') || toast.duration === Infinity || toast.type === 'loading') return;
-    let timeoutId: NodeJS.Timeout;
-    let remainingTime = duration;
 
     // Pause the timer on each hover
     const pauseTimer = () => {
-      if (lastCloseTimerStartTimeRef.current < closeTimerStartTimeRef.current) {
-        // Get the elapsed time since the timer started
-        const elapsedTime = new Date().getTime() - closeTimerStartTimeRef.current;
-
-        remainingTime = remainingTime - elapsedTime;
-      }
-
-      lastCloseTimerStartTimeRef.current = new Date().getTime();
+      const end = Date.now();
+      
+      timerRef.current.end < timerRef.current.start && (timerRef.current = {
+          ...timerRef.current,
+          end,
+          remaining: timerRef.current.remaining - (end - timerRef.current.start),
+      });
     };
 
     const startTimer = () => {
-      closeTimerStartTimeRef.current = new Date().getTime();
-
-      // Let the toast know it has started
-      timeoutId = setTimeout(() => {
-        toast.onAutoClose?.(toast);
-        deleteToast();
-      }, remainingTime);
+      timerRef.current = {
+          ...timerRef.current,
+          start: Date.now(),
+          id: setTimeout(() => {
+            toast.onAutoClose?.(toast);
+            deleteToast();
+          }, recalculateRemainingTime ? timerRef.current.remaining : duration),
+      };
     };
 
-    if (expanded || interacting || (pauseWhenPageIsHidden && isDocumentHidden)) {
-      pauseTimer();
-    } else {
-      startTimer();
-    }
+    (expanded || interacting || (pauseWhenPageIsHidden && isDocumentHidden)) ? pauseTimer() : startTimer();
 
-    return () => clearTimeout(timeoutId);
+    return () => {
+      timerRef.current?.id && clearTimeout(timerRef.current.id);
+  };
   }, [
     expanded,
     interacting,
