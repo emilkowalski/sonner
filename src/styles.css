@@ -165,7 +165,7 @@
   gap: 2px;
 }
 
-:where([data-sonner-toast]) :where([data-button]) {
+[data-sonner-toast][data-styled="true"] [data-button] {
   border-radius: 4px;
   padding-left: 8px;
   padding-right: 8px;
@@ -326,7 +326,7 @@
   height: calc(var(--initial-height) + 20%);
 }
 
-:where([data-sonner-toast][data-swiping='true']) {
+[data-sonner-toast][data-swiping='true'] {
   transform: var(--y) translateY(var(--swipe-amount, 0px));
   transition: none;
 }
