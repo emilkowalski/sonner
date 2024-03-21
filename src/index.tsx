@@ -3,12 +3,20 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import DOMPurify from "dompurify";
+import DOMPurify from 'dompurify';
 import { getAsset, Loader } from './assets';
 import { useIsDocumentHidden } from './hooks';
 import { toast, ToastState } from './state';
 import './styles.css';
-import type { ExternalToast, HeightT, ToasterProps, ToastProps, ToastT, ToastToDismiss } from './types';
+import {
+  isAction,
+  type ExternalToast,
+  type HeightT,
+  type ToasterProps,
+  type ToastProps,
+  type ToastT,
+  type ToastToDismiss,
+} from './types';
 
 // Visible toasts amount
 const VISIBLE_TOASTS_AMOUNT = 3;
@@ -375,16 +383,16 @@ const Toast = (props: ToastProps) => {
         <>
           {toastType || toast.icon || toast.promise ? (
             <div data-icon="" className={cn(classNames?.icon)}>
-              {toast.promise || (toast.type === 'loading' && !toast.icon)
-                ? toast.icon || getLoadingIcon()
-                : null}
+              {toast.promise || (toast.type === 'loading' && !toast.icon) ? toast.icon || getLoadingIcon() : null}
               {toast.type !== 'loading' ? toast.icon || icons?.[toastType] || getAsset(toastType) : null}
             </div>
           ) : null}
 
           <div data-content="" className={cn(classNames?.content)}>
-            <div data-title="" className={cn(classNames?.title, toast?.classNames?.title)}
-                 dangerouslySetInnerHTML={sanitizeHTML(toast.title as string)}
+            <div
+              data-title=""
+              className={cn(classNames?.title, toast?.classNames?.title)}
+              dangerouslySetInnerHTML={sanitizeHTML(toast.title as string)}
             ></div>
             {toast.description ? (
               <div
@@ -399,29 +407,35 @@ const Toast = (props: ToastProps) => {
               ></div>
             ) : null}
           </div>
-          {toast.cancel ? (
+          {React.isValidElement(toast.cancel) ? (
+            toast.cancel
+          ) : isAction(toast.cancel) ? (
             <button
               data-button
               data-cancel
               style={toast.cancelButtonStyle || cancelButtonStyle}
               onClick={(event) => {
+                // We need to check twice because typescript
+                if (!isAction(toast.cancel)) return;
                 if (!dismissible) return;
                 deleteToast();
-                if (toast.cancel?.onClick) {
-                  toast.cancel.onClick(event);
-                }
+                toast.cancel.onClick(event);
               }}
               className={cn(classNames?.cancelButton, toast?.classNames?.cancelButton)}
             >
               {toast.cancel.label}
             </button>
           ) : null}
-          {toast.action ? (
+          {React.isValidElement(toast.action) ? (
+            toast.action
+          ) : isAction(toast.action) ? (
             <button
               data-button=""
               style={toast.actionButtonStyle || actionButtonStyle}
               onClick={(event) => {
-                toast.action?.onClick(event);
+                // We need to check twice because typescript
+                if (!isAction(toast.action)) return;
+                toast.action.onClick(event);
                 if (event.defaultPrevented) return;
                 deleteToast();
               }}
@@ -703,4 +717,3 @@ const Toaster = (props: ToasterProps) => {
   );
 };
 export { toast, Toaster, type ExternalToast, type ToastT };
-
