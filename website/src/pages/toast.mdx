@@ -34,7 +34,7 @@ To render a toast on initial page load it is required that the function `toast()
 ```jsx
 setTimeout(() => {
   toast('My toast on a page load');
-})
+});
 ```
 
 ## Creating toasts
@@ -68,6 +68,14 @@ toast('My action toast', {
 });
 ```
 
+You can also render jsx as your action.
+
+```jsx
+toast('My action toast', {
+  action: <Button onClick={() => console.log('Action!')}>Action</Button>,
+});
+```
+
 ### Cancel
 
 Renders a secondary button, clicking it will close the toast and run the callback passed via `onClick`.
@@ -78,6 +86,14 @@ toast('My cancel toast', {
     label: 'Cancel',
     onClick: () => console.log('Cancel!'),
   },
+});
+```
+
+You can also render jsx as your action.
+
+```jsx
+toast('My cancel toast', {
+  action: <Button onClick={() => console.log('Cancel!')}>Cancel</Button>,
 });
 ```
 
