@@ -622,7 +622,7 @@ const Toaster = (props: ToasterProps) => {
                 '--front-toast-height': `${heights[0]?.height || 0}px`,
                 '--offset': typeof offset === 'number' ? `${offset}px` : offset || VIEWPORT_OFFSET,
                 '--width': `${TOAST_WIDTH}px`,
-                '--gap': `${GAP}px`,
+                '--gap': `${gap}px`,
                 ...style,
               } as React.CSSProperties
             }
