@@ -19,7 +19,6 @@ export const Hero = () => {
           onClick={() => {
             toast('Sonner', {
               description: 'An opinionated toast component for React.',
-              action: <button>xpp</button>,
             });
           }}
           className={styles.button}

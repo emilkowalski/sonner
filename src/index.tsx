@@ -64,7 +64,7 @@ const Toast = (props: ToastProps) => {
     descriptionClassName = '',
     duration: durationFromToaster,
     position,
-    gap = GAP,
+    gap,
     loadingIcon: loadingIconProp,
     expandByDefault,
     classNames,
@@ -409,7 +409,7 @@ const Toast = (props: ToastProps) => {
           </div>
           {React.isValidElement(toast.cancel) ? (
             toast.cancel
-          ) : isAction(toast.cancel) ? (
+          ) : toast.cancel && isAction(toast.cancel) ? (
             <button
               data-button
               data-cancel
@@ -428,7 +428,7 @@ const Toast = (props: ToastProps) => {
           ) : null}
           {React.isValidElement(toast.action) ? (
             toast.action
-          ) : isAction(toast.action) ? (
+          ) : toast.action && isAction(toast.action) ? (
             <button
               data-button=""
               style={toast.actionButtonStyle || actionButtonStyle}
@@ -479,7 +479,7 @@ const Toaster = (props: ToasterProps) => {
     visibleToasts = VISIBLE_TOASTS_AMOUNT,
     toastOptions,
     dir = getDocumentDirection(),
-    gap,
+    gap = GAP,
     loadingIcon,
     icons,
     containerAriaLabel = 'Notifications',

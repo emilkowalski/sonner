@@ -1,11 +1,11 @@
-### Issue 😱:
+### Issue:
 
 Closes https://github.com/emilkowalski/sonner/issues/
 
-### What has been done ✅:
+### What has been done:
 
 - [ ]
 
-### Screenshots/Videos 🎥:
+### Screenshots/Videos:
 
 N/A
