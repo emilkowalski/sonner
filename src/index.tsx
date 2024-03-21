@@ -3,12 +3,20 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import DOMPurify from "dompurify";
+import DOMPurify from 'dompurify';
 import { getAsset, Loader } from './assets';
 import { useIsDocumentHidden } from './hooks';
 import { toast, ToastState } from './state';
 import './styles.css';
-import type { ExternalToast, HeightT, ToasterProps, ToastProps, ToastT, ToastToDismiss } from './types';
+import {
+  isAction,
+  type ExternalToast,
+  type HeightT,
+  type ToasterProps,
+  type ToastProps,
+  type ToastT,
+  type ToastToDismiss,
+} from './types';
 
 // Visible toasts amount
 const VISIBLE_TOASTS_AMOUNT = 3;
@@ -56,7 +64,7 @@ const Toast = (props: ToastProps) => {
     descriptionClassName = '',
     duration: durationFromToaster,
     position,
-    gap = GAP,
+    gap,
     loadingIcon: loadingIconProp,
     expandByDefault,
     classNames,
@@ -375,9 +383,7 @@ const Toast = (props: ToastProps) => {
         <>
           {toastType || toast.icon || toast.promise ? (
             <div data-icon="" className={cn(classNames?.icon)}>
-              {toast.promise || (toast.type === 'loading' && !toast.icon)
-                ? toast.icon || getLoadingIcon()
-                : null}
+              {toast.promise || (toast.type === 'loading' && !toast.icon) ? toast.icon || getLoadingIcon() : null}
               {toast.type !== 'loading' ? toast.icon || icons?.[toastType] || getAsset(toastType) : null}
             </div>
           ) : null}
@@ -406,29 +412,35 @@ const Toast = (props: ToastProps) => {
               </div>
             ) : null}
           </div>
-          {toast.cancel ? (
+          {React.isValidElement(toast.cancel) ? (
+            toast.cancel
+          ) : toast.cancel && isAction(toast.cancel) ? (
             <button
               data-button
               data-cancel
               style={toast.cancelButtonStyle || cancelButtonStyle}
               onClick={(event) => {
+                // We need to check twice because typescript
+                if (!isAction(toast.cancel)) return;
                 if (!dismissible) return;
                 deleteToast();
-                if (toast.cancel?.onClick) {
-                  toast.cancel.onClick(event);
-                }
+                toast.cancel.onClick(event);
               }}
               className={cn(classNames?.cancelButton, toast?.classNames?.cancelButton)}
             >
               {toast.cancel.label}
             </button>
           ) : null}
-          {toast.action ? (
+          {React.isValidElement(toast.action) ? (
+            toast.action
+          ) : toast.action && isAction(toast.action) ? (
             <button
               data-button=""
               style={toast.actionButtonStyle || actionButtonStyle}
               onClick={(event) => {
-                toast.action?.onClick(event);
+                // We need to check twice because typescript
+                if (!isAction(toast.action)) return;
+                toast.action.onClick(event);
                 if (event.defaultPrevented) return;
                 deleteToast();
               }}
@@ -472,7 +484,7 @@ const Toaster = (props: ToasterProps) => {
     visibleToasts = VISIBLE_TOASTS_AMOUNT,
     toastOptions,
     dir = getDocumentDirection(),
-    gap,
+    gap = GAP,
     loadingIcon,
     icons,
     containerAriaLabel = 'Notifications',
@@ -629,7 +641,7 @@ const Toaster = (props: ToasterProps) => {
                 '--front-toast-height': `${heights[0]?.height || 0}px`,
                 '--offset': typeof offset === 'number' ? `${offset}px` : offset || VIEWPORT_OFFSET,
                 '--width': `${TOAST_WIDTH}px`,
-                '--gap': `${GAP}px`,
+                '--gap': `${gap}px`,
                 ...style,
               } as React.CSSProperties
             }
@@ -710,4 +722,3 @@ const Toaster = (props: ToasterProps) => {
   );
 };
 export { toast, Toaster, type ExternalToast, type ToastT };
-
