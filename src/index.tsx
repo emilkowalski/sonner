@@ -382,13 +382,13 @@ const Toast = (props: ToastProps) => {
       ) : (
         <>
           {toastType || toast.icon || toast.promise ? (
-            <div data-icon="" className={cn(classNames?.icon)}>
+            <div data-icon="" className={cn(classNames?.icon, toast?.classNames?.icon)}>
               {toast.promise || (toast.type === 'loading' && !toast.icon) ? toast.icon || getLoadingIcon() : null}
               {toast.type !== 'loading' ? toast.icon || icons?.[toastType] || getAsset(toastType) : null}
             </div>
           ) : null}
 
-          <div data-content="" className={cn(classNames?.content)}>
+          <div data-content="" className={cn(classNames?.content, toast?.classNames?.content)}>
             <div
               data-title=""
               className={cn(classNames?.title, toast?.classNames?.title)}
