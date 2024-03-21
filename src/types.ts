@@ -40,6 +40,12 @@ export interface ToastIcons {
   loading?: React.ReactNode;
 }
 
+interface Action {
+  label: string;
+  onClick: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
+  actionButtonStyle?: React.CSSProperties;
+}
+
 export interface ToastT {
   id: number | string;
   title?: string | React.ReactNode;
@@ -53,14 +59,8 @@ export interface ToastT {
   duration?: number;
   delete?: boolean;
   important?: boolean;
-  action?: {
-    label: React.ReactNode;
-    onClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
-  };
-  cancel?: {
-    label: React.ReactNode;
-    onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
-  };
+  action?: Action | React.ReactNode;
+  cancel?: Action | React.ReactNode;
   onDismiss?: (toast: ToastT) => void;
   onAutoClose?: (toast: ToastT) => void;
   promise?: PromiseT;
@@ -72,6 +72,10 @@ export interface ToastT {
   classNames?: ToastClassnames;
   descriptionClassName?: string;
   position?: Position;
+}
+
+export function isAction(action: Action | React.ReactNode): action is Action {
+  return (action as Action).label !== undefined && typeof (action as Action).onClick === 'function';
 }
 
 export type Position = 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right' | 'top-center' | 'bottom-center';
