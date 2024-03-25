@@ -388,12 +388,13 @@ const Toast = (props: ToastProps) => {
             </div>
           ) : null}
 
-          <div data-content="" className={cn(classNames?.content, toast?.classNames?.content)}>
-            <div
-              data-title=""
-              className={cn(classNames?.title, toast?.classNames?.title)}
-              dangerouslySetInnerHTML={sanitizeHTML(toast.title as string)}
-            ></div>
+          <div data-content="" className={cn(classNames?.content)}>
+            <div data-title="" className={cn(classNames?.title, toast?.classNames?.title)}>
+              { typeof toast.title === 'string'
+                  ? <div dangerouslySetInnerHTML={sanitizeHTML(toast.title)} />
+                  : toast.title
+              }
+            </div>
             {toast.description ? (
               <div
                 data-description=""
@@ -403,8 +404,12 @@ const Toast = (props: ToastProps) => {
                   classNames?.description,
                   toast?.classNames?.description,
                 )}
-                dangerouslySetInnerHTML={sanitizeHTML(toast.description as string)}
-              ></div>
+              >
+                { typeof toast.description === 'string'
+                    ? <div dangerouslySetInnerHTML={sanitizeHTML(toast.description)} />
+                    : toast.description
+                }
+              </div>
             ) : null}
           </div>
           {React.isValidElement(toast.cancel) ? (
