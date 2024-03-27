@@ -179,4 +179,14 @@ test.describe('Basic functionality', () => {
 
     await expect(button).toHaveCSS('background-color', 'rgb(219, 239, 255)');
   });
+
+  test('string description is rendered', async ({ page }) => {
+    await page.getByTestId('string-description').click();
+    await expect(page.getByText('string description')).toHaveCount(1);
+  });
+
+  test('ReactNode description is rendered', async ({ page }) => {
+    await page.getByTestId('react-node-description').click();
+    await expect(page.getByText('This is my custom ReactNode description')).toHaveCount(1);
+  });
 });
