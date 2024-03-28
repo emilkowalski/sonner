@@ -124,32 +124,33 @@ class Observer {
 
     let shouldDismiss = id !== undefined;
 
-    p.then((response) => {
+    p.then(async (response) => {
       // TODO: Clean up TS here, response has incorrect type
       // @ts-expect-error
       if (response && typeof response.ok === 'boolean' && !response.ok) {
         shouldDismiss = false;
         const message =
           // @ts-expect-error
-          typeof data.error === 'function' ? data.error(`HTTP error! status: ${response.status}`) : data.error;
+          typeof data.error === 'function' ? await data.error(`HTTP error! status: ${response.status}`) : data.error;
         const description =
           typeof data.description === 'function'
             ? // @ts-expect-error
-              data.description(`HTTP error! status: ${response.status}`)
+              await data.description(`HTTP error! status: ${response.status}`)
             : data.description;
         this.create({ id, type: 'error', message, description });
       } else if (data.success !== undefined) {
         shouldDismiss = false;
-        const message = typeof data.success === 'function' ? data.success(response) : data.success;
-        const description = typeof data.description === 'function' ? data.description(response) : data.description;
+        const message = typeof data.success === 'function' ? await data.success(response) : data.success;
+        const description =
+          typeof data.description === 'function' ? await data.description(response) : data.description;
         this.create({ id, type: 'success', message, description });
       }
     })
-      .catch((error) => {
+      .catch(async (error) => {
         if (data.error !== undefined) {
           shouldDismiss = false;
-          const message = typeof data.error === 'function' ? data.error(error) : data.error;
-          const description = typeof data.description === 'function' ? data.description(error) : data.description;
+          const message = typeof data.error === 'function' ? await data.error(error) : data.error;
+          const description = typeof data.description === 'function' ? await data.description(error) : data.description;
           this.create({ id, type: 'error', message, description });
         }
       })
