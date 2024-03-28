@@ -4,13 +4,18 @@ export type ToastTypes = 'normal' | 'action' | 'success' | 'info' | 'warning' | 
 
 export type PromiseT<Data = any> = Promise<Data> | (() => Promise<Data>);
 
+export type PromiseTResult<Data = any> =
+  | string
+  | React.ReactNode
+  | ((data: Data) => React.ReactNode | string | Promise<React.ReactNode | string>);
+
 export type PromiseExternalToast = Omit<ExternalToast, 'description'>;
 
 export type PromiseData<ToastData = any> = PromiseExternalToast & {
   loading?: string | React.ReactNode;
-  success?: string | React.ReactNode | ((data: ToastData) => React.ReactNode | string);
-  error?: string | React.ReactNode | ((error: any) => React.ReactNode | string);
-  description?: string | React.ReactNode | ((data: any) => React.ReactNode | string);
+  success?: PromiseTResult<ToastData>;
+  error?: PromiseTResult;
+  description?: PromiseTResult;
   finally?: () => void | Promise<void>;
 };
 
