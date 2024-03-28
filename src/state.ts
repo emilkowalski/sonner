@@ -125,17 +125,13 @@ class Observer {
     let shouldDismiss = id !== undefined;
 
     p.then(async (response) => {
-      // TODO: Clean up TS here, response has incorrect type
-      // @ts-expect-error
-      if (response && typeof response.ok === 'boolean' && !response.ok) {
+      if (isHttpResponse(response) && !response.ok) {
         shouldDismiss = false;
         const message =
-          // @ts-expect-error
           typeof data.error === 'function' ? await data.error(`HTTP error! status: ${response.status}`) : data.error;
         const description =
           typeof data.description === 'function'
-            ? // @ts-expect-error
-              await data.description(`HTTP error! status: ${response.status}`)
+            ? await data.description(`HTTP error! status: ${response.status}`)
             : data.description;
         this.create({ id, type: 'error', message, description });
       } else if (data.success !== undefined) {
@@ -186,6 +182,17 @@ const toastFunction = (message: string | React.ReactNode, data?: ExternalToast) 
     id,
   });
   return id;
+};
+
+const isHttpResponse = (data: any): data is Response => {
+  return (
+    data &&
+    typeof data === 'object' &&
+    'ok' in data &&
+    typeof data.ok === 'boolean' &&
+    'status' in data &&
+    typeof data.status === 'number'
+  );
 };
 
 const basicToast = toastFunction;
