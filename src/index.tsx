@@ -211,20 +211,6 @@ const Toast = (props: ToastProps) => {
   ]);
 
   React.useEffect(() => {
-    const toastNode = toastRef.current;
-
-    if (toastNode) {
-      const height = toastNode.getBoundingClientRect().height;
-
-      // Add toast height tot heights array after the toast is mounted
-      setInitialHeight(height);
-      setHeights((h) => [{ toastId: toast.id, height, position: toast.position }, ...h]);
-
-      return () => setHeights((h) => h.filter((height) => height.toastId !== toast.id));
-    }
-  }, [setHeights, toast.id]);
-
-  React.useEffect(() => {
     if (toast.delete) {
       deleteToast();
     }
