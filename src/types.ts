@@ -41,7 +41,7 @@ export interface ToastIcons {
 }
 
 interface Action {
-  label: string;
+  label: React.ReactNode;
   onClick: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
   actionButtonStyle?: React.CSSProperties;
 }
@@ -75,7 +75,7 @@ export interface ToastT {
 }
 
 export function isAction(action: Action | React.ReactNode): action is Action {
-  return (action as Action).label !== undefined && typeof (action as Action).onClick === 'function';
+  return (action as Action).label !== undefined;
 }
 
 export type Position = 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right' | 'top-center' | 'bottom-center';
