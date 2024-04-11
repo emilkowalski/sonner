@@ -1,5 +1,6 @@
+// @deno-types="npm:@types/react@^18.2.0"
 import React from 'react';
-import type { ExternalToast, ToastT, PromiseData, PromiseT, ToastToDismiss, ToastTypes } from './types';
+import type { ExternalToast, ToastT, PromiseData, PromiseT, ToastToDismiss, ToastTypes } from './types.ts';
 
 let toastsCounter = 1;
 
@@ -13,7 +14,7 @@ class Observer {
   }
 
   // We use arrow functions to maintain the correct `this` reference
-  subscribe = (subscriber: (toast: ToastT | ToastToDismiss) => void) => {
+  subscribe = (subscriber: (toast: ToastT | ToastToDismiss) => void): () => void => {
     this.subscribers.push(subscriber);
 
     return () => {
@@ -22,11 +23,11 @@ class Observer {
     };
   };
 
-  publish = (data: ToastT) => {
+  publish = (data: ToastT): void => {
     this.subscribers.forEach((subscriber) => subscriber(data));
   };
 
-  addToast = (data: ToastT) => {
+  addToast = (data: ToastT): void => {
     this.publish(data);
     this.toasts = [...this.toasts, data];
   };
@@ -38,7 +39,7 @@ class Observer {
       promise?: PromiseT;
       jsx?: React.ReactElement;
     },
-  ) => {
+  ): string | number => {
     const { message, ...rest } = data;
     const id = typeof data?.id === 'number' || data.id?.length > 0 ? data.id : toastsCounter++;
     const alreadyExists = this.toasts.find((toast) => {
@@ -68,7 +69,7 @@ class Observer {
     return id;
   };
 
-  dismiss = (id?: number | string) => {
+  dismiss = (id?: number | string): string | number => {
     if (!id) {
       this.toasts.forEach((toast) => {
         this.subscribers.forEach((subscriber) => subscriber({ id: toast.id, dismiss: true }));
@@ -79,31 +80,31 @@ class Observer {
     return id;
   };
 
-  message = (message: string | React.ReactNode, data?: ExternalToast) => {
+  message = (message: string | React.ReactNode, data?: ExternalToast): string | number => {
     return this.create({ ...data, message });
   };
 
-  error = (message: string | React.ReactNode, data?: ExternalToast) => {
+  error = (message: string | React.ReactNode, data?: ExternalToast): string | number => {
     return this.create({ ...data, message, type: 'error' });
   };
 
-  success = (message: string | React.ReactNode, data?: ExternalToast) => {
+  success = (message: string | React.ReactNode, data?: ExternalToast): string | number => {
     return this.create({ ...data, type: 'success', message });
   };
 
-  info = (message: string | React.ReactNode, data?: ExternalToast) => {
+  info = (message: string | React.ReactNode, data?: ExternalToast): string | number => {
     return this.create({ ...data, type: 'info', message });
   };
 
-  warning = (message: string | React.ReactNode, data?: ExternalToast) => {
+  warning = (message: string | React.ReactNode, data?: ExternalToast): string | number => {
     return this.create({ ...data, type: 'warning', message });
   };
 
-  loading = (message: string | React.ReactNode, data?: ExternalToast) => {
+  loading = (message: string | React.ReactNode, data?: ExternalToast): string | number => {
     return this.create({ ...data, type: 'loading', message });
   };
 
-  promise = <ToastData>(promise: PromiseT<ToastData>, data?: PromiseData<ToastData>) => {
+  promise = <ToastData>(promise: PromiseT<ToastData>, data?: PromiseData<ToastData>): string | number => {
     if (!data) {
       // Nothing to show
       return;
@@ -166,17 +167,17 @@ class Observer {
     return id;
   };
 
-  custom = (jsx: (id: number | string) => React.ReactElement, data?: ExternalToast) => {
+  custom = (jsx: (id: number | string) => React.ReactElement, data?: ExternalToast): string | number => {
     const id = data?.id || toastsCounter++;
     this.create({ jsx: jsx(id), id, ...data });
     return id;
   };
 }
 
-export const ToastState = new Observer();
+export const ToastState: Observer = new Observer();
 
 // bind this to the toast function
-const toastFunction = (message: string | React.ReactNode, data?: ExternalToast) => {
+const toastFunction = (message: string | React.ReactNode, data?: ExternalToast): string | number => {
   const id = data?.id || toastsCounter++;
 
   ToastState.addToast({
@@ -187,10 +188,20 @@ const toastFunction = (message: string | React.ReactNode, data?: ExternalToast) 
   return id;
 };
 
-const basicToast = toastFunction;
+const basicToast: typeof toastFunction = toastFunction;
 
 // We use `Object.assign` to maintain the correct types as we would lose them otherwise
-export const toast = Object.assign(basicToast, {
+export const toast: ((message: string | React.ReactNode, data?: ExternalToast) => string | number) & {
+  success: typeof ToastState.success,
+  info: typeof ToastState.info,
+  warning: typeof ToastState.warning,
+  error: typeof ToastState.error,
+  custom: typeof ToastState.custom,
+  message: typeof ToastState.message,
+  promise: typeof ToastState.promise,
+  dismiss: typeof ToastState.dismiss,
+  loading: typeof ToastState.loading,
+} = Object.assign(basicToast, {
   success: ToastState.success,
   info: ToastState.info,
   warning: ToastState.warning,

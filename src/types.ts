@@ -1,3 +1,4 @@
+// @deno-types="npm:@types/react@^18.2.0"
 import React from 'react';
 
 export type ToastTypes = 'normal' | 'action' | 'success' | 'info' | 'warning' | 'error' | 'loading' | 'default';

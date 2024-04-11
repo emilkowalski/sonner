@@ -1,0 +1,24 @@
+{
+    "name": "@bureaudouble/sonner",
+    "version": "0.0.1",
+    "compilerOptions": {
+        "jsx": "react-jsx",
+        "lib": [
+          "es2022",
+          "dom",
+          "dom.iterable",
+          "dom.asynciterable"
+        ]
+    },
+    "exclude": ["**/*", "!README.md", "!LICENSE.md", "!src", "!jsr.jsonc"],
+    "imports": {
+        "react": "npm:react@^18.2.0",
+        "react-dom": "npm:react-dom@^18.2.0",
+        "amuchina": "npm:amuchina@^1.0.12",
+        "react-style-singleton": "npm:react-style-singleton@^2.2.1"
+    },
+    "exports": {
+        ".": "./src/index.tsx"
+    }
+}
+  
