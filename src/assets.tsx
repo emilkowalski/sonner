@@ -1,6 +1,7 @@
 'use client';
+// @deno-types="npm:@types/react@^18.2.0"
 import React from 'react';
-import type { ToastTypes } from './types';
+import type { ToastTypes } from './types.ts';
 
 export const getAsset = (type: ToastTypes): JSX.Element | null => {
   switch (type) {
@@ -35,7 +36,7 @@ export const Loader = ({ visible }: { visible: boolean }) => {
   );
 };
 
-const SuccessIcon = (
+const SuccessIcon: React.JSX.Element = (
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" height="20" width="20">
     <path
       fillRule="evenodd"
@@ -45,7 +46,7 @@ const SuccessIcon = (
   </svg>
 );
 
-const WarningIcon = (
+const WarningIcon: React.JSX.Element = (
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" height="20" width="20">
     <path
       fillRule="evenodd"
@@ -55,7 +56,7 @@ const WarningIcon = (
   </svg>
 );
 
-const InfoIcon = (
+const InfoIcon: React.JSX.Element = (
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" height="20" width="20">
     <path
       fillRule="evenodd"
@@ -65,7 +66,7 @@ const InfoIcon = (
   </svg>
 );
 
-const ErrorIcon = (
+const ErrorIcon: React.JSX.Element = (
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" height="20" width="20">
     <path
       fillRule="evenodd"

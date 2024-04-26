@@ -1,13 +1,16 @@
 'use client';
 
+// @deno-types="npm:@types/react@^18.2.0"
 import React from 'react';
+// @deno-types="npm:@types/react-dom@^18.2.0"
 import ReactDOM from 'react-dom';
 
-import DOMPurify from 'dompurify';
-import { getAsset, Loader } from './assets';
-import { useIsDocumentHidden } from './hooks';
-import { toast, ToastState } from './state';
-import './styles.css';
+import { styleHookSingleton } from 'react-style-singleton';
+import Amuchina from 'amuchina';
+import { getAsset, Loader } from './assets.tsx';
+import { useIsDocumentHidden } from './hooks.tsx';
+import { toast, ToastState } from './state.ts';
+import styles from "./styles.ts";
 import {
   isAction,
   type ExternalToast,
@@ -16,7 +19,7 @@ import {
   type ToastProps,
   type ToastT,
   type ToastToDismiss,
-} from './types';
+} from './types.ts';
 
 // Visible toasts amount
 const VISIBLE_TOASTS_AMOUNT = 3;
@@ -43,7 +46,9 @@ function _cn(...classes: (string | undefined)[]) {
   return classes.filter(Boolean).join(' ');
 }
 
-const Toast = (props: ToastProps) => {
+const useStyle: ReturnType<typeof styleHookSingleton> = styleHookSingleton();
+const Toast = (props: ToastProps): React.JSX.Element => {
+  useStyle(styles);
   const {
     invert: ToasterInvert,
     toast,
@@ -250,7 +255,9 @@ const Toast = (props: ToastProps) => {
   }
 
   function sanitizeHTML(html: string): { __html: string } {
-    return { __html: DOMPurify.sanitize(html) };
+    const amuchina = globalThis.document ? new Amuchina() : null;
+    const parser = amuchina ? new DOMParser() : null;
+    return { __html: amuchina?.sanitize(parser?.parseFromString(html, 'text/html'))?.documentElement.innerHTML ?? "" };
   }
 
   return (
@@ -467,7 +474,7 @@ function getDocumentDirection(): ToasterProps['dir'] {
   return dirAttribute as ToasterProps['dir'];
 }
 
-const Toaster = (props: ToasterProps) => {
+const Toaster = (props: ToasterProps): React.JSX.Element => {
   const {
     invert,
     position = 'bottom-right',

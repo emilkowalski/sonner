@@ -1,7 +1,8 @@
+// @deno-types="npm:@types/react@^18.2.0"
 import React from 'react';
 
-export const useIsDocumentHidden = () => {
-  const [isDocumentHidden, setIsDocumentHidden] = React.useState(false);
+export const useIsDocumentHidden = (): boolean => {
+  const [isDocumentHidden, setIsDocumentHidden] = React.useState<boolean>(false);
 
   React.useEffect(() => {
     const callback = () => {
