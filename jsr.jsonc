@@ -1,6 +1,6 @@
 {
     "name": "@bureaudouble/sonner",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "compilerOptions": {
         "jsx": "react-jsx",
         "lib": [
@@ -15,7 +15,7 @@
         "react": "npm:react@^18.2.0",
         "react-dom": "npm:react-dom@^18.2.0",
         "amuchina": "npm:amuchina@^1.0.12",
-        "react-style-singleton": "npm:react-style-singleton@^2.2.1"
+        "react-style-singleton": "jsr:@bureaudouble-forks/react-style-singleton@^0.0.1"
     },
     "exports": {
         ".": "./src/index.tsx"
