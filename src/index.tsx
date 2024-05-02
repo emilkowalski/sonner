@@ -403,8 +403,12 @@ const Toast = (props: ToastProps) => {
                   classNames?.description,
                   toast?.classNames?.description,
                 )}
-                dangerouslySetInnerHTML={sanitizeHTML(toast.description as string)}
-              ></div>
+                dangerouslySetInnerHTML={
+                  typeof toast.description === 'string' ? sanitizeHTML(toast.description as string) : undefined
+                }
+              >
+                {typeof toast.description === 'object' ? toast.description : null}
+              </div>
             ) : null}
           </div>
           {React.isValidElement(toast.cancel) ? (
