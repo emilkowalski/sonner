@@ -165,7 +165,7 @@
   gap: 2px;
 }
 
-[data-sonner-toast][data-styled="true"] [data-button] {
+[data-sonner-toast][data-styled='true'] [data-button] {
   border-radius: 4px;
   padding-left: 8px;
   padding-right: 8px;
@@ -438,49 +438,49 @@
   --error-text: hsl(358, 100%, 81%);
 }
 
-[data-rich-colors='true'] [data-sonner-toast][data-type='success'] {
+[data-rich-colors='true'][data-sonner-toast][data-type='success'] {
   background: var(--success-bg);
   border-color: var(--success-border);
   color: var(--success-text);
 }
 
-[data-rich-colors='true'] [data-sonner-toast][data-type='success'] [data-close-button] {
+[data-rich-colors='true'][data-sonner-toast][data-type='success'] [data-close-button] {
   background: var(--success-bg);
   border-color: var(--success-border);
   color: var(--success-text);
 }
 
-[data-rich-colors='true'] [data-sonner-toast][data-type='info'] {
+[data-rich-colors='true'][data-sonner-toast][data-type='info'] {
   background: var(--info-bg);
   border-color: var(--info-border);
   color: var(--info-text);
 }
 
-[data-rich-colors='true'] [data-sonner-toast][data-type='info'] [data-close-button] {
+[data-rich-colors='true'][data-sonner-toast][data-type='info'] [data-close-button] {
   background: var(--info-bg);
   border-color: var(--info-border);
   color: var(--info-text);
 }
 
-[data-rich-colors='true'] [data-sonner-toast][data-type='warning'] {
+[data-rich-colors='true'][data-sonner-toast][data-type='warning'] {
   background: var(--warning-bg);
   border-color: var(--warning-border);
   color: var(--warning-text);
 }
 
-[data-rich-colors='true'] [data-sonner-toast][data-type='warning'] [data-close-button] {
+[data-rich-colors='true'][data-sonner-toast][data-type='warning'] [data-close-button] {
   background: var(--warning-bg);
   border-color: var(--warning-border);
   color: var(--warning-text);
 }
 
-[data-rich-colors='true'] [data-sonner-toast][data-type='error'] {
+[data-rich-colors='true'][data-sonner-toast][data-type='error'] {
   background: var(--error-bg);
   border-color: var(--error-border);
   color: var(--error-text);
 }
 
-[data-rich-colors='true'] [data-sonner-toast][data-type='error'] [data-close-button] {
+[data-rich-colors='true'][data-sonner-toast][data-type='error'] [data-close-button] {
   background: var(--error-bg);
   border-color: var(--error-border);
   color: var(--error-text);

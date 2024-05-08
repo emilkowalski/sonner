@@ -56,6 +56,7 @@ const Toast = (props: ToastProps) => {
     toasts,
     expanded,
     removeToast,
+    defaultRichColors,
     closeButton: closeButtonFromToaster,
     style,
     cancelButtonStyle,
@@ -270,6 +271,7 @@ const Toast = (props: ToastProps) => {
         toast?.classNames?.[toastType],
       )}
       data-sonner-toast=""
+      data-rich-colors={toast.richColors ?? defaultRichColors}
       data-styled={!Boolean(toast.jsx || toast.unstyled || unstyled)}
       data-mounted={mounted}
       data-promise={Boolean(toast.promise)}
@@ -632,7 +634,6 @@ const Toaster = (props: ToasterProps) => {
             className={className}
             data-sonner-toaster
             data-theme={actualTheme}
-            data-rich-colors={richColors}
             data-y-position={y}
             data-x-position={x}
             style={
@@ -689,6 +690,7 @@ const Toaster = (props: ToasterProps) => {
                   icons={icons}
                   index={index}
                   toast={toast}
+                  defaultRichColors={richColors}
                   duration={toastOptions?.duration ?? duration}
                   className={toastOptions?.className}
                   descriptionClassName={toastOptions?.descriptionClassName}

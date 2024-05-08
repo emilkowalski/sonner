@@ -52,6 +52,7 @@ export interface ToastT {
   type?: ToastTypes;
   icon?: React.ReactNode;
   jsx?: React.ReactNode;
+  richColors?: boolean;
   invert?: boolean;
   closeButton?: boolean;
   dismissible?: boolean;
@@ -158,6 +159,7 @@ export interface ToastProps {
   closeButtonAriaLabel?: string;
   pauseWhenPageIsHidden: boolean;
   cn: CnFunction;
+  defaultRichColors?: boolean;
 }
 
 export enum SwipeStateTypes {
