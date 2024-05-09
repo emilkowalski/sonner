@@ -155,6 +155,20 @@ export default function Home({ searchParams }: any) {
       >
         Updated Toast
       </button>
+      <button
+        data-testid="string-description"
+        className="button"
+        onClick={() => toast('Custom Description', { description: 'string description' })}
+      >
+        String Description
+      </button>
+      <button
+        data-testid="react-node-description"
+        className="button"
+        onClick={() => toast('Custom Description', { description: <div>This is my custom ReactNode description</div> })}
+      >
+        ReactNode Description
+      </button>
       {showAutoClose ? <div data-testid="auto-close-el" /> : null}
       {showDismiss ? <div data-testid="dismiss-el" /> : null}
       <Toaster

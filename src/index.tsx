@@ -3,10 +3,20 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import './styles.css';
+import DOMPurify from 'dompurify';
 import { getAsset, Loader } from './assets';
-import type { HeightT, ToastT, ToastToDismiss, ExternalToast, ToasterProps, ToastProps } from './types';
-import { ToastState, toast } from './state';
+import { useIsDocumentHidden } from './hooks';
+import { toast, ToastState } from './state';
+import './styles.css';
+import {
+  isAction,
+  type ExternalToast,
+  type HeightT,
+  type ToasterProps,
+  type ToastProps,
+  type ToastT,
+  type ToastToDismiss,
+} from './types';
 
 // Visible toasts amount
 const VISIBLE_TOASTS_AMOUNT = 3;
@@ -23,11 +33,13 @@ const TOAST_WIDTH = 356;
 // Default gap between toasts
 const GAP = 14;
 
+// Threshold to dismiss a toast
 const SWIPE_THRESHOLD = 20;
 
+// Equal to exit animation duration
 const TIME_BEFORE_UNMOUNT = 200;
 
-function cn(...classes: (string | undefined)[]) {
+function _cn(...classes: (string | undefined)[]) {
   return classes.filter(Boolean).join(' ');
 }
 
@@ -44,7 +56,7 @@ const Toast = (props: ToastProps) => {
     toasts,
     expanded,
     removeToast,
-    closeButton,
+    closeButton: closeButtonFromToaster,
     style,
     cancelButtonStyle,
     actionButtonStyle,
@@ -52,11 +64,14 @@ const Toast = (props: ToastProps) => {
     descriptionClassName = '',
     duration: durationFromToaster,
     position,
-    gap = GAP,
+    gap,
     loadingIcon: loadingIconProp,
     expandByDefault,
     classNames,
+    icons,
     closeButtonAriaLabel = 'Close toast',
+    pauseWhenPageIsHidden,
+    cn,
   } = props;
   const [mounted, setMounted] = React.useState(false);
   const [removed, setRemoved] = React.useState(false);
@@ -77,6 +92,10 @@ const Toast = (props: ToastProps) => {
     () => heights.findIndex((height) => height.toastId === toast.id) || 0,
     [heights, toast.id],
   );
+  const closeButton = React.useMemo(
+    () => toast.closeButton ?? closeButtonFromToaster,
+    [toast.closeButton, closeButtonFromToaster],
+  );
   const duration = React.useMemo(
     () => toast.duration || durationFromToaster || TOAST_LIFETIME,
     [toast.duration, durationFromToaster],
@@ -96,6 +115,8 @@ const Toast = (props: ToastProps) => {
       return prev + curr.height;
     }, 0);
   }, [heights, heightIndex]);
+  const isDocumentHidden = useIsDocumentHidden();
+
   const invert = toast.invert || ToasterInvert;
   const disabled = toastType === 'loading';
 
@@ -119,7 +140,7 @@ const Toast = (props: ToastProps) => {
     setHeights((heights) => {
       const alreadyExists = heights.find((height) => height.toastId === toast.id);
       if (!alreadyExists) {
-        return [{ toastId: toast.id, height: newHeight }, ...heights];
+        return [{ toastId: toast.id, height: newHeight, position: toast.position }, ...heights];
       } else {
         return heights.map((height) => (height.toastId === toast.id ? { ...height, height: newHeight } : height));
       }
@@ -141,6 +162,7 @@ const Toast = (props: ToastProps) => {
     if ((toast.promise && toastType === 'loading') || toast.duration === Infinity || toast.type === 'loading') return;
     let timeoutId: NodeJS.Timeout;
     let remainingTime = duration;
+
     // Pause the timer on each hover
     const pauseTimer = () => {
       if (lastCloseTimerStartTimeRef.current < closeTimerStartTimeRef.current) {
@@ -154,6 +176,11 @@ const Toast = (props: ToastProps) => {
     };
 
     const startTimer = () => {
+      // setTimeout(, Infinity) behaves as if the delay is 0.
+      // As a result, the toast would be closed immediately, giving the appearance that it was never rendered.
+      // See: https://github.com/denysdovhan/wtfjs?tab=readme-ov-file#an-infinite-timeout
+      if (remainingTime === Infinity) return;
+
       closeTimerStartTimeRef.current = new Date().getTime();
 
       // Let the toast know it has started
@@ -163,14 +190,25 @@ const Toast = (props: ToastProps) => {
       }, remainingTime);
     };
 
-    if (expanded || interacting) {
+    if (expanded || interacting || (pauseWhenPageIsHidden && isDocumentHidden)) {
       pauseTimer();
     } else {
       startTimer();
     }
 
     return () => clearTimeout(timeoutId);
-  }, [expanded, interacting, expandByDefault, toast, duration, deleteToast, toast.promise, toastType]);
+  }, [
+    expanded,
+    interacting,
+    expandByDefault,
+    toast,
+    duration,
+    deleteToast,
+    toast.promise,
+    toastType,
+    pauseWhenPageIsHidden,
+    isDocumentHidden,
+  ]);
 
   React.useEffect(() => {
     const toastNode = toastRef.current;
@@ -180,7 +218,7 @@ const Toast = (props: ToastProps) => {
 
       // Add toast height tot heights array after the toast is mounted
       setInitialHeight(height);
-      setHeights((h) => [{ toastId: toast.id, height }, ...h]);
+      setHeights((h) => [{ toastId: toast.id, height, position: toast.position }, ...h]);
 
       return () => setHeights((h) => h.filter((height) => height.toastId !== toast.id));
     }
@@ -193,14 +231,26 @@ const Toast = (props: ToastProps) => {
   }, [deleteToast, toast.delete]);
 
   function getLoadingIcon() {
+    if (icons?.loading) {
+      return (
+        <div className="sonner-loader" data-visible={toastType === 'loading'}>
+          {icons.loading}
+        </div>
+      );
+    }
+
     if (loadingIconProp) {
       return (
-        <div className="loader" data-visible={toastType === 'loading'}>
+        <div className="sonner-loader" data-visible={toastType === 'loading'}>
           {loadingIconProp}
         </div>
       );
     }
     return <Loader visible={toastType === 'loading'} />;
+  }
+
+  function sanitizeHTML(html: string): { __html: string } {
+    return { __html: DOMPurify.sanitize(html) };
   }
 
   return (
@@ -215,6 +265,7 @@ const Toast = (props: ToastProps) => {
         toastClassname,
         classNames?.toast,
         toast?.classNames?.toast,
+        classNames?.default,
         classNames?.[toastType],
         toast?.classNames?.[toastType],
       )}
@@ -295,7 +346,7 @@ const Toast = (props: ToastProps) => {
         }
       }}
     >
-      {(closeButton || toast.closeButton) && !toast.jsx ? (
+      {closeButton && !toast.jsx ? (
         <button
           aria-label={closeButtonAriaLabel}
           data-disabled={disabled}
@@ -331,16 +382,18 @@ const Toast = (props: ToastProps) => {
       ) : (
         <>
           {toastType || toast.icon || toast.promise ? (
-            <div data-icon="">
-              {(toast.promise || toast.type === 'loading') && !toast.icon ? getLoadingIcon() : null}
-              {toast.icon || getAsset(toastType)}
+            <div data-icon="" className={cn(classNames?.icon, toast?.classNames?.icon)}>
+              {toast.promise || (toast.type === 'loading' && !toast.icon) ? toast.icon || getLoadingIcon() : null}
+              {toast.type !== 'loading' ? toast.icon || icons?.[toastType] || getAsset(toastType) : null}
             </div>
           ) : null}
 
-          <div data-content="">
-            <div data-title="" className={cn(classNames?.title, toast?.classNames?.title)}>
-              {toast.title}
-            </div>
+          <div data-content="" className={cn(classNames?.content, toast?.classNames?.content)}>
+            <div
+              data-title=""
+              className={cn(classNames?.title, toast?.classNames?.title)}
+              dangerouslySetInnerHTML={sanitizeHTML(toast.title as string)}
+            ></div>
             {toast.description ? (
               <div
                 data-description=""
@@ -350,34 +403,43 @@ const Toast = (props: ToastProps) => {
                   classNames?.description,
                   toast?.classNames?.description,
                 )}
+                dangerouslySetInnerHTML={
+                  typeof toast.description === 'string' ? sanitizeHTML(toast.description as string) : undefined
+                }
               >
-                {toast.description}
+                {typeof toast.description === 'object' ? toast.description : null}
               </div>
             ) : null}
           </div>
-          {toast.cancel ? (
+          {React.isValidElement(toast.cancel) ? (
+            toast.cancel
+          ) : toast.cancel && isAction(toast.cancel) ? (
             <button
               data-button
               data-cancel
               style={toast.cancelButtonStyle || cancelButtonStyle}
               onClick={(event) => {
+                // We need to check twice because typescript
+                if (!isAction(toast.cancel)) return;
                 if (!dismissible) return;
                 deleteToast();
-                if (toast.cancel?.onClick) {
-                  toast.cancel.onClick(event);
-                }
+                toast.cancel.onClick(event);
               }}
               className={cn(classNames?.cancelButton, toast?.classNames?.cancelButton)}
             >
               {toast.cancel.label}
             </button>
           ) : null}
-          {toast.action ? (
+          {React.isValidElement(toast.action) ? (
+            toast.action
+          ) : toast.action && isAction(toast.action) ? (
             <button
               data-button=""
               style={toast.actionButtonStyle || actionButtonStyle}
               onClick={(event) => {
-                toast.action?.onClick(event);
+                // We need to check twice because typescript
+                if (!isAction(toast.action)) return;
+                toast.action.onClick(event);
                 if (event.defaultPrevented) return;
                 deleteToast();
               }}
@@ -421,9 +483,12 @@ const Toaster = (props: ToasterProps) => {
     visibleToasts = VISIBLE_TOASTS_AMOUNT,
     toastOptions,
     dir = getDocumentDirection(),
-    gap,
+    gap = GAP,
     loadingIcon,
+    icons,
     containerAriaLabel = 'Notifications',
+    pauseWhenPageIsHidden,
+    cn = _cn,
   } = props;
   const [toasts, setToasts] = React.useState<ToastT[]>([]);
   const possiblePositions = React.useMemo(() => {
@@ -438,10 +503,10 @@ const Toaster = (props: ToasterProps) => {
     theme !== 'system'
       ? theme
       : typeof window !== 'undefined'
-        ? window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
-          ? 'dark'
-          : 'light'
-        : 'light',
+      ? window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        ? 'dark'
+        : 'light'
+      : 'light',
   );
 
   const listRef = React.useRef<HTMLOListElement>(null);
@@ -572,10 +637,10 @@ const Toaster = (props: ToasterProps) => {
             data-x-position={x}
             style={
               {
-                '--front-toast-height': `${heights[0]?.height}px`,
+                '--front-toast-height': `${heights[0]?.height || 0}px`,
                 '--offset': typeof offset === 'number' ? `${offset}px` : offset || VIEWPORT_OFFSET,
                 '--width': `${TOAST_WIDTH}px`,
-                '--gap': `${GAP}px`,
+                '--gap': `${gap}px`,
                 ...style,
               } as React.CSSProperties
             }
@@ -621,6 +686,7 @@ const Toaster = (props: ToasterProps) => {
               .map((toast, index) => (
                 <Toast
                   key={toast.id}
+                  icons={icons}
                   index={index}
                   toast={toast}
                   duration={toastOptions?.duration ?? duration}
@@ -628,7 +694,7 @@ const Toaster = (props: ToasterProps) => {
                   descriptionClassName={toastOptions?.descriptionClassName}
                   invert={invert}
                   visibleToasts={visibleToasts}
-                  closeButton={closeButton}
+                  closeButton={toastOptions?.closeButton ?? closeButton}
                   interacting={interacting}
                   position={position}
                   style={toastOptions?.style}
@@ -637,13 +703,15 @@ const Toaster = (props: ToasterProps) => {
                   cancelButtonStyle={toastOptions?.cancelButtonStyle}
                   actionButtonStyle={toastOptions?.actionButtonStyle}
                   removeToast={removeToast}
-                  toasts={toasts}
-                  heights={heights}
+                  toasts={toasts.filter((t) => t.position == toast.position)}
+                  heights={heights.filter((h) => h.position == toast.position)}
                   setHeights={setHeights}
                   expandByDefault={expand}
                   gap={gap}
                   loadingIcon={loadingIcon}
                   expanded={expanded}
+                  pauseWhenPageIsHidden={pauseWhenPageIsHidden}
+                  cn={cn}
                 />
               ))}
           </ol>
@@ -652,4 +720,4 @@ const Toaster = (props: ToasterProps) => {
     </section>
   );
 };
-export { toast, Toaster, type ToastT, type ExternalToast };
+export { toast, Toaster, type ExternalToast, type ToastT };

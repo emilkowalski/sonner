@@ -28,6 +28,22 @@ export interface ToastClassnames {
   warning?: string;
   loading?: string;
   default?: string;
+  content?: string;
+  icon?: string;
+}
+
+export interface ToastIcons {
+  success?: React.ReactNode;
+  info?: React.ReactNode;
+  warning?: React.ReactNode;
+  error?: React.ReactNode;
+  loading?: React.ReactNode;
+}
+
+interface Action {
+  label: string;
+  onClick: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
+  actionButtonStyle?: React.CSSProperties;
 }
 
 export interface ToastT {
@@ -43,14 +59,8 @@ export interface ToastT {
   duration?: number;
   delete?: boolean;
   important?: boolean;
-  action?: {
-    label: React.ReactNode;
-    onClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
-  };
-  cancel?: {
-    label: React.ReactNode;
-    onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
-  };
+  action?: Action | React.ReactNode;
+  cancel?: Action | React.ReactNode;
   onDismiss?: (toast: ToastT) => void;
   onAutoClose?: (toast: ToastT) => void;
   promise?: PromiseT;
@@ -64,14 +74,20 @@ export interface ToastT {
   position?: Position;
 }
 
+export function isAction(action: Action | React.ReactNode): action is Action {
+  return (action as Action).label !== undefined && typeof (action as Action).onClick === 'function';
+}
+
 export type Position = 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right' | 'top-center' | 'bottom-center';
 export interface HeightT {
   height: number;
   toastId: number | string;
+  position: Position;
 }
 
 interface ToastOptions {
   className?: string;
+  closeButton?: boolean;
   descriptionClassName?: string;
   style?: React.CSSProperties;
   cancelButtonStyle?: React.CSSProperties;
@@ -80,6 +96,8 @@ interface ToastOptions {
   unstyled?: boolean;
   classNames?: ToastClassnames;
 }
+
+type CnFunction = (...classes: Array<string | undefined>) => string;
 
 export interface ToasterProps {
   invert?: boolean;
@@ -97,8 +115,19 @@ export interface ToasterProps {
   style?: React.CSSProperties;
   offset?: string | number;
   dir?: 'rtl' | 'ltr' | 'auto';
+  /**
+   * @deprecated Please use the `icons` prop instead:
+   * ```jsx
+   * <Toaster
+   *   icons={{ loading: <LoadingIcon /> }}
+   * />
+   * ```
+   */
   loadingIcon?: React.ReactNode;
+  icons?: ToastIcons;
   containerAriaLabel?: string;
+  pauseWhenPageIsHidden?: boolean;
+  cn?: CnFunction;
 }
 
 export interface ToastProps {
@@ -125,7 +154,10 @@ export interface ToastProps {
   descriptionClassName?: string;
   loadingIcon?: React.ReactNode;
   classNames?: ToastClassnames;
+  icons?: ToastIcons;
   closeButtonAriaLabel?: string;
+  pauseWhenPageIsHidden: boolean;
+  cn: CnFunction;
 }
 
 export enum SwipeStateTypes {
