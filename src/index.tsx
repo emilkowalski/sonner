@@ -549,6 +549,8 @@ const Toaster = (props: ToasterProps) => {
       if (!toasts.find((toast) => toast.id === toastToRemove.id)?.delete) {
         ToastState.dismiss(toastToRemove.id);
       }
+
+      setToasts((toasts) => toasts.filter(({ id }) => id !== toastToRemove.id))
     },
     [toasts],
   );
