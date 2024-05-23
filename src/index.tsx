@@ -424,8 +424,8 @@ const Toast = (props: ToastProps) => {
                 // We need to check twice because typescript
                 if (!isAction(toast.cancel)) return;
                 if (!dismissible) return;
+                toast.cancel.onClick?.(event);
                 deleteToast();
-                toast.cancel.onClick(event);
               }}
               className={cn(classNames?.cancelButton, toast?.classNames?.cancelButton)}
             >
@@ -436,13 +436,14 @@ const Toast = (props: ToastProps) => {
             toast.action
           ) : toast.action && isAction(toast.action) ? (
             <button
-              data-button=""
+              data-button
+							data-action
               style={toast.actionButtonStyle || actionButtonStyle}
               onClick={(event) => {
                 // We need to check twice because typescript
                 if (!isAction(toast.action)) return;
-                toast.action.onClick(event);
                 if (event.defaultPrevented) return;
+                toast.action.onClick?.(event);
                 deleteToast();
               }}
               className={cn(classNames?.actionButton, toast?.classNames?.actionButton)}
