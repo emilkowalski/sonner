@@ -59,7 +59,6 @@ export interface ToastT {
   description?: React.ReactNode;
   duration?: number;
   delete?: boolean;
-  important?: boolean;
   action?: Action | React.ReactNode;
   cancel?: Action | React.ReactNode;
   onDismiss?: (toast: ToastT) => void;
