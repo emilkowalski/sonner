@@ -38,7 +38,6 @@
   },
   "devDependencies": {
     "@playwright/test": "^1.30.0",
-    "@types/dompurify": "^3.0.5",
     "@types/node": "^18.11.13",
     "@types/react": "^18.0.26",
     "prettier": "^2.8.4",

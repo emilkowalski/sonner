@@ -11,9 +11,6 @@ importers:
       '@playwright/test':
         specifier: ^1.30.0
         version: 1.44.1
-      '@types/dompurify':
-        specifier: ^3.0.5
-        version: 3.0.5
       '@types/node':
         specifier: ^18.11.13
         version: 18.15.0
@@ -814,12 +811,6 @@ packages:
       '@types/ms': 0.7.34
     dev: false
 
-  /@types/dompurify@3.0.5:
-    resolution: {integrity: sha512-1Wg0g3BtQF7sSb27fJQAKck1HECM6zV1EB66j8JH9i3LCjYabJa0FSdiSgsD5K/RbrsR0SiraKacLB+T8ZVYAg==}
-    dependencies:
-      '@types/trusted-types': 2.0.7
-    dev: true
-
   /@types/estree-jsx@1.0.5:
     resolution: {integrity: sha512-52CcUVNFyfb1A2ALocQw/Dd1BQFNmSdkuC3BkZ6iqhdMfQz7JWOFRuJFloOzjk+6WijU56m9oKXFAXc7o3Towg==}
     dependencies:
@@ -913,10 +904,6 @@ packages:
 
   /@types/scheduler@0.23.0:
     resolution: {integrity: sha512-YIoDCTH3Af6XM5VuwGG/QL/CJqga1Zm3NkU3HZ4ZHK2fRMPYP1VczsTUqtsf43PH/iJNVlPHAo2oWX7BSdB2Hw==}
-
-  /@types/trusted-types@2.0.7:
-    resolution: {integrity: sha512-ScaPdn1dQczgbl0QFTeTOmVHFULt394XJgOQNoyVhZ6r2vLnMLJfBPd53SB52T/3G36VI1/g2MZaX0cwDuXsfw==}
-    dev: true
 
   /@types/unist@2.0.10:
     resolution: {integrity: sha512-IfYcSBWE3hLpBg8+X2SEa8LVkJdJEkT2Ese2aaLs3ptGdVtABxndrMaxuFlQ1qdFf9Q5rDvDpxI3WwgvKFAsQA==}
