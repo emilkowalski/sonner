@@ -20,9 +20,6 @@ importers:
       '@types/react':
         specifier: ^18.0.26
         version: 18.2.0
-      dompurify:
-        specifier: ^3.0.9
-        version: 3.1.5
       prettier:
         specifier: ^2.8.4
         version: 2.8.8
@@ -1921,8 +1918,9 @@ packages:
       esutils: 2.0.3
     dev: false
 
-  /dompurify@3.1.5:
-    resolution: {integrity: sha512-lwG+n5h8QNpxtyrJW/gJWckL+1/DQiYMX8f7t8Z2AZTPw1esVrqjI63i7Zc2Gz0aKzLVMYC1V1PL/ky+aY/NgA==}
+  /dompurify@3.0.10:
+    resolution: {integrity: sha512-WZDL8ZHTliEVP3Lk4phtvjg8SNQ3YMc5WVstxE8cszKZrFjzI4PF4ZTIk9VGAc9vZADO7uGO2V/ZiStcRSAT4Q==}
+    dev: false
 
   /eastasianwidth@0.2.0:
     resolution: {integrity: sha512-I88TYZWc9XiYHRQ4/3c5rjjfgkjhLyW2luGIheGERbNQ6OY7yTybanSpDXZa8y7VUP9YmDcYa+eyq4ca7iLqWA==}
