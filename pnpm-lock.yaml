@@ -3736,7 +3736,7 @@ packages:
       d3-sankey: 0.12.3
       dagre-d3-es: 7.0.10
       dayjs: 1.11.11
-      dompurify: 3.1.5
+      dompurify: 3.0.10
       elkjs: 0.9.3
       katex: 0.16.10
       khroma: 2.1.0
