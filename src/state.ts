@@ -70,7 +70,7 @@ class Observer {
   };
 
   dismiss = (id?: number | string) => {
-    if (!id) {
+    if (typeof id !== undefined && id !== '') {
       this.toasts.forEach((toast) => {
         this.subscribers.forEach((subscriber) => subscriber({ id: toast.id, dismiss: true }));
       });
