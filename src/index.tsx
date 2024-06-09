@@ -3,7 +3,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import DOMPurify from 'dompurify';
 import { getAsset, Loader } from './assets';
 import { useIsDocumentHidden } from './hooks';
 import { toast, ToastState } from './state';
@@ -56,6 +55,7 @@ const Toast = (props: ToastProps) => {
     toasts,
     expanded,
     removeToast,
+    defaultRichColors,
     closeButton: closeButtonFromToaster,
     style,
     cancelButtonStyle,
@@ -249,10 +249,6 @@ const Toast = (props: ToastProps) => {
     return <Loader visible={toastType === 'loading'} />;
   }
 
-  function sanitizeHTML(html: string): { __html: string } {
-    return { __html: DOMPurify.sanitize(html) };
-  }
-
   return (
     <li
       aria-live={toast.important ? 'assertive' : 'polite'}
@@ -270,6 +266,7 @@ const Toast = (props: ToastProps) => {
         toast?.classNames?.[toastType],
       )}
       data-sonner-toast=""
+      data-rich-colors={toast.richColors ?? defaultRichColors}
       data-styled={!Boolean(toast.jsx || toast.unstyled || unstyled)}
       data-mounted={mounted}
       data-promise={Boolean(toast.promise)}
@@ -389,11 +386,9 @@ const Toast = (props: ToastProps) => {
           ) : null}
 
           <div data-content="" className={cn(classNames?.content, toast?.classNames?.content)}>
-            <div
-              data-title=""
-              className={cn(classNames?.title, toast?.classNames?.title)}
-              dangerouslySetInnerHTML={sanitizeHTML(toast.title as string)}
-            ></div>
+            <div data-title="" className={cn(classNames?.title, toast?.classNames?.title)}>
+              {toast.title}
+            </div>
             {toast.description ? (
               <div
                 data-description=""
@@ -402,12 +397,9 @@ const Toast = (props: ToastProps) => {
                   toastDescriptionClassname,
                   classNames?.description,
                   toast?.classNames?.description,
-                )}
-                dangerouslySetInnerHTML={
-                  typeof toast.description === 'string' ? sanitizeHTML(toast.description as string) : undefined
-                }
+			)}
               >
-                {typeof toast.description === 'object' ? toast.description : null}
+                {toast.description}
               </div>
             ) : null}
           </div>
@@ -422,8 +414,8 @@ const Toast = (props: ToastProps) => {
                 // We need to check twice because typescript
                 if (!isAction(toast.cancel)) return;
                 if (!dismissible) return;
+                toast.cancel.onClick?.(event);
                 deleteToast();
-                toast.cancel.onClick(event);
               }}
               className={cn(classNames?.cancelButton, toast?.classNames?.cancelButton)}
             >
@@ -434,13 +426,14 @@ const Toast = (props: ToastProps) => {
             toast.action
           ) : toast.action && isAction(toast.action) ? (
             <button
-              data-button=""
+              data-button
+              data-action
               style={toast.actionButtonStyle || actionButtonStyle}
               onClick={(event) => {
                 // We need to check twice because typescript
                 if (!isAction(toast.action)) return;
-                toast.action.onClick(event);
                 if (event.defaultPrevented) return;
+                toast.action.onClick?.(event);
                 deleteToast();
               }}
               className={cn(classNames?.actionButton, toast?.classNames?.actionButton)}
@@ -465,6 +458,33 @@ function getDocumentDirection(): ToasterProps['dir'] {
   }
 
   return dirAttribute as ToasterProps['dir'];
+}
+
+function useSonner() {
+  const [activeToasts, setActiveToasts] = React.useState<ToastT[]>([]);
+
+  React.useEffect(() => {
+    return ToastState.subscribe((toast) => {
+      setActiveToasts((currentToasts) => {
+        if ('dismiss' in toast && toast.dismiss) {
+          return currentToasts.filter((t) => t.id !== toast.id);
+        }
+
+        const existingToastIndex = currentToasts.findIndex((t) => t.id === toast.id);
+        if (existingToastIndex !== -1) {
+          const updatedToasts = [...currentToasts];
+          updatedToasts[existingToastIndex] = { ...updatedToasts[existingToastIndex], ...toast };
+          return updatedToasts;
+        } else {
+          return [toast, ...currentToasts];
+        }
+      });
+    });
+  }, []);
+
+  return {
+    toasts: activeToasts,
+  };
 }
 
 const Toaster = (props: ToasterProps) => {
@@ -515,8 +535,14 @@ const Toaster = (props: ToasterProps) => {
   const isFocusWithinRef = React.useRef(false);
 
   const removeToast = React.useCallback(
-    (toast: ToastT) => setToasts((toasts) => toasts.filter(({ id }) => id !== toast.id)),
-    [],
+    (toastToRemove: ToastT) => {
+      if (!toasts.find((toast) => toast.id === toastToRemove.id)?.delete) {
+        ToastState.dismiss(toastToRemove.id);
+      }
+
+      setToasts((toasts) => toasts.filter(({ id }) => id !== toastToRemove.id))
+    },
+    [toasts],
   );
 
   React.useEffect(() => {
@@ -640,7 +666,6 @@ const Toaster = (props: ToasterProps) => {
             className={className}
             data-sonner-toaster
             data-theme={actualTheme}
-            data-rich-colors={richColors}
             data-y-position={y}
             data-x-position={x}
             style={
@@ -697,6 +722,7 @@ const Toaster = (props: ToasterProps) => {
                   icons={icons}
                   index={index}
                   toast={toast}
+                  defaultRichColors={richColors}
                   duration={toastOptions?.duration ?? duration}
                   className={toastOptions?.className}
                   descriptionClassName={toastOptions?.descriptionClassName}
@@ -728,4 +754,4 @@ const Toaster = (props: ToasterProps) => {
     </section>
   );
 };
-export { toast, Toaster, type ExternalToast, type ToastT };
+export { toast, Toaster, type ExternalToast, type ToastT, type ToasterProps, useSonner };

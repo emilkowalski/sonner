@@ -1,5 +1,6 @@
+import type { ExternalToast, PromiseData, PromiseT, ToastT, ToastToDismiss, ToastTypes } from './types';
+
 import React from 'react';
-import type { ExternalToast, ToastT, PromiseData, PromiseT, ToastToDismiss, ToastTypes } from './types';
 
 let toastsCounter = 1;
 
@@ -124,32 +125,29 @@ class Observer {
 
     let shouldDismiss = id !== undefined;
 
-    p.then((response) => {
-      // TODO: Clean up TS here, response has incorrect type
-      // @ts-expect-error
-      if (response && typeof response.ok === 'boolean' && !response.ok) {
+    p.then(async (response) => {
+      if (isHttpResponse(response) && !response.ok) {
         shouldDismiss = false;
         const message =
-          // @ts-expect-error
-          typeof data.error === 'function' ? data.error(`HTTP error! status: ${response.status}`) : data.error;
+          typeof data.error === 'function' ? await data.error(`HTTP error! status: ${response.status}`) : data.error;
         const description =
           typeof data.description === 'function'
-            ? // @ts-expect-error
-              data.description(`HTTP error! status: ${response.status}`)
+            ? await data.description(`HTTP error! status: ${response.status}`)
             : data.description;
         this.create({ id, type: 'error', message, description });
       } else if (data.success !== undefined) {
         shouldDismiss = false;
-        const message = typeof data.success === 'function' ? data.success(response) : data.success;
-        const description = typeof data.description === 'function' ? data.description(response) : data.description;
+        const message = typeof data.success === 'function' ? await data.success(response) : data.success;
+        const description =
+          typeof data.description === 'function' ? await data.description(response) : data.description;
         this.create({ id, type: 'success', message, description });
       }
     })
-      .catch((error) => {
+      .catch(async (error) => {
         if (data.error !== undefined) {
           shouldDismiss = false;
-          const message = typeof data.error === 'function' ? data.error(error) : data.error;
-          const description = typeof data.description === 'function' ? data.description(error) : data.description;
+          const message = typeof data.error === 'function' ? await data.error(error) : data.error;
+          const description = typeof data.description === 'function' ? await data.description(error) : data.description;
           this.create({ id, type: 'error', message, description });
         }
       })
@@ -187,17 +185,34 @@ const toastFunction = (message: string | React.ReactNode, data?: ExternalToast) 
   return id;
 };
 
+const isHttpResponse = (data: any): data is Response => {
+  return (
+    data &&
+    typeof data === 'object' &&
+    'ok' in data &&
+    typeof data.ok === 'boolean' &&
+    'status' in data &&
+    typeof data.status === 'number'
+  );
+};
+
 const basicToast = toastFunction;
 
+const getHistory = () => ToastState.toasts;
+
 // We use `Object.assign` to maintain the correct types as we would lose them otherwise
-export const toast = Object.assign(basicToast, {
-  success: ToastState.success,
-  info: ToastState.info,
-  warning: ToastState.warning,
-  error: ToastState.error,
-  custom: ToastState.custom,
-  message: ToastState.message,
-  promise: ToastState.promise,
-  dismiss: ToastState.dismiss,
-  loading: ToastState.loading,
-});
+export const toast = Object.assign(
+  basicToast,
+  {
+    success: ToastState.success,
+    info: ToastState.info,
+    warning: ToastState.warning,
+    error: ToastState.error,
+    custom: ToastState.custom,
+    message: ToastState.message,
+    promise: ToastState.promise,
+    dismiss: ToastState.dismiss,
+    loading: ToastState.loading,
+  },
+  { getHistory },
+);
