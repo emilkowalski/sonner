@@ -88,6 +88,8 @@
 }
 
 :where([data-sonner-toast][data-styled='true']) {
+  --border-opacity: calc(0.06 - var(--index) * 0.01);
+  --depth-shadow-opacity: calc(0.03 - var(--index) * 0.01);
   padding: 16px;
   background: var(--normal-bg);
   border: 1px solid var(--normal-border);
@@ -95,8 +97,8 @@
   border-radius: var(--border-radius);
   box-shadow: 0 1px 1px -0.5px rgba(0, 0, 0, 0.03), 0 3px 3px -1.5px rgba(0, 0, 0, 0.03),
     0 6px 6px -3px rgba(0, 0, 0, 0.03), 0 12px 12px -6px rgba(0, 0, 0, 0.03), 0 24px 24px -12px rgba(0, 0, 0, 0.03),
-    0 -8px 8px -8px rgba(0, 0, 0, 0.03);
-  border: 1px solid rgba(0, 0, 0, 0.06);
+    0 -8px 8px -8px rgba(0, 0, 0, var(--depth-shadow-opacity));
+  border: 1px solid rgba(0, 0, 0, var(--border-opacity));
   background-clip: padding-box;
   width: var(--width);
   font-size: 13px;
@@ -307,6 +309,11 @@
 :where([data-sonner-toast][data-mounted='true'][data-expanded='true']) {
   --y: translateY(calc(var(--lift) * var(--offset)));
   height: var(--initial-height);
+}
+
+:where([data-sonner-toast][data-mounted='true'][data-expanded='true'][data-styled='true']) {
+  --border-opacity: 0.06;
+  --depth-shadow-opacity: 0.03;
 }
 
 :where([data-sonner-toast][data-removed='true'][data-front='true'][data-swipe-out='false']) {
