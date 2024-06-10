@@ -74,7 +74,6 @@
 :where([data-sonner-toast]) {
   --y: translateY(100%);
   --lift-amount: calc(var(--lift) * var(--gap));
-  --border-opacity: calc(var(--z-index) * 0.01);
   z-index: var(--z-index);
   position: absolute;
   opacity: 0;
