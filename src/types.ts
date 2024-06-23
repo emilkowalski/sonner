@@ -45,7 +45,7 @@ export interface ToastIcons {
   loading?: React.ReactNode;
 }
 
-interface Action {
+export interface Action {
   label: React.ReactNode;
   onClick: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
   actionButtonStyle?: React.CSSProperties;
