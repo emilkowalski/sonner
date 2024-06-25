@@ -397,7 +397,7 @@ const Toast = (props: ToastProps) => {
                   toastDescriptionClassname,
                   classNames?.description,
                   toast?.classNames?.description,
-			)}
+                )}
               >
                 {toast.description}
               </div>
@@ -534,16 +534,15 @@ const Toaster = (props: ToasterProps) => {
   const lastFocusedElementRef = React.useRef<HTMLElement>(null);
   const isFocusWithinRef = React.useRef(false);
 
-  const removeToast = React.useCallback(
-    (toastToRemove: ToastT) => {
+  const removeToast = React.useCallback((toastToRemove: ToastT) => {
+    setToasts((toasts) => {
       if (!toasts.find((toast) => toast.id === toastToRemove.id)?.delete) {
         ToastState.dismiss(toastToRemove.id);
       }
 
-      setToasts((toasts) => toasts.filter(({ id }) => id !== toastToRemove.id))
-    },
-    [toasts],
-  );
+      return toasts.filter(({ id }) => id !== toastToRemove.id);
+    });
+  }, []);
 
   React.useEffect(() => {
     return ToastState.subscribe((toast) => {
