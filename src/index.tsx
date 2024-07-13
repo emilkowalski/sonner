@@ -3,7 +3,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import { CloseIcon, getAsset, Loader } from './assets';
+import { getAsset, Loader, LoadingWrapper } from './assets';
 import { useIsDocumentHidden } from './hooks';
 import { toast, ToastState } from './state';
 import './styles.css';
@@ -232,19 +232,11 @@ const Toast = (props: ToastProps) => {
 
   function getLoadingIcon() {
     if (icons?.loading) {
-      return (
-        <div className="sonner-loader" data-visible={toastType === 'loading'}>
-          {icons.loading}
-        </div>
-      );
+      return <LoadingWrapper visible={toastType === 'loading'}>{icons.loading}</LoadingWrapper>;
     }
 
     if (loadingIconProp) {
-      return (
-        <div className="sonner-loader" data-visible={toastType === 'loading'}>
-          {loadingIconProp}
-        </div>
-      );
+      return <LoadingWrapper visible={toastType === 'loading'}>{loadingIconProp}</LoadingWrapper>;
     }
     return <Loader visible={toastType === 'loading'} />;
   }
