@@ -100,6 +100,7 @@ const Toast = (props: ToastProps) => {
     () => toast.duration || durationFromToaster || TOAST_LIFETIME,
     [toast.duration, durationFromToaster],
   );
+  const remainingTime = React.useRef(duration);
   const closeTimerStartTimeRef = React.useRef(0);
   const offset = React.useRef(0);
   const lastCloseTimerStartTimeRef = React.useRef(0);
@@ -161,7 +162,6 @@ const Toast = (props: ToastProps) => {
   React.useEffect(() => {
     if ((toast.promise && toastType === 'loading') || toast.duration === Infinity || toast.type === 'loading') return;
     let timeoutId: NodeJS.Timeout;
-    let remainingTime = duration;
 
     // Pause the timer on each hover
     const pauseTimer = () => {
@@ -169,7 +169,7 @@ const Toast = (props: ToastProps) => {
         // Get the elapsed time since the timer started
         const elapsedTime = new Date().getTime() - closeTimerStartTimeRef.current;
 
-        remainingTime = remainingTime - elapsedTime;
+        remainingTime.current = remainingTime.current - elapsedTime;
       }
 
       lastCloseTimerStartTimeRef.current = new Date().getTime();
@@ -179,7 +179,7 @@ const Toast = (props: ToastProps) => {
       // setTimeout(, Infinity) behaves as if the delay is 0.
       // As a result, the toast would be closed immediately, giving the appearance that it was never rendered.
       // See: https://github.com/denysdovhan/wtfjs?tab=readme-ov-file#an-infinite-timeout
-      if (remainingTime === Infinity) return;
+      if (remainingTime.current === Infinity) return;
 
       closeTimerStartTimeRef.current = new Date().getTime();
 
@@ -187,7 +187,7 @@ const Toast = (props: ToastProps) => {
       timeoutId = setTimeout(() => {
         toast.onAutoClose?.(toast);
         deleteToast();
-      }, remainingTime);
+      }, remainingTime.current);
     };
 
     if (expanded || interacting || (pauseWhenPageIsHidden && isDocumentHidden)) {
