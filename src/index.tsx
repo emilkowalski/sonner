@@ -249,6 +249,10 @@ const Toast = (props: ToastProps) => {
     return <Loader visible={toastType === 'loading'} />;
   }
 
+  function sanitizeHTML(html: string): { __html: string } {
+    return { __html: DOMPurify.sanitize(html) };
+  }
+
   return (
     <li
       aria-live={toast.important ? 'assertive' : 'polite'}
