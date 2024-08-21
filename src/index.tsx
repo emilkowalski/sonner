@@ -428,7 +428,7 @@ const Toast = (props: ToastProps) => {
             <button
               data-button
               data-action
-              style={toast.actionButtonStyle || actionButtonStyle}
+              style={toast.actionButtonStyle || actionButtonStyle || toast.action?.actionButtonStyle}
               onClick={(event) => {
                 // We need to check twice because typescript
                 if (!isAction(toast.action)) return;
