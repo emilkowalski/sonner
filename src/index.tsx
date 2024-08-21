@@ -3,7 +3,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import { getAsset, Loader } from './assets';
+import { CloseIcon, getAsset, Loader } from './assets';
 import { useIsDocumentHidden } from './hooks';
 import { toast, ToastState } from './state';
 import './styles.css';
@@ -358,20 +358,7 @@ const Toast = (props: ToastProps) => {
           }
           className={cn(classNames?.closeButton, toast?.classNames?.closeButton)}
         >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="12"
-            height="12"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <line x1="18" y1="6" x2="6" y2="18"></line>
-            <line x1="6" y1="6" x2="18" y2="18"></line>
-          </svg>
+          {icons?.close ?? CloseIcon}
         </button>
       ) : null}
       {toast.jsx || React.isValidElement(toast.title) ? (
