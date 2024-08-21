@@ -4,13 +4,18 @@ export type ToastTypes = 'normal' | 'action' | 'success' | 'info' | 'warning' | 
 
 export type PromiseT<Data = any> = Promise<Data> | (() => Promise<Data>);
 
+export type PromiseTResult<Data = any> =
+  | string
+  | React.ReactNode
+  | ((data: Data) => React.ReactNode | string | Promise<React.ReactNode | string>);
+
 export type PromiseExternalToast = Omit<ExternalToast, 'description'>;
 
 export type PromiseData<ToastData = any> = PromiseExternalToast & {
   loading?: string | React.ReactNode;
-  success?: string | React.ReactNode | ((data: ToastData) => React.ReactNode | string);
-  error?: string | React.ReactNode | ((error: any) => React.ReactNode | string);
-  description?: string | React.ReactNode | ((data: any) => React.ReactNode | string);
+  success?: PromiseTResult<ToastData>;
+  error?: PromiseTResult;
+  description?: PromiseTResult;
   finally?: () => void | Promise<void>;
 };
 
@@ -40,8 +45,8 @@ export interface ToastIcons {
   loading?: React.ReactNode;
 }
 
-interface Action {
-  label: string;
+export interface Action {
+  label: React.ReactNode;
   onClick: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
   actionButtonStyle?: React.CSSProperties;
 }
@@ -52,6 +57,7 @@ export interface ToastT {
   type?: ToastTypes;
   icon?: React.ReactNode;
   jsx?: React.ReactNode;
+  richColors?: boolean;
   invert?: boolean;
   closeButton?: boolean;
   dismissible?: boolean;
@@ -75,7 +81,7 @@ export interface ToastT {
 }
 
 export function isAction(action: Action | React.ReactNode): action is Action {
-  return (action as Action).label !== undefined && typeof (action as Action).onClick === 'function';
+  return (action as Action).label !== undefined;
 }
 
 export type Position = 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right' | 'top-center' | 'bottom-center';
@@ -158,6 +164,7 @@ export interface ToastProps {
   closeButtonAriaLabel?: string;
   pauseWhenPageIsHidden: boolean;
   cn: CnFunction;
+  defaultRichColors?: boolean;
 }
 
 export enum SwipeStateTypes {

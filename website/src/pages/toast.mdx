@@ -178,6 +178,16 @@ toast('Event has been created', {
 });
 ```
 
+### Persisting toasts
+
+If you want a toast to stay on screen forever, you can set the `duration` to [`Infinity`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Infinity).
+
+```js
+toast('This toast will stay on screen forever', {
+  duration: Infinity,
+});
+```
+
 ### Dismissing toasts programmatically
 
 To remove a toast programmatically use `toast.dismiss(id)`. The `toast()` function return the id of the toast.
