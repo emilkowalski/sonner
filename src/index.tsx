@@ -389,13 +389,14 @@ const Toast = (props: ToastProps) => {
             </div>
           ) : null}
 
-          <div data-content="" className={cn(classNames?.content)}>
+          <div data-content="" className={cn(classNames?.content, toast?.classNames?.content)}>
             <div data-title="" className={cn(classNames?.title, toast?.classNames?.title)}>
               { typeof toast.title === 'string'
                   ? <div dangerouslySetInnerHTML={sanitizeHTML(toast.title)} />
                   : toast.title
               }
             </div>
+
             {toast.description ? (
               <div
                 data-description=""
@@ -412,6 +413,7 @@ const Toast = (props: ToastProps) => {
                 }
               </div>
             ) : null}
+            
           </div>
           {React.isValidElement(toast.cancel) ? (
             toast.cancel
