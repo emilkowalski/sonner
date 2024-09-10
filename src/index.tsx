@@ -2,7 +2,7 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-
+import DOMPurify from "dompurify";
 import { getAsset, Loader } from './assets';
 import { useIsDocumentHidden } from './hooks';
 import { toast, ToastState } from './state';
@@ -249,6 +249,10 @@ const Toast = (props: ToastProps) => {
     return <Loader visible={toastType === 'loading'} />;
   }
 
+  function sanitizeHTML(html: string): { __html: string } {
+    return { __html: DOMPurify.sanitize(html) };
+  }
+
   return (
     <li
       aria-live={toast.important ? 'assertive' : 'polite'}
@@ -387,8 +391,12 @@ const Toast = (props: ToastProps) => {
 
           <div data-content="" className={cn(classNames?.content, toast?.classNames?.content)}>
             <div data-title="" className={cn(classNames?.title, toast?.classNames?.title)}>
-              {toast.title}
+              { typeof toast.title === 'string'
+                  ? <div dangerouslySetInnerHTML={sanitizeHTML(toast.title)} />
+                  : toast.title
+              }
             </div>
+
             {toast.description ? (
               <div
                 data-description=""
@@ -399,9 +407,13 @@ const Toast = (props: ToastProps) => {
                   toast?.classNames?.description,
                 )}
               >
-                {toast.description}
+                { typeof toast.description === 'string'
+                    ? <div dangerouslySetInnerHTML={sanitizeHTML(toast.description)} />
+                    : toast.description
+                }
               </div>
             ) : null}
+            
           </div>
           {React.isValidElement(toast.cancel) ? (
             toast.cancel
