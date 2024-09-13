@@ -23,9 +23,9 @@ export const getAsset = (type: ToastTypes): JSX.Element | null => {
 
 const bars = Array(12).fill(0);
 
-export const Loader = ({ visible }: { visible: boolean }) => {
+export const Loader = ({ visible, className }: { visible: boolean, className?: string }) => {
   return (
-    <div className="sonner-loading-wrapper" data-visible={visible}>
+    <div className={['sonner-loading-wrapper', className].filter(Boolean).join(' ')} data-visible={visible}>
       <div className="sonner-spinner">
         {bars.map((_, i) => (
           <div className="sonner-loading-bar" key={`spinner-bar-${i}`} />
