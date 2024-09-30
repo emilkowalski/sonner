@@ -102,6 +102,7 @@ interface ToastOptions {
   duration?: number;
   unstyled?: boolean;
   classNames?: ToastClassnames;
+  closeButtonAriaLabel?: string;
 }
 
 type CnFunction = (...classes: Array<string | undefined>) => string;
