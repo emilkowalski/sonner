@@ -89,11 +89,11 @@ toast('My cancel toast', {
 });
 ```
 
-You can also render jsx as your action.
+You can also render jsx in the cancel option.
 
 ```jsx
 toast('My cancel toast', {
-  action: <Button onClick={() => console.log('Cancel!')}>Cancel</Button>,
+  cancel: <Button onClick={() => console.log('Cancel!')}>Cancel</Button>,
 });
 ```
 
@@ -222,5 +222,5 @@ toast.dismiss();
 | onDismiss          |       The function gets called when either the close button is clicked, or the toast is swiped.        |            `-` |
 | onAutoClose        | Function that gets called when the toast disappears automatically after it's timeout (duration` prop). |            `-` |
 | unstyled           |                  Removes the default styling, which allows for easier customization.                   |        `false` |
-| actionButtonStyles |                                      Styles for the action button                                      |           `{}` |
-| cancelButtonStyles |                                      Styles for the cancel button                                      |           `{}` |
+| actionButtonStyle  |                                      Styles for the action button                                      |           `{}` |
+| cancelButtonStyle  |                                      Styles for the cancel button                                      |           `{}` |

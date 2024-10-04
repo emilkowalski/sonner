@@ -43,6 +43,7 @@ export interface ToastIcons {
   warning?: React.ReactNode;
   error?: React.ReactNode;
   loading?: React.ReactNode;
+  close?: React.ReactNode;
 }
 
 export interface Action {

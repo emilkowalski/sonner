@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test';
+import { toast } from 'sonner';
 
 test.beforeEach(async ({ page }) => {
   await page.goto('/');
@@ -26,6 +27,17 @@ test.describe('Basic functionality', () => {
     await page.getByTestId('promise').click();
     await expect(page.getByText('Loading...')).toHaveCount(1);
     await expect(page.getByText('Loaded')).toHaveCount(1);
+  });
+
+  test('handle toast promise rejections', async ({ page }) => {
+    const rejectedPromise = new Promise((_, reject) => setTimeout(() => reject(new Error('Promise rejected')), 100));
+    try {
+      toast.promise(rejectedPromise, {});
+    } catch {
+      throw new Error('Promise should not have rejected without unwrap');
+    }
+
+    await expect(toast.promise(rejectedPromise, {}).unwrap()).rejects.toThrow('Promise rejected');
   });
 
   test('render custom jsx in toast', async ({ page }) => {
