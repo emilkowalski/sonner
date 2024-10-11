@@ -76,7 +76,7 @@ export default function Home({ searchParams }: any) {
         Render Promise Toast
       </button>
       <button
-        data-testid="promise"
+        data-testid="rsf-promise"
         data-finally={isFinally ? '1' : '0'}
         className="button"
         onClick={() =>
