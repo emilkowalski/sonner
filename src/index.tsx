@@ -1,9 +1,9 @@
 'use client';
 
-import React from 'react';
+import React, { forwardRef } from 'react';
 import ReactDOM from 'react-dom';
 
-import { getAsset, Loader, LoadingWrapper } from './assets';
+import { getAsset, Loader, LoadingWrapper, CloseIcon } from './assets';
 import { useIsDocumentHidden } from './hooks';
 import { toast, ToastState } from './state';
 import './styles.css';
@@ -466,7 +466,7 @@ function useSonner() {
   };
 }
 
-const Toaster = (props: ToasterProps) => {
+const Toaster = forwardRef<HTMLElement, ToasterProps>(function Toaster(props, ref) {
   const {
     invert,
     position = 'bottom-right',
@@ -624,7 +624,7 @@ const Toaster = (props: ToasterProps) => {
 
   return (
     // Remove item from normal navigation flow, only available via hotkey
-    <section aria-label={`${containerAriaLabel} ${hotkeyLabel}`} tabIndex={-1}>
+    <section aria-label={`${containerAriaLabel} ${hotkeyLabel}`} tabIndex={-1} ref={ref}>
       {possiblePositions.map((position, index) => {
         const [y, x] = position.split('-');
         return (
@@ -723,6 +723,6 @@ const Toaster = (props: ToasterProps) => {
       })}
     </section>
   );
-};
+});
 export { toast, Toaster, type ExternalToast, type ToastT, type ToasterProps, useSonner };
 export { type ToastClassnames, type ToastToDismiss, type Action } from './types';
