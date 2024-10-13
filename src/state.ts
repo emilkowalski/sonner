@@ -129,7 +129,11 @@ class Observer {
     const originalPromise = p
       .then(async (response) => {
         result = ['resolve', response];
-        if (isHttpResponse(response) && !response.ok) {
+      const isReactElementResponse = React.isValidElement(response);
+      if (isReactElementResponse) {
+        shouldDismiss = false;
+        this.create({ id, type: 'default', message: response });
+      } else if (isHttpResponse(response) && !response.ok) {
           shouldDismiss = false;
           const message =
             typeof data.error === 'function' ? await data.error(`HTTP error! status: ${response.status}`) : data.error;
