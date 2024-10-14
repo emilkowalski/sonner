@@ -15,6 +15,7 @@ jobs:
           node-version: 20
       - run: npm install pnpm@8.12.1 -g
       - run: pnpm install --no-frozen-lockfile
+      - run: pnpm type-check
       - run: pnpm build
       - run: npx playwright install --with-deps
       - run: pnpm test || exit 1
