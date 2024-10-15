@@ -579,13 +579,21 @@ const Toaster = forwardRef<HTMLElement, ToasterProps>(function Toaster(props, re
 
     if (typeof window === 'undefined') return;
 
-    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', ({ matches }) => {
+    const mediaQueryList = window.matchMedia('(prefers-color-scheme: dark)');
+    const handleChange = ({ matches }: MediaQueryListEvent) => {
       if (matches) {
         setActualTheme('dark');
       } else {
         setActualTheme('light');
       }
-    });
+    };
+
+    if ('addEventListener' in mediaQueryList) {
+      mediaQueryList.addEventListener('change', handleChange);
+    } else {
+      // @ts-expect-error: Deprecated API
+      mediaQueryList.addListener(handleChange);
+    }
   }, [theme]);
 
   React.useEffect(() => {
