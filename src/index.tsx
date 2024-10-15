@@ -578,14 +578,31 @@ const Toaster = forwardRef<HTMLElement, ToasterProps>(function Toaster(props, re
     }
 
     if (typeof window === 'undefined') return;
+    const darkMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
 
-    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', ({ matches }) => {
-      if (matches) {
-        setActualTheme('dark');
-      } else {
-        setActualTheme('light');
-      }
-    });
+    try {
+      // Chrome & Firefox
+      darkMediaQuery.addEventListener('change', ({ matches }) => {
+         if (matches) {
+           setActualTheme('dark');
+         } else {
+           setActualTheme('light');
+         }
+       });
+    } catch (error) {
+      // Safari
+      darkMediaQuery.addListener( ({ matches }) => {
+        try {
+          if (matches) {
+            setActualTheme('dark');
+          } else {
+            setActualTheme('light');
+          }
+        } catch(e) {
+          console.error(e)
+        }
+      });
+    } 
   }, [theme]);
 
   React.useEffect(() => {
