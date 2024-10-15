@@ -590,7 +590,7 @@ const Toaster = forwardRef<HTMLElement, ToasterProps>(function Toaster(props, re
          }
        });
     } catch (error) {
-      // Safari
+      // Safari < 14
       darkMediaQuery.addListener( ({ matches }) => {
         try {
           if (matches) {
