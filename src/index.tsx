@@ -405,8 +405,8 @@ const Toast = (props: ToastProps) => {
               onClick={(event) => {
                 // We need to check twice because typescript
                 if (!isAction(toast.action)) return;
-                if (event.defaultPrevented) return;
                 toast.action.onClick?.(event);
+                if (event.defaultPrevented) return;
                 deleteToast();
               }}
               className={cn(classNames?.actionButton, toast?.classNames?.actionButton)}
