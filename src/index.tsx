@@ -127,6 +127,17 @@ const Toast = (props: ToastProps) => {
     setMounted(true);
   }, []);
 
+  React.useEffect(() => {
+    const toastNode = toastRef.current;
+    if (toastNode) {
+      const height = toastNode.getBoundingClientRect().height;
+      // Add toast height tot heights array after the toast is mounted
+      setInitialHeight(height);
+      setHeights((h) => [{ toastId: toast.id, height, position: toast.position }, ...h]);
+      return () => setHeights((h) => h.filter((height) => height.toastId !== toast.id));
+    }
+  }, [setHeights, toast.id]);
+
   React.useLayoutEffect(() => {
     if (!mounted) return;
     const toastNode = toastRef.current;
@@ -219,7 +230,10 @@ const Toast = (props: ToastProps) => {
   function getLoadingIcon() {
     if (icons?.loading) {
       return (
-        <div className={cn(classNames?.loader, toast?.classNames?.loader, "sonner-loader")} data-visible={toastType === 'loading'}>
+        <div
+          className={cn(classNames?.loader, toast?.classNames?.loader, 'sonner-loader')}
+          data-visible={toastType === 'loading'}
+        >
           {icons.loading}
         </div>
       );
@@ -227,7 +241,10 @@ const Toast = (props: ToastProps) => {
 
     if (loadingIconProp) {
       return (
-        <div className={cn(classNames?.loader, toast?.classNames?.loader, "sonner-loader")} data-visible={toastType === 'loading'}>
+        <div
+          className={cn(classNames?.loader, toast?.classNames?.loader, 'sonner-loader')}
+          data-visible={toastType === 'loading'}
+        >
           {loadingIconProp}
         </div>
       );
@@ -569,26 +586,26 @@ const Toaster = forwardRef<HTMLElement, ToasterProps>(function Toaster(props, re
     try {
       // Chrome & Firefox
       darkMediaQuery.addEventListener('change', ({ matches }) => {
-         if (matches) {
-           setActualTheme('dark');
-         } else {
-           setActualTheme('light');
-         }
-       });
+        if (matches) {
+          setActualTheme('dark');
+        } else {
+          setActualTheme('light');
+        }
+      });
     } catch (error) {
       // Safari < 14
-      darkMediaQuery.addListener( ({ matches }) => {
+      darkMediaQuery.addListener(({ matches }) => {
         try {
           if (matches) {
             setActualTheme('dark');
           } else {
             setActualTheme('light');
           }
-        } catch(e) {
-          console.error(e)
+        } catch (e) {
+          console.error(e);
         }
       });
-    } 
+    }
   }, [theme]);
 
   React.useEffect(() => {
