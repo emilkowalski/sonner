@@ -316,20 +316,11 @@ const Toast = (props: ToastProps) => {
         if (!pointerStartRef.current || !dismissible) return;
 
         const yPosition = event.clientY - pointerStartRef.current.y;
-        const xPosition = event.clientX - pointerStartRef.current.x;
+        const isHighlighted = window.getSelection()?.toString().length > 0;
 
-        const clamp = y === 'top' ? Math.min : Math.max;
-        const clampedY = clamp(0, yPosition);
-        const swipeStartThreshold = event.pointerType === 'touch' ? 10 : 2;
-        const isAllowedToSwipe = Math.abs(clampedY) > swipeStartThreshold;
+        if (isHighlighted) return;
 
-        if (isAllowedToSwipe) {
-          toastRef.current?.style.setProperty('--swipe-amount', `${yPosition}px`);
-        } else if (Math.abs(xPosition) > swipeStartThreshold) {
-          // User is swiping in wrong direction so we disable swipe gesture
-          // for the current pointer down interaction
-          pointerStartRef.current = null;
-        }
+        toastRef.current?.style.setProperty('--swipe-amount', `${Math.max(0, yPosition)}px`);
       }}
     >
       {closeButton && !toast.jsx ? (
@@ -643,7 +634,13 @@ const Toaster = forwardRef<HTMLElement, ToasterProps>(function Toaster(props, re
 
   return (
     // Remove item from normal navigation flow, only available via hotkey
-    <section aria-label={`${containerAriaLabel} ${hotkeyLabel}`} tabIndex={-1} aria-live="polite" aria-relevant="additions text" aria-atomic="false">
+    <section
+      aria-label={`${containerAriaLabel} ${hotkeyLabel}`}
+      tabIndex={-1}
+      aria-live="polite"
+      aria-relevant="additions text"
+      aria-atomic="false"
+    >
       {possiblePositions.map((position, index) => {
         const [y, x] = position.split('-');
 
