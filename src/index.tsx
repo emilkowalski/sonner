@@ -243,9 +243,6 @@ const Toast = (props: ToastProps) => {
 
   return (
     <li
-      aria-live={toast.important ? 'assertive' : 'polite'}
-      aria-atomic="true"
-      role="status"
       tabIndex={0}
       ref={toastRef}
       className={cn(
@@ -644,13 +641,14 @@ const Toaster = forwardRef<HTMLElement, ToasterProps>(function Toaster(props, re
     }
   }, [listRef.current]);
 
-  if (!toasts.length) return null;
-
   return (
     // Remove item from normal navigation flow, only available via hotkey
-    <section aria-label={`${containerAriaLabel} ${hotkeyLabel}`} tabIndex={-1} ref={ref}>
+    <section aria-label={`${containerAriaLabel} ${hotkeyLabel}`} tabIndex={-1} aria-live="polite" aria-relevant="additions text" aria-atomic="false">
       {possiblePositions.map((position, index) => {
         const [y, x] = position.split('-');
+
+        if (!toasts.length) return null;
+
         return (
           <ol
             key={position}
