@@ -213,7 +213,6 @@
   justify-content: center;
   align-items: center;
   padding: 0;
-  background: var(--gray1);
   color: var(--gray12);
   border: 1px solid var(--gray4);
   transform: var(--toast-close-button-transform);
@@ -221,6 +220,10 @@
   cursor: pointer;
   z-index: 1;
   transition: opacity 100ms, background 200ms, border-color 200ms;
+}
+
+[data-sonner-toast] [data-close-button] {
+  background: var(--gray1);
 }
 
 :where([data-sonner-toast]) :where([data-close-button]):focus-visible {
