@@ -353,8 +353,15 @@ const Toast = (props: ToastProps) => {
           {icons?.close ?? CloseIcon}
         </button>
       ) : null}
+      {/* TODO: This can be cleaner */}
       {toast.jsx || React.isValidElement(toast.title) ? (
-        toast.jsx || toast.title
+        toast.jsx ? (
+          toast.jsx
+        ) : typeof toast.title === 'function' ? (
+          toast.title()
+        ) : (
+          toast.title
+        )
       ) : (
         <>
           {toastType || toast.icon || toast.promise ? (
@@ -366,7 +373,7 @@ const Toast = (props: ToastProps) => {
 
           <div data-content="" className={cn(classNames?.content, toast?.classNames?.content)}>
             <div data-title="" className={cn(classNames?.title, toast?.classNames?.title)}>
-              {toast.title}
+              {typeof toast.title === 'function' ? toast.title() : toast.title}
             </div>
             {toast.description ? (
               <div
@@ -378,7 +385,7 @@ const Toast = (props: ToastProps) => {
                   toast?.classNames?.description,
                 )}
               >
-                {toast.description}
+                {typeof toast.description === 'function' ? toast.description() : toast.description}
               </div>
             ) : null}
           </div>
