@@ -23,9 +23,9 @@ export const getAsset = (type: ToastTypes): JSX.Element | null => {
 
 const bars = Array(12).fill(0);
 
-export const Loader = ({ visible }: { visible: boolean }) => {
+export const Loader = ({ visible, className }: { visible: boolean, className?: string }) => {
   return (
-    <div className="sonner-loading-wrapper" data-visible={visible}>
+    <div className={['sonner-loading-wrapper', className].filter(Boolean).join(' ')} data-visible={visible}>
       <div className="sonner-spinner">
         {bars.map((_, i) => (
           <div className="sonner-loading-bar" key={`spinner-bar-${i}`} />
@@ -72,5 +72,22 @@ const ErrorIcon = (
       d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-5a.75.75 0 01.75.75v4.5a.75.75 0 01-1.5 0v-4.5A.75.75 0 0110 5zm0 10a1 1 0 100-2 1 1 0 000 2z"
       clipRule="evenodd"
     />
+  </svg>
+);
+
+export const CloseIcon = (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="12"
+    height="12"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.5"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <line x1="18" y1="6" x2="6" y2="18"></line>
+    <line x1="6" y1="6" x2="18" y2="18"></line>
   </svg>
 );

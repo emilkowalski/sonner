@@ -43,6 +43,7 @@ export interface ToastIcons {
   warning?: React.ReactNode;
   error?: React.ReactNode;
   loading?: React.ReactNode;
+  close?: React.ReactNode;
 }
 
 export interface Action {
@@ -53,7 +54,7 @@ export interface Action {
 
 export interface ToastT {
   id: number | string;
-  title?: string | React.ReactNode;
+  title?: (() => React.ReactNode) | React.ReactNode;
   type?: ToastTypes;
   icon?: React.ReactNode;
   jsx?: React.ReactNode;
@@ -61,7 +62,7 @@ export interface ToastT {
   invert?: boolean;
   closeButton?: boolean;
   dismissible?: boolean;
-  description?: React.ReactNode;
+  description?: (() => React.ReactNode) | React.ReactNode;
   duration?: number;
   delete?: boolean;
   action?: Action | React.ReactNode;
