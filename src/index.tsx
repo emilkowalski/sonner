@@ -79,6 +79,7 @@ const Toast = (props: ToastProps) => {
   const [swipeOut, setSwipeOut] = React.useState(false);
   const [offsetBeforeRemove, setOffsetBeforeRemove] = React.useState(0);
   const [initialHeight, setInitialHeight] = React.useState(0);
+  const remainingTime = React.useRef(toast.duration || durationFromToaster || TOAST_LIFETIME);
   const dragStartTime = React.useRef<Date | null>(null);
   const toastRef = React.useRef<HTMLLIElement>(null);
   const isFront = index === 0;
@@ -172,7 +173,6 @@ const Toast = (props: ToastProps) => {
   React.useEffect(() => {
     if ((toast.promise && toastType === 'loading') || toast.duration === Infinity || toast.type === 'loading') return;
     let timeoutId: NodeJS.Timeout;
-    let remainingTime = duration;
 
     // Pause the timer on each hover
     const pauseTimer = () => {
@@ -180,7 +180,7 @@ const Toast = (props: ToastProps) => {
         // Get the elapsed time since the timer started
         const elapsedTime = new Date().getTime() - closeTimerStartTimeRef.current;
 
-        remainingTime = remainingTime - elapsedTime;
+        remainingTime.current = remainingTime.current - elapsedTime;
       }
 
       lastCloseTimerStartTimeRef.current = new Date().getTime();
@@ -190,7 +190,7 @@ const Toast = (props: ToastProps) => {
       // setTimeout(, Infinity) behaves as if the delay is 0.
       // As a result, the toast would be closed immediately, giving the appearance that it was never rendered.
       // See: https://github.com/denysdovhan/wtfjs?tab=readme-ov-file#an-infinite-timeout
-      if (remainingTime === Infinity) return;
+      if (remainingTime.current === Infinity) return;
 
       closeTimerStartTimeRef.current = new Date().getTime();
 
@@ -198,7 +198,7 @@ const Toast = (props: ToastProps) => {
       timeoutId = setTimeout(() => {
         toast.onAutoClose?.(toast);
         deleteToast();
-      }, remainingTime);
+      }, remainingTime.current);
     };
 
     if (expanded || interacting || (pauseWhenPageIsHidden && isDocumentHidden)) {
@@ -208,18 +208,7 @@ const Toast = (props: ToastProps) => {
     }
 
     return () => clearTimeout(timeoutId);
-  }, [
-    expanded,
-    interacting,
-    expandByDefault,
-    toast,
-    duration,
-    deleteToast,
-    toast.promise,
-    toastType,
-    pauseWhenPageIsHidden,
-    isDocumentHidden,
-  ]);
+  }, [expanded, interacting, toast, toastType, pauseWhenPageIsHidden, isDocumentHidden, deleteToast]);
 
   React.useEffect(() => {
     if (toast.delete) {
