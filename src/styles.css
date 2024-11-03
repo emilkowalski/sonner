@@ -51,7 +51,7 @@
   transition: transform 400ms ease;
 }
 
-:where([data-sonner-toaster][data-expanded='true']) {
+:where([data-sonner-toaster][data-lifted='true']) {
   transform: translateY(-10px);
 }
 

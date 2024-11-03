@@ -664,7 +664,7 @@ const Toaster = forwardRef<HTMLElement, ToasterProps>(function Toaster(props, re
             data-sonner-toaster
             data-theme={actualTheme}
             data-y-position={y}
-            data-expanded={expanded}
+            data-lifted={expanded && toasts.length > 1 && !expand}
             data-x-position={x}
             style={
               {
