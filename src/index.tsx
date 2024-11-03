@@ -77,6 +77,7 @@ const Toast = (props: ToastProps) => {
   const [removed, setRemoved] = React.useState(false);
   const [swiping, setSwiping] = React.useState(false);
   const [swipeOut, setSwipeOut] = React.useState(false);
+  const [isSwiped, setIsSwiped] = React.useState(false);
   const [offsetBeforeRemove, setOffsetBeforeRemove] = React.useState(0);
   const [initialHeight, setInitialHeight] = React.useState(0);
   const remainingTime = React.useRef(toast.duration || durationFromToaster || TOAST_LIFETIME);
@@ -132,7 +133,7 @@ const Toast = (props: ToastProps) => {
     const toastNode = toastRef.current;
     if (toastNode) {
       const height = toastNode.getBoundingClientRect().height;
-      // Add toast height tot heights array after the toast is mounted
+      // Add toast height to heights array after the toast is mounted
       setInitialHeight(height);
       setHeights((h) => [{ toastId: toast.id, height, position: toast.position }, ...h]);
       return () => setHeights((h) => h.filter((height) => height.toastId !== toast.id));
@@ -259,6 +260,7 @@ const Toast = (props: ToastProps) => {
       data-styled={!Boolean(toast.jsx || toast.unstyled || unstyled)}
       data-mounted={mounted}
       data-promise={Boolean(toast.promise)}
+      data-swiped={isSwiped}
       data-removed={removed}
       data-visible={isVisible}
       data-y-position={y}
@@ -306,6 +308,7 @@ const Toast = (props: ToastProps) => {
           toast.onDismiss?.(toast);
           deleteToast();
           setSwipeOut(true);
+          setIsSwiped(false);
           return;
         }
 
@@ -317,6 +320,11 @@ const Toast = (props: ToastProps) => {
 
         const yPosition = event.clientY - pointerStartRef.current.y;
         const isHighlighted = window.getSelection()?.toString().length > 0;
+        const swipeAmount = Number(toastRef.current?.style.getPropertyValue('--swipe-amount').replace('px', '') || 0);
+
+        if (swipeAmount > 0) {
+          setIsSwiped(true);
+        }
 
         if (isHighlighted) return;
 
@@ -656,6 +664,7 @@ const Toaster = forwardRef<HTMLElement, ToasterProps>(function Toaster(props, re
             data-sonner-toaster
             data-theme={actualTheme}
             data-y-position={y}
+            data-expanded={expanded}
             data-x-position={x}
             style={
               {
