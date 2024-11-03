@@ -51,7 +51,7 @@
   transition: transform 400ms ease;
 }
 
-:where([data-sonner-toaster]:hover) {
+:where([data-sonner-toaster][data-expanded='true']) {
   transform: translateY(-10px);
 }
 
@@ -337,6 +337,9 @@
 [data-sonner-toast][data-swiping='true'] {
   transform: var(--y) translateY(var(--swipe-amount, 0px));
   transition: none;
+}
+
+[data-sonner-toast][data-swiped='true'] {
   user-select: none;
 }
 
