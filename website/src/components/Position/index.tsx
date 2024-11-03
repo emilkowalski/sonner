@@ -1,4 +1,4 @@
-import { toast } from 'sonner';
+import { toast, useSonner } from 'sonner';
 import { CodeBlock } from '../CodeBlock';
 import React from 'react';
 
@@ -13,6 +13,12 @@ export const Position = ({
   position: Position;
   setPosition: React.Dispatch<React.SetStateAction<Position>>;
 }) => {
+  const { toasts } = useSonner();
+
+  function removeAllToasts() {
+    toasts.forEach((t) => toast.dismiss(t.id));
+  }
+
   return (
     <div>
       <h2>Position</h2>
@@ -23,11 +29,11 @@ export const Position = ({
             data-active={activePosition === position}
             className="button"
             onClick={() => {
-              const toastsAmount = document.querySelectorAll('[data-sonner-toast]').length;
-              setPosition(position);
-              // No need to show a toast when there is already one
-              if (toastsAmount > 0 && position !== activePosition) return;
-
+              if (activePosition !== position) {
+                setPosition(position);
+                removeAllToasts();
+              }
+			  
               toast('Event has been created', {
                 description: 'Monday, January 3rd at 6:00pm',
               });
