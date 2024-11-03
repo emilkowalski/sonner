@@ -48,6 +48,11 @@
   list-style: none;
   outline: none;
   z-index: 999999999;
+  transition: transform 400ms ease;
+}
+
+:where([data-sonner-toaster]:hover) {
+  transform: translateY(-10px);
 }
 
 :where([data-sonner-toaster][data-x-position='right']) {
