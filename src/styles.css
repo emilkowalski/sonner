@@ -55,6 +55,12 @@
   transform: translateY(-10px);
 }
 
+@media (max-width: 768px) {
+  :where([data-sonner-toaster][data-lifted='true']) {
+    transform: none;
+  }
+}
+
 :where([data-sonner-toaster][data-x-position='right']) {
   right: max(var(--offset), env(safe-area-inset-right));
 }
