@@ -55,7 +55,7 @@
   transform: translateY(-10px);
 }
 
-@media (max-width: 768px) {
+@media (hover: none) and (pointer: coarse) {
   :where([data-sonner-toaster][data-lifted='true']) {
     transform: none;
   }
