@@ -178,6 +178,12 @@ test.describe('Basic functionality', () => {
     await expect(page.getByText('My Updated Toast')).toHaveCount(1);
   });
 
+  test('show correct toast content when updating custom toast', async ({ page }) => {
+    await page.getByTestId('update-custom-toast').click();
+    await expect(page.getByText('My custom toast - unupdated')).toHaveCount(0);
+    await expect(page.getByText('My custom toast - updated')).toHaveCount(1);
+  });
+
   test('cancel button is rendered with custom styles', async ({ page }) => {
     await page.getByTestId('custom-cancel-button-toast').click();
     const button = await page.locator('[data-cancel]');

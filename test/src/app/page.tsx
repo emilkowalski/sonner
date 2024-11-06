@@ -107,6 +107,28 @@ export default function Home({ searchParams }: any) {
         Render Custom Toast
       </button>
       <button
+        data-testid="update-custom-toast"
+        className="button"
+        onClick={() => {
+          const toastId = toast.custom((t) => (
+            <div>
+              My custom toast - unupdated
+            </div>
+          ), {
+            id: undefined
+          })
+          toast.custom((t) => (
+            <div>
+              My custom toast - updated
+            </div>
+          ), {
+            id: toastId
+          })
+        }}
+      >
+        Update Custom Toast
+      </button>
+      <button
         data-testid="custom-cancel-button-toast"
         className="button"
         onClick={() =>
