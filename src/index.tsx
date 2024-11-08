@@ -320,15 +320,15 @@ const Toast = (props: ToastProps) => {
 
         const yPosition = event.clientY - pointerStartRef.current.y;
         const isHighlighted = window.getSelection()?.toString().length > 0;
-        const swipeAmount = Number(toastRef.current?.style.getPropertyValue('--swipe-amount').replace('px', '') || 0);
+        const swipeAmount = y === 'top' ? Math.min(0, yPosition) : Math.max(0, yPosition);
 
-        if (swipeAmount > 0) {
+        if (Math.abs(swipeAmount) > 0) {
           setIsSwiped(true);
         }
 
         if (isHighlighted) return;
 
-        toastRef.current?.style.setProperty('--swipe-amount', `${Math.max(0, yPosition)}px`);
+        toastRef.current?.style.setProperty('--swipe-amount', `${swipeAmount}px`);
       }}
     >
       {closeButton && !toast.jsx ? (
