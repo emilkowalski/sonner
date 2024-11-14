@@ -82,6 +82,11 @@
   bottom: max(var(--offset), env(safe-area-inset-bottom));
 }
 
+:where([data-sonner-toaster][data-x-position='center'][data-y-position='center']) {
+  top: calc(50% - calc(var(--front-toast-height) / 2));
+  left: 50%;
+}
+
 :where([data-sonner-toast]) {
   --y: translateY(100%);
   --lift-amount: calc(var(--lift) * var(--gap));

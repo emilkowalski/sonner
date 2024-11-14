@@ -2,7 +2,15 @@ import { toast, useSonner } from 'sonner';
 import { CodeBlock } from '../CodeBlock';
 import React from 'react';
 
-const positions = ['top-left', 'top-center', 'top-right', 'bottom-left', 'bottom-center', 'bottom-right'] as const;
+const positions = [
+  'top-left',
+  'top-center',
+  'top-right',
+  'bottom-left',
+  'bottom-center',
+  'bottom-right',
+  'center-center',
+] as const;
 
 export type Position = (typeof positions)[number];
 
@@ -33,7 +41,7 @@ export const Position = ({
                 setPosition(position);
                 removeAllToasts();
               }
-			  
+
               toast('Event has been created', {
                 description: 'Monday, January 3rd at 6:00pm',
               });
