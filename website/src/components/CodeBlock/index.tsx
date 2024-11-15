@@ -1,7 +1,6 @@
 import React from 'react';
 import Highlight, { defaultProps } from 'prism-react-renderer';
 import useMeasure from 'react-use-measure';
-import copy from 'copy-to-clipboard';
 import { AnimatePresence, motion, MotionConfig } from 'framer-motion';
 
 import styles from './code-block.module.css';
@@ -50,7 +49,7 @@ export const CodeBlock = ({ children, initialHeight = 0 }: { children: string; i
   const [copying, setCopying] = React.useState<number>(0);
 
   const onCopy = React.useCallback(() => {
-    copy(children);
+    navigator.clipboard.writeText(children)
     setCopying((c) => c + 1);
     setTimeout(() => {
       setCopying((c) => c - 1);
