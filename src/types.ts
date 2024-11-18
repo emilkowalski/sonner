@@ -113,6 +113,7 @@ export interface ToasterProps {
   richColors?: boolean;
   expand?: boolean;
   duration?: number;
+  dismissibleByClick?: boolean;
   gap?: number;
   visibleToasts?: number;
   closeButton?: boolean;
@@ -155,6 +156,7 @@ export interface ToastProps {
   cancelButtonStyle?: React.CSSProperties;
   actionButtonStyle?: React.CSSProperties;
   duration?: number;
+  dismissibleByClick?: boolean;
   className?: string;
   unstyled?: boolean;
   descriptionClassName?: string;
