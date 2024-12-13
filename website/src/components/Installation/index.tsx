@@ -1,7 +1,6 @@
 'use client';
 
 import React from 'react';
-import copy from 'copy-to-clipboard';
 import { motion, AnimatePresence, MotionConfig } from 'framer-motion';
 
 import styles from './installation.module.css';
@@ -15,7 +14,7 @@ export const Installation = () => {
   const [copying, setCopying] = React.useState(0);
 
   const onCopy = React.useCallback(() => {
-    copy('npm install sonner');
+    navigator.clipboard.writeText('npm install sonner')
     setCopying((c) => c + 1);
     setTimeout(() => {
       setCopying((c) => c - 1);
