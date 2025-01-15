@@ -130,6 +130,7 @@ export interface ToasterProps {
   offset?: Offset;
   mobileOffset?: Offset;
   dir?: 'rtl' | 'ltr' | 'auto';
+  swipeDirections?: SwipeDirection[];
   /**
    * @deprecated Please use the `icons` prop instead:
    * ```jsx
@@ -144,10 +145,13 @@ export interface ToasterProps {
   pauseWhenPageIsHidden?: boolean;
 }
 
+export type SwipeDirection = 'top' | 'right' | 'bottom' | 'left';
+
 export interface ToastProps {
   toast: ToastT;
   toasts: ToastT[];
   index: number;
+  swipeDirections?: SwipeDirection[];
   expanded: boolean;
   invert: boolean;
   heights: HeightT[];

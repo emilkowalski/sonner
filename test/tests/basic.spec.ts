@@ -112,12 +112,18 @@ test.describe('Basic functionality', () => {
     const dragBoundingBox = await toast.boundingBox();
 
     if (!dragBoundingBox) return;
+
+    // Initial touch point
     await page.mouse.move(dragBoundingBox.x + dragBoundingBox.width / 2, dragBoundingBox.y);
-
     await page.mouse.down();
-    await page.mouse.move(0, dragBoundingBox.y + 300);
 
+    // Move mouse slightly to determine swipe direction
+    await page.mouse.move(dragBoundingBox.x + dragBoundingBox.width / 2, dragBoundingBox.y + 10);
+
+    // Complete the swipe
+    await page.mouse.move(0, dragBoundingBox.y + 300);
     await page.mouse.up();
+
     await expect(page.getByTestId('dismiss-el')).toHaveCount(1);
   });
 
