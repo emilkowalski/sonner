@@ -22,6 +22,8 @@ const VISIBLE_TOASTS_AMOUNT = 3;
 
 // Viewport padding
 const VIEWPORT_OFFSET = '32px';
+const MOBILE_VIEWPORT_X_OFFSET = '16px';
+const MOBILE_VIEWPORT_Y_OFFSET = '20px';
 
 // Default lifetime of a toasts (in ms)
 const TOAST_LIFETIME = 4000;
@@ -109,7 +111,7 @@ const Toast = (props: ToastProps) => {
   const [y, x] = position.split('-');
   const toastsHeightBefore = React.useMemo(() => {
     return heights.reduce((prev, curr, reducerIndex) => {
-      // Calculate offset up until current  toast
+      // Calculate offset up until current toast
       if (reducerIndex >= heightIndex) {
         return prev;
       }
@@ -482,6 +484,8 @@ const Toaster = forwardRef<HTMLElement, ToasterProps>(function Toaster(props, re
     closeButton,
     className,
     offset,
+    mobileXOffset,
+    mobileYOffset,
     theme = 'light',
     richColors,
     duration,
@@ -676,6 +680,10 @@ const Toaster = forwardRef<HTMLElement, ToasterProps>(function Toaster(props, re
               {
                 '--front-toast-height': `${heights[0]?.height || 0}px`,
                 '--offset': typeof offset === 'number' ? `${offset}px` : offset || VIEWPORT_OFFSET,
+                '--mobile-x-offset':
+                  typeof mobileXOffset === 'number' ? `${mobileXOffset}px` : mobileXOffset || MOBILE_VIEWPORT_X_OFFSET,
+                '--mobile-y-offset':
+                  typeof mobileYOffset === 'number' ? `${mobileYOffset}px` : mobileYOffset || MOBILE_VIEWPORT_Y_OFFSET,
                 '--width': `${TOAST_WIDTH}px`,
                 '--gap': `${gap}px`,
                 ...style,

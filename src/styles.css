@@ -369,37 +369,36 @@
 @media (max-width: 600px) {
   [data-sonner-toaster] {
     position: fixed;
-    --mobile-offset: 16px;
-    right: var(--mobile-offset);
-    left: var(--mobile-offset);
+    right: var(--mobile-x-offset);
+    left: var(--mobile-x-offset);
     width: 100%;
   }
 
   [data-sonner-toaster][dir='rtl'] {
-    left: calc(var(--mobile-offset) * -1);
+    left: calc(var(--mobile-x-offset) * -1);
   }
 
   [data-sonner-toaster] [data-sonner-toast] {
     left: 0;
     right: 0;
-    width: calc(100% - var(--mobile-offset) * 2);
+    width: calc(100% - var(--mobile-x-offset) * 2);
   }
 
   [data-sonner-toaster][data-x-position='left'] {
-    left: var(--mobile-offset);
+    left: var(--mobile-x-offset);
   }
 
   [data-sonner-toaster][data-y-position='bottom'] {
-    bottom: 20px;
+    bottom: max(var(--mobile-y-offset), env(safe-area-inset-bottom));
   }
 
   [data-sonner-toaster][data-y-position='top'] {
-    top: 20px;
+    top: max(var(--mobile-y-offset), env(safe-area-inset-top));
   }
 
   [data-sonner-toaster][data-x-position='center'] {
-    left: var(--mobile-offset);
-    right: var(--mobile-offset);
+    left: var(--mobile-x-offset);
+    right: var(--mobile-x-offset);
     transform: none;
   }
 }

@@ -120,6 +120,8 @@ export interface ToasterProps {
   className?: string;
   style?: React.CSSProperties;
   offset?: string | number;
+  mobileXOffset?: string | number;
+  mobileYOffset?: string | number;
   dir?: 'rtl' | 'ltr' | 'auto';
   /**
    * @deprecated Please use the `icons` prop instead:
