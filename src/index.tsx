@@ -1,6 +1,6 @@
 'use client';
 
-import React, { forwardRef } from 'react';
+import React, { forwardRef, isValidElement } from 'react';
 import ReactDOM from 'react-dom';
 
 import { CloseIcon, getAsset, Loader } from './assets';
@@ -354,7 +354,7 @@ const Toast = (props: ToastProps) => {
         </button>
       ) : null}
       {/* TODO: This can be cleaner */}
-      {toast.jsx || React.isValidElement(toast.title) ? (
+      {toast.jsx || isValidElement(toast.title) ? (
         toast.jsx ? (
           toast.jsx
         ) : typeof toast.title === 'function' ? (
@@ -389,7 +389,7 @@ const Toast = (props: ToastProps) => {
               </div>
             ) : null}
           </div>
-          {React.isValidElement(toast.cancel) ? (
+          {isValidElement(toast.cancel) ? (
             toast.cancel
           ) : toast.cancel && isAction(toast.cancel) ? (
             <button
@@ -408,7 +408,7 @@ const Toast = (props: ToastProps) => {
               {toast.cancel.label}
             </button>
           ) : null}
-          {React.isValidElement(toast.action) ? (
+          {isValidElement(toast.action) ? (
             toast.action
           ) : toast.action && isAction(toast.action) ? (
             <button
