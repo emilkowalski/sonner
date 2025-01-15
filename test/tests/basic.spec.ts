@@ -106,7 +106,7 @@ test.describe('Basic functionality', () => {
     await expect(page.getByTestId('auto-close-el')).toHaveCount(1);
   });
 
-  test.only("toast's dismiss callback gets executed correctly", async ({ page }) => {
+  test("toast's dismiss callback gets executed correctly", async ({ page }) => {
     await page.getByTestId('dismiss-toast-callback').click();
     const toast = page.locator('[data-sonner-toast]');
     const dragBoundingBox = await toast.boundingBox();
