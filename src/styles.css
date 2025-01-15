@@ -440,7 +440,9 @@
 
 [data-sonner-toaster][data-theme='dark'] {
   --normal-bg: #000;
+  --normal-bg-hover: hsl(0, 0%, 12%);
   --normal-border: hsl(0, 0%, 20%);
+  --normal-border-hover: hsl(0, 0%, 25%);
   --normal-text: var(--gray1);
 
   --success-bg: hsl(150, 100%, 6%);
@@ -458,6 +460,17 @@
   --error-bg: hsl(358, 76%, 10%);
   --error-border: hsl(357, 89%, 16%);
   --error-text: hsl(358, 100%, 81%);
+}
+
+[data-sonner-toaster][data-theme='dark'] [data-sonner-toast] [data-close-button] {
+  background: var(--normal-bg);
+  border-color: var(--normal-border);
+  color: var(--normal-text);
+}
+
+[data-sonner-toaster][data-theme='dark'] [data-sonner-toast] [data-close-button]:hover {
+  background: var(--normal-bg-hover);
+  border-color: var(--normal-border-hover);
 }
 
 [data-rich-colors='true'][data-sonner-toast][data-type='success'] {
