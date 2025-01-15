@@ -22,8 +22,9 @@ const VISIBLE_TOASTS_AMOUNT = 3;
 
 // Viewport padding
 const VIEWPORT_OFFSET = '32px';
-const MOBILE_VIEWPORT_X_OFFSET = '16px';
-const MOBILE_VIEWPORT_Y_OFFSET = '20px';
+
+// Mobile viewport padding
+const MOBILE_VIEWPORT_OFFSET = '16px';
 
 // Default lifetime of a toasts (in ms)
 const TOAST_LIFETIME = 4000;
@@ -448,6 +449,33 @@ function getDocumentDirection(): ToasterProps['dir'] {
   return dirAttribute as ToasterProps['dir'];
 }
 
+function assignOffset(defaultOffset: ToasterProps['offset'], mobileOffset: ToasterProps['mobileOffset']) {
+  const styles = {} as React.CSSProperties;
+
+  [defaultOffset, mobileOffset].forEach((offset, index) => {
+    const isMobile = index === 1;
+    const prefix = isMobile ? '--mobile-offset' : '--offset';
+
+    function assignAll(offset: string | number) {
+      ['top', 'right', 'bottom', 'left'].forEach((key) => {
+        styles[`${prefix}-${key}`] = typeof offset === 'number' ? `${offset}px` : offset;
+      });
+    }
+
+    if (typeof offset === 'number' || typeof offset === 'string') {
+      assignAll(offset);
+    } else if (typeof offset === 'object') {
+      Object.keys(offset).forEach((key) => {
+        styles[`${prefix}-${key}`] = typeof offset[key] === 'number' ? `${offset[key]}px` : offset[key];
+      });
+    } else {
+      assignAll(isMobile ? MOBILE_VIEWPORT_OFFSET : VIEWPORT_OFFSET);
+    }
+  });
+
+  return styles;
+}
+
 function useSonner() {
   const [activeToasts, setActiveToasts] = React.useState<ToastT[]>([]);
 
@@ -484,8 +512,7 @@ const Toaster = forwardRef<HTMLElement, ToasterProps>(function Toaster(props, re
     closeButton,
     className,
     offset,
-    mobileXOffset,
-    mobileYOffset,
+    mobileOffset,
     theme = 'light',
     richColors,
     duration,
@@ -679,14 +706,10 @@ const Toaster = forwardRef<HTMLElement, ToasterProps>(function Toaster(props, re
             style={
               {
                 '--front-toast-height': `${heights[0]?.height || 0}px`,
-                '--offset': typeof offset === 'number' ? `${offset}px` : offset || VIEWPORT_OFFSET,
-                '--mobile-x-offset':
-                  typeof mobileXOffset === 'number' ? `${mobileXOffset}px` : mobileXOffset || MOBILE_VIEWPORT_X_OFFSET,
-                '--mobile-y-offset':
-                  typeof mobileYOffset === 'number' ? `${mobileYOffset}px` : mobileYOffset || MOBILE_VIEWPORT_Y_OFFSET,
                 '--width': `${TOAST_WIDTH}px`,
                 '--gap': `${gap}px`,
                 ...style,
+                ...assignOffset(offset, mobileOffset),
               } as React.CSSProperties
             }
             onBlur={(event) => {
