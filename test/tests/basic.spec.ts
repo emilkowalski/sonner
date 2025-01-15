@@ -106,26 +106,26 @@ test.describe('Basic functionality', () => {
     await expect(page.getByTestId('auto-close-el')).toHaveCount(1);
   });
 
-  test("toast's dismiss callback gets executed correctly", async ({ page }) => {
+  test.only("toast's dismiss callback gets executed correctly", async ({ page }) => {
     await page.getByTestId('dismiss-toast-callback').click();
     const toast = page.locator('[data-sonner-toast]');
-    const dragBoundingBox = await toast.boundingBox();
 
-    if (!dragBoundingBox) return;
+    await toast.waitFor({ state: 'visible' });
 
-    // Initial touch point
-    const startX = dragBoundingBox.x + dragBoundingBox.width / 2;
-    const startY = dragBoundingBox.y;
+    const box = await toast.boundingBox();
+    if (!box) return;
 
-    // Initial touch point
+    const startX = box.x + box.width / 2;
+    const startY = box.y + box.height / 2;
+
     await page.mouse.move(startX, startY);
     await page.mouse.down();
 
-    // Move mouse slightly to determine swipe direction
-    await page.mouse.move(startX, startY + 10);
+    // Small initial movement to trigger drag
+    await page.mouse.move(startX, startY + 20, { steps: 5 });
 
-    // Complete the swipe - using relative position from start
-    await page.mouse.move(startX, startY + 300);
+    // Main swipe movement
+    await page.mouse.move(startX, startY + 300, { steps: 10 });
     await page.mouse.up();
 
     await expect(page.getByTestId('dismiss-el')).toHaveCount(1);
