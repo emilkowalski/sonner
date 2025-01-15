@@ -105,6 +105,16 @@ interface ToastOptions {
 
 type CnFunction = (...classes: Array<string | undefined>) => string;
 
+type Offset =
+  | {
+      top?: string | number;
+      right?: string | number;
+      bottom?: string | number;
+      left?: string | number;
+    }
+  | string
+  | number;
+
 export interface ToasterProps {
   invert?: boolean;
   theme?: 'light' | 'dark' | 'system';
@@ -119,9 +129,8 @@ export interface ToasterProps {
   toastOptions?: ToastOptions;
   className?: string;
   style?: React.CSSProperties;
-  offset?: string | number;
-  mobileXOffset?: string | number;
-  mobileYOffset?: string | number;
+  offset?: Offset;
+  mobileOffset?: Offset;
   dir?: 'rtl' | 'ltr' | 'auto';
   /**
    * @deprecated Please use the `icons` prop instead:
