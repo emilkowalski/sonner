@@ -643,6 +643,7 @@ const Toaster = forwardRef<HTMLElement, ToasterProps>(function Toaster(props, re
   return (
     // Remove item from normal navigation flow, only available via hotkey
     <section
+      ref={ref}
       aria-label={`${containerAriaLabel} ${hotkeyLabel}`}
       tabIndex={-1}
       aria-live="polite"
