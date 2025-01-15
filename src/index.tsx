@@ -41,7 +41,7 @@ const SWIPE_THRESHOLD = 20;
 // Equal to exit animation duration
 const TIME_BEFORE_UNMOUNT = 200;
 
-function _cn(...classes: (string | undefined)[]) {
+function cn(...classes: (string | undefined)[]) {
   return classes.filter(Boolean).join(' ');
 }
 
@@ -74,7 +74,6 @@ const Toast = (props: ToastProps) => {
     icons,
     closeButtonAriaLabel = 'Close toast',
     pauseWhenPageIsHidden,
-    cn,
   } = props;
   const [mounted, setMounted] = React.useState(false);
   const [removed, setRemoved] = React.useState(false);
@@ -530,7 +529,6 @@ const Toaster = forwardRef<HTMLElement, ToasterProps>(function Toaster(props, re
     icons,
     containerAriaLabel = 'Notifications',
     pauseWhenPageIsHidden,
-    cn = _cn,
   } = props;
   const [toasts, setToasts] = React.useState<ToastT[]>([]);
   const possiblePositions = React.useMemo(() => {
@@ -785,7 +783,6 @@ const Toaster = forwardRef<HTMLElement, ToasterProps>(function Toaster(props, re
                   loadingIcon={loadingIcon}
                   expanded={expanded}
                   pauseWhenPageIsHidden={pauseWhenPageIsHidden}
-                  cn={cn}
                 />
               ))}
           </ol>

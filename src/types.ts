@@ -103,8 +103,6 @@ interface ToastOptions {
   classNames?: ToastClassnames;
 }
 
-type CnFunction = (...classes: Array<string | undefined>) => string;
-
 type Offset =
   | {
       top?: string | number;
@@ -144,7 +142,6 @@ export interface ToasterProps {
   icons?: ToastIcons;
   containerAriaLabel?: string;
   pauseWhenPageIsHidden?: boolean;
-  cn?: CnFunction;
 }
 
 export interface ToastProps {
@@ -174,7 +171,6 @@ export interface ToastProps {
   icons?: ToastIcons;
   closeButtonAriaLabel?: string;
   pauseWhenPageIsHidden: boolean;
-  cn: CnFunction;
   defaultRichColors?: boolean;
 }
 
