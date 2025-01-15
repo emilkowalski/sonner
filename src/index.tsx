@@ -9,6 +9,7 @@ import { toast, ToastState } from './state';
 import './styles.css';
 import {
   isAction,
+  SwipeDirection,
   type ExternalToast,
   type HeightT,
   type ToasterProps,
@@ -43,6 +44,25 @@ const TIME_BEFORE_UNMOUNT = 200;
 
 function cn(...classes: (string | undefined)[]) {
   return classes.filter(Boolean).join(' ');
+}
+
+function getDefaultSwipeDirections(position: string): Array<SwipeDirection> {
+  const [y, x] = position.split('-');
+  const directions: Array<SwipeDirection> = [];
+
+  if (y === 'top') {
+    directions.push('top');
+  } else if (y === 'bottom') {
+    directions.push('bottom');
+  }
+
+  if (x === 'left') {
+    directions.push('left');
+  } else if (x === 'right') {
+    directions.push('right');
+  }
+
+  return directions;
 }
 
 const Toast = (props: ToastProps) => {
@@ -315,16 +335,13 @@ const Toast = (props: ToastProps) => {
         );
         const timeTaken = new Date().getTime() - dragStartTime.current?.getTime();
 
-        // Calculate total swipe amount based on the locked direction
         const swipeAmount = swipeDirection === 'x' ? swipeAmountX : swipeAmountY;
         const velocity = Math.abs(swipeAmount) / timeTaken;
 
-        // Remove only if threshold is met
         if (Math.abs(swipeAmount) >= SWIPE_THRESHOLD || velocity > 0.11) {
           setOffsetBeforeRemove(offset.current);
           toast.onDismiss?.(toast);
 
-          // Set the swipe out direction based on the movement
           if (swipeDirection === 'x') {
             setSwipeOutDirection(swipeAmountX > 0 ? 'right' : 'left');
           } else {
@@ -349,7 +366,7 @@ const Toast = (props: ToastProps) => {
         const yDelta = event.clientY - pointerStartRef.current.y;
         const xDelta = event.clientX - pointerStartRef.current.x;
 
-        const swipeDirections = props.swipeDirections ?? ['bottom', 'right'];
+        const swipeDirections = props.swipeDirections ?? getDefaultSwipeDirections(position);
 
         // Determine swipe direction if not already locked
         if (!swipeDirection && (Math.abs(xDelta) > 5 || Math.abs(yDelta) > 5)) {
@@ -835,7 +852,6 @@ const Toaster = forwardRef<HTMLElement, ToasterProps>(function Toaster(props, re
                   expanded={expanded}
                   pauseWhenPageIsHidden={pauseWhenPageIsHidden}
                   swipeDirections={props.swipeDirections}
-                  y={props.y}
                 />
               ))}
           </ol>

@@ -254,8 +254,8 @@
 :where([data-sonner-toast][data-swiping='true'])::before {
   content: '';
   position: absolute;
-  left: 0;
-  right: 0;
+  left: -50%;
+  right: -50%;
   height: 100%;
   z-index: -1;
 }
