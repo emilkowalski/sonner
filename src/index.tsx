@@ -125,6 +125,10 @@ const Toast = (props: ToastProps) => {
   offset.current = React.useMemo(() => heightIndex * gap + toastsHeightBefore, [heightIndex, toastsHeightBefore]);
 
   React.useEffect(() => {
+    remainingTime.current = duration;
+  }, [duration]);
+
+  React.useEffect(() => {
     // Trigger enter animation without using CSS animation
     setMounted(true);
   }, []);

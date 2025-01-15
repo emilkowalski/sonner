@@ -178,6 +178,22 @@ test.describe('Basic functionality', () => {
     await expect(page.getByText('My Updated Toast')).toHaveCount(1);
   });
 
+  test('should update toast content and duration after 3 seconds', async ({ page }) => {
+    await page.getByTestId('update-toast-duration').click();
+
+    const initialToast = page.getByText('My Unupdated Toast, Updated After 3 Seconds');
+    await expect(initialToast).toBeVisible();
+
+    await page.waitForTimeout(3000);
+    const updatedToast = page.getByText('My Updated Toast, Close After 1 Second');
+    await expect(updatedToast).toBeVisible();
+
+    await expect(initialToast).not.toBeVisible();
+
+    await page.waitForTimeout(1200);
+    await expect(updatedToast).not.toBeVisible();
+  });
+
   test('cancel button is rendered with custom styles', async ({ page }) => {
     await page.getByTestId('custom-cancel-button-toast').click();
     const button = await page.locator('[data-cancel]');
