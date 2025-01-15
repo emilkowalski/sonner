@@ -63,6 +63,7 @@ const Toast = (props: ToastProps) => {
     className = '',
     descriptionClassName = '',
     duration: durationFromToaster,
+    dismissibleByClick = false,
     position,
     gap,
     loadingIcon: loadingIconProp,
@@ -334,6 +335,14 @@ const Toast = (props: ToastProps) => {
 
         toastRef.current?.style.setProperty('--swipe-amount', `${swipeAmount}px`);
       }}
+      onClick={
+        !dismissibleByClick || disabled || !dismissible || !(toasts.length === 1 || expanded)
+          ? () => {}
+          : () => {
+              deleteToast();
+              toast.onDismiss?.(toast);
+            }
+      }
     >
       {closeButton && !toast.jsx ? (
         <button
@@ -485,6 +494,7 @@ const Toaster = forwardRef<HTMLElement, ToasterProps>(function Toaster(props, re
     theme = 'light',
     richColors,
     duration,
+    dismissibleByClick,
     style,
     visibleToasts = VISIBLE_TOASTS_AMOUNT,
     toastOptions,
@@ -728,6 +738,7 @@ const Toaster = forwardRef<HTMLElement, ToasterProps>(function Toaster(props, re
                   toast={toast}
                   defaultRichColors={richColors}
                   duration={toastOptions?.duration ?? duration}
+                  dismissibleByClick={dismissibleByClick}
                   className={toastOptions?.className}
                   descriptionClassName={toastOptions?.descriptionClassName}
                   invert={invert}
