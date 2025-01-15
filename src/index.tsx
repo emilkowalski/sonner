@@ -365,7 +365,7 @@ const Toast = (props: ToastProps) => {
         const swipeDirections = props.swipeDirections ?? getDefaultSwipeDirections(position);
 
         // Determine swipe direction if not already locked
-        if (!swipeDirection && (Math.abs(xDelta) > 5 || Math.abs(yDelta) > 5)) {
+        if (!swipeDirection && (Math.abs(xDelta) > 1 || Math.abs(yDelta) > 1)) {
           setSwipeDirection(Math.abs(xDelta) > Math.abs(yDelta) ? 'x' : 'y');
         }
 
