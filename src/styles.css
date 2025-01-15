@@ -369,8 +369,8 @@
 @media (max-width: 600px) {
   [data-sonner-toaster] {
     position: fixed;
-    right: var(--mobile-offset-left);
-    left: var(--mobile-offset-right);
+    right: var(--mobile-offset-right);
+    left: var(--mobile-offset-left);
     width: 100%;
   }
 
