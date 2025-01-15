@@ -783,7 +783,6 @@ const Toaster = forwardRef<HTMLElement, ToasterProps>(function Toaster(props, re
                   loadingIcon={loadingIcon}
                   expanded={expanded}
                   pauseWhenPageIsHidden={pauseWhenPageIsHidden}
-                  cn={cn}
                 />
               ))}
           </ol>
