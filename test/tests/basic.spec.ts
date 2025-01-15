@@ -117,9 +117,6 @@ test.describe('Basic functionality', () => {
     await page.mouse.move(dragBoundingBox.x + dragBoundingBox.width / 2, dragBoundingBox.y);
     await page.mouse.down();
 
-    // Move mouse slightly to determine swipe direction
-    await page.mouse.move(dragBoundingBox.x + dragBoundingBox.width / 2, dragBoundingBox.y + 10);
-
     // Complete the swipe
     await page.mouse.move(0, dragBoundingBox.y + 300);
     await page.mouse.up();
