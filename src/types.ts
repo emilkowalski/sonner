@@ -144,10 +144,13 @@ export interface ToasterProps {
   pauseWhenPageIsHidden?: boolean;
 }
 
+type SwipeDirection = 'top' | 'right' | 'bottom' | 'left';
+
 export interface ToastProps {
   toast: ToastT;
   toasts: ToastT[];
   index: number;
+  swipeDirections?: SwipeDirection[];
   expanded: boolean;
   invert: boolean;
   heights: HeightT[];

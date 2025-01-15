@@ -341,7 +341,7 @@
 }
 
 [data-sonner-toast][data-swiping='true'] {
-  transform: var(--y) translateY(var(--swipe-amount, 0px));
+  transform: var(--y) translateY(var(--swipe-amount-y, 0px)) translateX(var(--swipe-amount-x, 0px));
   transition: none;
 }
 
@@ -351,17 +351,71 @@
 
 [data-sonner-toast][data-swipe-out='true'][data-y-position='bottom'],
 [data-sonner-toast][data-swipe-out='true'][data-y-position='top'] {
-  animation: swipe-out 200ms ease-out forwards;
+  animation-duration: 200ms;
+  animation-timing-function: ease-out;
+  animation-fill-mode: forwards;
 }
 
-@keyframes swipe-out {
+[data-sonner-toast][data-swipe-out='true'][data-swipe-direction='left'] {
+  animation-name: swipe-out-left;
+}
+
+[data-sonner-toast][data-swipe-out='true'][data-swipe-direction='right'] {
+  animation-name: swipe-out-right;
+}
+
+[data-sonner-toast][data-swipe-out='true'][data-swipe-direction='up'] {
+  animation-name: swipe-out-up;
+}
+
+[data-sonner-toast][data-swipe-out='true'][data-swipe-direction='down'] {
+  animation-name: swipe-out-down;
+}
+
+@keyframes swipe-out-left {
   from {
-    transform: translateY(calc(var(--lift) * var(--offset) + var(--swipe-amount)));
+    transform: translateX(var(--swipe-amount-x));
     opacity: 1;
   }
 
   to {
-    transform: translateY(calc(var(--lift) * var(--offset) + var(--swipe-amount) + var(--lift) * -100%));
+    transform: translateX(calc(var(--swipe-amount-x) - 100%));
+    opacity: 0;
+  }
+}
+
+@keyframes swipe-out-right {
+  from {
+    transform: translateX(var(--swipe-amount-x));
+    opacity: 1;
+  }
+
+  to {
+    transform: translateX(calc(var(--swipe-amount-x) + 100%));
+    opacity: 0;
+  }
+}
+
+@keyframes swipe-out-up {
+  from {
+    transform: translateY(var(--swipe-amount-y));
+    opacity: 1;
+  }
+
+  to {
+    transform: translateY(calc(var(--swipe-amount-y) - 100%));
+    opacity: 0;
+  }
+}
+
+@keyframes swipe-out-down {
+  from {
+    transform: translateY(var(--swipe-amount-y));
+    opacity: 1;
+  }
+
+  to {
+    transform: translateY(calc(var(--swipe-amount-y) + 100%));
     opacity: 0;
   }
 }
