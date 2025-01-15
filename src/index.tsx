@@ -455,6 +455,7 @@ function assignOffset(defaultOffset: ToasterProps['offset'], mobileOffset: Toast
   [defaultOffset, mobileOffset].forEach((offset, index) => {
     const isMobile = index === 1;
     const prefix = isMobile ? '--mobile-offset' : '--offset';
+    const defaultValue = isMobile ? MOBILE_VIEWPORT_OFFSET : VIEWPORT_OFFSET;
 
     function assignAll(offset: string | number) {
       ['top', 'right', 'bottom', 'left'].forEach((key) => {
@@ -465,11 +466,15 @@ function assignOffset(defaultOffset: ToasterProps['offset'], mobileOffset: Toast
     if (typeof offset === 'number' || typeof offset === 'string') {
       assignAll(offset);
     } else if (typeof offset === 'object') {
-      Object.keys(offset).forEach((key) => {
-        styles[`${prefix}-${key}`] = typeof offset[key] === 'number' ? `${offset[key]}px` : offset[key];
+      ['top', 'right', 'bottom', 'left'].forEach((key) => {
+        if (offset[key] === undefined) {
+          styles[`${prefix}-${key}`] = defaultValue;
+        } else {
+          styles[`${prefix}-${key}`] = typeof offset[key] === 'number' ? `${offset[key]}px` : offset[key];
+        }
       });
     } else {
-      assignAll(isMobile ? MOBILE_VIEWPORT_OFFSET : VIEWPORT_OFFSET);
+      assignAll(defaultValue);
     }
   });
 

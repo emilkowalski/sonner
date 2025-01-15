@@ -20,14 +20,7 @@ export default function Home() {
   return (
     <div className="wrapper light">
       <Head />
-      <Toaster
-        theme="light"
-        richColors={richColors}
-        closeButton={closeButton}
-        expand={expand}
-        position={position}
-        offset={40}
-      />
+      <Toaster theme="light" richColors={richColors} closeButton={closeButton} expand={expand} position={position} />
       <main className="container">
         <Hero />
         <div className="content">
