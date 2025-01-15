@@ -374,48 +374,48 @@
 
 @keyframes swipe-out-left {
   from {
-    transform: translateX(var(--swipe-amount-x));
+    transform: var(--y) translateX(var(--swipe-amount-x));
     opacity: 1;
   }
 
   to {
-    transform: translateX(calc(var(--swipe-amount-x) - 100%));
+    transform: var(--y) translateX(calc(var(--swipe-amount-x) - 100%));
     opacity: 0;
   }
 }
 
 @keyframes swipe-out-right {
   from {
-    transform: translateX(var(--swipe-amount-x));
+    transform: var(--y) translateX(var(--swipe-amount-x));
     opacity: 1;
   }
 
   to {
-    transform: translateX(calc(var(--swipe-amount-x) + 100%));
+    transform: var(--y) translateX(calc(var(--swipe-amount-x) + 100%));
     opacity: 0;
   }
 }
 
 @keyframes swipe-out-up {
   from {
-    transform: translateY(var(--swipe-amount-y));
+    transform: var(--y) translateY(var(--swipe-amount-y));
     opacity: 1;
   }
 
   to {
-    transform: translateY(calc(var(--swipe-amount-y) - 100%));
+    transform: var(--y) translateY(calc(var(--swipe-amount-y) - 100%));
     opacity: 0;
   }
 }
 
 @keyframes swipe-out-down {
   from {
-    transform: translateY(var(--swipe-amount-y));
+    transform: var(--y) translateY(var(--swipe-amount-y));
     opacity: 1;
   }
 
   to {
-    transform: translateY(calc(var(--swipe-amount-y) + 100%));
+    transform: var(--y) translateY(calc(var(--swipe-amount-y) + 100%));
     opacity: 0;
   }
 }

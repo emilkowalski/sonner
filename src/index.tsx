@@ -50,16 +50,12 @@ function getDefaultSwipeDirections(position: string): Array<SwipeDirection> {
   const [y, x] = position.split('-');
   const directions: Array<SwipeDirection> = [];
 
-  if (y === 'top') {
-    directions.push('top');
-  } else if (y === 'bottom') {
-    directions.push('bottom');
+  if (y) {
+    directions.push(y as SwipeDirection);
   }
 
-  if (x === 'left') {
-    directions.push('left');
-  } else if (x === 'right') {
-    directions.push('right');
+  if (x) {
+    directions.push(x as SwipeDirection);
   }
 
   return directions;
