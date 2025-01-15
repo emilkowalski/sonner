@@ -653,6 +653,7 @@ const Toaster = forwardRef<HTMLElement, ToasterProps>(function Toaster(props, re
       aria-live="polite"
       aria-relevant="additions text"
       aria-atomic="false"
+      suppressHydrationWarning
     >
       {possiblePositions.map((position, index) => {
         const [y, x] = position.split('-');
