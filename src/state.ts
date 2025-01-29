@@ -9,10 +9,12 @@ type titleT = (() => React.ReactNode) | React.ReactNode;
 class Observer {
   subscribers: Array<(toast: ExternalToast | ToastToDismiss) => void>;
   toasts: Array<ToastT | ToastToDismiss>;
+  dismissedToasts: Set<string | number>;
 
   constructor() {
     this.subscribers = [];
     this.toasts = [];
+    this.dismissedToasts = new Set();
   }
 
   // We use arrow functions to maintain the correct `this` reference
@@ -49,6 +51,10 @@ class Observer {
     });
     const dismissible = data.dismissible === undefined ? true : data.dismissible;
 
+    if (this.dismissedToasts.has(id)) {
+      this.dismissedToasts.delete(id);
+    }
+
     if (alreadyExists) {
       this.toasts = this.toasts.map((toast) => {
         if (toast.id === id) {
@@ -72,12 +78,13 @@ class Observer {
   };
 
   dismiss = (id?: number | string) => {
+    this.dismissedToasts.add(id);
+
     if (!id) {
       this.toasts.forEach((toast) => {
         this.subscribers.forEach((subscriber) => subscriber({ id: toast.id, dismiss: true }));
       });
     }
-
     this.subscribers.forEach((subscriber) => subscriber({ id, dismiss: true }));
     return id;
   };
@@ -189,6 +196,10 @@ class Observer {
     this.create({ jsx: jsx(id), id, ...data });
     return id;
   };
+
+  getActiveToasts = () => {
+    return this.toasts.filter((toast) => !this.dismissedToasts.has(toast.id));
+  };
 }
 
 export const ToastState = new Observer();
@@ -219,6 +230,7 @@ const isHttpResponse = (data: any): data is Response => {
 const basicToast = toastFunction;
 
 const getHistory = () => ToastState.toasts;
+const getActiveHistory = () => ToastState.getActiveToasts();
 
 // We use `Object.assign` to maintain the correct types as we would lose them otherwise
 export const toast = Object.assign(
@@ -234,5 +246,5 @@ export const toast = Object.assign(
     dismiss: ToastState.dismiss,
     loading: ToastState.loading,
   },
-  { getHistory },
+  { getHistory, getActiveHistory },
 );
