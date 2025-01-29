@@ -549,19 +549,33 @@ function useSonner() {
 
   React.useEffect(() => {
     return ToastState.subscribe((toast) => {
-      setActiveToasts((currentToasts) => {
-        if ('dismiss' in toast && toast.dismiss) {
-          return currentToasts.filter((t) => t.id !== toast.id);
-        }
+      if ((toast as ToastToDismiss).dismiss) {
+        setTimeout(() => {
+          ReactDOM.flushSync(() => {
+            setActiveToasts((toasts) => toasts.filter((t) => t.id !== toast.id));
+          });
+        });
+        return;
+      }
 
-        const existingToastIndex = currentToasts.findIndex((t) => t.id === toast.id);
-        if (existingToastIndex !== -1) {
-          const updatedToasts = [...currentToasts];
-          updatedToasts[existingToastIndex] = { ...updatedToasts[existingToastIndex], ...toast };
-          return updatedToasts;
-        } else {
-          return [toast, ...currentToasts];
-        }
+      // Prevent batching, temp solution.
+      setTimeout(() => {
+        ReactDOM.flushSync(() => {
+          setActiveToasts((toasts) => {
+            const indexOfExistingToast = toasts.findIndex((t) => t.id === toast.id);
+
+            // Update the toast if it already exists
+            if (indexOfExistingToast !== -1) {
+              return [
+                ...toasts.slice(0, indexOfExistingToast),
+                { ...toasts[indexOfExistingToast], ...toast },
+                ...toasts.slice(indexOfExistingToast + 1),
+              ];
+            }
+
+            return [toast, ...toasts];
+          });
+        });
       });
     });
   }, []);
