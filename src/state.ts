@@ -230,7 +230,7 @@ const isHttpResponse = (data: any): data is Response => {
 const basicToast = toastFunction;
 
 const getHistory = () => ToastState.toasts;
-const getActiveHistory = () => ToastState.getActiveToasts();
+const getToasts = () => ToastState.getActiveToasts();
 
 // We use `Object.assign` to maintain the correct types as we would lose them otherwise
 export const toast = Object.assign(
@@ -246,5 +246,5 @@ export const toast = Object.assign(
     dismiss: ToastState.dismiss,
     loading: ToastState.loading,
   },
-  { getHistory, getActiveHistory },
+  { getHistory, getToasts },
 );
