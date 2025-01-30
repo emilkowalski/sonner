@@ -61,6 +61,7 @@ export interface ToastT {
   richColors?: boolean;
   invert?: boolean;
   closeButton?: boolean;
+  showCloseOnHover?: boolean;
   dismissible?: boolean;
   description?: (() => React.ReactNode) | React.ReactNode;
   duration?: number;

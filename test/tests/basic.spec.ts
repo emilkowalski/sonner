@@ -80,6 +80,7 @@ test.describe('Basic functionality', () => {
   });
 
   test('toast is not removed when hovered', async ({ page }) => {
+    await page.goto('/?position=top-left');
     await page.getByTestId('default-button').click();
     await page.hover('[data-sonner-toast]');
     const timeout = new Promise((resolve) => setTimeout(resolve, 5000));

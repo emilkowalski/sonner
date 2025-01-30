@@ -720,3 +720,9 @@
   opacity: 0;
   transform: scale(0.8) translate(-50%, -50%);
 }
+
+.close-button-hidden {
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out;
+}

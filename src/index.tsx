@@ -98,6 +98,7 @@ const Toast = (props: ToastProps) => {
   const [swiping, setSwiping] = React.useState(false);
   const [swipeOut, setSwipeOut] = React.useState(false);
   const [isSwiped, setIsSwiped] = React.useState(false);
+  const [isHovered, setIsHovered] = React.useState(false);
   const [offsetBeforeRemove, setOffsetBeforeRemove] = React.useState(0);
   const [initialHeight, setInitialHeight] = React.useState(0);
   const remainingTime = React.useRef(toast.duration || durationFromToaster || TOAST_LIFETIME);
@@ -309,6 +310,8 @@ const Toast = (props: ToastProps) => {
           ...toast.style,
         } as React.CSSProperties
       }
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
       onPointerDown={(event) => {
         if (disabled || !dismissible) return;
         dragStartTime.current = new Date();
@@ -414,7 +417,11 @@ const Toast = (props: ToastProps) => {
                   toast.onDismiss?.(toast);
                 }
           }
-          className={cn(classNames?.closeButton, toast?.classNames?.closeButton)}
+          className={cn(
+            classNames?.closeButton,
+            toast?.classNames?.closeButton,
+            toast?.showCloseOnHover && !isHovered ? 'close-button-hidden' : '',
+          )}
         >
           {icons?.close ?? CloseIcon}
         </button>
