@@ -406,7 +406,6 @@ const Toast = (props: ToastProps) => {
         toastRef.current?.style.setProperty('--swipe-amount-y', `${swipeAmount.y}px`);
       }}
     >
-      <a href="/">link</a>
       {closeButton && !toast.jsx ? (
         <button
           aria-label={closeButtonAriaLabel}
