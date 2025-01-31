@@ -309,6 +309,11 @@ const Toast = (props: ToastProps) => {
           ...toast.style,
         } as React.CSSProperties
       }
+      onDragEnd={() => {
+        setSwiping(false);
+        setSwipeDirection(null);
+        pointerStartRef.current = null;
+      }}
       onPointerDown={(event) => {
         if (disabled || !dismissible) return;
         dragStartTime.current = new Date();
@@ -821,6 +826,7 @@ const Toaster = forwardRef<HTMLElement, ToasterProps>(function Toaster(props, re
                 setExpanded(false);
               }
             }}
+            onDragEnd={() => setExpanded(false)}
             onPointerDown={(event) => {
               const isNotDismissible =
                 event.target instanceof HTMLElement && event.target.dataset.dismissible === 'false';
