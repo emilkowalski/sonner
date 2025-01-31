@@ -18,7 +18,7 @@ jobs:
       - run: pnpm build
       - run: npx playwright install --with-deps
       - run: pnpm test || exit 1
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: playwright-report
