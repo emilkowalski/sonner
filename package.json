@@ -1,6 +1,6 @@
 {
   "name": "sonner",
-  "version": "1.7.1",
+  "version": "1.7.4",
   "description": "An opinionated toast component for React.",
   "exports": {
     ".": {
@@ -41,7 +41,7 @@
     "url": "https://github.com/emilkowalski/sonner/issues"
   },
   "devDependencies": {
-    "@playwright/test": "^1.30.0",
+    "@playwright/test": "^1.49.1",
     "@types/node": "^18.11.13",
     "@types/react": "^18.0.26",
     "prettier": "^2.8.4",

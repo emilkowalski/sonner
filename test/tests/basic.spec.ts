@@ -109,15 +109,25 @@ test.describe('Basic functionality', () => {
   test("toast's dismiss callback gets executed correctly", async ({ page }) => {
     await page.getByTestId('dismiss-toast-callback').click();
     const toast = page.locator('[data-sonner-toast]');
-    const dragBoundingBox = await toast.boundingBox();
 
-    if (!dragBoundingBox) return;
-    await page.mouse.move(dragBoundingBox.x + dragBoundingBox.width / 2, dragBoundingBox.y);
+    await toast.waitFor({ state: 'visible' });
 
+    const box = await toast.boundingBox();
+    if (!box) return;
+
+    const startX = box.x + box.width / 2;
+    const startY = box.y + box.height / 2;
+
+    await page.mouse.move(startX, startY);
     await page.mouse.down();
-    await page.mouse.move(0, dragBoundingBox.y + 300);
 
+    // Small initial movement to trigger drag
+    await page.mouse.move(startX, startY + 20, { steps: 5 });
+
+    // Main swipe movement
+    await page.mouse.move(startX, startY + 300, { steps: 10 });
     await page.mouse.up();
+
     await expect(page.getByTestId('dismiss-el')).toHaveCount(1);
   });
 
@@ -176,6 +186,22 @@ test.describe('Basic functionality', () => {
     await page.getByTestId('update-toast').click();
     await expect(page.getByText('My Unupdated Toast')).toHaveCount(0);
     await expect(page.getByText('My Updated Toast')).toHaveCount(1);
+  });
+
+  test('should update toast content and duration after 3 seconds', async ({ page }) => {
+    await page.getByTestId('update-toast-duration').click();
+
+    const initialToast = page.getByText('My Unupdated Toast, Updated After 3 Seconds');
+    await expect(initialToast).toBeVisible();
+
+    await page.waitForTimeout(3000);
+    const updatedToast = page.getByText('My Updated Toast, Close After 1 Second');
+    await expect(updatedToast).toBeVisible();
+
+    await expect(initialToast).not.toBeVisible();
+
+    await page.waitForTimeout(1200);
+    await expect(updatedToast).not.toBeVisible();
   });
 
   test('cancel button is rendered with custom styles', async ({ page }) => {

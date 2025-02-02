@@ -1,6 +1,6 @@
 'use client';
 
-import React, { forwardRef } from 'react';
+import React, { forwardRef, isValidElement } from 'react';
 import ReactDOM from 'react-dom';
 
 import { CloseIcon, getAsset, Loader } from './assets';
@@ -9,6 +9,7 @@ import { toast, ToastState } from './state';
 import './styles.css';
 import {
   isAction,
+  SwipeDirection,
   type ExternalToast,
   type HeightT,
   type ToasterProps,
@@ -22,6 +23,9 @@ const VISIBLE_TOASTS_AMOUNT = 3;
 
 // Viewport padding
 const VIEWPORT_OFFSET = '32px';
+
+// Mobile viewport padding
+const MOBILE_VIEWPORT_OFFSET = '16px';
 
 // Default lifetime of a toasts (in ms)
 const TOAST_LIFETIME = 4000;
@@ -38,8 +42,23 @@ const SWIPE_THRESHOLD = 20;
 // Equal to exit animation duration
 const TIME_BEFORE_UNMOUNT = 200;
 
-function _cn(...classes: (string | undefined)[]) {
+function cn(...classes: (string | undefined)[]) {
   return classes.filter(Boolean).join(' ');
+}
+
+function getDefaultSwipeDirections(position: string): Array<SwipeDirection> {
+  const [y, x] = position.split('-');
+  const directions: Array<SwipeDirection> = [];
+
+  if (y) {
+    directions.push(y as SwipeDirection);
+  }
+
+  if (x) {
+    directions.push(x as SwipeDirection);
+  }
+
+  return directions;
 }
 
 const Toast = (props: ToastProps) => {
@@ -71,8 +90,9 @@ const Toast = (props: ToastProps) => {
     icons,
     closeButtonAriaLabel = 'Close toast',
     pauseWhenPageIsHidden,
-    cn,
   } = props;
+  const [swipeDirection, setSwipeDirection] = React.useState<'x' | 'y' | null>(null);
+  const [swipeOutDirection, setSwipeOutDirection] = React.useState<'left' | 'right' | 'up' | 'down' | null>(null);
   const [mounted, setMounted] = React.useState(false);
   const [removed, setRemoved] = React.useState(false);
   const [swiping, setSwiping] = React.useState(false);
@@ -109,7 +129,7 @@ const Toast = (props: ToastProps) => {
   const [y, x] = position.split('-');
   const toastsHeightBefore = React.useMemo(() => {
     return heights.reduce((prev, curr, reducerIndex) => {
-      // Calculate offset up until current  toast
+      // Calculate offset up until current toast
       if (reducerIndex >= heightIndex) {
         return prev;
       }
@@ -123,6 +143,10 @@ const Toast = (props: ToastProps) => {
   const disabled = toastType === 'loading';
 
   offset.current = React.useMemo(() => heightIndex * gap + toastsHeightBefore, [heightIndex, toastsHeightBefore]);
+
+  React.useEffect(() => {
+    remainingTime.current = duration;
+  }, [duration]);
 
   React.useEffect(() => {
     // Trigger enter animation without using CSS animation
@@ -272,6 +296,7 @@ const Toast = (props: ToastProps) => {
       data-type={toastType}
       data-invert={invert}
       data-swipe-out={swipeOut}
+      data-swipe-direction={swipeOutDirection}
       data-expanded={Boolean(expanded || (expandByDefault && mounted))}
       style={
         {
@@ -284,6 +309,11 @@ const Toast = (props: ToastProps) => {
           ...toast.style,
         } as React.CSSProperties
       }
+      onDragEnd={() => {
+        setSwiping(false);
+        setSwipeDirection(null);
+        pointerStartRef.current = null;
+      }}
       onPointerDown={(event) => {
         if (disabled || !dismissible) return;
         dragStartTime.current = new Date();
@@ -298,37 +328,82 @@ const Toast = (props: ToastProps) => {
         if (swipeOut || !dismissible) return;
 
         pointerStartRef.current = null;
-        const swipeAmount = Number(toastRef.current?.style.getPropertyValue('--swipe-amount').replace('px', '') || 0);
+        const swipeAmountX = Number(
+          toastRef.current?.style.getPropertyValue('--swipe-amount-x').replace('px', '') || 0,
+        );
+        const swipeAmountY = Number(
+          toastRef.current?.style.getPropertyValue('--swipe-amount-y').replace('px', '') || 0,
+        );
         const timeTaken = new Date().getTime() - dragStartTime.current?.getTime();
+
+        const swipeAmount = swipeDirection === 'x' ? swipeAmountX : swipeAmountY;
         const velocity = Math.abs(swipeAmount) / timeTaken;
 
-        // Remove only if threshold is met
         if (Math.abs(swipeAmount) >= SWIPE_THRESHOLD || velocity > 0.11) {
           setOffsetBeforeRemove(offset.current);
           toast.onDismiss?.(toast);
+
+          if (swipeDirection === 'x') {
+            setSwipeOutDirection(swipeAmountX > 0 ? 'right' : 'left');
+          } else {
+            setSwipeOutDirection(swipeAmountY > 0 ? 'down' : 'up');
+          }
+
           deleteToast();
           setSwipeOut(true);
           setIsSwiped(false);
           return;
         }
 
-        toastRef.current?.style.setProperty('--swipe-amount', '0px');
         setSwiping(false);
+        setSwipeDirection(null);
       }}
       onPointerMove={(event) => {
         if (!pointerStartRef.current || !dismissible) return;
 
-        const yPosition = event.clientY - pointerStartRef.current.y;
         const isHighlighted = window.getSelection()?.toString().length > 0;
-        const swipeAmount = y === 'top' ? Math.min(0, yPosition) : Math.max(0, yPosition);
+        if (isHighlighted) return;
 
-        if (Math.abs(swipeAmount) > 0) {
+        const yDelta = event.clientY - pointerStartRef.current.y;
+        const xDelta = event.clientX - pointerStartRef.current.x;
+
+        const swipeDirections = props.swipeDirections ?? getDefaultSwipeDirections(position);
+
+        // Determine swipe direction if not already locked
+        if (!swipeDirection && (Math.abs(xDelta) > 1 || Math.abs(yDelta) > 1)) {
+          setSwipeDirection(Math.abs(xDelta) > Math.abs(yDelta) ? 'x' : 'y');
+        }
+
+        let swipeAmount = { x: 0, y: 0 };
+
+        // Only apply swipe in the locked direction
+        if (swipeDirection === 'y') {
+          // Handle vertical swipes
+          if (swipeDirections.includes('top') || swipeDirections.includes('bottom')) {
+            if (swipeDirections.includes('top') && yDelta < 0) {
+              swipeAmount.y = yDelta;
+            } else if (swipeDirections.includes('bottom') && yDelta > 0) {
+              swipeAmount.y = yDelta;
+            }
+          }
+        } else if (swipeDirection === 'x') {
+          // Handle horizontal swipes
+          if (swipeDirections.includes('left') || swipeDirections.includes('right')) {
+            if (swipeDirections.includes('left') && xDelta < 0) {
+              swipeAmount.x = xDelta;
+            } else if (swipeDirections.includes('right') && xDelta > 0) {
+              swipeAmount.x = xDelta;
+            }
+          }
+        }
+
+        if (Math.abs(swipeAmount.x) > 0 || Math.abs(swipeAmount.y) > 0) {
           setIsSwiped(true);
         }
 
-        if (isHighlighted) return;
-
-        toastRef.current?.style.setProperty('--swipe-amount', `${swipeAmount}px`);
+        // Apply transform using both x and y values
+        toastRef.current?.style.setProperty('--swipe-amount-x', `${swipeAmount.x}px`);
+        toastRef.current?.style.setProperty('--swipe-amount-y', `${swipeAmount.y}px`);
       }}
     >
       {closeButton && !toast.jsx && toastType !== 'loading' ? (
@@ -350,7 +425,7 @@ const Toast = (props: ToastProps) => {
         </button>
       ) : null}
       {/* TODO: This can be cleaner */}
-      {toast.jsx || React.isValidElement(toast.title) ? (
+      {toast.jsx || isValidElement(toast.title) ? (
         toast.jsx ? (
           toast.jsx
         ) : typeof toast.title === 'function' ? (
@@ -385,7 +460,7 @@ const Toast = (props: ToastProps) => {
               </div>
             ) : null}
           </div>
-          {React.isValidElement(toast.cancel) ? (
+          {isValidElement(toast.cancel) ? (
             toast.cancel
           ) : toast.cancel && isAction(toast.cancel) ? (
             <button
@@ -404,7 +479,7 @@ const Toast = (props: ToastProps) => {
               {toast.cancel.label}
             </button>
           ) : null}
-          {React.isValidElement(toast.action) ? (
+          {isValidElement(toast.action) ? (
             toast.action
           ) : toast.action && isAction(toast.action) ? (
             <button
@@ -442,24 +517,70 @@ function getDocumentDirection(): ToasterProps['dir'] {
   return dirAttribute as ToasterProps['dir'];
 }
 
+function assignOffset(defaultOffset: ToasterProps['offset'], mobileOffset: ToasterProps['mobileOffset']) {
+  const styles = {} as React.CSSProperties;
+
+  [defaultOffset, mobileOffset].forEach((offset, index) => {
+    const isMobile = index === 1;
+    const prefix = isMobile ? '--mobile-offset' : '--offset';
+    const defaultValue = isMobile ? MOBILE_VIEWPORT_OFFSET : VIEWPORT_OFFSET;
+
+    function assignAll(offset: string | number) {
+      ['top', 'right', 'bottom', 'left'].forEach((key) => {
+        styles[`${prefix}-${key}`] = typeof offset === 'number' ? `${offset}px` : offset;
+      });
+    }
+
+    if (typeof offset === 'number' || typeof offset === 'string') {
+      assignAll(offset);
+    } else if (typeof offset === 'object') {
+      ['top', 'right', 'bottom', 'left'].forEach((key) => {
+        if (offset[key] === undefined) {
+          styles[`${prefix}-${key}`] = defaultValue;
+        } else {
+          styles[`${prefix}-${key}`] = typeof offset[key] === 'number' ? `${offset[key]}px` : offset[key];
+        }
+      });
+    } else {
+      assignAll(defaultValue);
+    }
+  });
+
+  return styles;
+}
+
 function useSonner() {
   const [activeToasts, setActiveToasts] = React.useState<ToastT[]>([]);
 
   React.useEffect(() => {
     return ToastState.subscribe((toast) => {
-      setActiveToasts((currentToasts) => {
-        if ('dismiss' in toast && toast.dismiss) {
-          return currentToasts.filter((t) => t.id !== toast.id);
-        }
+      if ((toast as ToastToDismiss).dismiss) {
+        setTimeout(() => {
+          ReactDOM.flushSync(() => {
+            setActiveToasts((toasts) => toasts.filter((t) => t.id !== toast.id));
+          });
+        });
+        return;
+      }
 
-        const existingToastIndex = currentToasts.findIndex((t) => t.id === toast.id);
-        if (existingToastIndex !== -1) {
-          const updatedToasts = [...currentToasts];
-          updatedToasts[existingToastIndex] = { ...updatedToasts[existingToastIndex], ...toast };
-          return updatedToasts;
-        } else {
-          return [toast, ...currentToasts];
-        }
+      // Prevent batching, temp solution.
+      setTimeout(() => {
+        ReactDOM.flushSync(() => {
+          setActiveToasts((toasts) => {
+            const indexOfExistingToast = toasts.findIndex((t) => t.id === toast.id);
+
+            // Update the toast if it already exists
+            if (indexOfExistingToast !== -1) {
+              return [
+                ...toasts.slice(0, indexOfExistingToast),
+                { ...toasts[indexOfExistingToast], ...toast },
+                ...toasts.slice(indexOfExistingToast + 1),
+              ];
+            }
+
+            return [toast, ...toasts];
+          });
+        });
       });
     });
   }, []);
@@ -478,6 +599,7 @@ const Toaster = forwardRef<HTMLElement, ToasterProps>(function Toaster(props, re
     closeButton,
     className,
     offset,
+    mobileOffset,
     theme = 'light',
     richColors,
     duration,
@@ -490,7 +612,6 @@ const Toaster = forwardRef<HTMLElement, ToasterProps>(function Toaster(props, re
     icons,
     containerAriaLabel = 'Notifications',
     pauseWhenPageIsHidden,
-    cn = _cn,
   } = props;
   const [toasts, setToasts] = React.useState<ToastT[]>([]);
   const possiblePositions = React.useMemo(() => {
@@ -643,11 +764,13 @@ const Toaster = forwardRef<HTMLElement, ToasterProps>(function Toaster(props, re
   return (
     // Remove item from normal navigation flow, only available via hotkey
     <section
+      ref={ref}
       aria-label={`${containerAriaLabel} ${hotkeyLabel}`}
       tabIndex={-1}
       aria-live="polite"
       aria-relevant="additions text"
       aria-atomic="false"
+      suppressHydrationWarning
     >
       {possiblePositions.map((position, index) => {
         const [y, x] = position.split('-');
@@ -669,10 +792,10 @@ const Toaster = forwardRef<HTMLElement, ToasterProps>(function Toaster(props, re
             style={
               {
                 '--front-toast-height': `${heights[0]?.height || 0}px`,
-                '--offset': typeof offset === 'number' ? `${offset}px` : offset || VIEWPORT_OFFSET,
                 '--width': `${TOAST_WIDTH}px`,
                 '--gap': `${gap}px`,
                 ...style,
+                ...assignOffset(offset, mobileOffset),
               } as React.CSSProperties
             }
             onBlur={(event) => {
@@ -703,6 +826,7 @@ const Toaster = forwardRef<HTMLElement, ToasterProps>(function Toaster(props, re
                 setExpanded(false);
               }
             }}
+            onDragEnd={() => setExpanded(false)}
             onPointerDown={(event) => {
               const isNotDismissible =
                 event.target instanceof HTMLElement && event.target.dataset.dismissible === 'false';
@@ -743,7 +867,7 @@ const Toaster = forwardRef<HTMLElement, ToasterProps>(function Toaster(props, re
                   loadingIcon={loadingIcon}
                   expanded={expanded}
                   pauseWhenPageIsHidden={pauseWhenPageIsHidden}
-                  cn={cn}
+                  swipeDirections={props.swipeDirections}
                 />
               ))}
           </ol>

@@ -103,7 +103,15 @@ interface ToastOptions {
   classNames?: ToastClassnames;
 }
 
-type CnFunction = (...classes: Array<string | undefined>) => string;
+type Offset =
+  | {
+      top?: string | number;
+      right?: string | number;
+      bottom?: string | number;
+      left?: string | number;
+    }
+  | string
+  | number;
 
 export interface ToasterProps {
   invert?: boolean;
@@ -119,8 +127,10 @@ export interface ToasterProps {
   toastOptions?: ToastOptions;
   className?: string;
   style?: React.CSSProperties;
-  offset?: string | number;
+  offset?: Offset;
+  mobileOffset?: Offset;
   dir?: 'rtl' | 'ltr' | 'auto';
+  swipeDirections?: SwipeDirection[];
   /**
    * @deprecated Please use the `icons` prop instead:
    * ```jsx
@@ -133,13 +143,15 @@ export interface ToasterProps {
   icons?: ToastIcons;
   containerAriaLabel?: string;
   pauseWhenPageIsHidden?: boolean;
-  cn?: CnFunction;
 }
+
+export type SwipeDirection = 'top' | 'right' | 'bottom' | 'left';
 
 export interface ToastProps {
   toast: ToastT;
   toasts: ToastT[];
   index: number;
+  swipeDirections?: SwipeDirection[];
   expanded: boolean;
   invert: boolean;
   heights: HeightT[];
@@ -163,7 +175,6 @@ export interface ToastProps {
   icons?: ToastIcons;
   closeButtonAriaLabel?: string;
   pauseWhenPageIsHidden: boolean;
-  cn: CnFunction;
   defaultRichColors?: boolean;
 }
 
