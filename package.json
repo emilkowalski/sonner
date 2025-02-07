@@ -4,9 +4,15 @@
   "description": "An opinionated toast component for React.",
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.js"
+      "import": {
+        "types": "./dist/index.d.mts",
+        "default": "./dist/index.mjs"
+      },
+      "require": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "default": "./dist/index.js"
     },
     "./dist/styles.css": "./dist/styles.css"
   },
@@ -16,8 +22,9 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsup src/index.tsx && cp src/styles.css dist/styles.css",
-    "dev": "tsup src/index.tsx --watch",
+    "dev": "bunchee --watch",
+    "build": "bunchee && cp src/styles.css dist/styles.css",
+    "type-check": "tsc --noEmit",
     "dev:website": "turbo run dev --filter=website...",
     "dev:test": "turbo run dev --filter=test...",
     "format": "prettier --write .",
@@ -44,10 +51,10 @@
     "@playwright/test": "^1.49.1",
     "@types/node": "^18.11.13",
     "@types/react": "^18.0.26",
+    "bunchee": "^6.3.3",
     "prettier": "^2.8.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "tsup": "^6.4.0",
     "turbo": "1.6",
     "typescript": "^4.8.4"
   },
