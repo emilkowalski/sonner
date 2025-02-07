@@ -133,20 +133,20 @@ test.describe('Basic functionality', () => {
 
   test("toaster's theme should be light", async ({ page }) => {
     await page.getByTestId('infinity-toast').click();
-    await expect(page.locator('[data-sonner-toaster]')).toHaveAttribute('data-theme', 'light');
+    await expect(page.locator('[data-sonner-toaster]')).toHaveAttribute('data-sonner-theme', 'light');
   });
 
   test("toaster's theme should be dark", async ({ page }) => {
     await page.goto('/?theme=dark');
     await page.getByTestId('infinity-toast').click();
-    await expect(page.locator('[data-sonner-toaster]')).toHaveAttribute('data-theme', 'dark');
+    await expect(page.locator('[data-sonner-toaster]')).toHaveAttribute('data-sonner-theme', 'dark');
   });
 
   test("toaster's theme should be changed", async ({ page }) => {
     await page.getByTestId('infinity-toast').click();
-    await expect(page.locator('[data-sonner-toaster]')).toHaveAttribute('data-theme', 'light');
+    await expect(page.locator('[data-sonner-toaster]')).toHaveAttribute('data-sonner-theme', 'light');
     await page.getByTestId('theme-button').click();
-    await expect(page.locator('[data-sonner-toaster]')).toHaveAttribute('data-theme', 'dark');
+    await expect(page.locator('[data-sonner-toaster]')).toHaveAttribute('data-sonner-theme', 'dark');
   });
 
   test('return focus to the previous focused element', async ({ page }) => {
