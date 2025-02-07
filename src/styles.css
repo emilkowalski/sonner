@@ -295,6 +295,14 @@ html[dir='rtl'],
   transition: opacity 400ms;
 }
 
+[data-sonner-toast][data-x-position='right'] {
+  right: 0;
+}
+
+[data-sonner-toast][data-x-position='left'] {
+  left: 0;
+}
+
 [data-sonner-toast][data-expanded='false'][data-front='false'][data-styled='true'] > * {
   opacity: 0;
 }
