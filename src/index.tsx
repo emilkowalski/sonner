@@ -650,7 +650,8 @@ const Toaster = forwardRef<HTMLElement, ToasterProps>(function Toaster(props, re
   React.useEffect(() => {
     return ToastState.subscribe((toast) => {
       if ((toast as ToastToDismiss).dismiss) {
-        setToasts((toasts) => toasts.map((t) => (t.id === toast.id ? { ...t, delete: true } : t)));
+        const map = toasts.map((t) => (t.id === toast.id ? { ...t, delete: true } : t));
+        setToasts(map);
         return;
       }
 
@@ -674,7 +675,7 @@ const Toaster = forwardRef<HTMLElement, ToasterProps>(function Toaster(props, re
         });
       });
     });
-  }, []);
+  }, [toasts]);
 
   React.useEffect(() => {
     if (theme !== 'system') {

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { StrictMode } from 'react';
 import { Toaster } from 'sonner';
 import { Installation } from '@/src/components/Installation';
 import { Hero } from '@/src/components/Hero';
