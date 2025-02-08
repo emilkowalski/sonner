@@ -85,7 +85,8 @@ class Observer {
         this.subscribers.forEach((subscriber) => subscriber({ id: toast.id, dismiss: true }));
       });
     }
-    this.subscribers.forEach((subscriber) => subscriber({ id, dismiss: true }));
+
+    requestAnimationFrame(() => this.subscribers.forEach((subscriber) => subscriber({ id, dismiss: true })));
     return id;
   };
 
