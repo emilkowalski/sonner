@@ -353,6 +353,9 @@ const Toast = (props: ToastProps) => {
           setSwipeOut(true);
           setIsSwiped(false);
           return;
+        } else {
+          toastRef.current?.style.setProperty('--swipe-amount-x', `0px`);
+          toastRef.current?.style.setProperty('--swipe-amount-y', `0px`);
         }
 
         setSwiping(false);
