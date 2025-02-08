@@ -131,7 +131,7 @@ class Observer {
       });
     }
 
-    const p = promise instanceof Promise ? promise : promise();
+    const p = Promise.resolve(promise instanceof Function ? promise() : promise);
 
     let shouldDismiss = id !== undefined;
     let result: ['resolve', ToastData] | ['reject', unknown];
