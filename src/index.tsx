@@ -425,81 +425,69 @@ const Toast = (props: ToastProps) => {
         </button>
       ) : null}
       {/* TODO: This can be cleaner */}
-      {toast.jsx || isValidElement(toast.title) ? (
-        toast.jsx ? (
-          toast.jsx
-        ) : typeof toast.title === 'function' ? (
-          toast.title()
-        ) : (
-          toast.title
-        )
-      ) : (
-        <>
-          {toastType || toast.icon || toast.promise ? (
-            <div data-icon="" className={cn(classNames?.icon, toast?.classNames?.icon)}>
-              {toast.promise || (toast.type === 'loading' && !toast.icon) ? toast.icon || getLoadingIcon() : null}
-              {toast.type !== 'loading' ? toast.icon || icons?.[toastType] || getAsset(toastType) : null}
-            </div>
-          ) : null}
+      {toastType || toast.icon || toast.promise ? (
+        <div data-icon="" className={cn(classNames?.icon, toast?.classNames?.icon)}>
+          {toast.promise || (toast.type === 'loading' && !toast.icon) ? toast.icon || getLoadingIcon() : null}
+          {toast.type !== 'loading' ? toast.icon || icons?.[toastType] || getAsset(toastType) : null}
+        </div>
+      ) : null}
 
-          <div data-content="" className={cn(classNames?.content, toast?.classNames?.content)}>
-            <div data-title="" className={cn(classNames?.title, toast?.classNames?.title)}>
-              {typeof toast.title === 'function' ? toast.title() : toast.title}
-            </div>
-            {toast.description ? (
-              <div
-                data-description=""
-                className={cn(
-                  descriptionClassName,
-                  toastDescriptionClassname,
-                  classNames?.description,
-                  toast?.classNames?.description,
-                )}
-              >
-                {typeof toast.description === 'function' ? toast.description() : toast.description}
-              </div>
-            ) : null}
+      <div data-content="" className={cn(classNames?.content, toast?.classNames?.content)}>
+        <div data-title="" className={cn(classNames?.title, toast?.classNames?.title)}>
+          {toast.jsx ? toast.jsx : typeof toast.title === 'function' ? toast.title() : toast.title}
+        </div>
+        {toast.description ? (
+          <div
+            data-description=""
+            className={cn(
+              descriptionClassName,
+              toastDescriptionClassname,
+              classNames?.description,
+              toast?.classNames?.description,
+            )}
+          >
+            {typeof toast.description === 'function' ? toast.description() : toast.description}
           </div>
-          {isValidElement(toast.cancel) ? (
-            toast.cancel
-          ) : toast.cancel && isAction(toast.cancel) ? (
-            <button
-              data-button
-              data-cancel
-              style={toast.cancelButtonStyle || cancelButtonStyle}
-              onClick={(event) => {
-                // We need to check twice because typescript
-                if (!isAction(toast.cancel)) return;
-                if (!dismissible) return;
-                toast.cancel.onClick?.(event);
-                deleteToast();
-              }}
-              className={cn(classNames?.cancelButton, toast?.classNames?.cancelButton)}
-            >
-              {toast.cancel.label}
-            </button>
-          ) : null}
-          {isValidElement(toast.action) ? (
-            toast.action
-          ) : toast.action && isAction(toast.action) ? (
-            <button
-              data-button
-              data-action
-              style={toast.actionButtonStyle || actionButtonStyle}
-              onClick={(event) => {
-                // We need to check twice because typescript
-                if (!isAction(toast.action)) return;
-                toast.action.onClick?.(event);
-                if (event.defaultPrevented) return;
-                deleteToast();
-              }}
-              className={cn(classNames?.actionButton, toast?.classNames?.actionButton)}
-            >
-              {toast.action.label}
-            </button>
-          ) : null}
-        </>
-      )}
+        ) : null}
+      </div>
+      {isValidElement(toast.cancel) ? (
+        toast.cancel
+      ) : toast.cancel && isAction(toast.cancel) ? (
+        <button
+          data-button
+          data-cancel
+          style={toast.cancelButtonStyle || cancelButtonStyle}
+          onClick={(event) => {
+            // We need to check twice because typescript
+            if (!isAction(toast.cancel)) return;
+            if (!dismissible) return;
+            toast.cancel.onClick?.(event);
+            deleteToast();
+          }}
+          className={cn(classNames?.cancelButton, toast?.classNames?.cancelButton)}
+        >
+          {toast.cancel.label}
+        </button>
+      ) : null}
+      {isValidElement(toast.action) ? (
+        toast.action
+      ) : toast.action && isAction(toast.action) ? (
+        <button
+          data-button
+          data-action
+          style={toast.actionButtonStyle || actionButtonStyle}
+          onClick={(event) => {
+            // We need to check twice because typescript
+            if (!isAction(toast.action)) return;
+            toast.action.onClick?.(event);
+            if (event.defaultPrevented) return;
+            deleteToast();
+          }}
+          className={cn(classNames?.actionButton, toast?.classNames?.actionButton)}
+        >
+          {toast.action.label}
+        </button>
+      ) : null}
     </li>
   );
 };
