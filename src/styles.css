@@ -186,6 +186,7 @@ html[dir='rtl'],
   margin-left: var(--toast-button-margin-start);
   margin-right: var(--toast-button-margin-end);
   border: none;
+  font-weight: 500;
   cursor: pointer;
   outline: none;
   display: flex;
