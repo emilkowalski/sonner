@@ -122,7 +122,11 @@ html[dir='rtl'],
 [data-sonner-toast] [data-description] {
   font-weight: 400;
   line-height: 1.4;
-  color: inherit;
+  color: #3f3f3f;
+}
+
+[data-sonner-toaster][data-sonner-theme='dark'] [data-description] {
+  color: hsl(0, 0%, 91%);
 }
 
 [data-sonner-toast] [data-title] {
@@ -199,7 +203,7 @@ html[dir='rtl'],
   background: rgba(0, 0, 0, 0.08);
 }
 
-[data-sonner-toast][data-sonner-theme='dark'] [data-cancel] {
+[data-sonner-toaster][data-sonner-theme='dark'] [data-cancel] {
   background: rgba(255, 255, 255, 0.3);
 }
 
@@ -451,15 +455,15 @@ html[dir='rtl'],
   --normal-text: var(--gray12);
 
   --success-bg: hsl(143, 85%, 96%);
-  --success-border: hsl(145, 92%, 91%);
+  --success-border: hsl(145, 92%, 87%);
   --success-text: hsl(140, 100%, 27%);
 
   --info-bg: hsl(208, 100%, 97%);
-  --info-border: hsl(221, 91%, 91%);
+  --info-border: hsl(221, 91%, 93%);
   --info-text: hsl(210, 92%, 45%);
 
   --warning-bg: hsl(49, 100%, 97%);
-  --warning-border: hsl(49, 91%, 91%);
+  --warning-border: hsl(49, 91%, 84%);
   --warning-text: hsl(31, 92%, 45%);
 
   --error-bg: hsl(359, 100%, 97%);
@@ -491,11 +495,11 @@ html[dir='rtl'],
   --success-text: hsl(150, 86%, 65%);
 
   --info-bg: hsl(215, 100%, 6%);
-  --info-border: hsl(223, 100%, 12%);
+  --info-border: hsl(223, 43%, 17%);
   --info-text: hsl(216, 87%, 65%);
 
   --warning-bg: hsl(64, 100%, 6%);
-  --warning-border: hsl(60, 100%, 12%);
+  --warning-border: hsl(60, 100%, 9%);
   --warning-text: hsl(46, 87%, 65%);
 
   --error-bg: hsl(358, 76%, 10%);

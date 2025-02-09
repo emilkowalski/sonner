@@ -26,7 +26,7 @@ export default function Home() {
         closeButton={closeButton}
         expand={expand}
         position={position}
-	duration={Infinity}
+        duration={Infinity}
       />
       <main className="container">
         <Hero />
