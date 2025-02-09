@@ -21,6 +21,7 @@ export default function Home() {
     <div className="wrapper light">
       <Head />
       <Toaster
+        theme="light"
         richColors={richColors}
         closeButton={closeButton}
         expand={expand}
