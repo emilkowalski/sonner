@@ -172,6 +172,23 @@ export default function Home({ searchParams }: any) {
         Updated Toast
       </button>
       <button
+        data-testid="update-toast-duration"
+        className="button"
+        onClick={() => {
+          const toastId = toast('My Unupdated Toast, Updated After 3 Seconds', {
+            duration: 10000,
+          });
+          setTimeout(() => {
+            toast('My Updated Toast, Close After 1 Second', {
+              id: toastId,
+              duration: 1000,
+            });
+          }, 3000);
+        }}
+      >
+        Updated Toast Duration
+      </button>
+      <button
         data-testid="string-description"
         className="button"
         onClick={() => toast('Custom Description', { description: 'string description' })}
