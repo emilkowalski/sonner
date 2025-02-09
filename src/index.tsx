@@ -28,7 +28,7 @@ const VIEWPORT_OFFSET = '24px';
 const MOBILE_VIEWPORT_OFFSET = '16px';
 
 // Default lifetime of a toasts (in ms)
-const TOAST_LIFETIME = 5000;
+const TOAST_LIFETIME = 4000;
 
 // Default toast width
 const TOAST_WIDTH = 356;
