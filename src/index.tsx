@@ -22,13 +22,13 @@ import {
 const VISIBLE_TOASTS_AMOUNT = 3;
 
 // Viewport padding
-const VIEWPORT_OFFSET = '32px';
+const VIEWPORT_OFFSET = '24px';
 
 // Mobile viewport padding
 const MOBILE_VIEWPORT_OFFSET = '16px';
 
 // Default lifetime of a toasts (in ms)
-const TOAST_LIFETIME = 4000;
+const TOAST_LIFETIME = 5000;
 
 // Default toast width
 const TOAST_WIDTH = 356;
