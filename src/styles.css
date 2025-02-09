@@ -132,7 +132,11 @@ html[dir='rtl'],
 [data-sonner-toast] [data-description] {
   font-weight: 400;
   line-height: 1.4;
-  color: inherit;
+  color: #3f3f3f;
+}
+
+[data-sonner-toaster][data-sonner-theme='dark'] [data-description] {
+  color: hsl(0, 0%, 91%);
 }
 
 [data-sonner-toast] [data-title] {
@@ -209,7 +213,7 @@ html[dir='rtl'],
   background: rgba(0, 0, 0, 0.08);
 }
 
-[data-sonner-toast][data-sonner-theme='dark'] [data-cancel] {
+[data-sonner-toaster][data-sonner-theme='dark'] [data-cancel] {
   background: rgba(255, 255, 255, 0.3);
 }
 
