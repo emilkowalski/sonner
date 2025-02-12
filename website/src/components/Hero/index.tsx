@@ -24,6 +24,15 @@ export const Hero = () => {
             toast('Sonner', {
               description: 'An opinionated toast component for React.',
             });
+            toast('Sonner', {
+              description: 'An opinionated toast component for React.',
+            });
+            toast('Sonner', {
+              description: 'An opinionated toast component for React.',
+            });
+            toast('Sonner', {
+              description: 'An opinionated toast component for React.',
+            });
           }}
           className={styles.button}
         >
