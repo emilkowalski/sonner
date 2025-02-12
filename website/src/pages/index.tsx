@@ -27,9 +27,6 @@ export default function Home() {
         expand={expand}
         position={position}
         duration={Infinity}
-        toastOptions={{
-          unstyled: true,
-        }}
       />
       <main className="container">
         <Hero />
