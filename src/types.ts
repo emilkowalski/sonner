@@ -59,15 +59,33 @@ export interface ToastT {
   icon?: React.ReactNode;
   jsx?: React.ReactNode;
   richColors?: boolean;
+  /** Whether to invert the toast colors, useful if you want your toast to stand out
+   *
+   * @default false
+   */
   invert?: boolean;
+  /** Whether to show a close button on the toast */
   closeButton?: boolean;
+  /**
+   * Whether the user is able to dismiss the toast by swiping.
+   * @default true
+   */
   dismissible?: boolean;
+  /** Description of the toast, rendered below the title */
   description?: (() => React.ReactNode) | React.ReactNode;
+  /**
+   * How long the toast should stay visible (in ms).
+   * @default 4000
+   */
   duration?: number;
   delete?: boolean;
+  /** Action button of the toast */
   action?: Action | React.ReactNode;
+  /** Cancel button of the toast */
   cancel?: Action | React.ReactNode;
+  /** Callback when the toast is dismissed either programmatically or by swiping */
   onDismiss?: (toast: ToastT) => void;
+  /** Callback when the toast is automatically closed */
   onAutoClose?: (toast: ToastT) => void;
   promise?: PromiseT;
   cancelButtonStyle?: React.CSSProperties;

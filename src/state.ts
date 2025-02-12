@@ -209,11 +209,12 @@ export const ToastState = new Observer();
 const toastFunction = (message: titleT, data?: ExternalToast) => {
   const id = data?.id || toastsCounter++;
 
-  ToastState.addToast({
-    title: message,
+  ToastState.create({
+    message,
     ...data,
     id,
   });
+
   return id;
 };
 
