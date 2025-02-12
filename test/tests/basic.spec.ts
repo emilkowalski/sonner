@@ -81,18 +81,38 @@ test.describe('Basic functionality', () => {
 
   test('toast is not removed when hovered', async ({ page }) => {
     await page.getByTestId('default-button').click();
+
+    // Wait for toast to be visible first
+    await expect(page.locator('[data-sonner-toast]')).toBeVisible();
+
+    // Hover the toast
     await page.hover('[data-sonner-toast]');
-    const timeout = new Promise((resolve) => setTimeout(resolve, 5000));
-    await timeout;
+
+    // Wait a bit to ensure hover is registered
+    await page.waitForTimeout(100);
+
+    // Create a longer timeout to verify toast persists
+    await page.waitForTimeout(5000);
+
+    // Verify toast is still visible
+    await expect(page.locator('[data-sonner-toast]')).toBeVisible();
     await expect(page.locator('[data-sonner-toast]')).toHaveCount(1);
   });
 
   test('toast is not removed if duration is set to infinity', async ({ page }) => {
     await page.getByTestId('infinity-toast').click();
-    await page.hover('[data-sonner-toast]');
-    const timeout = new Promise((resolve) => setTimeout(resolve, 5000));
-    await timeout;
-    await expect(page.locator('[data-sonner-toast]')).toHaveCount(1);
+
+    await expect(page.locator('[data-sonner-toast]')).toBeVisible();
+
+    const toast = page.locator('[data-sonner-toast]');
+    await toast.hover({ force: true });
+
+    await page.waitForTimeout(100);
+
+    await page.waitForTimeout(5000);
+
+    await expect(toast).toBeVisible();
+    await expect(toast).toHaveCount(1);
   });
 
   test('toast is not removed when event prevented in action', async ({ page }) => {

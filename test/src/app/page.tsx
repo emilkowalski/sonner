@@ -139,11 +139,13 @@ export default function Home({ searchParams }: any) {
         className="button"
         onClick={() =>
           toast('My Toast', {
-            onDismiss: () => setShowDismiss(true),
+            onDismiss: () => {
+              setShowDismiss(true);
+            },
           })
         }
       >
-        Render Toast With onAutoClose callback
+        Dismiss toast callback
       </button>
       <button
         data-testid="non-dismissible-toast"

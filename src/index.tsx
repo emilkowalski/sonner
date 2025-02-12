@@ -341,6 +341,7 @@ const Toast = (props: ToastProps) => {
 
         if (Math.abs(swipeAmount) >= SWIPE_THRESHOLD || velocity > 0.11) {
           setOffsetBeforeRemove(offset.current);
+
           toast.onDismiss?.(toast);
 
           if (swipeDirection === 'x') {
