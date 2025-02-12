@@ -1,9 +1,13 @@
 import { toast } from 'sonner';
-
+import React from 'react';
 import styles from './hero.module.css';
 import Link from 'next/link';
 
 export const Hero = () => {
+  React.useEffect(() => {
+    const test = toast.success('Event has been created');
+    toast.dismiss(test);
+  }, []);
   return (
     <div className={styles.wrapper}>
       <div className={styles.toastWrapper}>

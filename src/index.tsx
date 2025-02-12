@@ -643,7 +643,10 @@ const Toaster = forwardRef<HTMLElement, ToasterProps>(function Toaster(props, re
     return ToastState.subscribe((toast) => {
       if ((toast as ToastToDismiss).dismiss) {
         const map = toasts.map((t) => (t.id === toast.id ? { ...t, delete: true } : t));
-        setToasts(map);
+        // Prevent batching of other state updates
+        requestAnimationFrame(() => {
+          setToasts(map);
+        });
         return;
       }
 
