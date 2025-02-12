@@ -214,6 +214,7 @@ export default function Home({ searchParams }: any) {
       {showAutoClose ? <div data-testid="auto-close-el" /> : null}
       {showDismiss ? <div data-testid="dismiss-el" /> : null}
       <Toaster
+        offset={32}
         position={searchParams.position || 'bottom-right'}
         toastOptions={{
           actionButtonStyle: { backgroundColor: 'rgb(219, 239, 255)' },
