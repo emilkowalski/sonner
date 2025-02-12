@@ -1,6 +1,6 @@
 'use client';
 
-import React, { forwardRef, isValidElement } from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom';
 
 import { CloseIcon, getAsset, Loader } from './assets';
@@ -454,7 +454,7 @@ const Toast = (props: ToastProps) => {
           </div>
         ) : null}
       </div>
-      {isValidElement(toast.cancel) ? (
+      {React.isValidElement(toast.cancel) ? (
         toast.cancel
       ) : toast.cancel && isAction(toast.cancel) ? (
         <button
@@ -473,7 +473,7 @@ const Toast = (props: ToastProps) => {
           {toast.cancel.label}
         </button>
       ) : null}
-      {isValidElement(toast.action) ? (
+      {React.isValidElement(toast.action) ? (
         toast.action
       ) : toast.action && isAction(toast.action) ? (
         <button
@@ -582,7 +582,7 @@ function useSonner() {
   };
 }
 
-const Toaster = forwardRef<HTMLElement, ToasterProps>(function Toaster(props, ref) {
+const Toaster = React.forwardRef<HTMLElement, ToasterProps>(function Toaster(props, ref) {
   const {
     invert,
     position = 'bottom-right',
@@ -643,27 +643,28 @@ const Toaster = forwardRef<HTMLElement, ToasterProps>(function Toaster(props, re
     return ToastState.subscribe((toast) => {
       if ((toast as ToastToDismiss).dismiss) {
         const map = toasts.map((t) => (t.id === toast.id ? { ...t, delete: true } : t));
-        setToasts(map);
+        // Prevent batching of other state updates
+        requestAnimationFrame(() => {
+          setToasts(map);
+        });
         return;
       }
 
       // Prevent batching, temp solution.
-      setTimeout(() => {
-        ReactDOM.flushSync(() => {
-          setToasts((toasts) => {
-            const indexOfExistingToast = toasts.findIndex((t) => t.id === toast.id);
+      ReactDOM.flushSync(() => {
+        setToasts((toasts) => {
+          const indexOfExistingToast = toasts.findIndex((t) => t.id === toast.id);
 
-            // Update the toast if it already exists
-            if (indexOfExistingToast !== -1) {
-              return [
-                ...toasts.slice(0, indexOfExistingToast),
-                { ...toasts[indexOfExistingToast], ...toast },
-                ...toasts.slice(indexOfExistingToast + 1),
-              ];
-            }
+          // Update the toast if it already exists
+          if (indexOfExistingToast !== -1) {
+            return [
+              ...toasts.slice(0, indexOfExistingToast),
+              { ...toasts[indexOfExistingToast], ...toast },
+              ...toasts.slice(indexOfExistingToast + 1),
+            ];
+          }
 
-            return [toast, ...toasts];
-          });
+          return [toast, ...toasts];
         });
       });
     });
@@ -869,5 +870,6 @@ const Toaster = forwardRef<HTMLElement, ToasterProps>(function Toaster(props, re
     </section>
   );
 });
+
 export { toast, Toaster, type ExternalToast, type ToastT, type ToasterProps, useSonner };
 export { type ToastClassnames, type ToastToDismiss, type Action } from './types';
