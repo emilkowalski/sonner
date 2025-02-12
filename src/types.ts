@@ -132,35 +132,69 @@ type Offset =
   | number;
 
 export interface ToasterProps {
+  /** Whether to invert the toast colors, useful if you want your toast to stand out
+   *
+   * @default false
+   */
   invert?: boolean;
   theme?: 'light' | 'dark' | 'system';
   position?: Position;
+  /**
+   * The keys to use as the keyboard shortcut that will move focus to the toast viewport.
+   * @default ['altKey', 'KeyT']
+   */
   hotkey?: string[];
   richColors?: boolean;
-  expand?: boolean;
-  duration?: number;
-  gap?: number;
-  visibleToasts?: number;
-  closeButton?: boolean;
-  toastOptions?: ToastOptions;
-  className?: string;
-  style?: React.CSSProperties;
-  offset?: Offset;
-  mobileOffset?: Offset;
-  dir?: 'rtl' | 'ltr' | 'auto';
-  swipeDirections?: SwipeDirection[];
-  /**
-   * @deprecated Please use the `icons` prop instead:
-   * ```jsx
-   * <Toaster
-   *   icons={{ loading: <LoadingIcon /> }}
-   * />
-   * ```
+  /** Disables toast stacking and renders them on top of each other if `true`
+   *
+   * @default false
    */
-  loadingIcon?: React.ReactNode;
+  expand?: boolean;
+  /**
+   * How long the toast should stay visible (in ms). Applies to all toasts.
+   *
+   * @default 4000
+   */
+  duration?: number;
+  /** The gap between toasts.
+   *
+   * @default 14
+   */
+  gap?: number;
+  /** The maximum number of toasts that can be visible at once.
+   *
+   * @default 3
+   */
+  visibleToasts?: number;
+  /** Whether to show a close button on the toast. Applies to all toasts.
+   *
+   * @default false
+   */
+  closeButton?: boolean;
+  /** Options for the toast. Applies to all toasts. */
+  toastOptions?: ToastOptions;
+  /** Toaster's class name. */
+  className?: string;
+  /** Toaster's style. */
+  style?: React.CSSProperties;
+  /** Offset from the edge of the screen. Can either be a number or an object with top, right, bottom, and left properties.
+   *
+   * @default 24
+   */
+  offset?: Offset;
+  /** Offset from the edge of the screen on mobile (< 600px). Can either be a number or an object with top, right, bottom, and left properties.
+   *
+   * @default 16
+   */
+  mobileOffset?: Offset;
+  /** Text direction. */
+  dir?: 'rtl' | 'ltr' | 'auto';
+  /** The directions in which the toast can be swiped to dismiss. */
+  swipeDirections?: SwipeDirection[];
+  /** Icons for the toast. */
   icons?: ToastIcons;
+  /** Aria label for the container. */
   containerAriaLabel?: string;
-  pauseWhenPageIsHidden?: boolean;
 }
 
 export type SwipeDirection = 'top' | 'right' | 'bottom' | 'left';
@@ -188,11 +222,9 @@ export interface ToastProps {
   className?: string;
   unstyled?: boolean;
   descriptionClassName?: string;
-  loadingIcon?: React.ReactNode;
   classNames?: ToastClassnames;
   icons?: ToastIcons;
   closeButtonAriaLabel?: string;
-  pauseWhenPageIsHidden: boolean;
   defaultRichColors?: boolean;
 }
 
