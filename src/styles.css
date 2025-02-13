@@ -218,6 +218,7 @@ html[dir='rtl'],
   align-items: center;
   padding: 0;
   color: var(--gray12);
+  background: var(--normal-bg);
   border: 1px solid var(--gray4);
   transform: var(--toast-close-button-transform);
   border-radius: 50%;
