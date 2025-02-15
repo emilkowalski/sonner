@@ -368,6 +368,12 @@ const Toast = (props: ToastProps) => {
 
         let swipeAmount = { x: 0, y: 0 };
 
+        const getDampening = (delta: number) => {
+          const factor = Math.abs(delta) / 20;
+
+          return 1 / (1.5 + factor);
+        };
+
         // Only apply swipe in the locked direction
         if (swipeDirection === 'y') {
           // Handle vertical swipes
@@ -376,6 +382,9 @@ const Toast = (props: ToastProps) => {
               swipeAmount.y = yDelta;
             } else if (swipeDirections.includes('bottom') && yDelta > 0) {
               swipeAmount.y = yDelta;
+            } else {
+              // Apply progressive dampening for opposite direction
+              swipeAmount.y = yDelta * getDampening(yDelta);
             }
           }
         } else if (swipeDirection === 'x') {
@@ -385,6 +394,9 @@ const Toast = (props: ToastProps) => {
               swipeAmount.x = xDelta;
             } else if (swipeDirections.includes('right') && xDelta > 0) {
               swipeAmount.x = xDelta;
+            } else {
+              // Apply progressive dampening for opposite direction
+              swipeAmount.x = xDelta * getDampening(xDelta);
             }
           }
         }
