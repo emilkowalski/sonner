@@ -131,18 +131,8 @@ export interface ToasterProps {
   mobileOffset?: Offset;
   dir?: 'rtl' | 'ltr' | 'auto';
   swipeDirections?: SwipeDirection[];
-  /**
-   * @deprecated Please use the `icons` prop instead:
-   * ```jsx
-   * <Toaster
-   *   icons={{ loading: <LoadingIcon /> }}
-   * />
-   * ```
-   */
-  loadingIcon?: React.ReactNode;
   icons?: ToastIcons;
   containerAriaLabel?: string;
-  pauseWhenPageIsHidden?: boolean;
 }
 
 export type SwipeDirection = 'top' | 'right' | 'bottom' | 'left';
@@ -174,7 +164,6 @@ export interface ToastProps {
   classNames?: ToastClassnames;
   icons?: ToastIcons;
   closeButtonAriaLabel?: string;
-  pauseWhenPageIsHidden: boolean;
   defaultRichColors?: boolean;
 }
 
