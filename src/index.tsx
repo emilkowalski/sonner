@@ -37,7 +37,7 @@ const TOAST_WIDTH = 356;
 const GAP = 14;
 
 // Threshold to dismiss a toast
-const SWIPE_THRESHOLD = 20;
+const SWIPE_THRESHOLD = 45;
 
 // Equal to exit animation duration
 const TIME_BEFORE_UNMOUNT = 200;
@@ -378,25 +378,25 @@ const Toast = (props: ToastProps) => {
         if (swipeDirection === 'y') {
           // Handle vertical swipes
           if (swipeDirections.includes('top') || swipeDirections.includes('bottom')) {
-            if (swipeDirections.includes('top') && yDelta < 0) {
-              swipeAmount.y = yDelta;
-            } else if (swipeDirections.includes('bottom') && yDelta > 0) {
+            if ((swipeDirections.includes('top') && yDelta < 0) || (swipeDirections.includes('bottom') && yDelta > 0)) {
               swipeAmount.y = yDelta;
             } else {
-              // Apply progressive dampening for opposite direction
-              swipeAmount.y = yDelta * getDampening(yDelta);
+              // Smoothly transition to dampened movement
+              const dampenedDelta = yDelta * getDampening(yDelta);
+              // Ensure we don't jump when transitioning to dampened movement
+              swipeAmount.y = Math.abs(dampenedDelta) < Math.abs(yDelta) ? dampenedDelta : yDelta;
             }
           }
         } else if (swipeDirection === 'x') {
           // Handle horizontal swipes
           if (swipeDirections.includes('left') || swipeDirections.includes('right')) {
-            if (swipeDirections.includes('left') && xDelta < 0) {
-              swipeAmount.x = xDelta;
-            } else if (swipeDirections.includes('right') && xDelta > 0) {
+            if ((swipeDirections.includes('left') && xDelta < 0) || (swipeDirections.includes('right') && xDelta > 0)) {
               swipeAmount.x = xDelta;
             } else {
-              // Apply progressive dampening for opposite direction
-              swipeAmount.x = xDelta * getDampening(xDelta);
+              // Smoothly transition to dampened movement
+              const dampenedDelta = xDelta * getDampening(xDelta);
+              // Ensure we don't jump when transitioning to dampened movement
+              swipeAmount.x = Math.abs(dampenedDelta) < Math.abs(xDelta) ? dampenedDelta : xDelta;
             }
           }
         }
@@ -869,3 +869,4 @@ const Toaster = React.forwardRef<HTMLElement, ToasterProps>(function Toaster(pro
 
 export { toast, Toaster, type ExternalToast, type ToastT, type ToasterProps, useSonner };
 export { type ToastClassnames, type ToastToDismiss, type Action } from './types';
+ifconfig;
