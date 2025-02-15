@@ -84,12 +84,10 @@ const Toast = (props: ToastProps) => {
     duration: durationFromToaster,
     position,
     gap,
-    loadingIcon: loadingIconProp,
     expandByDefault,
     classNames,
     icons,
     closeButtonAriaLabel = 'Close toast',
-    pauseWhenPageIsHidden,
   } = props;
   const [swipeDirection, setSwipeDirection] = React.useState<'x' | 'y' | null>(null);
   const [swipeOutDirection, setSwipeOutDirection] = React.useState<'left' | 'right' | 'up' | 'down' | null>(null);
@@ -226,14 +224,14 @@ const Toast = (props: ToastProps) => {
       }, remainingTime.current);
     };
 
-    if (expanded || interacting || (pauseWhenPageIsHidden && isDocumentHidden)) {
+    if (expanded || interacting || isDocumentHidden) {
       pauseTimer();
     } else {
       startTimer();
     }
 
     return () => clearTimeout(timeoutId);
-  }, [expanded, interacting, toast, toastType, pauseWhenPageIsHidden, isDocumentHidden, deleteToast]);
+  }, [expanded, interacting, toast, toastType, isDocumentHidden, deleteToast]);
 
   React.useEffect(() => {
     if (toast.delete) {
@@ -253,16 +251,6 @@ const Toast = (props: ToastProps) => {
       );
     }
 
-    if (loadingIconProp) {
-      return (
-        <div
-          className={cn(classNames?.loader, toast?.classNames?.loader, 'sonner-loader')}
-          data-visible={toastType === 'loading'}
-        >
-          {loadingIconProp}
-        </div>
-      );
-    }
     return <Loader className={cn(classNames?.loader, toast?.classNames?.loader)} visible={toastType === 'loading'} />;
   }
 
@@ -600,10 +588,8 @@ const Toaster = React.forwardRef<HTMLElement, ToasterProps>(function Toaster(pro
     toastOptions,
     dir = getDocumentDirection(),
     gap = GAP,
-    loadingIcon,
     icons,
     containerAriaLabel = 'Notifications',
-    pauseWhenPageIsHidden,
   } = props;
   const [toasts, setToasts] = React.useState<ToastT[]>([]);
   const possiblePositions = React.useMemo(() => {
@@ -858,9 +844,7 @@ const Toaster = React.forwardRef<HTMLElement, ToasterProps>(function Toaster(pro
                   setHeights={setHeights}
                   expandByDefault={expand}
                   gap={gap}
-                  loadingIcon={loadingIcon}
                   expanded={expanded}
-                  pauseWhenPageIsHidden={pauseWhenPageIsHidden}
                   swipeDirections={props.swipeDirections}
                 />
               ))}
