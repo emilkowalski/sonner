@@ -109,6 +109,7 @@ interface ToastOptions {
   duration?: number;
   unstyled?: boolean;
   classNames?: ToastClassnames;
+  closeButtonAriaLabel?: string;
 }
 
 type Offset =

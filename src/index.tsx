@@ -850,6 +850,7 @@ const Toaster = React.forwardRef<HTMLElement, ToasterProps>(function Toaster(pro
                   classNames={toastOptions?.classNames}
                   cancelButtonStyle={toastOptions?.cancelButtonStyle}
                   actionButtonStyle={toastOptions?.actionButtonStyle}
+                  closeButtonAriaLabel={toastOptions?.closeButtonAriaLabel}
                   removeToast={removeToast}
                   toasts={toasts.filter((t) => t.position == toast.position)}
                   heights={heights.filter((h) => h.position == toast.position)}

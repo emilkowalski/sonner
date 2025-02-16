@@ -47,6 +47,15 @@ Changes the directionality of the toast's text.
 <Toaster dir="rtl" />
 ```
 
+### Custom ARIA label
+
+You can customize the default ARIA label for the notification container and the toast close button.
+
+```jsx
+// example in Finnish
+<Toaster containerAriaLabel="Ilmoitukset" toastOptions={{closeButtonAriaLabel: 'Sulje'}} />
+```
+
 ## API Reference
 
 | Property              |                                                           Description                                                           |                             Default |

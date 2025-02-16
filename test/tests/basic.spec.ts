@@ -289,4 +289,11 @@ test.describe('Basic functionality', () => {
     await page.getByTestId('react-node-description').click();
     await expect(page.getByText('This is my custom ReactNode description')).toHaveCount(1);
   });
+
+  test('aria labels are custom', async ({ page }) => {
+    await page.getByRole('button', { name: 'With custom ARIA labels' }).click();
+    await expect(page.getByText('Toast with custom ARIA labels')).toHaveCount(1);
+    await expect(page.getByLabel('Notices')).toHaveCount(1);
+    await expect(page.getByLabel('Yeet the notice', { exact: true })).toHaveCount(1);
+  });
 });

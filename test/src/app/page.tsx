@@ -11,6 +11,7 @@ export default function Home({ searchParams }: any) {
   const [showDismiss, setShowDismiss] = React.useState(false);
   const [theme, setTheme] = React.useState(searchParams.theme || 'light');
   const [isFinally, setIsFinally] = React.useState(false);
+  const [showAriaLabels, setShowAriaLabels] = React.useState(false);
 
   return (
     <>
@@ -244,6 +245,7 @@ export default function Home({ searchParams }: any) {
       >
         Extended Promise Toast
       </button>
+      
 
       <button
         data-testid="extended-promise-error"
@@ -302,6 +304,15 @@ export default function Home({ searchParams }: any) {
       >
         Error Promise Toast
       </button>
+      <button
+        className="button"
+        onClick={() => {
+          setShowAriaLabels(true);
+          toast('Toast with custom ARIA labels', { closeButton: true, onAutoClose: () => setShowAriaLabels(false) });
+        }}
+      >
+        With custom ARIA labels
+      </button>
       {showAutoClose ? <div data-testid="auto-close-el" /> : null}
       {showDismiss ? <div data-testid="dismiss-el" /> : null}
       <Toaster
@@ -310,9 +321,11 @@ export default function Home({ searchParams }: any) {
         toastOptions={{
           actionButtonStyle: { backgroundColor: 'rgb(219, 239, 255)' },
           cancelButtonStyle: { backgroundColor: 'rgb(254, 226, 226)' },
+          closeButtonAriaLabel: showAriaLabels ? 'Yeet the notice' : undefined,
         }}
         theme={theme}
         dir={searchParams.dir || 'auto'}
+        containerAriaLabel={showAriaLabels ? 'Notices' : undefined}
         icons={{
           close:
             searchParams.customCloseIcon === '' ? (
