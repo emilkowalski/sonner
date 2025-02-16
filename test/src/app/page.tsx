@@ -279,6 +279,29 @@ export default function Home({ searchParams }: any) {
       >
         Extended Promise Error Toast
       </button>
+      <button
+        data-testid="error-promise"
+        className="button"
+        onClick={() => {
+          const whatWillHappen = async () => {
+            throw new Error('Not implemented');
+          };
+
+          toast.promise(whatWillHappen, {
+            loading: 'Saving project...',
+            success: (result: any) => {
+              if (result?.ok) {
+                return 'Project saved';
+              } else {
+                return `${result?.error}`;
+              }
+            },
+            error: (e) => `Error Raise: ${e}`,
+          });
+        }}
+      >
+        Error Promise Toast
+      </button>
       {showAutoClose ? <div data-testid="auto-close-el" /> : null}
       {showDismiss ? <div data-testid="dismiss-el" /> : null}
       <Toaster

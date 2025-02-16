@@ -72,6 +72,16 @@ test.describe('Basic functionality', () => {
     await expect(page.getByText('An error occurred')).toHaveCount(1);
   });
 
+  test('promise toast with Error object rejection', async ({ page }) => {
+    await page.getByTestId('error-promise').click();
+
+    // Check loading state
+    await expect(page.getByText('Saving project...')).toHaveCount(1);
+
+    // Check error state shows the error message correctly
+    await expect(page.getByText('Error Raise: Error: Not implemented')).toHaveCount(1);
+  });
+
   test('render custom jsx in toast', async ({ page }) => {
     await page.getByTestId('custom').click();
     await expect(page.getByText('jsx')).toHaveCount(1);
