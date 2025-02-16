@@ -67,6 +67,7 @@ You can customize the default ARIA label for the notification container and the 
 | position              |                                             Place where the toasts will be rendered                                             |                      `bottom-right` |
 | closeButton           |                                                Adds a close button to all toasts                                                |                             `false` |
 | offset                |                                              Offset from the edges of the screen.                                               |                              `32px` |
+| mobileOffset          |                                    Offset from the left/right edges of the screen on screens with width smaller than 600px.                                    |                              `16px` |
 | dir                   |                                                 Directionality of toast's text                                                  |                               `ltr` |
 | hotkey                |                                   Keyboard shortcut that will move focus to the toaster area.                                   |                         `⌥/alt + T` |
 | invert                |                                            Dark toasts in light mode and vice versa.                                            |                             `false` |
@@ -75,5 +76,3 @@ You can customize the default ARIA label for the notification container and the 
 | loadingIcon           |                                                Changes the default loading icon                                                 |                                 `-` |
 | pauseWhenPageIsHidden | Pauses toast timers when the page is hidden, e.g., when the tab is backgrounded, the browser is minimized, or the OS is locked. |                             `false` |
 | icons                 |                                                    Changes the default icons                                                    |                                 `-` |
-| containerAriaLabel    |                                            Custom ARIA label for the toast container.                                           |                     `Notifications` |
-| cn                    |                                        Custom function for constructing/merging classes.                                        | `classes.filter(Boolean).join(' ')` |

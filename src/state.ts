@@ -4,13 +4,17 @@ import React from 'react';
 
 let toastsCounter = 1;
 
+type titleT = (() => React.ReactNode) | React.ReactNode;
+
 class Observer {
   subscribers: Array<(toast: ExternalToast | ToastToDismiss) => void>;
   toasts: Array<ToastT | ToastToDismiss>;
+  dismissedToasts: Set<string | number>;
 
   constructor() {
     this.subscribers = [];
     this.toasts = [];
+    this.dismissedToasts = new Set();
   }
 
   // We use arrow functions to maintain the correct `this` reference
@@ -34,7 +38,7 @@ class Observer {
 
   create = (
     data: ExternalToast & {
-      message?: string | React.ReactNode;
+      message?: titleT;
       type?: ToastTypes;
       promise?: PromiseT;
       jsx?: React.ReactElement;
@@ -46,6 +50,10 @@ class Observer {
       return toast.id === id;
     });
     const dismissible = data.dismissible === undefined ? true : data.dismissible;
+
+    if (this.dismissedToasts.has(id)) {
+      this.dismissedToasts.delete(id);
+    }
 
     if (alreadyExists) {
       this.toasts = this.toasts.map((toast) => {
@@ -70,37 +78,38 @@ class Observer {
   };
 
   dismiss = (id?: number | string) => {
+    this.dismissedToasts.add(id);
+
     if (!id) {
       this.toasts.forEach((toast) => {
         this.subscribers.forEach((subscriber) => subscriber({ id: toast.id, dismiss: true }));
       });
     }
-
     this.subscribers.forEach((subscriber) => subscriber({ id, dismiss: true }));
     return id;
   };
 
-  message = (message: string | React.ReactNode, data?: ExternalToast) => {
+  message = (message: titleT | React.ReactNode, data?: ExternalToast) => {
     return this.create({ ...data, message });
   };
 
-  error = (message: string | React.ReactNode, data?: ExternalToast) => {
+  error = (message: titleT | React.ReactNode, data?: ExternalToast) => {
     return this.create({ ...data, message, type: 'error' });
   };
 
-  success = (message: string | React.ReactNode, data?: ExternalToast) => {
+  success = (message: titleT | React.ReactNode, data?: ExternalToast) => {
     return this.create({ ...data, type: 'success', message });
   };
 
-  info = (message: string | React.ReactNode, data?: ExternalToast) => {
+  info = (message: titleT | React.ReactNode, data?: ExternalToast) => {
     return this.create({ ...data, type: 'info', message });
   };
 
-  warning = (message: string | React.ReactNode, data?: ExternalToast) => {
+  warning = (message: titleT | React.ReactNode, data?: ExternalToast) => {
     return this.create({ ...data, type: 'warning', message });
   };
 
-  loading = (message: string | React.ReactNode, data?: ExternalToast) => {
+  loading = (message: titleT | React.ReactNode, data?: ExternalToast) => {
     return this.create({ ...data, type: 'loading', message });
   };
 
@@ -129,7 +138,11 @@ class Observer {
     const originalPromise = p
       .then(async (response) => {
         result = ['resolve', response];
-        if (isHttpResponse(response) && !response.ok) {
+        const isReactElementResponse = React.isValidElement(response);
+        if (isReactElementResponse) {
+          shouldDismiss = false;
+          this.create({ id, type: 'default', message: response });
+        } else if (isHttpResponse(response) && !response.ok) {
           shouldDismiss = false;
           const message =
             typeof data.error === 'function' ? await data.error(`HTTP error! status: ${response.status}`) : data.error;
@@ -183,12 +196,16 @@ class Observer {
     this.create({ jsx: jsx(id), id, ...data });
     return id;
   };
+
+  getActiveToasts = () => {
+    return this.toasts.filter((toast) => !this.dismissedToasts.has(toast.id));
+  };
 }
 
 export const ToastState = new Observer();
 
 // bind this to the toast function
-const toastFunction = (message: string | React.ReactNode, data?: ExternalToast) => {
+const toastFunction = (message: titleT, data?: ExternalToast) => {
   const id = data?.id || toastsCounter++;
 
   ToastState.addToast({
@@ -213,6 +230,7 @@ const isHttpResponse = (data: any): data is Response => {
 const basicToast = toastFunction;
 
 const getHistory = () => ToastState.toasts;
+const getToasts = () => ToastState.getActiveToasts();
 
 // We use `Object.assign` to maintain the correct types as we would lose them otherwise
 export const toast = Object.assign(
@@ -228,5 +246,5 @@ export const toast = Object.assign(
     dismiss: ToastState.dismiss,
     loading: ToastState.loading,
   },
-  { getHistory },
+  { getHistory, getToasts },
 );

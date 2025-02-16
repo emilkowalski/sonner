@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { Toaster, toast } from 'sonner';
+import { action } from '@/app/action';
 
 const promise = () => new Promise((resolve) => setTimeout(resolve, 2000));
 
@@ -74,6 +75,21 @@ export default function Home({ searchParams }: any) {
         }
       >
         Render Promise Toast
+      </button>
+      <button
+        data-testid="rsf-promise"
+        data-finally={isFinally ? '1' : '0'}
+        className="button"
+        onClick={() =>
+          toast.promise(action(), {
+            loading: 'Loading...',
+            success: 'Loaded',
+            error: 'Error',
+            finally: () => setIsFinally(true),
+          })
+        }
+      >
+        Render React Server Function Toast
       </button>
       <button
         data-testid="custom"
@@ -155,6 +171,23 @@ export default function Home({ searchParams }: any) {
         }}
       >
         Updated Toast
+      </button>
+      <button
+        data-testid="update-toast-duration"
+        className="button"
+        onClick={() => {
+          const toastId = toast('My Unupdated Toast, Updated After 3 Seconds', {
+            duration: 10000,
+          });
+          setTimeout(() => {
+            toast('My Updated Toast, Close After 1 Second', {
+              id: toastId,
+              duration: 1000,
+            });
+          }, 3000);
+        }}
+      >
+        Updated Toast Duration
       </button>
       <button
         data-testid="string-description"
