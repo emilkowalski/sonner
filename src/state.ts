@@ -164,6 +164,17 @@ class Observer {
             typeof promiseData === 'object' ? (promiseData as PromiseIExtendedResult) : { message: promiseData };
 
           this.create({ id, type: 'error', description, ...toastSettings });
+        } else if (response instanceof Error) {
+          shouldDismiss = false;
+
+          const promiseData = typeof data.error === 'function' ? await data.error(response) : data.error;
+          const description =
+            typeof data.description === 'function' ? await data.description(response) : data.description;
+
+          const toastSettings: PromiseIExtendedResult =
+            typeof promiseData === 'object' ? (promiseData as PromiseIExtendedResult) : { message: promiseData };
+
+          this.create({ id, type: 'error', description, ...toastSettings });
         } else if (data.success !== undefined) {
           shouldDismiss = false;
           const promiseData = typeof data.success === 'function' ? await data.success(response) : data.success;

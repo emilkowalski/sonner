@@ -40,6 +40,48 @@ test.describe('Basic functionality', () => {
     await expect(toast.promise(rejectedPromise, {}).unwrap()).rejects.toThrow('Promise rejected');
   });
 
+  test('promise toast with extended configuration', async ({ page }) => {
+    await page.getByTestId('extended-promise').click();
+
+    // Check loading state
+    await expect(page.getByText('Loading...')).toHaveCount(1);
+
+    // Check success state with custom message and description
+    await expect(page.getByText('Sonner toast has been added')).toHaveCount(1);
+    await expect(page.getByText('Custom description for the Success state')).toHaveCount(1);
+
+    // Verify global description is not shown (overridden by success description)
+    await expect(page.getByText('Global description')).toHaveCount(0);
+  });
+
+  test('promise toast with extended error configuration', async ({ page }) => {
+    await page.getByTestId('extended-promise-error').click();
+
+    // Check loading state
+    await expect(page.getByText('Loading...')).toHaveCount(1);
+
+    // Check error state
+    await expect(page.getByText('An error occurred')).toHaveCount(1);
+
+    // Verify action button is present
+    const actionButton = page.getByText('Retry');
+    await expect(actionButton).toHaveCount(1);
+
+    // Click retry button and verify it doesn't close the toast (due to preventDefault)
+    await actionButton.click();
+    await expect(page.getByText('An error occurred')).toHaveCount(1);
+  });
+
+  test('promise toast with Error object rejection', async ({ page }) => {
+    await page.getByTestId('error-promise').click();
+
+    // Check loading state
+    await expect(page.getByText('Saving project...')).toHaveCount(1);
+
+    // Check error state shows the error message correctly
+    await expect(page.getByText('Error Raise: Error: Not implemented')).toHaveCount(1);
+  });
+
   test('render custom jsx in toast', async ({ page }) => {
     await page.getByTestId('custom').click();
     await expect(page.getByText('jsx')).toHaveCount(1);

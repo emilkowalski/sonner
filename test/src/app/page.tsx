@@ -211,6 +211,97 @@ export default function Home({ searchParams }: any) {
       >
         Render close button
       </button>
+      <button
+        data-testid="extended-promise"
+        className="button"
+        onClick={() =>
+          toast.promise(
+            new Promise((resolve) => {
+              setTimeout(() => {
+                resolve({ name: 'Sonner' });
+              }, 2000);
+            }),
+            {
+              loading: 'Loading...',
+              success: (data: any) => ({
+                message: `${data.name} toast has been added`,
+                description: 'Custom description for the Success state',
+              }),
+              error: {
+                message: 'An error occurred',
+                description: undefined,
+                action: {
+                  label: 'Retry',
+                  onClick: () => {
+                    console.log('retrying');
+                  },
+                },
+              },
+              description: 'Global description',
+            },
+          )
+        }
+      >
+        Extended Promise Toast
+      </button>
+
+      <button
+        data-testid="extended-promise-error"
+        className="button"
+        onClick={() =>
+          toast.promise(
+            new Promise((_, reject) => {
+              setTimeout(() => {
+                reject(new Error('Simulated error'));
+              }, 2000);
+            }),
+            {
+              loading: 'Loading...',
+              success: (data: any) => ({
+                message: `${data.name} toast has been added`,
+                description: 'Custom description for the Success state',
+              }),
+              error: {
+                message: 'An error occurred',
+                description: undefined,
+                action: {
+                  label: 'Retry',
+                  onClick: (event) => {
+                    event.preventDefault();
+                    console.log('retrying');
+                  },
+                },
+              },
+              description: 'Global description',
+            },
+          )
+        }
+      >
+        Extended Promise Error Toast
+      </button>
+      <button
+        data-testid="error-promise"
+        className="button"
+        onClick={() => {
+          const whatWillHappen = async () => {
+            throw new Error('Not implemented');
+          };
+
+          toast.promise(whatWillHappen, {
+            loading: 'Saving project...',
+            success: (result: any) => {
+              if (result?.ok) {
+                return 'Project saved';
+              } else {
+                return `${result?.error}`;
+              }
+            },
+            error: (e) => `Error Raise: ${e}`,
+          });
+        }}
+      >
+        Error Promise Toast
+      </button>
       {showAutoClose ? <div data-testid="auto-close-el" /> : null}
       {showDismiss ? <div data-testid="dismiss-el" /> : null}
       <Toaster
