@@ -4,6 +4,14 @@ export type ToastTypes = 'normal' | 'action' | 'success' | 'info' | 'warning' | 
 
 export type PromiseT<Data = any> = Promise<Data> | (() => Promise<Data>);
 
+export interface PromiseIExtendedResult extends ExternalToast {
+  message: React.ReactNode;
+}
+
+export type PromiseTExtendedResult<Data = any> =
+  | PromiseIExtendedResult
+  | ((data: Data) => PromiseIExtendedResult | Promise<PromiseIExtendedResult>);
+
 export type PromiseTResult<Data = any> =
   | string
   | React.ReactNode
@@ -13,8 +21,8 @@ export type PromiseExternalToast = Omit<ExternalToast, 'description'>;
 
 export type PromiseData<ToastData = any> = PromiseExternalToast & {
   loading?: string | React.ReactNode;
-  success?: PromiseTResult<ToastData>;
-  error?: PromiseTResult;
+  success?: PromiseTResult<ToastData> | PromiseTExtendedResult<ToastData>;
+  error?: PromiseTResult | PromiseTExtendedResult;
   description?: PromiseTResult;
   finally?: () => void | Promise<void>;
 };
@@ -101,6 +109,7 @@ interface ToastOptions {
   duration?: number;
   unstyled?: boolean;
   classNames?: ToastClassnames;
+  closeButtonAriaLabel?: string;
 }
 
 type Offset =
@@ -131,18 +140,8 @@ export interface ToasterProps {
   mobileOffset?: Offset;
   dir?: 'rtl' | 'ltr' | 'auto';
   swipeDirections?: SwipeDirection[];
-  /**
-   * @deprecated Please use the `icons` prop instead:
-   * ```jsx
-   * <Toaster
-   *   icons={{ loading: <LoadingIcon /> }}
-   * />
-   * ```
-   */
-  loadingIcon?: React.ReactNode;
   icons?: ToastIcons;
   containerAriaLabel?: string;
-  pauseWhenPageIsHidden?: boolean;
 }
 
 export type SwipeDirection = 'top' | 'right' | 'bottom' | 'left';
@@ -174,7 +173,6 @@ export interface ToastProps {
   classNames?: ToastClassnames;
   icons?: ToastIcons;
   closeButtonAriaLabel?: string;
-  pauseWhenPageIsHidden: boolean;
   defaultRichColors?: boolean;
 }
 

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { StrictMode } from 'react';
 import { Toaster } from 'sonner';
 import { Installation } from '@/src/components/Installation';
 import { Hero } from '@/src/components/Hero';
@@ -20,7 +20,14 @@ export default function Home() {
   return (
     <div className="wrapper light">
       <Head />
-      <Toaster theme="light" richColors={richColors} closeButton={closeButton} expand={expand} position={position} />
+      <Toaster
+        theme="light"
+        richColors={richColors}
+        closeButton={closeButton}
+        expand={expand}
+        position={position}
+        duration={Infinity}
+      />
       <main className="container">
         <Hero />
         <div className="content">

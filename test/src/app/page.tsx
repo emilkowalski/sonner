@@ -11,6 +11,7 @@ export default function Home({ searchParams }: any) {
   const [showDismiss, setShowDismiss] = React.useState(false);
   const [theme, setTheme] = React.useState(searchParams.theme || 'light');
   const [isFinally, setIsFinally] = React.useState(false);
+  const [showAriaLabels, setShowAriaLabels] = React.useState(false);
 
   return (
     <>
@@ -139,11 +140,13 @@ export default function Home({ searchParams }: any) {
         className="button"
         onClick={() =>
           toast('My Toast', {
-            onDismiss: () => setShowDismiss(true),
+            onDismiss: () => {
+              setShowDismiss(true);
+            },
           })
         }
       >
-        Render Toast With onAutoClose callback
+        Dismiss toast callback
       </button>
       <button
         data-testid="non-dismissible-toast"
@@ -209,16 +212,120 @@ export default function Home({ searchParams }: any) {
       >
         Render close button
       </button>
+      <button
+        data-testid="extended-promise"
+        className="button"
+        onClick={() =>
+          toast.promise(
+            new Promise((resolve) => {
+              setTimeout(() => {
+                resolve({ name: 'Sonner' });
+              }, 2000);
+            }),
+            {
+              loading: 'Loading...',
+              success: (data: any) => ({
+                message: `${data.name} toast has been added`,
+                description: 'Custom description for the Success state',
+              }),
+              error: {
+                message: 'An error occurred',
+                description: undefined,
+                action: {
+                  label: 'Retry',
+                  onClick: () => {
+                    console.log('retrying');
+                  },
+                },
+              },
+              description: 'Global description',
+            },
+          )
+        }
+      >
+        Extended Promise Toast
+      </button>
+      
+
+      <button
+        data-testid="extended-promise-error"
+        className="button"
+        onClick={() =>
+          toast.promise(
+            new Promise((_, reject) => {
+              setTimeout(() => {
+                reject(new Error('Simulated error'));
+              }, 2000);
+            }),
+            {
+              loading: 'Loading...',
+              success: (data: any) => ({
+                message: `${data.name} toast has been added`,
+                description: 'Custom description for the Success state',
+              }),
+              error: {
+                message: 'An error occurred',
+                description: undefined,
+                action: {
+                  label: 'Retry',
+                  onClick: (event) => {
+                    event.preventDefault();
+                    console.log('retrying');
+                  },
+                },
+              },
+              description: 'Global description',
+            },
+          )
+        }
+      >
+        Extended Promise Error Toast
+      </button>
+      <button
+        data-testid="error-promise"
+        className="button"
+        onClick={() => {
+          const whatWillHappen = async () => {
+            throw new Error('Not implemented');
+          };
+
+          toast.promise(whatWillHappen, {
+            loading: 'Saving project...',
+            success: (result: any) => {
+              if (result?.ok) {
+                return 'Project saved';
+              } else {
+                return `${result?.error}`;
+              }
+            },
+            error: (e) => `Error Raise: ${e}`,
+          });
+        }}
+      >
+        Error Promise Toast
+      </button>
+      <button
+        className="button"
+        onClick={() => {
+          setShowAriaLabels(true);
+          toast('Toast with custom ARIA labels', { closeButton: true, onAutoClose: () => setShowAriaLabels(false) });
+        }}
+      >
+        With custom ARIA labels
+      </button>
       {showAutoClose ? <div data-testid="auto-close-el" /> : null}
       {showDismiss ? <div data-testid="dismiss-el" /> : null}
       <Toaster
+        offset={32}
         position={searchParams.position || 'bottom-right'}
         toastOptions={{
           actionButtonStyle: { backgroundColor: 'rgb(219, 239, 255)' },
           cancelButtonStyle: { backgroundColor: 'rgb(254, 226, 226)' },
+          closeButtonAriaLabel: showAriaLabels ? 'Yeet the notice' : undefined,
         }}
         theme={theme}
         dir={searchParams.dir || 'auto'}
+        containerAriaLabel={showAriaLabels ? 'Notices' : undefined}
         icons={{
           close:
             searchParams.customCloseIcon === '' ? (
