@@ -1,6 +1,6 @@
 {
   "name": "sonner",
-  "version": "2.0.0-beta.3",
+  "version": "2.0.1",
   "description": "An opinionated toast component for React.",
   "exports": {
     ".": {
