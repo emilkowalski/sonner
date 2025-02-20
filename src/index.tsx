@@ -649,20 +649,22 @@ const Toaster = React.forwardRef<HTMLElement, ToasterProps>(function Toaster(pro
       }
 
       // Prevent batching, temp solution.
-      ReactDOM.flushSync(() => {
-        setToasts((toasts) => {
-          const indexOfExistingToast = toasts.findIndex((t) => t.id === toast.id);
+      setTimeout(() => {
+        ReactDOM.flushSync(() => {
+          setToasts((toasts) => {
+            const indexOfExistingToast = toasts.findIndex((t) => t.id === toast.id);
 
-          // Update the toast if it already exists
-          if (indexOfExistingToast !== -1) {
-            return [
-              ...toasts.slice(0, indexOfExistingToast),
-              { ...toasts[indexOfExistingToast], ...toast },
-              ...toasts.slice(indexOfExistingToast + 1),
-            ];
-          }
+            // Update the toast if it already exists
+            if (indexOfExistingToast !== -1) {
+              return [
+                ...toasts.slice(0, indexOfExistingToast),
+                { ...toasts[indexOfExistingToast], ...toast },
+                ...toasts.slice(indexOfExistingToast + 1),
+              ];
+            }
 
-          return [toast, ...toasts];
+            return [toast, ...toasts];
+          });
         });
       });
     });
