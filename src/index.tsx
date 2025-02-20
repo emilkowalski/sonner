@@ -120,6 +120,7 @@ const Toast = (props: ToastProps) => {
     () => toast.duration || durationFromToaster || TOAST_LIFETIME,
     [toast.duration, durationFromToaster],
   );
+  const remainingTime = React.useRef(duration);
   const closeTimerStartTimeRef = React.useRef(0);
   const offset = React.useRef(0);
   const lastCloseTimerStartTimeRef = React.useRef(0);
