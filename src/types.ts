@@ -131,6 +131,7 @@ export interface ToasterProps {
   expand?: boolean;
   duration?: number;
   gap?: number;
+  initialLift?: number;
   visibleToasts?: number;
   closeButton?: boolean;
   toastOptions?: ToastOptions;
