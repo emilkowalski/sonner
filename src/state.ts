@@ -153,36 +153,49 @@ class Observer {
           this.create({ id, type: 'default', message: response });
         } else if (isHttpResponse(response) && !response.ok) {
           shouldDismiss = false;
+
           const promiseData =
             typeof data.error === 'function' ? await data.error(`HTTP error! status: ${response.status}`) : data.error;
+
           const description =
             typeof data.description === 'function'
               ? await data.description(`HTTP error! status: ${response.status}`)
               : data.description;
 
-          const toastSettings: PromiseIExtendedResult =
-            typeof promiseData === 'object' ? (promiseData as PromiseIExtendedResult) : { message: promiseData };
+          const isExtendedResult = typeof promiseData === 'object' && !React.isValidElement(promiseData);
+
+          const toastSettings: PromiseIExtendedResult = isExtendedResult
+            ? (promiseData as PromiseIExtendedResult)
+            : { message: promiseData };
 
           this.create({ id, type: 'error', description, ...toastSettings });
         } else if (response instanceof Error) {
           shouldDismiss = false;
 
           const promiseData = typeof data.error === 'function' ? await data.error(response) : data.error;
+
           const description =
             typeof data.description === 'function' ? await data.description(response) : data.description;
 
-          const toastSettings: PromiseIExtendedResult =
-            typeof promiseData === 'object' ? (promiseData as PromiseIExtendedResult) : { message: promiseData };
+          const isExtendedResult = typeof promiseData === 'object' && !React.isValidElement(promiseData);
+
+          const toastSettings: PromiseIExtendedResult = isExtendedResult
+            ? (promiseData as PromiseIExtendedResult)
+            : { message: promiseData };
 
           this.create({ id, type: 'error', description, ...toastSettings });
         } else if (data.success !== undefined) {
           shouldDismiss = false;
           const promiseData = typeof data.success === 'function' ? await data.success(response) : data.success;
+
           const description =
             typeof data.description === 'function' ? await data.description(response) : data.description;
 
-          const toastSettings: PromiseIExtendedResult =
-            typeof promiseData === 'object' ? (promiseData as PromiseIExtendedResult) : { message: promiseData };
+          const isExtendedResult = typeof promiseData === 'object' && !React.isValidElement(promiseData);
+
+          const toastSettings: PromiseIExtendedResult = isExtendedResult
+            ? (promiseData as PromiseIExtendedResult)
+            : { message: promiseData };
 
           this.create({ id, type: 'success', description, ...toastSettings });
         }
@@ -192,10 +205,14 @@ class Observer {
         if (data.error !== undefined) {
           shouldDismiss = false;
           const promiseData = typeof data.error === 'function' ? await data.error(error) : data.error;
+
           const description = typeof data.description === 'function' ? await data.description(error) : data.description;
 
-          const toastSettings: PromiseIExtendedResult =
-            typeof promiseData === 'object' ? (promiseData as PromiseIExtendedResult) : { message: promiseData };
+          const isExtendedResult = typeof promiseData === 'object' && !React.isValidElement(promiseData);
+
+          const toastSettings: PromiseIExtendedResult = isExtendedResult
+            ? (promiseData as PromiseIExtendedResult)
+            : { message: promiseData };
 
           this.create({ id, type: 'error', description, ...toastSettings });
         }
