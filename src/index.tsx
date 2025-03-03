@@ -36,6 +36,9 @@ const TOAST_WIDTH = 356;
 // Default gap between toasts
 const GAP = 14;
 
+// Default initial lift for expanding toasts on hover
+const LIFT = -8;
+
 // Threshold to dismiss a toast
 const SWIPE_THRESHOLD = 45;
 
@@ -600,6 +603,7 @@ const Toaster = React.forwardRef<HTMLElement, ToasterProps>(function Toaster(pro
     toastOptions,
     dir = getDocumentDirection(),
     gap = GAP,
+    initialLift = LIFT,
     icons,
     containerAriaLabel = 'Notifications',
   } = props;
@@ -788,6 +792,7 @@ const Toaster = React.forwardRef<HTMLElement, ToasterProps>(function Toaster(pro
                 '--front-toast-height': `${heights[0]?.height || 0}px`,
                 '--width': `${TOAST_WIDTH}px`,
                 '--gap': `${gap}px`,
+                '--initial-lift': `${initialLift}px`,
                 ...style,
                 ...assignOffset(offset, mobileOffset),
               } as React.CSSProperties
