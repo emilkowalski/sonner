@@ -254,6 +254,8 @@ const Toast = (props: ToastProps) => {
     return <Loader className={cn(classNames?.loader, toast?.classNames?.loader)} visible={toastType === 'loading'} />;
   }
 
+  const icon = toast.icon || icons?.[toastType] || getAsset(toastType);
+
   return (
     <li
       tabIndex={0}
@@ -429,10 +431,12 @@ const Toast = (props: ToastProps) => {
         </button>
       ) : null}
       {/* TODO: This can be cleaner */}
-      {toastType || toast.icon || toast.promise ? (
+      {(toastType || toast.icon || toast.promise) &&
+      toast.icon !== null &&
+      (icons?.[toastType] !== null || toast.icon) ? (
         <div data-icon="" className={cn(classNames?.icon, toast?.classNames?.icon)}>
           {toast.promise || (toast.type === 'loading' && !toast.icon) ? toast.icon || getLoadingIcon() : null}
-          {toast.type !== 'loading' ? toast.icon || icons?.[toastType] || getAsset(toastType) : null}
+          {toast.type !== 'loading' ? icon : null}
         </div>
       ) : null}
 
