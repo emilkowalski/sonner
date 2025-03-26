@@ -86,15 +86,15 @@ class Observer {
   };
 
   dismiss = (id?: number | string) => {
-    this.dismissedToasts.add(id);
-
-    if (!id) {
+    if (id) {
+      this.dismissedToasts.add(id);
+      requestAnimationFrame(() => this.subscribers.forEach((subscriber) => subscriber({ id, dismiss: true })));
+    } else {
       this.toasts.forEach((toast) => {
         this.subscribers.forEach((subscriber) => subscriber({ id: toast.id, dismiss: true }));
       });
     }
 
-    requestAnimationFrame(() => this.subscribers.forEach((subscriber) => subscriber({ id, dismiss: true })));
     return id;
   };
 
