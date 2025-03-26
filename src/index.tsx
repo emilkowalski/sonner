@@ -640,10 +640,9 @@ const Toaster = React.forwardRef<HTMLElement, ToasterProps>(function Toaster(pro
   React.useEffect(() => {
     return ToastState.subscribe((toast) => {
       if ((toast as ToastToDismiss).dismiss) {
-        const map = toasts.map((t) => (t.id === toast.id ? { ...t, delete: true } : t));
         // Prevent batching of other state updates
         requestAnimationFrame(() => {
-          setToasts(map);
+          setToasts((toasts) => toasts.map((t) => (t.id === toast.id ? { ...t, delete: true } : t)));
         });
         return;
       }
