@@ -52,7 +52,7 @@ html[dir='rtl'],
 }
 
 [data-sonner-toaster][data-lifted='true'] {
-  transform: translateY(-8px);
+  transform: translateY(var(--initial-lift));
 }
 
 @media (hover: none) and (pointer: coarse) {
