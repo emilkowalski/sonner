@@ -134,6 +134,10 @@ html[dir='rtl'],
   color: #3f3f3f;
 }
 
+[data-rich-colors='true'][data-sonner-toast][data-styled='true'] [data-description] {
+  color: inherit;
+}
+
 [data-sonner-toaster][data-sonner-theme='dark'] [data-description] {
   color: hsl(0, 0%, 91%);
 }
