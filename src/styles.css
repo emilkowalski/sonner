@@ -276,7 +276,7 @@ html[dir='rtl'],
   transform: scaleY(2);
 }
 
-[data-sonner-toast]::after {
+[data-sonner-toast][data-expanded='true']::after {
   content: '';
   position: absolute;
   left: 0;
