@@ -89,6 +89,8 @@ const Toast = (props: ToastProps) => {
     icons,
     closeButtonAriaLabel = 'Close toast',
   } = props;
+  const removeToastRef = React.useRef(removeToast);
+  removeToastRef.current = removeToast;
   const [swipeDirection, setSwipeDirection] = React.useState<'x' | 'y' | null>(null);
   const [swipeOutDirection, setSwipeOutDirection] = React.useState<'left' | 'right' | 'up' | 'down' | null>(null);
   const [mounted, setMounted] = React.useState(false);
@@ -187,11 +189,16 @@ const Toast = (props: ToastProps) => {
     setRemoved(true);
     setOffsetBeforeRemove(offset.current);
     setHeights((h) => h.filter((height) => height.toastId !== toast.id));
+  }, [toast, setHeights, offset]);
 
-    setTimeout(() => {
-      removeToast(toast);
-    }, TIME_BEFORE_UNMOUNT);
-  }, [toast, removeToast, setHeights, offset]);
+  React.useEffect(() => {
+    if (removed) {
+      const timeout = setTimeout(() => {
+        removeToastRef.current(toast);
+      }, TIME_BEFORE_UNMOUNT);
+      return () => clearTimeout(timeout);
+    }
+  }, [removed]);
 
   React.useEffect(() => {
     if ((toast.promise && toastType === 'loading') || toast.duration === Infinity || toast.type === 'loading') return;
@@ -548,10 +555,13 @@ function assignOffset(defaultOffset: ToasterProps['offset'], mobileOffset: Toast
 function useSonner() {
   const [activeToasts, setActiveToasts] = React.useState<ToastT[]>([]);
 
-    return ToastState.subscribe((toast) => {
   safeUseLayoutEffect(() => {
+    let tornDown = false;
+    const tearDown = ToastState.subscribe((toast) => {
       if ((toast as ToastToDismiss).dismiss) {
         setTimeout(() => {
+          if (tornDown) return;
+
           ReactDOM.flushSync(() => {
             setActiveToasts((toasts) => toasts.filter((t) => t.id !== toast.id));
           });
@@ -561,6 +571,8 @@ function useSonner() {
 
       // Prevent batching, temp solution.
       setTimeout(() => {
+        if (tornDown) return;
+
         ReactDOM.flushSync(() => {
           setActiveToasts((toasts) => {
             const indexOfExistingToast = toasts.findIndex((t) => t.id === toast.id);
@@ -579,6 +591,11 @@ function useSonner() {
         });
       });
     });
+
+    return () => {
+      tornDown = true;
+      tearDown();
+    };
   }, []);
 
   return {
@@ -641,11 +658,14 @@ const Toaster = React.forwardRef<HTMLElement, ToasterProps>(function Toaster(pro
     });
   }, []);
 
-    return ToastState.subscribe((toast) => {
   safeUseLayoutEffect(() => {
+    let tornDown = false;
+    const tearDown = ToastState.subscribe((toast) => {
       if ((toast as ToastToDismiss).dismiss) {
         // Prevent batching of other state updates
         requestAnimationFrame(() => {
+          if (tornDown) return;
+
           setToasts((toasts) => toasts.map((t) => (t.id === toast.id ? { ...t, delete: true } : t)));
         });
         return;
@@ -653,6 +673,8 @@ const Toaster = React.forwardRef<HTMLElement, ToasterProps>(function Toaster(pro
 
       // Prevent batching, temp solution.
       setTimeout(() => {
+        if (tornDown) return;
+
         ReactDOM.flushSync(() => {
           setToasts((toasts) => {
             const indexOfExistingToast = toasts.findIndex((t) => t.id === toast.id);
@@ -671,6 +693,11 @@ const Toaster = React.forwardRef<HTMLElement, ToasterProps>(function Toaster(pro
         });
       });
     });
+
+    return () => {
+      tornDown = true;
+      tearDown();
+    };
   }, [toasts]);
 
   React.useEffect(() => {
