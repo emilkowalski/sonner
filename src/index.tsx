@@ -690,7 +690,6 @@ const Toaster = React.forwardRef<HTMLElement, ToasterProps>(function Toaster(pro
       }
     }
 
-    if (typeof window === 'undefined') return;
     const darkMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
 
     try {
