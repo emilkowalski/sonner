@@ -1,5 +1,7 @@
 import React from 'react';
 
+export const safeUseLayoutEffect = typeof window !== 'undefined' ? React.useLayoutEffect : () => {};
+
 export const useIsDocumentHidden = () => {
   const [isDocumentHidden, setIsDocumentHidden] = React.useState(document.hidden);
 

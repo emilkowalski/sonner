@@ -4,7 +4,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 import { CloseIcon, getAsset, Loader } from './assets';
-import { useIsDocumentHidden } from './hooks';
+import { safeUseLayoutEffect, useIsDocumentHidden } from './hooks';
 import { toast, ToastState } from './state';
 import './styles.css';
 import {
@@ -548,8 +548,8 @@ function assignOffset(defaultOffset: ToasterProps['offset'], mobileOffset: Toast
 function useSonner() {
   const [activeToasts, setActiveToasts] = React.useState<ToastT[]>([]);
 
-  React.useEffect(() => {
     return ToastState.subscribe((toast) => {
+  safeUseLayoutEffect(() => {
       if ((toast as ToastToDismiss).dismiss) {
         setTimeout(() => {
           ReactDOM.flushSync(() => {
@@ -641,8 +641,8 @@ const Toaster = React.forwardRef<HTMLElement, ToasterProps>(function Toaster(pro
     });
   }, []);
 
-  React.useEffect(() => {
     return ToastState.subscribe((toast) => {
+  safeUseLayoutEffect(() => {
       if ((toast as ToastToDismiss).dismiss) {
         // Prevent batching of other state updates
         requestAnimationFrame(() => {
