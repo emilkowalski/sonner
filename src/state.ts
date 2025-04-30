@@ -118,8 +118,12 @@ class Observer {
     return this.create({ ...data, type: 'warning', message });
   };
 
-  loading = (message: titleT | React.ReactNode, data?: ExternalToast) => {
-    return this.create({ ...data, type: 'loading', message });
+  loading = (message: titleT | React.ReactNode, data?: ExternalToast & { timeout?: number }) => {
+    const toastId = this.create({ ...data, type: 'loading', message });
+    setTimeout(() => {
+      this.dismiss(toastId);
+    }, data?.timeout ?? 10000);
+    return toastId;
   };
 
   promise = <ToastData>(promise: PromiseT<ToastData>, data?: PromiseData<ToastData>) => {

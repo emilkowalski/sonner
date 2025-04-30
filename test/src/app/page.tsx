@@ -68,7 +68,6 @@ export default function Home({ searchParams }: any) {
         onClick={() =>
           toast.promise(promise, {
             loading: 'Loading...',
-            success: 'Loaded',
             error: 'Error',
             finally: () => setIsFinally(true),
           })
@@ -120,6 +119,21 @@ export default function Home({ searchParams }: any) {
         }
       >
         Render Custom Cancel Button
+      </button>
+      <button
+        data-testid="custom-cancel-button-toast"
+        className="button"
+        onClick={() =>
+          toast.loading('My Loading Toast', {
+            cancel: {
+              label: 'Cancel',
+              onClick: () => console.log('Cancel'),
+            },
+            timeout: 5000,
+          })
+        }
+      >
+        Render Loading
       </button>
       <button data-testid="infinity-toast" className="button" onClick={() => toast('My Toast', { duration: Infinity })}>
         Render Infinity Toast
@@ -245,7 +259,6 @@ export default function Home({ searchParams }: any) {
       >
         Extended Promise Toast
       </button>
-      
 
       <button
         data-testid="extended-promise-error"
