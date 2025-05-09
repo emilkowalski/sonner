@@ -83,6 +83,7 @@ html[dir='rtl'],
 }
 
 [data-sonner-toast] {
+  width:100%;
   --y: translateY(100%);
   --lift-amount: calc(var(--lift) * var(--gap));
   z-index: var(--z-index);
