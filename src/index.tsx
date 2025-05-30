@@ -163,6 +163,7 @@ const Toast = (props: ToastProps) => {
   }, [setHeights, toast.id]);
 
   React.useLayoutEffect(() => {
+    // Keep height up to date with the content in case it updates
     if (!mounted) return;
     const toastNode = toastRef.current;
     const originalHeight = toastNode.style.height;
@@ -180,7 +181,7 @@ const Toast = (props: ToastProps) => {
         return heights.map((height) => (height.toastId === toast.id ? { ...height, height: newHeight } : height));
       }
     });
-  }, [mounted, toast.title, toast.description, setHeights, toast.id]);
+  }, [mounted, toast.title, toast.description, setHeights, toast.id, toast.jsx, toast.action, toast.cancel]);
 
   const deleteToast = React.useCallback(() => {
     // Save the offset for the exit swipe animation
