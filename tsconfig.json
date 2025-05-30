@@ -4,7 +4,16 @@
     "target": "ES2018",
     "moduleResolution": "node",
     "esModuleInterop": true,
-    "lib": ["es2015", "dom"]
+    "lib": ["ES2015", "DOM"],
+    "skipLibCheck": true,
+    "strict": true,
+    "allowUnusedLabels": false,
+    "allowUnreachableCode": false,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitOverride": true,
+    "noPropertyAccessFromIndexSignature": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true
   },
   "include": ["src"]
 }

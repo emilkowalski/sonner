@@ -53,26 +53,26 @@ You can customize the default ARIA label for the notification container and the 
 
 ```jsx
 // example in Finnish
-<Toaster containerAriaLabel="Ilmoitukset" toastOptions={{closeButtonAriaLabel: 'Sulje'}} />
+<Toaster containerAriaLabel="Ilmoitukset" toastOptions={{ closeButtonAriaLabel: 'Sulje' }} />
 ```
 
 ## API Reference
 
-| Property              |                                                           Description                                                           |                             Default |
-| :-------------------- | :-----------------------------------------------------------------------------------------------------------------------------: | ----------------------------------: |
-| theme                 |                                       Toast's theme, either `light`, `dark`, or `system`                                        |                             `light` |
-| richColors            |                                           Makes error and success state more colorful                                           |                             `false` |
-| expand                |                                               Toasts will be expanded by default                                                |                             `false` |
-| visibleToasts         |                                                    Amount of visible toasts                                                     |                                 `3` |
-| position              |                                             Place where the toasts will be rendered                                             |                      `bottom-right` |
-| closeButton           |                                                Adds a close button to all toasts                                                |                             `false` |
-| offset                |                                              Offset from the edges of the screen.                                               |                              `32px` |
-| mobileOffset          |                                    Offset from the left/right edges of the screen on screens with width smaller than 600px.                                    |                              `16px` |
-| dir                   |                                                 Directionality of toast's text                                                  |                               `ltr` |
-| hotkey                |                                   Keyboard shortcut that will move focus to the toaster area.                                   |                         `⌥/alt + T` |
-| invert                |                                            Dark toasts in light mode and vice versa.                                            |                             `false` |
-| toastOptions          |               These will act as default options for all toasts. See [toast()](/toast) for all available options.                |                              `4000` |
-| gap                   |                                                Gap between toasts when expanded                                                 |                                `14` |
-| loadingIcon           |                                                Changes the default loading icon                                                 |                                 `-` |
-| pauseWhenPageIsHidden | Pauses toast timers when the page is hidden, e.g., when the tab is backgrounded, the browser is minimized, or the OS is locked. |                             `false` |
-| icons                 |                                                    Changes the default icons                                                    |                                 `-` |
+| Property              |                                                           Description                                                           |        Default |
+| :-------------------- | :-----------------------------------------------------------------------------------------------------------------------------: | -------------: |
+| theme                 |                                       Toast's theme, either `light`, `dark`, or `system`                                        |        `light` |
+| richColors            |                                           Makes error and success state more colorful                                           |        `false` |
+| expand                |                                               Toasts will be expanded by default                                                |        `false` |
+| visibleToasts         |                                                    Amount of visible toasts                                                     |            `3` |
+| position              |                                             Place where the toasts will be rendered                                             | `bottom-right` |
+| closeButton           |                                                Adds a close button to all toasts                                                |        `false` |
+| offset                |                                              Offset from the edges of the screen.                                               |         `32px` |
+| mobileOffset          |                    Offset from the left/right edges of the screen on screens with width smaller than 600px.                     |         `16px` |
+| dir                   |                                                 Directionality of toast's text                                                  |          `ltr` |
+| hotkey                |                                   Keyboard shortcut that will move focus to the toaster area.                                   |    `⌥/alt + T` |
+| invert                |                                            Dark toasts in light mode and vice versa.                                            |        `false` |
+| toastOptions          |               These will act as default options for all toasts. See [toast()](/toast) for all available options.                |         `4000` |
+| gap                   |                                                Gap between toasts when expanded                                                 |           `14` |
+| loadingIcon           |                                                Changes the default loading icon                                                 |            `-` |
+| pauseWhenPageIsHidden | Pauses toast timers when the page is hidden, e.g., when the tab is backgrounded, the browser is minimized, or the OS is locked. |        `false` |
+| icons                 |                                                    Changes the default icons                                                    |            `-` |

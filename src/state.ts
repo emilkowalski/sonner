@@ -15,8 +15,8 @@ let toastsCounter = 1;
 type titleT = (() => React.ReactNode) | React.ReactNode;
 
 class Observer {
-  subscribers: Array<(toast: ExternalToast | ToastToDismiss) => void>;
-  toasts: Array<ToastT | ToastToDismiss>;
+  subscribers: ((toast: ToastT | ToastToDismiss) => void)[];
+  toasts: (ToastT | ToastToDismiss)[];
   dismissedToasts: Set<string | number>;
 
   constructor() {
@@ -36,7 +36,9 @@ class Observer {
   };
 
   publish = (data: ToastT) => {
-    this.subscribers.forEach((subscriber) => subscriber(data));
+    this.subscribers.forEach((subscriber) => {
+      subscriber(data);
+    });
   };
 
   addToast = (data: ToastT) => {
@@ -53,11 +55,11 @@ class Observer {
     },
   ) => {
     const { message, ...rest } = data;
-    const id = typeof data?.id === 'number' || data.id?.length > 0 ? data.id : toastsCounter++;
+    const id = typeof data.id === 'number' || (data.id && data.id.length > 0) ? data.id : toastsCounter++;
     const alreadyExists = this.toasts.find((toast) => {
       return toast.id === id;
     });
-    const dismissible = data.dismissible === undefined ? true : data.dismissible;
+    const dismissible = data.dismissible ?? true;
 
     if (this.dismissedToasts.has(id)) {
       this.dismissedToasts.delete(id);
@@ -88,37 +90,43 @@ class Observer {
   dismiss = (id?: number | string) => {
     if (id) {
       this.dismissedToasts.add(id);
-      requestAnimationFrame(() => this.subscribers.forEach((subscriber) => subscriber({ id, dismiss: true })));
+      requestAnimationFrame(() => {
+        this.subscribers.forEach((subscriber) => {
+          subscriber({ id, dismiss: true });
+        });
+      });
     } else {
       this.toasts.forEach((toast) => {
-        this.subscribers.forEach((subscriber) => subscriber({ id: toast.id, dismiss: true }));
+        this.subscribers.forEach((subscriber) => {
+          subscriber({ id: toast.id, dismiss: true });
+        });
       });
     }
 
     return id;
   };
 
-  message = (message: titleT | React.ReactNode, data?: ExternalToast) => {
+  message = (message: titleT, data?: ExternalToast) => {
     return this.create({ ...data, message });
   };
 
-  error = (message: titleT | React.ReactNode, data?: ExternalToast) => {
+  error = (message: titleT, data?: ExternalToast) => {
     return this.create({ ...data, message, type: 'error' });
   };
 
-  success = (message: titleT | React.ReactNode, data?: ExternalToast) => {
+  success = (message: titleT, data?: ExternalToast) => {
     return this.create({ ...data, type: 'success', message });
   };
 
-  info = (message: titleT | React.ReactNode, data?: ExternalToast) => {
+  info = (message: titleT, data?: ExternalToast) => {
     return this.create({ ...data, type: 'info', message });
   };
 
-  warning = (message: titleT | React.ReactNode, data?: ExternalToast) => {
+  warning = (message: titleT, data?: ExternalToast) => {
     return this.create({ ...data, type: 'warning', message });
   };
 
-  loading = (message: titleT | React.ReactNode, data?: ExternalToast) => {
+  loading = (message: titleT, data?: ExternalToast) => {
     return this.create({ ...data, type: 'loading', message });
   };
 
@@ -200,7 +208,7 @@ class Observer {
           this.create({ id, type: 'success', description, ...toastSettings });
         }
       })
-      .catch(async (error) => {
+      .catch(async (error: unknown) => {
         result = ['reject', error];
         if (data.error !== undefined) {
           shouldDismiss = false;
@@ -228,8 +236,17 @@ class Observer {
       });
 
     const unwrap = () =>
-      new Promise<ToastData>((resolve, reject) =>
-        originalPromise.then(() => (result[0] === 'reject' ? reject(result[1]) : resolve(result[1]))).catch(reject),
+      new Promise<ToastData>(
+        (resolve, reject) =>
+          void originalPromise
+            .then(() => {
+              if (result[0] === 'reject') {
+                reject(result[1] instanceof Error ? result[1] : new Error(String(result[1])));
+              } else {
+                resolve(result[1]);
+              }
+            })
+            .catch(reject),
       );
 
     if (typeof id !== 'string' && typeof id !== 'number') {
@@ -241,7 +258,7 @@ class Observer {
   };
 
   custom = (jsx: (id: number | string) => React.ReactElement, data?: ExternalToast) => {
-    const id = data?.id || toastsCounter++;
+    const id = data?.id ?? toastsCounter++;
     this.create({ jsx: jsx(id), id, ...data });
     return id;
   };
@@ -255,26 +272,25 @@ export const ToastState = new Observer();
 
 // bind this to the toast function
 const toastFunction = (message: titleT, data?: ExternalToast) => {
-  const id = data?.id || toastsCounter++;
+  const id = data?.id ?? toastsCounter++;
+  const dismissible = data?.dismissible ?? true;
 
   ToastState.addToast({
     title: message,
     ...data,
+    dismissible,
     id,
   });
   return id;
 };
 
-const isHttpResponse = (data: any): data is Response => {
-  return (
-    data &&
-    typeof data === 'object' &&
-    'ok' in data &&
-    typeof data.ok === 'boolean' &&
-    'status' in data &&
-    typeof data.status === 'number'
-  );
-};
+const isHttpResponse = (data: unknown): data is Response =>
+  !!data &&
+  typeof data === 'object' &&
+  'ok' in data &&
+  typeof data.ok === 'boolean' &&
+  'status' in data &&
+  typeof data.status === 'number';
 
 const basicToast = toastFunction;
 

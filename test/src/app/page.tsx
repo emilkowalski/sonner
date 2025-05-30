@@ -245,7 +245,6 @@ export default function Home({ searchParams }: any) {
       >
         Extended Promise Toast
       </button>
-      
 
       <button
         data-testid="extended-promise-error"

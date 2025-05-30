@@ -17,6 +17,9 @@ importers:
       '@types/react':
         specifier: ^18.0.26
         version: 18.2.0
+      '@types/react-dom':
+        specifier: ^18.0.26
+        version: 18.3.7(@types/react@18.2.0)
       bunchee:
         specifier: ^6.3.3
         version: 6.3.3(typescript@4.9.5)
@@ -1332,6 +1335,14 @@ packages:
     dependencies:
       '@types/react': 18.2.0
     dev: false
+
+  /@types/react-dom@18.3.7(@types/react@18.2.0):
+    resolution: {integrity: sha512-MEe3UeoENYVFXzoXEWsvcpg6ZvlrFNlOQ7EOsvhI3CfAXwzPfO8Qwuxd40nepsYKqyyVQnTdEfv68q91yLcKrQ==}
+    peerDependencies:
+      '@types/react': ^18.0.0
+    dependencies:
+      '@types/react': 18.2.0
+    dev: true
 
   /@types/react@18.0.28:
     resolution: {integrity: sha512-RD0ivG1kEztNBdoAK7lekI9M+azSnitIn85h4iOiaLjaTrMjzslhaqCGaI4IyCJ1RljWiLCEu4jyrLLgqxBTew==}
