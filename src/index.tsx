@@ -236,6 +236,7 @@ const Toast = (props: ToastProps) => {
   React.useEffect(() => {
     if (toast.delete) {
       deleteToast();
+      toast.onDismiss?.(toast);
     }
   }, [deleteToast, toast.delete]);
 
