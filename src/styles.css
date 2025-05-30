@@ -79,6 +79,7 @@ html[dir='rtl'],
 }
 
 [data-sonner-toast] {
+  width:100%;
   --y: translateY(100%);
   --lift-amount: calc(var(--lift) * var(--gap));
   z-index: var(--z-index);
@@ -308,7 +309,7 @@ html[dir='rtl'],
   left: 0;
 }
 
-[data-sonner-toast][data-expanded='false'][data-front='false'][data-styled='true'] > * {
+[data-sonner-toast][data-expanded='false'][data-front='false'] > * {
   opacity: 0;
 }
 
