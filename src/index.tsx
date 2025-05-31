@@ -6,7 +6,7 @@ import ReactDOM from 'react-dom';
 import { CloseIcon, getAsset, Loader } from './assets';
 import { useIsDocumentHidden } from './hooks';
 import { toast, ToastState } from './state';
-import './styles.css';
+import globalStyle from './styles.css?inline';
 import {
   isAction,
   SwipeDirection,
@@ -588,6 +588,16 @@ function useSonner() {
   };
 }
 
+function insertCSS(target: HTMLElement, code: string) {
+  if (!code) {
+    return;
+  }
+  const style = document.createElement('style');
+  style.type = 'text/css';
+  target.appendChild(style);
+  style.appendChild(document.createTextNode(code));
+}
+
 const Toaster = React.forwardRef<HTMLElement, ToasterProps>(function Toaster(props, ref) {
   const {
     invert,
@@ -608,6 +618,7 @@ const Toaster = React.forwardRef<HTMLElement, ToasterProps>(function Toaster(pro
     gap = GAP,
     icons,
     containerAriaLabel = 'Notifications',
+    container,
   } = props;
   const [toasts, setToasts] = React.useState<ToastT[]>([]);
   const possiblePositions = React.useMemo(() => {
@@ -642,6 +653,12 @@ const Toaster = React.forwardRef<HTMLElement, ToasterProps>(function Toaster(pro
       return toasts.filter(({ id }) => id !== toastToRemove.id);
     });
   }, []);
+
+  React.useEffect(() => {
+    if (typeof document !== 'undefined') {
+      insertCSS(container ?? document.body, globalStyle);
+    }
+  }, [container]);
 
   React.useEffect(() => {
     return ToastState.subscribe((toast) => {
