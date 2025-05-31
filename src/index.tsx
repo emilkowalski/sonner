@@ -618,7 +618,7 @@ const Toaster = React.forwardRef<HTMLElement, ToasterProps>(function Toaster(pro
     gap = GAP,
     icons,
     containerAriaLabel = 'Notifications',
-    container = document.body,
+    container,
   } = props;
   const [toasts, setToasts] = React.useState<ToastT[]>([]);
   const possiblePositions = React.useMemo(() => {
@@ -655,7 +655,9 @@ const Toaster = React.forwardRef<HTMLElement, ToasterProps>(function Toaster(pro
   }, []);
 
   React.useEffect(() => {
-    insertCSS(container, globalStyle);
+    if (typeof document !== 'undefined') {
+      insertCSS(container ?? document.body, globalStyle);
+    }
   }, [container]);
 
   React.useEffect(() => {
