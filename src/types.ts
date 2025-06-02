@@ -142,7 +142,6 @@ export interface ToasterProps {
   swipeDirections?: SwipeDirection[];
   icons?: ToastIcons;
   containerAriaLabel?: string;
-  cssContainer?: HTMLElement | null;
 }
 
 export type SwipeDirection = 'top' | 'right' | 'bottom' | 'left';
