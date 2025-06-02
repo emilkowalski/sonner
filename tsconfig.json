@@ -4,11 +4,7 @@
     "target": "ES2018",
     "moduleResolution": "node",
     "esModuleInterop": true,
-    "lib": ["es2015", "dom"],
-    "skipLibCheck": true,
-    "declaration": true,
-    "emitDeclarationOnly": true,
-    "outDir": "dist"
+    "lib": ["es2015", "dom"]
   },
   "include": ["src"]
 }
