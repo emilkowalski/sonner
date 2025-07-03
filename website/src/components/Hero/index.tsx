@@ -17,13 +17,9 @@ export const Hero = () => {
         <button
           data-primary=""
           onClick={() => {
-            toast(
-              <div>
-                <a href="https://github.com/emilkowalski/sonner" target="_blank" style={{ userSelect: 'none' }}>
-                  fdsafafads
-                </a>
-              </div>,
-            );
+            toast('Sonner', {
+              description: 'An opinionated toast component for React.',
+            });
           }}
           className={styles.button}
         >
