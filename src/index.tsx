@@ -307,6 +307,7 @@ const Toast = (props: ToastProps) => {
         pointerStartRef.current = null;
       }}
       onPointerDown={(event) => {
+        if (event.button === 2) return; // Return early on right click
         if (disabled || !dismissible) return;
         dragStartTime.current = new Date();
         setOffsetBeforeRemove(offset.current);
