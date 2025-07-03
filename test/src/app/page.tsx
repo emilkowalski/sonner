@@ -313,6 +313,27 @@ export default function Home({ searchParams }: any) {
       >
         With custom ARIA labels
       </button>
+      <button
+        data-testid="testid-toast-button"
+        className="button"
+        onClick={() => toast('Toast with test ID', { testId: 'my-test-toast' })}
+      >
+        Toast with testId
+      </button>
+      <button
+        data-testid="testid-promise-toast-button"
+        className="button"
+        onClick={() =>
+          toast.promise(promise, {
+            loading: 'Loading...',
+            success: 'Loaded',
+            error: 'Error',
+            testId: 'promise-test-toast',
+          })
+        }
+      >
+        Promise Toast with testId
+      </button>
       {showAutoClose ? <div data-testid="auto-close-el" /> : null}
       {showDismiss ? <div data-testid="dismiss-el" /> : null}
       <Toaster
