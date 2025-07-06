@@ -23,7 +23,9 @@
   ],
   "scripts": {
     "dev": "bunchee --watch",
+    "prebuild": "sed -i '' 's/\\.css?inline/.txt/g' src/index.tsx && cp src/styles.css src/styles.txt",
     "build": "bunchee && cp src/styles.css dist/styles.css",
+    "postbuild": "sed -i '' 's/\\.txt/.css?inline/g' src/index.tsx && rm -f src/styles.txt",
     "type-check": "tsc --noEmit",
     "dev:website": "turbo run dev --filter=website...",
     "dev:test": "turbo run dev --filter=test...",
