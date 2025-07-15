@@ -293,4 +293,20 @@ test.describe('Basic functionality', () => {
     await expect(page.getByLabel('Notices')).toHaveCount(1);
     await expect(page.getByLabel('Yeet the notice', { exact: true })).toHaveCount(1);
   });
+
+  test('toast with toasterId only appears in the correct Toaster', async ({ page }) => {
+    await page.getByTestId('toast-secondary').click();
+    const secondaryToaster = page.locator('[data-sonner-toaster][data-x-position="left"][data-y-position="top"]');
+    await expect(secondaryToaster.getByText('Secondary Toaster Toast')).toHaveCount(1);
+    const globalToaster = page.locator('[data-sonner-toaster][data-x-position="right"][data-y-position="bottom"]');
+    await expect(globalToaster.getByText('Secondary Toaster Toast')).toHaveCount(0);
+  });
+
+  test('toast without toasterId only appears in the global Toaster', async ({ page }) => {
+    await page.getByTestId('toast-global').click();
+    const globalToaster = page.locator('[data-sonner-toaster][data-x-position="right"][data-y-position="bottom"]');
+    await expect(globalToaster.getByText('Global Toaster Toast')).toHaveCount(1);
+    const secondaryToaster = page.locator('[data-sonner-toaster][data-x-position="left"][data-y-position="top"]');
+    await expect(secondaryToaster.getByText('Global Toaster Toast')).toHaveCount(0);
+  });
 });
