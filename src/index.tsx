@@ -591,6 +591,7 @@ function useSonner() {
 
 const Toaster = React.forwardRef<HTMLElement, ToasterProps>(function Toaster(props, ref) {
   const {
+    id,
     invert,
     position = 'bottom-right',
     hotkey = ['altKey', 'KeyT'],
@@ -611,11 +612,17 @@ const Toaster = React.forwardRef<HTMLElement, ToasterProps>(function Toaster(pro
     containerAriaLabel = 'Notifications',
   } = props;
   const [toasts, setToasts] = React.useState<ToastT[]>([]);
+  const filteredToasts = React.useMemo(() => {
+    if (id) {
+      return toasts.filter((toast) => toast.toasterId === id);
+    }
+    return toasts.filter((toast) => !toast.toasterId);
+  }, [toasts, id]);
   const possiblePositions = React.useMemo(() => {
     return Array.from(
-      new Set([position].concat(toasts.filter((toast) => toast.position).map((toast) => toast.position))),
+      new Set([position].concat(filteredToasts.filter((toast) => toast.position).map((toast) => toast.position))),
     );
-  }, [toasts, position]);
+  }, [filteredToasts, position]);
   const [heights, setHeights] = React.useState<HeightT[]>([]);
   const [expanded, setExpanded] = React.useState(false);
   const [interacting, setInteracting] = React.useState(false);
@@ -775,7 +782,7 @@ const Toaster = React.forwardRef<HTMLElement, ToasterProps>(function Toaster(pro
       {possiblePositions.map((position, index) => {
         const [y, x] = position.split('-');
 
-        if (!toasts.length) return null;
+        if (!filteredToasts.length) return null;
 
         return (
           <ol
@@ -835,7 +842,7 @@ const Toaster = React.forwardRef<HTMLElement, ToasterProps>(function Toaster(pro
             }}
             onPointerUp={() => setInteracting(false)}
           >
-            {toasts
+            {filteredToasts
               .filter((toast) => (!toast.position && index === 0) || toast.position === position)
               .map((toast, index) => (
                 <Toast
@@ -859,7 +866,7 @@ const Toaster = React.forwardRef<HTMLElement, ToasterProps>(function Toaster(pro
                   actionButtonStyle={toastOptions?.actionButtonStyle}
                   closeButtonAriaLabel={toastOptions?.closeButtonAriaLabel}
                   removeToast={removeToast}
-                  toasts={toasts.filter((t) => t.position == toast.position)}
+                  toasts={filteredToasts.filter((t) => t.position == toast.position)}
                   heights={heights.filter((h) => h.position == toast.position)}
                   setHeights={setHeights}
                   expandByDefault={expand}
