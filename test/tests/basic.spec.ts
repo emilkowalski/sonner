@@ -293,4 +293,15 @@ test.describe('Basic functionality', () => {
     await expect(page.getByLabel('Notices')).toHaveCount(1);
     await expect(page.getByLabel('Yeet the notice', { exact: true })).toHaveCount(1);
   });
+
+  test('nonce is applied to injected styles', async ({ page }) => {
+    await page.getByTestId('nonce-example').click();
+    
+    // Check that the style element has the nonce attribute
+    const styleElement = page.locator('#sonner-styles');
+    await expect(styleElement).toHaveAttribute('nonce', 'test-nonce-value');
+    
+    // Verify toast is rendered
+    await expect(page.getByText('Toast with CSP nonce support')).toHaveCount(1);
+  });
 });

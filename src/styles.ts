@@ -1,3 +1,5 @@
+// CSS content as a string to allow nonce injection
+export const CSS_CONTENT = `
 html[dir='ltr'],
 [data-sonner-toaster][dir='ltr'] {
   --toast-icon-margin-start: -3px;
@@ -722,3 +724,22 @@ html[dir='rtl'],
   opacity: 0;
   transform: scale(0.8) translate(-50%, -50%);
 }
+`;
+
+// Function to inject CSS with optional nonce
+export function injectStyles(nonce?: string): void {
+  // Check if styles are already injected
+  if (document.querySelector('#sonner-styles')) {
+    return;
+  }
+
+  const style = document.createElement('style');
+  style.id = 'sonner-styles';
+  style.textContent = CSS_CONTENT;
+  
+  if (nonce) {
+    style.setAttribute('nonce', nonce);
+  }
+  
+  document.head.appendChild(style);
+} 

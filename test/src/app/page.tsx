@@ -313,6 +313,13 @@ export default function Home({ searchParams }: any) {
       >
         With custom ARIA labels
       </button>
+      <button
+        data-testid="nonce-example"
+        className="button"
+        onClick={() => toast('Toast with CSP nonce support')}
+      >
+        Toast with CSP Nonce Support
+      </button>
       {showAutoClose ? <div data-testid="auto-close-el" /> : null}
       {showDismiss ? <div data-testid="dismiss-el" /> : null}
       <Toaster
@@ -326,6 +333,7 @@ export default function Home({ searchParams }: any) {
         theme={theme}
         dir={searchParams.dir || 'auto'}
         containerAriaLabel={showAriaLabels ? 'Notices' : undefined}
+        nonce="test-nonce-value"
         icons={{
           close:
             searchParams.customCloseIcon === '' ? (

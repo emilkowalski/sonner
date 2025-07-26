@@ -6,7 +6,7 @@ import ReactDOM from 'react-dom';
 import { CloseIcon, getAsset, Loader } from './assets';
 import { useIsDocumentHidden } from './hooks';
 import { toast, ToastState } from './state';
-import './styles.css';
+import { injectStyles } from './styles';
 import {
   isAction,
   SwipeDirection,
@@ -609,6 +609,7 @@ const Toaster = React.forwardRef<HTMLElement, ToasterProps>(function Toaster(pro
     gap = GAP,
     icons,
     containerAriaLabel = 'Notifications',
+    nonce,
   } = props;
   const [toasts, setToasts] = React.useState<ToastT[]>([]);
   const possiblePositions = React.useMemo(() => {
@@ -675,6 +676,11 @@ const Toaster = React.forwardRef<HTMLElement, ToasterProps>(function Toaster(pro
       });
     });
   }, [toasts]);
+
+  // Inject styles with nonce if provided
+  React.useEffect(() => {
+    injectStyles(nonce);
+  }, [nonce]);
 
   React.useEffect(() => {
     if (theme !== 'system') {
