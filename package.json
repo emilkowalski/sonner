@@ -1,5 +1,5 @@
 {
-  "name": "sonner-nonce",
+  "name": "sonner",
   "version": "2.0.6",
   "description": "An opinionated toast component for React.",
   "exports": {
@@ -13,7 +13,8 @@
         "default": "./dist/index.js"
       },
       "default": "./dist/index.js"
-    }
+    },
+    "./dist/styles.css": "./dist/styles.css"
   },
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -22,7 +23,7 @@
   ],
   "scripts": {
     "dev": "bunchee --watch",
-    "build": "bunchee",
+    "build": "bunchee && cp src/styles.css dist/styles.css",
     "type-check": "tsc --noEmit",
     "dev:website": "turbo run dev --filter=website...",
     "dev:test": "turbo run dev --filter=test...",
@@ -41,10 +42,10 @@
   "homepage": "https://sonner.emilkowal.ski/",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/supafox/sonner-nonce.git"
+    "url": "git+https://github.com/emilkowalski/sonner.git"
   },
   "bugs": {
-    "url": "https://github.com/supafox/sonner-nonce/issues"
+    "url": "https://github.com/emilkowalski/sonner/issues"
   },
   "devDependencies": {
     "@playwright/test": "^1.49.1",

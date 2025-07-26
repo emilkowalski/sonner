@@ -7,14 +7,14 @@ https://github.com/vallezw/sonner/assets/50796600/59b95cb7-9068-4f3e-8469-0b35d9
 To start using the library, install it in your project:
 
 ```bash
-npm install sonner-nonce  
+npm install sonner  
 ```
 
 Add `<Toaster />` to your app, it will be the place where all your toasts will be rendered.
 After that you can use `toast()` from anywhere in your app.
 
 ```jsx
-import { Toaster, toast } from 'sonner-nonce';
+import { Toaster, toast } from 'sonner';
 
 // ...
 
@@ -33,7 +33,7 @@ function App() {
 If you're using Content Security Policy and need to add a nonce to the injected styles, you can pass a `nonce` prop to the `<Toaster />` component:
 
 ```jsx
-import { Toaster, toast } from 'sonner-nonce';
+import { Toaster, toast } from 'sonner';
 
 function App() {
   return (
