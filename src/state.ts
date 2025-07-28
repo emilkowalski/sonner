@@ -10,19 +10,19 @@ import type {
 
 import React from 'react';
 
-let toastsCounter = 1;
-
 type titleT = (() => React.ReactNode) | React.ReactNode;
 
 class Observer {
   subscribers: Array<(toast: ExternalToast | ToastToDismiss) => void>;
   toasts: Array<ToastT | ToastToDismiss>;
   dismissedToasts: Set<string | number>;
+  toastCounter: number;
 
   constructor() {
     this.subscribers = [];
     this.toasts = [];
     this.dismissedToasts = new Set();
+    this.toastCounter = 1;
   }
 
   // We use arrow functions to maintain the correct `this` reference
@@ -53,7 +53,7 @@ class Observer {
     },
   ) => {
     const { message, ...rest } = data;
-    const id = typeof data?.id === 'number' || data.id?.length > 0 ? data.id : toastsCounter++;
+    const id = typeof data?.id === 'number' || data.id?.length > 0 ? data.id : this.toastCounter++;
     const alreadyExists = this.toasts.find((toast) => {
       return toast.id === id;
     });
@@ -96,6 +96,10 @@ class Observer {
     }
 
     return id;
+  };
+
+  setToastCount = (count: number) => {
+    this.toastCounter = count + 1;
   };
 
   message = (message: titleT | React.ReactNode, data?: ExternalToast) => {
@@ -241,7 +245,7 @@ class Observer {
   };
 
   custom = (jsx: (id: number | string) => React.ReactElement, data?: ExternalToast) => {
-    const id = data?.id || toastsCounter++;
+    const id = data?.id || this.toastCounter++;
     this.create({ jsx: jsx(id), id, ...data });
     return id;
   };
@@ -255,7 +259,7 @@ export const ToastState = new Observer();
 
 // bind this to the toast function
 const toastFunction = (message: titleT, data?: ExternalToast) => {
-  const id = data?.id || toastsCounter++;
+  const id = data?.id || ToastState.toastCounter++;
 
   ToastState.addToast({
     title: message,

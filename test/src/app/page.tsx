@@ -245,7 +245,6 @@ export default function Home({ searchParams }: any) {
       >
         Extended Promise Toast
       </button>
-      
 
       <button
         data-testid="extended-promise-error"
@@ -280,6 +279,38 @@ export default function Home({ searchParams }: any) {
         }
       >
         Extended Promise Error Toast
+      </button>
+      <button
+        data-testid="persistent-toast"
+        className="button"
+        onClick={() => toast('Persistent Toast', { persistent: true, closeButton: true })}
+      >
+        Persistent toast
+      </button>
+      <button
+        data-testid="persistent-extended-promise-toast"
+        className="button"
+        onClick={() =>
+          toast.promise(
+            new Promise((resolve) => {
+              setTimeout(() => {
+                resolve({ name: 'Sonner' });
+              }, 2000);
+            }),
+            {
+              loading: 'Loading...',
+              success: (data: any) => ({
+                message: `${data.name} toast has been added`,
+                description: 'Custom description for the Success state',
+              }),
+              description: 'Global description',
+              persistent: true,
+              closeButton: true,
+            },
+          )
+        }
+      >
+        Persistent Promise Toast
       </button>
       <button
         data-testid="error-promise"

@@ -117,8 +117,8 @@ const Toast = (props: ToastProps) => {
     [toast.closeButton, closeButtonFromToaster],
   );
   const duration = React.useMemo(
-    () => toast.duration || durationFromToaster || TOAST_LIFETIME,
-    [toast.duration, durationFromToaster],
+    () => (toast.persistent ? Infinity : toast.duration || durationFromToaster || TOAST_LIFETIME),
+    [toast.duration, durationFromToaster, toast.persistent],
   );
   const closeTimerStartTimeRef = React.useRef(0);
   const offset = React.useRef(0);
@@ -609,6 +609,7 @@ const Toaster = React.forwardRef<HTMLElement, ToasterProps>(function Toaster(pro
     gap = GAP,
     icons,
     containerAriaLabel = 'Notifications',
+    storageKey = 'sonner-toasts',
   } = props;
   const [toasts, setToasts] = React.useState<ToastT[]>([]);
   const possiblePositions = React.useMemo(() => {
@@ -674,6 +675,56 @@ const Toaster = React.forwardRef<HTMLElement, ToasterProps>(function Toaster(pro
         });
       });
     });
+  }, [toasts]);
+
+  React.useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const storedToasts = localStorage.getItem(storageKey);
+      if (storedToasts) {
+        try {
+          const persistentToasts = JSON.parse(storedToasts);
+
+          if (Array.isArray(persistentToasts) && persistentToasts.length) {
+            //Add in reverse order to preserve original order
+            let i = 0;
+            let numPersistentToasts = persistentToasts.length;
+            persistentToasts.reverse().forEach((persistedToast) => {
+              // Skip loading toasts - they represented old operations which are not longer consistent with the current state
+              if (persistedToast.type === 'loading') {
+                return;
+              }
+              
+              const toastData = { ...persistedToast, persistent: true, id: i + 1 };
+              setTimeout(
+                () => {
+                  // Re-add through ToastState so animations / logic stay consistent
+                  ToastState.addToast(toastData);
+                },
+                // Add ramping delay only for visibleToasts
+                i > numPersistentToasts - visibleToasts ? (i - (numPersistentToasts - visibleToasts)) * 200 : 0,
+              );
+              i++;
+            });
+            // Set the toast count to the number of persistent toasts
+            ToastState.setToastCount(numPersistentToasts);
+          }
+        } catch (error) {
+          console.error('Failed to parse stored toasts:', error);
+          localStorage.removeItem(storageKey);
+        }
+      }
+    }
+  }, []);
+
+  React.useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const persistentToasts = toasts.filter((toast) => toast.persistent);
+      if (persistentToasts.length > 0) {
+        localStorage.setItem(storageKey, JSON.stringify(persistentToasts));
+      } else {
+        localStorage.removeItem(storageKey);
+      }
+    }
   }, [toasts]);
 
   React.useEffect(() => {

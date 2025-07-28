@@ -86,6 +86,7 @@ export interface ToastT {
   classNames?: ToastClassnames;
   descriptionClassName?: string;
   position?: Position;
+  persistent?: boolean;
 }
 
 export function isAction(action: Action | React.ReactNode): action is Action {
@@ -142,6 +143,7 @@ export interface ToasterProps {
   swipeDirections?: SwipeDirection[];
   icons?: ToastIcons;
   containerAriaLabel?: string;
+  storageKey?: string;
 }
 
 export type SwipeDirection = 'top' | 'right' | 'bottom' | 'left';

@@ -79,6 +79,53 @@ test.describe('Basic functionality', () => {
     await expect(page.getByText('Error Raise: Error: Not implemented')).toHaveCount(1);
   });
 
+  test('should persist a toast after a page reload', async ({ page }) => {
+    // Create a persistent toast
+    const persistentToastButton = page.locator('[data-testid="persistent-toast"]');
+    await persistentToastButton.click();
+
+    // Verify the toast is visible
+    const toast = page.locator('[data-sonner-toast]');
+    await expect(toast).toBeVisible();
+    await expect(toast).toContainText('Persistent Toast');
+
+    // Reload the page
+    await page.reload();
+
+    // Verify the toast is still visible after reload
+    const restoredToast = page.locator('[data-sonner-toast]');
+    await expect(restoredToast).toBeVisible();
+    await expect(restoredToast).toContainText('Persistent Toast');
+
+    // Verify the toast can be dismissed
+    const closeButton = restoredToast.locator('[data-close-button]');
+    await expect(closeButton).toBeVisible();
+    await closeButton.click();
+
+    // Verify the toast is no longer visible
+    await expect(restoredToast).not.toBeVisible();
+
+    // Reload again to verify the toast doesn't come back after being dismissed
+    await page.reload();
+    await expect(page.locator('[data-sonner-toast]')).not.toBeVisible();
+  });
+
+  test('should not persist regular (non-persistent) toasts', async ({ page }) => {
+    // Create a regular toast
+    const regularToastButton = page.locator('[data-testid="default-button"]');
+    await regularToastButton.click();
+
+    // Verify the toast is visible
+    const toast = page.locator('[data-sonner-toast]');
+    await expect(toast).toBeVisible();
+
+    // Reload the page
+    await page.reload();
+
+    // Verify the regular toast does not persist
+    await expect(page.locator('[data-sonner-toast]')).not.toBeVisible();
+  });
+
   test('render custom jsx in toast', async ({ page }) => {
     await page.getByTestId('custom').click();
     await expect(page.getByText('jsx')).toHaveCount(1);
