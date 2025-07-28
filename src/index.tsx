@@ -689,6 +689,11 @@ const Toaster = React.forwardRef<HTMLElement, ToasterProps>(function Toaster(pro
             let i = 0;
             let numPersistentToasts = persistentToasts.length;
             persistentToasts.reverse().forEach((persistedToast) => {
+              // Skip loading toasts - they represented old operations which are not longer consistent with the current state
+              if (persistedToast.type === 'loading') {
+                return;
+              }
+              
               const toastData = { ...persistedToast, persistent: true, id: i + 1 };
               setTimeout(
                 () => {
