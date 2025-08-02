@@ -245,7 +245,6 @@ export default function Home({ searchParams }: any) {
       >
         Extended Promise Toast
       </button>
-      
 
       <button
         data-testid="extended-promise-error"
@@ -314,6 +313,14 @@ export default function Home({ searchParams }: any) {
         With custom ARIA labels
       </button>
       <button
+        data-testid="toast-secondary"
+        className="button"
+        onClick={() => toast('Secondary Toaster Toast', { toasterId: 'secondary' })}
+      >
+        Render Toast in Secondary Toaster
+      </button>
+      <button data-testid="toast-global" className="button" onClick={() => toast('Global Toaster Toast')}>
+        Render Toast in Global Toaster
         data-testid="testid-toast-button"
         className="button"
         onClick={() => toast('Toast with test ID', { testId: 'my-test-toast' })}
@@ -365,6 +372,13 @@ export default function Home({ searchParams }: any) {
                 <line x1="6" y1="6" x2="18" y2="18"></line>
               </svg>
             ) : undefined,
+        }}
+      />
+      <Toaster
+        id="secondary"
+        position="top-left"
+        toastOptions={{
+          className: 'secondary-toaster',
         }}
       />
     </>
