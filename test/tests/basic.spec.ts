@@ -308,6 +308,8 @@ test.describe('Basic functionality', () => {
     await expect(globalToaster.getByText('Global Toaster Toast')).toHaveCount(1);
     const secondaryToaster = page.locator('[data-sonner-toaster][data-x-position="left"][data-y-position="top"]');
     await expect(secondaryToaster.getByText('Global Toaster Toast')).toHaveCount(0);
+  });
+
   test('toast with testId renders data-testid attribute correctly', async ({ page }) => {
     await page.getByTestId('testid-toast-button').click();
     await expect(page.getByTestId('my-test-toast')).toBeVisible();
