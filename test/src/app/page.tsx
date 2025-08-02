@@ -321,6 +321,8 @@ export default function Home({ searchParams }: any) {
       </button>
       <button data-testid="toast-global" className="button" onClick={() => toast('Global Toaster Toast')}>
         Render Toast in Global Toaster
+      </button>
+      <button
         data-testid="testid-toast-button"
         className="button"
         onClick={() => toast('Toast with test ID', { testId: 'my-test-toast' })}
