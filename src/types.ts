@@ -87,6 +87,7 @@ export interface ToastT {
   classNames?: ToastClassnames;
   descriptionClassName?: string;
   position?: Position;
+  testId?: string;
 }
 
 export function isAction(action: Action | React.ReactNode): action is Action {

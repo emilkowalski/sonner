@@ -308,5 +308,23 @@ test.describe('Basic functionality', () => {
     await expect(globalToaster.getByText('Global Toaster Toast')).toHaveCount(1);
     const secondaryToaster = page.locator('[data-sonner-toaster][data-x-position="left"][data-y-position="top"]');
     await expect(secondaryToaster.getByText('Global Toaster Toast')).toHaveCount(0);
+  test('toast with testId renders data-testid attribute correctly', async ({ page }) => {
+    await page.getByTestId('testid-toast-button').click();
+    await expect(page.getByTestId('my-test-toast')).toBeVisible();
+    await expect(page.getByTestId('my-test-toast')).toHaveText('Toast with test ID');
+  });
+
+  test('toast without testId does not have data-testid attribute', async ({ page }) => {
+    await page.getByTestId('default-button').click();
+    const toast = page.locator('[data-sonner-toast]');
+    await expect(toast).toBeVisible();
+    await expect(toast).not.toHaveAttribute('data-testid');
+  });
+
+  test('promise toast with testId maintains testId through state changes', async ({ page }) => {
+    await page.getByTestId('testid-promise-toast-button').click();
+    await expect(page.getByTestId('promise-test-toast')).toBeVisible();
+    await expect(page.getByTestId('promise-test-toast')).toHaveText('Loading...');
+    await expect(page.getByTestId('promise-test-toast')).toHaveText('Loaded');
   });
 });
