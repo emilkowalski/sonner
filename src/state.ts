@@ -152,10 +152,12 @@ class Observer {
           shouldDismiss = false;
           this.create({ id, type: 'default', message: response });
         } else if (isHttpResponse(response) && !response.ok) {
-          shouldDismiss = false;
-
           const promiseData =
             typeof data.error === 'function' ? await data.error(`HTTP error! status: ${response.status}`) : data.error;
+
+          if (!promiseData) return;
+
+          shouldDismiss = false;
 
           const description =
             typeof data.description === 'function'
@@ -170,9 +172,11 @@ class Observer {
 
           this.create({ id, type: 'error', description, ...toastSettings });
         } else if (response instanceof Error) {
-          shouldDismiss = false;
-
           const promiseData = typeof data.error === 'function' ? await data.error(response) : data.error;
+
+          if (!promiseData) return;
+
+          shouldDismiss = false;
 
           const description =
             typeof data.description === 'function' ? await data.description(response) : data.description;
@@ -185,8 +189,11 @@ class Observer {
 
           this.create({ id, type: 'error', description, ...toastSettings });
         } else if (data.success !== undefined) {
-          shouldDismiss = false;
           const promiseData = typeof data.success === 'function' ? await data.success(response) : data.success;
+
+          if (!promiseData) return;
+
+          shouldDismiss = false;
 
           const description =
             typeof data.description === 'function' ? await data.description(response) : data.description;
@@ -203,8 +210,11 @@ class Observer {
       .catch(async (error) => {
         result = ['reject', error];
         if (data.error !== undefined) {
-          shouldDismiss = false;
           const promiseData = typeof data.error === 'function' ? await data.error(error) : data.error;
+
+          if (!promiseData) return;
+
+          shouldDismiss = false;
 
           const description = typeof data.description === 'function' ? await data.description(error) : data.description;
 
