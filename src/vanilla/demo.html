@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sonner Vanilla JS Demo</title>
+  <link rel="stylesheet" href="../styles.css">
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+      padding: 40px;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    h1 {
+      margin-bottom: 30px;
+    }
+    .demo-section {
+      margin-bottom: 30px;
+    }
+    .demo-section h2 {
+      font-size: 20px;
+      margin-bottom: 15px;
+    }
+    .buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 14px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      background: white;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    button:hover {
+      background: #f5f5f5;
+      border-color: #999;
+    }
+  </style>
+</head>
+<body>
+  <h1>Sonner Vanilla JS Demo</h1>
+  <p>An opinionated toast component for vanilla JavaScript - no React required!</p>
+
+  <div class="demo-section">
+    <h2>Basic Toasts</h2>
+    <div class="buttons">
+      <button id="basic-toast">Default Toast</button>
+      <button id="success-toast">Success Toast</button>
+      <button id="error-toast">Error Toast</button>
+      <button id="warning-toast">Warning Toast</button>
+      <button id="info-toast">Info Toast</button>
+      <button id="loading-toast">Loading Toast</button>
+    </div>
+  </div>
+
+  <div class="demo-section">
+    <h2>With Description</h2>
+    <div class="buttons">
+      <button id="description-toast">Toast with Description</button>
+    </div>
+  </div>
+
+  <div class="demo-section">
+    <h2>With Actions</h2>
+    <div class="buttons">
+      <button id="action-toast">Toast with Action</button>
+      <button id="cancel-toast">Toast with Cancel</button>
+    </div>
+  </div>
+
+  <div class="demo-section">
+    <h2>Promise</h2>
+    <div class="buttons">
+      <button id="promise-toast">Promise Toast</button>
+    </div>
+  </div>
+
+  <div class="demo-section">
+    <h2>Control</h2>
+    <div class="buttons">
+      <button id="dismiss-all">Dismiss All</button>
+    </div>
+  </div>
+
+  <script type="module">
+    // This would normally be: import { Sonner, toast } from 'sonner/vanilla';
+    // For demo purposes, we'll need to build it first
+    
+    // Placeholder for demo - actual implementation would be:
+    // import { Sonner, toast } from '../dist/vanilla/index.js';
+    // const toaster = Sonner.init({ position: 'bottom-right', duration: 4000 });
+    
+    console.log('Vanilla JS demo loaded. Build the vanilla version to test.');
+    console.log('Run: npm run build');
+    
+    // For now, show instructions
+    document.getElementById('basic-toast')?.addEventListener('click', () => {
+      alert('Build the vanilla version first with: npm run build');
+    });
+  </script>
+</body>
+</html>
