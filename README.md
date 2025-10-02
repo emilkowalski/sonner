@@ -40,21 +40,78 @@ For projects without React, import from `sonner/vanilla`:
 import { Sonner, toast } from 'sonner/vanilla';
 import 'sonner/dist/styles.css';
 
-// Initialize the toaster
+// Initialize the toaster (do this once, typically in your main app file)
 const toaster = Sonner.init({
-  position: 'bottom-right',
-  duration: 4000,
+  position: 'bottom-right',  // 'top-left', 'top-right', 'bottom-left', 'bottom-right', 'top-center', 'bottom-center'
+  duration: 4000,            // Default duration in milliseconds
+  closeButton: false,        // Show close button
+  richColors: false,         // Enable rich colors
+  theme: 'light',           // 'light', 'dark', or 'system'
 });
 
-// Use toast from anywhere
-toast('My first toast');
-toast.success('Success!');
-toast.error('Error!');
-toast.promise(fetchData(), {
-  loading: 'Loading...',
-  success: 'Data loaded!',
-  error: 'Failed to load',
+// Basic usage
+toast('Event has been created');
+
+// Toast types
+toast.success('Successfully saved!');
+toast.error('An error occurred');
+toast.warning('Be careful!');
+toast.info('Did you know?');
+toast.loading('Loading...');
+
+// With description
+toast('Event Created', {
+  description: 'Monday, January 3rd at 6:00pm'
 });
+
+// With action button
+toast('Event Created', {
+  action: {
+    label: 'Undo',
+    onClick: () => console.log('Undo clicked')
+  }
+});
+
+// Promise support - automatically shows loading, then success/error
+const promise = fetch('/api/data');
+toast.promise(promise, {
+  loading: 'Loading data...',
+  success: (data) => `${data.name} loaded successfully!`,
+  error: 'Failed to load data'
+});
+
+// Custom duration
+toast('Quick message', { duration: 1000 });
+toast('Stays forever', { duration: Infinity });
+
+// Dismiss toasts
+const id = toast('Message');
+toast.dismiss(id);  // Dismiss specific toast
+toast.dismiss();    // Dismiss all toasts
+```
+
+**Using with CDN (no build step required):**
+
+```html
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sonner/dist/styles.css">
+</head>
+<body>
+  <button id="show-toast">Show Toast</button>
+  
+  <script type="module">
+    import { Sonner, toast } from 'https://cdn.jsdelivr.net/npm/sonner/dist/vanilla/index.mjs';
+    
+    Sonner.init({ position: 'bottom-right' });
+    
+    document.getElementById('show-toast').onclick = () => {
+      toast('Hello from CDN!');
+    };
+  </script>
+</body>
+</html>
 ```
 
 **Features:**
@@ -65,6 +122,8 @@ toast.promise(fetchData(), {
 - ✅ Custom durations
 - ✅ Automatic dismiss or infinite duration
 - ✅ Same CSS styling as React version
+- ✅ TypeScript support
+- ✅ Works with CDN (no build required)
 
 See the [demo page](./demo-vanilla.html) for more examples.
 
