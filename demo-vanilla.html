@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sonner Vanilla JS Demo</title>
+  <link rel="stylesheet" href="../dist/styles.css">
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+      padding: 40px;
+      max-width: 800px;
+      margin: 0 auto;
+      background: #fafafa;
+    }
+    h1 {
+      margin-bottom: 10px;
+    }
+    .subtitle {
+      color: #666;
+      margin-bottom: 30px;
+    }
+    .demo-section {
+      margin-bottom: 30px;
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    .demo-section h2 {
+      font-size: 18px;
+      margin-top: 0;
+      margin-bottom: 15px;
+    }
+    .buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 14px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      background: white;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    button:hover {
+      background: #f5f5f5;
+      border-color: #999;
+    }
+    button:active {
+      background: #e5e5e5;
+    }
+    .code-block {
+      background: #f5f5f5;
+      padding: 10px;
+      border-radius: 4px;
+      font-family: 'Monaco', 'Menlo', 'Consolas', monospace;
+      font-size: 12px;
+      overflow-x: auto;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h1>🍞 Sonner Vanilla JS</h1>
+  <p class="subtitle">An opinionated toast component - no React required!</p>
+
+  <div class="demo-section">
+    <h2>Basic Toasts</h2>
+    <div class="buttons">
+      <button id="basic-toast">Default Toast</button>
+      <button id="success-toast">Success</button>
+      <button id="error-toast">Error</button>
+      <button id="warning-toast">Warning</button>
+      <button id="info-toast">Info</button>
+      <button id="loading-toast">Loading</button>
+    </div>
+    <div class="code-block">
+toast('Event has been created')<br>
+toast.success('Successfully saved!')<br>
+toast.error('An error occurred')
+    </div>
+  </div>
+
+  <div class="demo-section">
+    <h2>With Description</h2>
+    <div class="buttons">
+      <button id="description-toast">Show Description</button>
+    </div>
+    <div class="code-block">
+toast('Event Created', {<br>
+&nbsp;&nbsp;description: 'Monday, January 3rd at 6:00pm'<br>
+})
+    </div>
+  </div>
+
+  <div class="demo-section">
+    <h2>With Actions</h2>
+    <div class="buttons">
+      <button id="action-toast">With Action</button>
+      <button id="action-cancel-toast">With Action & Cancel</button>
+    </div>
+    <div class="code-block">
+toast('Event Created', {<br>
+&nbsp;&nbsp;action: {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;label: 'Undo',<br>
+&nbsp;&nbsp;&nbsp;&nbsp;onClick: () => console.log('Undo')<br>
+&nbsp;&nbsp;}<br>
+})
+    </div>
+  </div>
+
+  <div class="demo-section">
+    <h2>Promise</h2>
+    <div class="buttons">
+      <button id="promise-success">Promise (Success)</button>
+      <button id="promise-error">Promise (Error)</button>
+    </div>
+    <div class="code-block">
+const promise = fetch('/api/data')<br>
+toast.promise(promise, {<br>
+&nbsp;&nbsp;loading: 'Loading...',<br>
+&nbsp;&nbsp;success: 'Data loaded!',<br>
+&nbsp;&nbsp;error: 'Failed to load'<br>
+})
+    </div>
+  </div>
+
+  <div class="demo-section">
+    <h2>Custom Duration</h2>
+    <div class="buttons">
+      <button id="short-duration">Short (1s)</button>
+      <button id="long-duration">Long (10s)</button>
+      <button id="infinite-duration">Infinite</button>
+    </div>
+    <div class="code-block">
+toast('Short duration', { duration: 1000 })<br>
+toast('Infinite', { duration: Infinity })
+    </div>
+  </div>
+
+  <div class="demo-section">
+    <h2>Control</h2>
+    <div class="buttons">
+      <button id="dismiss-all">Dismiss All</button>
+      <button id="dismiss-specific">Create & Dismiss</button>
+    </div>
+    <div class="code-block">
+toast.dismiss() // Dismiss all<br>
+const id = toast('Message')<br>
+toast.dismiss(id) // Dismiss specific
+    </div>
+  </div>
+
+  <script type="module">
+    // Import the vanilla JS version
+    import { Sonner, toast } from '../dist/vanilla/index.mjs';
+    
+    // Initialize Sonner
+    const toaster = Sonner.init({
+      position: 'bottom-right',
+      duration: 4000,
+      closeButton: false,
+    });
+    
+    console.log('Sonner Vanilla JS initialized!', toaster);
+    
+    // Basic toasts
+    document.getElementById('basic-toast').addEventListener('click', () => {
+      toast('Event has been created');
+    });
+    
+    document.getElementById('success-toast').addEventListener('click', () => {
+      toast.success('Successfully saved!');
+    });
+    
+    document.getElementById('error-toast').addEventListener('click', () => {
+      toast.error('An error occurred');
+    });
+    
+    document.getElementById('warning-toast').addEventListener('click', () => {
+      toast.warning('Be careful!');
+    });
+    
+    document.getElementById('info-toast').addEventListener('click', () => {
+      toast.info('Did you know?');
+    });
+    
+    document.getElementById('loading-toast').addEventListener('click', () => {
+      toast.loading('Loading data...');
+    });
+    
+    // With description
+    document.getElementById('description-toast').addEventListener('click', () => {
+      toast('Event has been created', {
+        description: 'Monday, January 3rd at 6:00pm'
+      });
+    });
+    
+    // With actions
+    document.getElementById('action-toast').addEventListener('click', () => {
+      toast('Event has been created', {
+        action: {
+          label: 'Undo',
+          onClick: () => {
+            console.log('Undo clicked!');
+            toast('Event undone!');
+          }
+        }
+      });
+    });
+    
+    document.getElementById('action-cancel-toast').addEventListener('click', () => {
+      toast('Event has been created', {
+        action: {
+          label: 'Confirm',
+          onClick: () => {
+            console.log('Confirmed!');
+            toast.success('Confirmed!');
+          }
+        },
+        cancel: {
+          label: 'Cancel',
+          onClick: () => {
+            console.log('Cancelled!');
+            toast.error('Cancelled!');
+          }
+        }
+      });
+    });
+    
+    // Promise
+    document.getElementById('promise-success').addEventListener('click', () => {
+      const promise = new Promise((resolve) => {
+        setTimeout(() => resolve({ name: 'John' }), 2000);
+      });
+      
+      toast.promise(promise, {
+        loading: 'Loading data...',
+        success: (data) => `Hello ${data.name}!`,
+        error: 'Failed to load data'
+      });
+    });
+    
+    document.getElementById('promise-error').addEventListener('click', () => {
+      const promise = new Promise((_, reject) => {
+        setTimeout(() => reject(new Error('Network error')), 2000);
+      });
+      
+      toast.promise(promise, {
+        loading: 'Loading data...',
+        success: 'Data loaded!',
+        error: (err) => `Error: ${err.message}`
+      });
+    });
+    
+    // Custom duration
+    document.getElementById('short-duration').addEventListener('click', () => {
+      toast('This will disappear quickly', { duration: 1000 });
+    });
+    
+    document.getElementById('long-duration').addEventListener('click', () => {
+      toast('This will stay for a while', { duration: 10000 });
+    });
+    
+    document.getElementById('infinite-duration').addEventListener('click', () => {
+      toast('This stays forever (until dismissed)', { duration: Infinity });
+    });
+    
+    // Control
+    document.getElementById('dismiss-all').addEventListener('click', () => {
+      toast.dismiss();
+    });
+    
+    document.getElementById('dismiss-specific').addEventListener('click', () => {
+      const id = toast('This will be dismissed in 1 second');
+      setTimeout(() => {
+        toast.dismiss(id);
+      }, 1000);
+    });
+  </script>
+</body>
+</html>

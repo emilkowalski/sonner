@@ -9,6 +9,7 @@ node_modules
 
 # testing
 coverage
+test-vanilla.js
 
 # next.js
 .next/
