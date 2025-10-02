@@ -1,7 +1,7 @@
 {
   "name": "sonner",
   "version": "2.0.7",
-  "description": "An opinionated toast component for React.",
+  "description": "An opinionated toast component for React and Vanilla JavaScript.",
   "exports": {
     ".": {
       "import": {
@@ -13,6 +13,17 @@
         "default": "./dist/index.js"
       },
       "default": "./dist/index.js"
+    },
+    "./vanilla": {
+      "import": {
+        "types": "./dist/vanilla/index.d.mts",
+        "default": "./dist/vanilla/index.mjs"
+      },
+      "require": {
+        "types": "./dist/vanilla/index.d.ts",
+        "default": "./dist/vanilla/index.js"
+      },
+      "default": "./dist/vanilla/index.js"
     },
     "./dist/styles.css": "./dist/styles.css"
   },
@@ -32,6 +43,8 @@
   },
   "keywords": [
     "react",
+    "vanilla",
+    "javascript",
     "notifications",
     "toast",
     "snackbar",
