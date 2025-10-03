@@ -62,6 +62,7 @@ export interface Action {
 
 export interface ToastT {
   id: number | string;
+  toasterId?: string;
   title?: (() => React.ReactNode) | React.ReactNode;
   type?: ToastTypes;
   icon?: React.ReactNode;
@@ -86,6 +87,7 @@ export interface ToastT {
   classNames?: ToastClassnames;
   descriptionClassName?: string;
   position?: Position;
+  testId?: string;
 }
 
 export function isAction(action: Action | React.ReactNode): action is Action {
@@ -110,6 +112,7 @@ interface ToastOptions {
   unstyled?: boolean;
   classNames?: ToastClassnames;
   closeButtonAriaLabel?: string;
+  toasterId?: string;
 }
 
 type Offset =
@@ -123,6 +126,7 @@ type Offset =
   | number;
 
 export interface ToasterProps {
+  id?: string;
   invert?: boolean;
   theme?: 'light' | 'dark' | 'system';
   position?: Position;
@@ -191,4 +195,5 @@ export interface ToastToDismiss {
 
 export type ExternalToast = Omit<ToastT, 'id' | 'type' | 'title' | 'jsx' | 'delete' | 'promise'> & {
   id?: number | string;
+  toasterId?: string;
 };

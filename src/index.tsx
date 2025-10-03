@@ -165,6 +165,7 @@ const Toast = (props: ToastProps) => {
   }, [setHeights, toast.id]);
 
   React.useLayoutEffect(() => {
+    // Keep height up to date with the content in case it updates
     if (!mounted) return;
     const toastNode = toastRef.current;
     const originalHeight = toastNode.style.height;
@@ -182,7 +183,7 @@ const Toast = (props: ToastProps) => {
         return heights.map((height) => (height.toastId === toast.id ? { ...height, height: newHeight } : height));
       }
     });
-  }, [mounted, toast.title, toast.description, setHeights, toast.id]);
+  }, [mounted, toast.title, toast.description, setHeights, toast.id, toast.jsx, toast.action, toast.cancel]);
 
   const deleteToast = React.useCallback(() => {
     // Save the offset for the exit swipe animation
@@ -243,6 +244,7 @@ const Toast = (props: ToastProps) => {
   React.useEffect(() => {
     if (toast.delete) {
       deleteToast();
+      toast.onDismiss?.(toast);
     }
   }, [deleteToast, toast.delete]);
 
@@ -295,6 +297,7 @@ const Toast = (props: ToastProps) => {
       data-swipe-out={swipeOut}
       data-swipe-direction={swipeOutDirection}
       data-expanded={Boolean(expanded || (expandByDefault && mounted))}
+      data-testid={toast.testId}
       style={
         {
           '--index': index,
@@ -312,6 +315,7 @@ const Toast = (props: ToastProps) => {
         pointerStartRef.current = null;
       }}
       onPointerDown={(event) => {
+        if (event.button === 2) return; // Return early on right click
         if (disabled || !dismissible) return;
         dragStartTime.current = new Date();
         setOffsetBeforeRemove(offset.current);
@@ -605,6 +609,7 @@ function useSonner() {
 
 const Toaster = React.forwardRef<HTMLElement, ToasterProps>(function Toaster(props, ref) {
   const {
+    id,
     invert,
     position = 'bottom-right',
     hotkey = ['altKey', 'KeyT'],
@@ -625,11 +630,17 @@ const Toaster = React.forwardRef<HTMLElement, ToasterProps>(function Toaster(pro
     containerAriaLabel = 'Notifications',
   } = props;
   const [toasts, setToasts] = React.useState<ToastT[]>([]);
+  const filteredToasts = React.useMemo(() => {
+    if (id) {
+      return toasts.filter((toast) => toast.toasterId === id);
+    }
+    return toasts.filter((toast) => !toast.toasterId);
+  }, [toasts, id]);
   const possiblePositions = React.useMemo(() => {
     return Array.from(
-      new Set([position].concat(toasts.filter((toast) => toast.position).map((toast) => toast.position))),
+      new Set([position].concat(filteredToasts.filter((toast) => toast.position).map((toast) => toast.position))),
     );
-  }, [toasts, position]);
+  }, [filteredToasts, position]);
   const [heights, setHeights] = React.useState<HeightT[]>([]);
   const [expanded, setExpanded] = React.useState(false);
   const [interacting, setInteracting] = React.useState(false);
@@ -798,7 +809,7 @@ const Toaster = React.forwardRef<HTMLElement, ToasterProps>(function Toaster(pro
       {possiblePositions.map((position, index) => {
         const [y, x] = position.split('-');
 
-        if (!toasts.length) return null;
+        if (!filteredToasts.length) return null;
 
         return (
           <ol
@@ -810,7 +821,6 @@ const Toaster = React.forwardRef<HTMLElement, ToasterProps>(function Toaster(pro
             data-sonner-toaster
             data-sonner-theme={actualTheme}
             data-y-position={y}
-            data-lifted={expanded && toasts.length > 1 && !expand}
             data-x-position={x}
             style={
               {
@@ -859,7 +869,7 @@ const Toaster = React.forwardRef<HTMLElement, ToasterProps>(function Toaster(pro
             }}
             onPointerUp={() => setInteracting(false)}
           >
-            {toasts
+            {filteredToasts
               .filter((toast) => (!toast.position && index === 0) || toast.position === position)
               .map((toast, index) => (
                 <Toast
@@ -883,7 +893,7 @@ const Toaster = React.forwardRef<HTMLElement, ToasterProps>(function Toaster(pro
                   actionButtonStyle={toastOptions?.actionButtonStyle}
                   closeButtonAriaLabel={toastOptions?.closeButtonAriaLabel}
                   removeToast={removeToast}
-                  toasts={toasts.filter((t) => t.position == toast.position)}
+                  toasts={filteredToasts.filter((t) => t.position == toast.position)}
                   heights={heights.filter((h) => h.position == toast.position)}
                   setHeights={setHeights}
                   expandByDefault={expand}

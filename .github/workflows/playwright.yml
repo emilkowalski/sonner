@@ -13,7 +13,7 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 20
-      - run: npm install pnpm@8.12.1 -g
+      - run: npm install pnpm@9.15.9 -g
       - run: pnpm install --no-frozen-lockfile
       - run: pnpm build
       - run: npx playwright install --with-deps

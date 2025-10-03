@@ -51,10 +51,6 @@ html[dir='rtl'],
   transition: transform 400ms ease;
 }
 
-[data-sonner-toaster][data-lifted='true'] {
-  transform: translateY(-8px);
-}
-
 @media (hover: none) and (pointer: coarse) {
   [data-sonner-toaster][data-lifted='true'] {
     transform: none;

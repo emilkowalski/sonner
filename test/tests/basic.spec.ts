@@ -293,4 +293,40 @@ test.describe('Basic functionality', () => {
     await expect(page.getByLabel('Notices')).toHaveCount(1);
     await expect(page.getByLabel('Yeet the notice', { exact: true })).toHaveCount(1);
   });
+
+  test('toast with toasterId only appears in the correct Toaster', async ({ page }) => {
+    await page.getByTestId('toast-secondary').click();
+    const secondaryToaster = page.locator('[data-sonner-toaster][data-x-position="left"][data-y-position="top"]');
+    await expect(secondaryToaster.getByText('Secondary Toaster Toast')).toHaveCount(1);
+    const globalToaster = page.locator('[data-sonner-toaster][data-x-position="right"][data-y-position="bottom"]');
+    await expect(globalToaster.getByText('Secondary Toaster Toast')).toHaveCount(0);
+  });
+
+  test('toast without toasterId only appears in the global Toaster', async ({ page }) => {
+    await page.getByTestId('toast-global').click();
+    const globalToaster = page.locator('[data-sonner-toaster][data-x-position="right"][data-y-position="bottom"]');
+    await expect(globalToaster.getByText('Global Toaster Toast')).toHaveCount(1);
+    const secondaryToaster = page.locator('[data-sonner-toaster][data-x-position="left"][data-y-position="top"]');
+    await expect(secondaryToaster.getByText('Global Toaster Toast')).toHaveCount(0);
+  });
+
+  test('toast with testId renders data-testid attribute correctly', async ({ page }) => {
+    await page.getByTestId('testid-toast-button').click();
+    await expect(page.getByTestId('my-test-toast')).toBeVisible();
+    await expect(page.getByTestId('my-test-toast')).toHaveText('Toast with test ID');
+  });
+
+  test('toast without testId does not have data-testid attribute', async ({ page }) => {
+    await page.getByTestId('default-button').click();
+    const toast = page.locator('[data-sonner-toast]');
+    await expect(toast).toBeVisible();
+    await expect(toast).not.toHaveAttribute('data-testid');
+  });
+
+  test('promise toast with testId maintains testId through state changes', async ({ page }) => {
+    await page.getByTestId('testid-promise-toast-button').click();
+    await expect(page.getByTestId('promise-test-toast')).toBeVisible();
+    await expect(page.getByTestId('promise-test-toast')).toHaveText('Loading...');
+    await expect(page.getByTestId('promise-test-toast')).toHaveText('Loaded');
+  });
 });
