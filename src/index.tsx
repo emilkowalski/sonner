@@ -779,6 +779,7 @@ const Toaster = React.forwardRef<HTMLElement, ToasterProps>(function Toaster(pro
       aria-relevant="additions text"
       aria-atomic="false"
       suppressHydrationWarning
+      data-react-aria-top-layer
     >
       {possiblePositions.map((position, index) => {
         const [y, x] = position.split('-');
