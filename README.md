@@ -2,6 +2,10 @@ https://github.com/vallezw/sonner/assets/50796600/59b95cb7-9068-4f3e-8469-0b35d9
 
 [Sonner](https://sonner.emilkowal.ski/) is an opinionated toast component for React. You can read more about why and how it was built [here](https://emilkowal.ski/ui/building-a-toast-component).
 
+[![npm downloads](https://img.shields.io/npm/dw/sonner.svg)](https://npm-compare.com/sonner) 
+[![npm version](https://img.shields.io/npm/v/sonner.svg)](https://www.npmjs.com/package/sonner)
+[![npm license](https://img.shields.io/npm/l/sonner.svg)](https://github.com/emilkowalski/sonner)
+
 ## Usage
 
 To start using the library, install it in your project:
