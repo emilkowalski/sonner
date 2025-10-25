@@ -738,7 +738,7 @@ const Toaster = React.forwardRef<HTMLElement, ToasterProps>(function Toaster(pro
 
   React.useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
-      const isHotkeyPressed = hotkey.every((key) => (event as any)[key] || event.code === key);
+      const isHotkeyPressed = hotkey.length > 0 && hotkey.every((key) => (event as any)[key] || event.code === key);
 
       if (isHotkeyPressed) {
         setExpanded(true);
