@@ -610,6 +610,7 @@ const Toaster = React.forwardRef<HTMLElement, ToasterProps>(function Toaster(pro
     dir = getDocumentDirection(),
     gap = GAP,
     icons,
+    customAriaLabel,
     containerAriaLabel = 'Notifications',
   } = props;
   const [toasts, setToasts] = React.useState<ToastT[]>([]);
@@ -773,7 +774,7 @@ const Toaster = React.forwardRef<HTMLElement, ToasterProps>(function Toaster(pro
     // Remove item from normal navigation flow, only available via hotkey
     <section
       ref={ref}
-      aria-label={`${containerAriaLabel} ${hotkeyLabel}`}
+      aria-label={customAriaLabel ?? `${containerAriaLabel} ${hotkeyLabel}`}
       tabIndex={-1}
       aria-live="polite"
       aria-relevant="additions text"
