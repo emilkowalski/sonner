@@ -127,7 +127,7 @@ html[dir='rtl'],
 [data-sonner-toast][data-styled='true'] [data-description] {
   font-weight: 400;
   line-height: 1.4;
-  color: #3f3f3f;
+  color: inherit;
 }
 
 [data-rich-colors='true'][data-sonner-toast][data-styled='true'] [data-description] {
