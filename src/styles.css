@@ -86,7 +86,7 @@ html[dir='rtl'],
   opacity: 0;
   transform: var(--y);
   touch-action: none;
-  transition: transform 400ms, opacity 400ms, height 400ms, box-shadow 200ms;
+  transition: var(--transition-duration);
   box-sizing: border-box;
   outline: none;
   overflow-wrap: anywhere;

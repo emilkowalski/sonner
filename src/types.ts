@@ -113,6 +113,7 @@ interface ToastOptions {
   classNames?: ToastClassnames;
   closeButtonAriaLabel?: string;
   toasterId?: string;
+  transitionDuration?: number;
 }
 
 type Offset =
@@ -179,6 +180,7 @@ export interface ToastProps {
   icons?: ToastIcons;
   closeButtonAriaLabel?: string;
   defaultRichColors?: boolean;
+  transitionDuration?: number;
 }
 
 export enum SwipeStateTypes {

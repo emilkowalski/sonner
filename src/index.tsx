@@ -88,6 +88,7 @@ const Toast = (props: ToastProps) => {
     classNames,
     icons,
     closeButtonAriaLabel = 'Close toast',
+    transitionDuration = 400,
   } = props;
   const [swipeDirection, setSwipeDirection] = React.useState<'x' | 'y' | null>(null);
   const [swipeOutDirection, setSwipeOutDirection] = React.useState<'left' | 'right' | 'up' | 'down' | null>(null);
@@ -291,6 +292,7 @@ const Toast = (props: ToastProps) => {
       data-swipe-direction={swipeOutDirection}
       data-expanded={Boolean(expanded || (expandByDefault && mounted))}
       data-testid={toast.testId}
+      data-transition-duration={transitionDuration}
       style={
         {
           '--index': index,
@@ -298,6 +300,7 @@ const Toast = (props: ToastProps) => {
           '--z-index': toasts.length - index,
           '--offset': `${removed ? offsetBeforeRemove : offset.current}px`,
           '--initial-height': expandByDefault ? 'auto' : `${initialHeight}px`,
+          '--transition-duration': `transform ${transitionDuration}ms, opacity ${transitionDuration}ms, height ${transitionDuration}ms, box-shadow ${transitionDuration}ms`,
           ...style,
           ...toast.style,
         } as React.CSSProperties
@@ -875,6 +878,7 @@ const Toaster = React.forwardRef<HTMLElement, ToasterProps>(function Toaster(pro
                   gap={gap}
                   expanded={expanded}
                   swipeDirections={props.swipeDirections}
+                  transitionDuration={toastOptions?.transitionDuration}
                 />
               ))}
           </ol>
