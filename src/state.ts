@@ -54,18 +54,19 @@ class Observer {
   ) => {
     const { message, ...rest } = data;
     const id = typeof data?.id === 'number' || data.id?.length > 0 ? data.id : toastsCounter++;
-    const alreadyExists = this.toasts.find((toast) => {
-      return toast.id === id;
+    const existingToast = this.toasts.find((toast) => {
+      return toast.id === id || toastHasSameText(toast, message);
     });
+
     const dismissible = data.dismissible === undefined ? true : data.dismissible;
 
     if (this.dismissedToasts.has(id)) {
       this.dismissedToasts.delete(id);
     }
 
-    if (alreadyExists) {
+    if (existingToast) {
       this.toasts = this.toasts.map((toast) => {
-        if (toast.id === id) {
+        if (toast.id === existingToast.id) {
           this.publish({ ...toast, ...data, id, title: message });
           return {
             ...toast,
@@ -280,6 +281,8 @@ const basicToast = toastFunction;
 
 const getHistory = () => ToastState.toasts;
 const getToasts = () => ToastState.getActiveToasts();
+const toastHasSameText = (toast: ToastT | ToastToDismiss, message: titleT) =>
+  typeof message === 'string' && 'title' in toast && typeof toast.title === 'string' && message === toast.title;
 
 // We use `Object.assign` to maintain the correct types as we would lose them otherwise
 export const toast = Object.assign(
