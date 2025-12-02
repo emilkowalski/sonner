@@ -1,32 +1,45 @@
 import type {
   ExternalToast,
   PromiseData,
-  PromiseIExtendedResult,
+  PromiseExtendedResult,
   PromiseT,
+  ToastContent,
   ToastT,
   ToastToDismiss,
   ToastTypes,
 } from './types';
 
-import React from 'react';
-
 let toastsCounter = 1;
 
-type titleT = (() => React.ReactNode) | React.ReactNode;
+export interface ContentValidator<TContent = any> {
+  isValidElement: (content: any) => content is TContent;
+}
 
-class Observer {
-  subscribers: Array<(toast: ExternalToast | ToastToDismiss) => void>;
-  toasts: Array<ToastT | ToastToDismiss>;
+class DefaultContentValidator implements ContentValidator {
+  isValidElement(content: any): content is any {
+    return false;
+  }
+}
+
+class Observer<TContent = any> {
+  subscribers: Array<(toast: ExternalToast<TContent> | ToastToDismiss) => void>;
+  toasts: Array<ToastT<TContent> | ToastToDismiss>;
   dismissedToasts: Set<string | number>;
+  contentValidator: ContentValidator<TContent>;
 
-  constructor() {
+  constructor(contentValidator?: ContentValidator<TContent>) {
     this.subscribers = [];
     this.toasts = [];
     this.dismissedToasts = new Set();
+    this.contentValidator = contentValidator || new DefaultContentValidator();
+  }
+
+  setContentValidator(validator: ContentValidator<TContent>) {
+    this.contentValidator = validator;
   }
 
   // We use arrow functions to maintain the correct `this` reference
-  subscribe = (subscriber: (toast: ToastT | ToastToDismiss) => void) => {
+  subscribe = (subscriber: (toast: ToastT<TContent> | ToastToDismiss) => void) => {
     this.subscribers.push(subscriber);
 
     return () => {
@@ -35,22 +48,22 @@ class Observer {
     };
   };
 
-  publish = (data: ToastT) => {
+  publish = (data: ToastT<TContent>) => {
     this.subscribers.forEach((subscriber) => subscriber(data));
   };
 
-  addToast = (data: ToastT) => {
+  addToast = (data: ToastT<TContent>) => {
     this.publish(data);
     this.toasts = [...this.toasts, data];
   };
 
   create = (
-    data: ExternalToast & {
-      message?: titleT;
+    data: ExternalToast<TContent> & {
+      message?: ToastContent<TContent>;
       type?: ToastTypes;
       promise?: PromiseT;
-      jsx?: React.ReactElement;
-    },
+      jsx?: TContent;
+    }
   ) => {
     const { message, ...rest } = data;
     const id = typeof data?.id === 'number' || data.id?.length > 0 ? data.id : toastsCounter++;
@@ -66,14 +79,15 @@ class Observer {
     if (alreadyExists) {
       this.toasts = this.toasts.map((toast) => {
         if (toast.id === id) {
-          this.publish({ ...toast, ...data, id, title: message });
-          return {
+          const updatedToast = {
             ...toast,
             ...data,
             id,
             dismissible,
             title: message,
           };
+          this.publish(updatedToast);
+          return updatedToast;
         }
 
         return toast;
@@ -88,7 +102,12 @@ class Observer {
   dismiss = (id?: number | string) => {
     if (id) {
       this.dismissedToasts.add(id);
-      requestAnimationFrame(() => this.subscribers.forEach((subscriber) => subscriber({ id, dismiss: true })));
+      if (typeof requestAnimationFrame !== 'undefined') {
+        requestAnimationFrame(() => this.subscribers.forEach((subscriber) => subscriber({ id, dismiss: true })));
+      } else {
+        // Fallback for environments without requestAnimationFrame
+        setTimeout(() => this.subscribers.forEach((subscriber) => subscriber({ id, dismiss: true })), 0);
+      }
     } else {
       this.toasts.forEach((toast) => {
         this.subscribers.forEach((subscriber) => subscriber({ id: toast.id, dismiss: true }));
@@ -98,31 +117,31 @@ class Observer {
     return id;
   };
 
-  message = (message: titleT | React.ReactNode, data?: ExternalToast) => {
+  message = (message: ToastContent<TContent>, data?: ExternalToast<TContent>) => {
     return this.create({ ...data, message });
   };
 
-  error = (message: titleT | React.ReactNode, data?: ExternalToast) => {
+  error = (message: ToastContent<TContent>, data?: ExternalToast<TContent>) => {
     return this.create({ ...data, message, type: 'error' });
   };
 
-  success = (message: titleT | React.ReactNode, data?: ExternalToast) => {
+  success = (message: ToastContent<TContent>, data?: ExternalToast<TContent>) => {
     return this.create({ ...data, type: 'success', message });
   };
 
-  info = (message: titleT | React.ReactNode, data?: ExternalToast) => {
+  info = (message: ToastContent<TContent>, data?: ExternalToast<TContent>) => {
     return this.create({ ...data, type: 'info', message });
   };
 
-  warning = (message: titleT | React.ReactNode, data?: ExternalToast) => {
+  warning = (message: ToastContent<TContent>, data?: ExternalToast<TContent>) => {
     return this.create({ ...data, type: 'warning', message });
   };
 
-  loading = (message: titleT | React.ReactNode, data?: ExternalToast) => {
+  loading = (message: ToastContent<TContent>, data?: ExternalToast<TContent>) => {
     return this.create({ ...data, type: 'loading', message });
   };
 
-  promise = <ToastData>(promise: PromiseT<ToastData>, data?: PromiseData<ToastData>) => {
+  promise = <ToastData>(promise: PromiseT<ToastData>, data?: PromiseData<ToastData, TContent>) => {
     if (!data) {
       // Nothing to show
       return;
@@ -147,8 +166,8 @@ class Observer {
     const originalPromise = p
       .then(async (response) => {
         result = ['resolve', response];
-        const isReactElementResponse = React.isValidElement(response);
-        if (isReactElementResponse) {
+        const isElementResponse = this.contentValidator.isValidElement(response);
+        if (isElementResponse) {
           shouldDismiss = false;
           this.create({ id, type: 'default', message: response });
         } else if (isHttpResponse(response) && !response.ok) {
@@ -162,10 +181,10 @@ class Observer {
               ? await data.description(`HTTP error! status: ${response.status}`)
               : data.description;
 
-          const isExtendedResult = typeof promiseData === 'object' && !React.isValidElement(promiseData);
+          const isExtendedResult = typeof promiseData === 'object' && !this.contentValidator.isValidElement(promiseData);
 
-          const toastSettings: PromiseIExtendedResult = isExtendedResult
-            ? (promiseData as PromiseIExtendedResult)
+          const toastSettings: PromiseExtendedResult<TContent> = isExtendedResult
+            ? (promiseData as PromiseExtendedResult<TContent>)
             : { message: promiseData };
 
           this.create({ id, type: 'error', description, ...toastSettings });
@@ -177,24 +196,24 @@ class Observer {
           const description =
             typeof data.description === 'function' ? await data.description(response) : data.description;
 
-          const isExtendedResult = typeof promiseData === 'object' && !React.isValidElement(promiseData);
+          const isExtendedResult = typeof promiseData === 'object' && !this.contentValidator.isValidElement(promiseData);
 
-          const toastSettings: PromiseIExtendedResult = isExtendedResult
-            ? (promiseData as PromiseIExtendedResult)
+          const toastSettings: PromiseExtendedResult<TContent> = isExtendedResult
+            ? (promiseData as PromiseExtendedResult<TContent>)
             : { message: promiseData };
 
           this.create({ id, type: 'error', description, ...toastSettings });
         } else if (data.success !== undefined) {
           shouldDismiss = false;
-          const promiseData = typeof data.success === 'function' ? await data.success(response) : data.success;
+          const promiseData = typeof data.success === 'function' ? await (data.success as Function)(response) : data.success;
 
           const description =
             typeof data.description === 'function' ? await data.description(response) : data.description;
 
-          const isExtendedResult = typeof promiseData === 'object' && !React.isValidElement(promiseData);
+          const isExtendedResult = typeof promiseData === 'object' && !this.contentValidator.isValidElement(promiseData);
 
-          const toastSettings: PromiseIExtendedResult = isExtendedResult
-            ? (promiseData as PromiseIExtendedResult)
+          const toastSettings: PromiseExtendedResult<TContent> = isExtendedResult
+            ? (promiseData as PromiseExtendedResult<TContent>)
             : { message: promiseData };
 
           this.create({ id, type: 'success', description, ...toastSettings });
@@ -208,10 +227,10 @@ class Observer {
 
           const description = typeof data.description === 'function' ? await data.description(error) : data.description;
 
-          const isExtendedResult = typeof promiseData === 'object' && !React.isValidElement(promiseData);
+          const isExtendedResult = typeof promiseData === 'object' && !this.contentValidator.isValidElement(promiseData);
 
-          const toastSettings: PromiseIExtendedResult = isExtendedResult
-            ? (promiseData as PromiseIExtendedResult)
+          const toastSettings: PromiseExtendedResult<TContent> = isExtendedResult
+            ? (promiseData as PromiseExtendedResult<TContent>)
             : { message: promiseData };
 
           this.create({ id, type: 'error', description, ...toastSettings });
@@ -240,7 +259,7 @@ class Observer {
     }
   };
 
-  custom = (jsx: (id: number | string) => React.ReactElement, data?: ExternalToast) => {
+  custom = (jsx: (id: number | string) => TContent, data?: ExternalToast<TContent>) => {
     const id = data?.id || toastsCounter++;
     this.create({ jsx: jsx(id), id, ...data });
     return id;
@@ -250,20 +269,6 @@ class Observer {
     return this.toasts.filter((toast) => !this.dismissedToasts.has(toast.id));
   };
 }
-
-export const ToastState = new Observer();
-
-// bind this to the toast function
-const toastFunction = (message: titleT, data?: ExternalToast) => {
-  const id = data?.id || toastsCounter++;
-
-  ToastState.addToast({
-    title: message,
-    ...data,
-    id,
-  });
-  return id;
-};
 
 const isHttpResponse = (data: any): data is Response => {
   return (
@@ -276,24 +281,39 @@ const isHttpResponse = (data: any): data is Response => {
   );
 };
 
-const basicToast = toastFunction;
+export function createToastState<TContent = any>(contentValidator?: ContentValidator<TContent>) {
+  const state = new Observer<TContent>(contentValidator);
 
-const getHistory = () => ToastState.toasts;
-const getToasts = () => ToastState.getActiveToasts();
+  const basicToast = (message: ToastContent<TContent>, data?: ExternalToast<TContent>) => {
+    const id = data?.id || toastsCounter++;
 
-// We use `Object.assign` to maintain the correct types as we would lose them otherwise
-export const toast = Object.assign(
-  basicToast,
-  {
-    success: ToastState.success,
-    info: ToastState.info,
-    warning: ToastState.warning,
-    error: ToastState.error,
-    custom: ToastState.custom,
-    message: ToastState.message,
-    promise: ToastState.promise,
-    dismiss: ToastState.dismiss,
-    loading: ToastState.loading,
-  },
-  { getHistory, getToasts },
-);
+    state.addToast({
+      title: message,
+      ...data,
+      id,
+    });
+    return id;
+  };
+
+  const getHistory = () => state.toasts;
+  const getToasts = () => state.getActiveToasts();
+
+  // We use `Object.assign` to maintain the correct types as we would lose them otherwise
+  const toast = Object.assign(
+    basicToast,
+    {
+      success: state.success,
+      info: state.info,
+      warning: state.warning,
+      error: state.error,
+      custom: state.custom,
+      message: state.message,
+      promise: state.promise,
+      dismiss: state.dismiss,
+      loading: state.loading,
+    },
+    { getHistory, getToasts },
+  );
+
+  return { state, toast };
+}
