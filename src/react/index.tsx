@@ -6,60 +6,31 @@ import ReactDOM from 'react-dom';
 import { CloseIcon, getAsset, Loader } from './assets';
 import { useIsDocumentHidden } from './hooks';
 import { toast, ToastState } from './state';
-import './styles.css';
 import {
   isAction,
-  SwipeDirection,
   type ExternalToast,
-  type HeightT,
   type ToasterProps,
   type ToastProps,
   type ToastT,
   type ToastToDismiss,
+  type HeightT,
 } from './types';
+import {
+  VISIBLE_TOASTS_AMOUNT,
+  VIEWPORT_OFFSET,
+  MOBILE_VIEWPORT_OFFSET,
+  TOAST_LIFETIME,
+  TOAST_WIDTH,
+  GAP,
+  SWIPE_THRESHOLD,
+  TIME_BEFORE_UNMOUNT,
+  cn,
+  getDefaultSwipeDirections,
+  getDocumentDirection,
+  assignOffset,
+} from '../core';
 
-// Visible toasts amount
-const VISIBLE_TOASTS_AMOUNT = 3;
-
-// Viewport padding
-const VIEWPORT_OFFSET = '24px';
-
-// Mobile viewport padding
-const MOBILE_VIEWPORT_OFFSET = '16px';
-
-// Default lifetime of a toasts (in ms)
-const TOAST_LIFETIME = 4000;
-
-// Default toast width
-const TOAST_WIDTH = 356;
-
-// Default gap between toasts
-const GAP = 14;
-
-// Threshold to dismiss a toast
-const SWIPE_THRESHOLD = 45;
-
-// Equal to exit animation duration
-const TIME_BEFORE_UNMOUNT = 200;
-
-function cn(...classes: (string | undefined)[]) {
-  return classes.filter(Boolean).join(' ');
-}
-
-function getDefaultSwipeDirections(position: string): Array<SwipeDirection> {
-  const [y, x] = position.split('-');
-  const directions: Array<SwipeDirection> = [];
-
-  if (y) {
-    directions.push(y as SwipeDirection);
-  }
-
-  if (x) {
-    directions.push(x as SwipeDirection);
-  }
-
-  return directions;
-}
+import '../styles.css';
 
 const Toast = (props: ToastProps) => {
   const {
@@ -503,51 +474,6 @@ const Toast = (props: ToastProps) => {
     </li>
   );
 };
-
-function getDocumentDirection(): ToasterProps['dir'] {
-  if (typeof window === 'undefined') return 'ltr';
-  if (typeof document === 'undefined') return 'ltr'; // For Fresh purpose
-
-  const dirAttribute = document.documentElement.getAttribute('dir');
-
-  if (dirAttribute === 'auto' || !dirAttribute) {
-    return window.getComputedStyle(document.documentElement).direction as ToasterProps['dir'];
-  }
-
-  return dirAttribute as ToasterProps['dir'];
-}
-
-function assignOffset(defaultOffset: ToasterProps['offset'], mobileOffset: ToasterProps['mobileOffset']) {
-  const styles = {} as React.CSSProperties;
-
-  [defaultOffset, mobileOffset].forEach((offset, index) => {
-    const isMobile = index === 1;
-    const prefix = isMobile ? '--mobile-offset' : '--offset';
-    const defaultValue = isMobile ? MOBILE_VIEWPORT_OFFSET : VIEWPORT_OFFSET;
-
-    function assignAll(offset: string | number) {
-      ['top', 'right', 'bottom', 'left'].forEach((key) => {
-        styles[`${prefix}-${key}`] = typeof offset === 'number' ? `${offset}px` : offset;
-      });
-    }
-
-    if (typeof offset === 'number' || typeof offset === 'string') {
-      assignAll(offset);
-    } else if (typeof offset === 'object') {
-      ['top', 'right', 'bottom', 'left'].forEach((key) => {
-        if (offset[key] === undefined) {
-          styles[`${prefix}-${key}`] = defaultValue;
-        } else {
-          styles[`${prefix}-${key}`] = typeof offset[key] === 'number' ? `${offset[key]}px` : offset[key];
-        }
-      });
-    } else {
-      assignAll(defaultValue);
-    }
-  });
-
-  return styles;
-}
 
 function useSonner() {
   const [activeToasts, setActiveToasts] = React.useState<ToastT[]>([]);
