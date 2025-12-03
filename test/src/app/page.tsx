@@ -121,6 +121,27 @@ export default function Home({ searchParams }: any) {
       >
         Render Custom Cancel Button
       </button>
+      <button
+        data-testid="custom-with-empty-id"
+        className="button"
+        onClick={() =>
+          toast.custom(
+            (t) => (
+              <div>
+                <h1>jsx</h1>
+                <button data-testid="dismiss-button" onClick={() => toast.dismiss(t)}>
+                  Dismiss
+                </button>
+              </div>
+            ),
+            {
+              id: undefined,
+            },
+          )
+        }
+      >
+        Render Custom Toast with empty id
+      </button>
       <button data-testid="infinity-toast" className="button" onClick={() => toast('My Toast', { duration: Infinity })}>
         Render Infinity Toast
       </button>
