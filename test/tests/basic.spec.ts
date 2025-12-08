@@ -23,6 +23,12 @@ test.describe('Basic functionality', () => {
     await expect(page.locator('[data-button]')).toHaveCount(1);
   });
 
+  test('does not render duplicate toasts with the same text', async ({ page }) => {
+    await page.getByTestId('success').click();
+    await page.getByTestId('success').click();
+    await expect(page.getByText('My Success Toast', { exact: true })).toHaveCount(1);
+  });
+
   test('show correct toast content based on promise state', async ({ page }) => {
     await page.getByTestId('promise').click();
     await expect(page.getByText('Loading...')).toHaveCount(1);
@@ -265,7 +271,7 @@ test.describe('Basic functionality', () => {
 
   test('cancel button is rendered with custom styles', async ({ page }) => {
     await page.getByTestId('custom-cancel-button-toast').click();
-    const button = await page.locator('[data-cancel]');
+    const button = page.locator('[data-cancel]');
 
     await expect(button).toHaveCSS('background-color', 'rgb(254, 226, 226)');
   });
@@ -280,7 +286,7 @@ test.describe('Basic functionality', () => {
 
   test('action button is rendered with custom styles', async ({ page }) => {
     await page.getByTestId('action').click();
-    const button = await page.locator('[data-button]');
+    const button = page.locator('[data-button]');
 
     await expect(button).toHaveCSS('background-color', 'rgb(219, 239, 255)');
   });
