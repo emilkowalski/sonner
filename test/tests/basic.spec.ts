@@ -338,3 +338,11 @@ test.describe('Basic functionality', () => {
     await expect(page.getByTestId('promise-test-toast')).toHaveText('Loaded');
   });
 });
+
+test('applies enterFrom attribute to toast when set', async ({ page }) => {
+  await page.goto('/?position=bottom-right&enterFrom=left');
+  await page.getByTestId('default-button').click();
+  const toast = page.locator('[data-sonner-toast]');
+  await expect(toast).toBeVisible();
+  await expect(toast).toHaveAttribute('data-enter-from', 'left');
+});

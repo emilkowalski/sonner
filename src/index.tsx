@@ -87,6 +87,7 @@ const Toast = (props: ToastProps) => {
     expandByDefault,
     classNames,
     icons,
+    enterFrom,
     closeButtonAriaLabel = 'Close toast',
   } = props;
   const [swipeDirection, setSwipeDirection] = React.useState<'x' | 'y' | null>(null);
@@ -125,6 +126,9 @@ const Toast = (props: ToastProps) => {
   const lastCloseTimerStartTimeRef = React.useRef(0);
   const pointerStartRef = React.useRef<{ x: number; y: number } | null>(null);
   const [y, x] = position.split('-');
+  // Per-toast > Toaster-level
+  const resolvedEnterFrom = toast.enterFrom ?? enterFrom;
+
   const toastsHeightBefore = React.useMemo(() => {
     return heights.reduce((prev, curr, reducerIndex) => {
       // Calculate offset up until current toast
@@ -281,6 +285,7 @@ const Toast = (props: ToastProps) => {
       data-visible={isVisible}
       data-y-position={y}
       data-x-position={x}
+      data-enter-from={resolvedEnterFrom}
       data-index={index}
       data-front={isFront}
       data-swiping={swiping}
@@ -612,6 +617,7 @@ const Toaster = React.forwardRef<HTMLElement, ToasterProps>(function Toaster(pro
     icons,
     customAriaLabel,
     containerAriaLabel = 'Notifications',
+    enterFrom,
   } = props;
   const [toasts, setToasts] = React.useState<ToastT[]>([]);
   const filteredToasts = React.useMemo(() => {
@@ -770,6 +776,8 @@ const Toaster = React.forwardRef<HTMLElement, ToasterProps>(function Toaster(pro
     }
   }, [listRef.current]);
 
+  const resolvedEnterFrom = enterFrom ?? toastOptions?.enterFrom;
+
   return (
     // Remove item from normal navigation flow, only available via hotkey
     <section
@@ -876,6 +884,7 @@ const Toaster = React.forwardRef<HTMLElement, ToasterProps>(function Toaster(pro
                   gap={gap}
                   expanded={expanded}
                   swipeDirections={props.swipeDirections}
+                  enterFrom={resolvedEnterFrom}
                 />
               ))}
           </ol>
