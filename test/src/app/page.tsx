@@ -369,6 +369,9 @@ export default function Home({ searchParams }: any) {
       <Toaster
         offset={32}
         position={searchParams.position || 'bottom-right'}
+        enterFrom={
+          searchParams.enterFrom === 'left' || searchParams.enterFrom === 'right' ? searchParams.enterFrom : undefined
+        }
         toastOptions={{
           actionButtonStyle: { backgroundColor: 'rgb(219, 239, 255)' },
           cancelButtonStyle: { backgroundColor: 'rgb(254, 226, 226)' },

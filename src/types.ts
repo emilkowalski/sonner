@@ -87,6 +87,7 @@ export interface ToastT {
   classNames?: ToastClassnames;
   descriptionClassName?: string;
   position?: Position;
+  enterFrom?: EnterFromDirection;
   testId?: string;
 }
 
@@ -112,6 +113,7 @@ interface ToastOptions {
   unstyled?: boolean;
   classNames?: ToastClassnames;
   closeButtonAriaLabel?: string;
+  enterFrom?: EnterFromDirection;
   toasterId?: string;
 }
 
@@ -144,18 +146,21 @@ export interface ToasterProps {
   mobileOffset?: Offset;
   dir?: 'rtl' | 'ltr' | 'auto';
   swipeDirections?: SwipeDirection[];
+  enterFrom?: EnterFromDirection;
   icons?: ToastIcons;
   customAriaLabel?: string;
   containerAriaLabel?: string;
 }
 
 export type SwipeDirection = 'top' | 'right' | 'bottom' | 'left';
+export type EnterFromDirection = 'left' | 'right';
 
 export interface ToastProps {
   toast: ToastT;
   toasts: ToastT[];
   index: number;
   swipeDirections?: SwipeDirection[];
+  enterFrom?: EnterFromDirection;
   expanded: boolean;
   invert: boolean;
   heights: HeightT[];
