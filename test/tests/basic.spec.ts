@@ -274,7 +274,7 @@ test.describe('Basic functionality', () => {
     await page.getByTestId('custom-with-empty-id').click();
 
     await expect(page.locator('[data-sonner-toast]')).toHaveCount(1);
-    await page.locator('[data-dismiss]').click();
+    await page.getByTestId('dismiss-button').click();
     await expect(page.locator('[data-sonner-toast]')).toHaveCount(0);
   });
 
