@@ -227,9 +227,9 @@ html[dir='rtl'],
   justify-content: center;
   align-items: center;
   padding: 0;
-  color: var(--gray12);
+  color: var(--normal-text);
   background: var(--normal-bg);
-  border: 1px solid var(--gray4);
+  border: 1px solid var(--normal-border);
   transform: var(--toast-close-button-transform);
   border-radius: 50%;
   cursor: pointer;
