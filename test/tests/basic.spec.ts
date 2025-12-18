@@ -270,6 +270,14 @@ test.describe('Basic functionality', () => {
     await expect(button).toHaveCSS('background-color', 'rgb(254, 226, 226)');
   });
 
+  test('cancel button dismisses the custom toast with empty id', async ({ page }) => {
+    await page.getByTestId('custom-with-empty-id').click();
+
+    await expect(page.locator('[data-sonner-toast]')).toHaveCount(1);
+    await page.locator('[data-dismiss]').click();
+    await expect(page.locator('[data-sonner-toast]')).toHaveCount(0);
+  });
+
   test('action button is rendered with custom styles', async ({ page }) => {
     await page.getByTestId('action').click();
     const button = await page.locator('[data-button]');

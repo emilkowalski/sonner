@@ -348,6 +348,7 @@ html[dir='rtl'],
 }
 
 [data-sonner-toast][data-swiped='true'] {
+  -webkit-user-select: none; /* Safari 3+ */
   user-select: none;
 }
 
