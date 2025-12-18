@@ -351,6 +351,20 @@ export default function Home({ searchParams }: any) {
         Toast with testId
       </button>
       <button
+        data-testid="loading-with-id-toast-button"
+        className="button"
+        onClick={() => toast.loading('Loading state...', { id: 'my-loading-toast', testId: 'my-loading-toast' })}
+      >
+        Render Loading toast with ID
+      </button>
+      <button
+        data-testid="dismiss-loading-with-id-toast-button"
+        className="button"
+        onClick={() => toast.dismiss('my-loading-toast')}
+      >
+        Dismiss Loading toast with ID
+      </button>
+      <button
         data-testid="testid-promise-toast-button"
         className="button"
         onClick={() =>
