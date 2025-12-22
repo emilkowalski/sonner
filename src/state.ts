@@ -233,7 +233,7 @@ class Observer {
       );
 
     if (typeof id !== 'string' && typeof id !== 'number') {
-      // cannot Object.assign on undefined
+      // Cannot Object.assign on undefined
       return { unwrap };
     } else {
       return Object.assign(id, { unwrap });
@@ -253,7 +253,7 @@ class Observer {
 
 export const ToastState = new Observer();
 
-// bind this to the toast function
+// Bind this to the toast function
 const toastFunction = (message: titleT, data?: ExternalToast) => {
   const id = data?.id || toastsCounter++;
 
