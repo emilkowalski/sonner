@@ -337,4 +337,26 @@ test.describe('Basic functionality', () => {
     await expect(page.getByTestId('promise-test-toast')).toHaveText('Loading...');
     await expect(page.getByTestId('promise-test-toast')).toHaveText('Loaded');
   });
+
+  test('toast can be created, dismissed and re-created with the same ID', async ({ page }) => {
+    // Create the toast, dismiss it and create it again. It should be done without any additional waits,
+    // as this reproduces issue with state becoming stale.
+    await page.getByTestId('loading-with-id-toast-button').click();
+    await expect(page.getByTestId('my-loading-toast')).toBeVisible();
+
+    // Dismiss it. Don't wait for it to disappear. We want to trigger race condition.
+    await page.getByTestId('dismiss-loading-with-id-toast-button').click();
+
+    // Re-create the toast with the same ID.
+    await page.getByTestId('loading-with-id-toast-button').click();
+
+    // Give React 20 frames to process the toast re-creation. We need to do it, as toasts may become out of sync
+    // a little bit due to state updates.
+    for (let i = 0; i < 20; i++) {
+      await page.evaluate(() => new Promise(requestAnimationFrame));
+    }
+
+    await expect(page.getByTestId('my-loading-toast')).toBeVisible();
+    await expect(page.getByTestId('my-loading-toast')).toContainText('Loading state...');
+  });
 });
