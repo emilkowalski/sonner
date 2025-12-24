@@ -88,6 +88,7 @@ export interface ToastT {
   descriptionClassName?: string;
   position?: Position;
   testId?: string;
+  pauseWhenPageIsHidden?: boolean;
 }
 
 export function isAction(action: Action | React.ReactNode): action is Action {
@@ -147,6 +148,7 @@ export interface ToasterProps {
   icons?: ToastIcons;
   customAriaLabel?: string;
   containerAriaLabel?: string;
+  pauseWhenPageIsHidden?: boolean;
 }
 
 export type SwipeDirection = 'top' | 'right' | 'bottom' | 'left';
@@ -179,6 +181,7 @@ export interface ToastProps {
   icons?: ToastIcons;
   closeButtonAriaLabel?: string;
   defaultRichColors?: boolean;
+  pauseWhenPageIsHidden?: boolean;
 }
 
 export enum SwipeStateTypes {

@@ -88,6 +88,7 @@ const Toast = (props: ToastProps) => {
     classNames,
     icons,
     closeButtonAriaLabel = 'Close toast',
+    pauseWhenPageIsHidden: pauseWhenPageIsHiddenFromToaster = true,
   } = props;
   const [swipeDirection, setSwipeDirection] = React.useState<'x' | 'y' | null>(null);
   const [swipeOutDirection, setSwipeOutDirection] = React.useState<'left' | 'right' | 'up' | 'down' | null>(null);
@@ -137,6 +138,7 @@ const Toast = (props: ToastProps) => {
   }, [heights, heightIndex]);
   const isDocumentHidden = useIsDocumentHidden();
 
+  const pauseWhenPageIsHidden = toast.pauseWhenPageIsHidden ?? pauseWhenPageIsHiddenFromToaster;
   const invert = toast.invert || ToasterInvert;
   const disabled = toastType === 'loading';
 
@@ -225,14 +227,14 @@ const Toast = (props: ToastProps) => {
       }, remainingTime.current);
     };
 
-    if (expanded || interacting || isDocumentHidden) {
+    if (expanded || interacting || (pauseWhenPageIsHidden && isDocumentHidden)) {
       pauseTimer();
     } else {
       startTimer();
     }
 
     return () => clearTimeout(timeoutId);
-  }, [expanded, interacting, toast, toastType, isDocumentHidden, deleteToast]);
+  }, [expanded, interacting, toast, toastType, pauseWhenPageIsHidden, isDocumentHidden, deleteToast]);
 
   React.useEffect(() => {
     if (toast.delete) {
@@ -612,6 +614,7 @@ const Toaster = React.forwardRef<HTMLElement, ToasterProps>(function Toaster(pro
     icons,
     customAriaLabel,
     containerAriaLabel = 'Notifications',
+    pauseWhenPageIsHidden = true,
   } = props;
   const [toasts, setToasts] = React.useState<ToastT[]>([]);
   const filteredToasts = React.useMemo(() => {
@@ -876,6 +879,7 @@ const Toaster = React.forwardRef<HTMLElement, ToasterProps>(function Toaster(pro
                   gap={gap}
                   expanded={expanded}
                   swipeDirections={props.swipeDirections}
+                  pauseWhenPageIsHidden={pauseWhenPageIsHidden}
                 />
               ))}
           </ol>
