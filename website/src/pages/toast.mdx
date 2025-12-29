@@ -233,6 +233,20 @@ You can target a specific Toaster by passing a `toasterId` option:
 toast('This will show in the canvas Toaster', { toasterId: 'canvas' });
 ```
 
+### Global Configuration
+
+You can configure global settings like console logging via `toast.configure()`. This is useful when you need to enable logging before the Toaster component mounts.
+
+```jsx
+// Enable console logging with JSON format
+toast.configure({
+  enabled: true,
+  format: 'json', // or 'human' (default)
+});
+```
+
+See the [Toaster documentation](/toaster#console-logging) for more details on console logging.
+
 ## API Reference
 
 | Property          |                                              Description                                               |        Default |

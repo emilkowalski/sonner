@@ -72,6 +72,38 @@ You can customize the default ARIA label for the notification container and the 
 <Toaster containerAriaLabel="Ilmoitukset" toastOptions={{ closeButtonAriaLabel: 'Sulje' }} />
 ```
 
+### Console Logging
+
+For debugging and automated testing, you can enable console logging of all toast events. This is useful when working with browser automation tools that can capture console output.
+
+```jsx
+// Enable human-readable logs
+<Toaster consoleLog />
+
+// Enable JSON logs for automated tools
+<Toaster consoleLog consoleLogFormat="json" />
+```
+
+You can also enable logging programmatically via the global config:
+
+```jsx
+// Enable before Toaster mounts
+toast.configure({ enabled: true, format: 'json' });
+```
+
+Human-readable output:
+```
+[sonner:success] Payment processed (id: 3)
+[sonner:error] Connection failed (id: 4, description: "Check your network")
+[sonner:dismiss] Toast dismissed (id: 3)
+```
+
+JSON output:
+```json
+{"event":"create","id":3,"type":"success","title":"Payment processed","timestamp":1703...}
+{"event":"dismiss","id":3,"timestamp":1703...}
+```
+
 ## API Reference
 
 | Property              |                                                           Description                                                           |        Default |
@@ -92,3 +124,5 @@ You can customize the default ARIA label for the notification container and the 
 | loadingIcon           |                                                Changes the default loading icon                                                 |            `-` |
 | pauseWhenPageIsHidden | Pauses toast timers when the page is hidden, e.g., when the tab is backgrounded, the browser is minimized, or the OS is locked. |        `false` |
 | icons                 |                                                    Changes the default icons                                                    |            `-` |
+| consoleLog            |                                        Enables console logging of toast create and dismiss events                              |        `false` |
+| consoleLogFormat      |                                            Console log format: `human` or `json`                                               |       `human` |

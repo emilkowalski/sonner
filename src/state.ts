@@ -1,4 +1,5 @@
 import type {
+  ConsoleLogConfig,
   ExternalToast,
   PromiseData,
   PromiseIExtendedResult,
@@ -11,6 +12,61 @@ import type {
 import React from 'react';
 
 let toastsCounter = 1;
+
+// Console logging configuration
+let consoleLogConfig: ConsoleLogConfig = {
+  enabled: false,
+  format: 'human',
+};
+
+// Extract text from ReactNode for logging
+const extractText = (node: React.ReactNode | (() => React.ReactNode)): string => {
+  if (typeof node === 'function') {
+    try {
+      return extractText(node());
+    } catch {
+      return '[Function]';
+    }
+  }
+  if (typeof node === 'string') return node;
+  if (typeof node === 'number') return String(node);
+  if (node === null || node === undefined) return '';
+  if (React.isValidElement(node)) return '[React Element]';
+  if (Array.isArray(node)) return node.map(extractText).join('');
+  return '';
+};
+
+// Log toast events to console
+const logToast = (event: 'create' | 'update' | 'dismiss', toast: ToastT | { id: string | number }) => {
+  if (!consoleLogConfig.enabled) return;
+  if (typeof window === 'undefined') return; // SSR guard
+
+  const id = toast.id;
+  const type = 'type' in toast ? toast.type || 'default' : undefined;
+  const title = 'title' in toast ? extractText(toast.title) : undefined;
+  const description = 'description' in toast ? extractText(toast.description) : undefined;
+
+  if (consoleLogConfig.format === 'json') {
+    console.log(
+      JSON.stringify({
+        event,
+        id,
+        type,
+        title: title || undefined,
+        description: description || undefined,
+        timestamp: Date.now(),
+      }),
+    );
+  } else {
+    // Human-readable format
+    if (event === 'dismiss') {
+      console.log(`[sonner:dismiss] Toast dismissed (id: ${id})`);
+    } else {
+      const descPart = description ? `, description: "${description}"` : '';
+      console.log(`[sonner:${type || 'default'}] ${title || '(no title)'} (id: ${id}${descPart})`);
+    }
+  }
+};
 
 type titleT = (() => React.ReactNode) | React.ReactNode;
 
@@ -39,9 +95,14 @@ class Observer {
     this.subscribers.forEach((subscriber) => subscriber(data));
   };
 
+  configure = (config: Partial<ConsoleLogConfig>) => {
+    consoleLogConfig = { ...consoleLogConfig, ...config };
+  };
+
   addToast = (data: ToastT) => {
     this.publish(data);
     this.toasts = [...this.toasts, data];
+    logToast('create', data);
   };
 
   create = (
@@ -88,9 +149,11 @@ class Observer {
   dismiss = (id?: number | string) => {
     if (id) {
       this.dismissedToasts.add(id);
+      logToast('dismiss', { id });
       requestAnimationFrame(() => this.subscribers.forEach((subscriber) => subscriber({ id, dismiss: true })));
     } else {
       this.toasts.forEach((toast) => {
+        logToast('dismiss', { id: toast.id });
         this.subscribers.forEach((subscriber) => subscriber({ id: toast.id, dismiss: true }));
       });
     }
@@ -294,6 +357,7 @@ export const toast = Object.assign(
     promise: ToastState.promise,
     dismiss: ToastState.dismiss,
     loading: ToastState.loading,
+    configure: ToastState.configure,
   },
   { getHistory, getToasts },
 );
