@@ -2,6 +2,13 @@ import React from 'react';
 
 export type ToastTypes = 'normal' | 'action' | 'success' | 'info' | 'warning' | 'error' | 'loading' | 'default';
 
+export type ConsoleLogFormat = 'human' | 'json';
+
+export interface ConsoleLogConfig {
+  enabled: boolean;
+  format: ConsoleLogFormat;
+}
+
 export type PromiseT<Data = any> = Promise<Data> | (() => Promise<Data>);
 
 export interface PromiseIExtendedResult extends ExternalToast {
@@ -147,6 +154,8 @@ export interface ToasterProps {
   icons?: ToastIcons;
   customAriaLabel?: string;
   containerAriaLabel?: string;
+  consoleLog?: boolean;
+  consoleLogFormat?: ConsoleLogFormat;
 }
 
 export type SwipeDirection = 'top' | 'right' | 'bottom' | 'left';

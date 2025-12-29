@@ -612,6 +612,8 @@ const Toaster = React.forwardRef<HTMLElement, ToasterProps>(function Toaster(pro
     icons,
     customAriaLabel,
     containerAriaLabel = 'Notifications',
+    consoleLog,
+    consoleLogFormat,
   } = props;
   const [toasts, setToasts] = React.useState<ToastT[]>([]);
   const filteredToasts = React.useMemo(() => {
@@ -729,6 +731,16 @@ const Toaster = React.forwardRef<HTMLElement, ToasterProps>(function Toaster(pro
       });
     }
   }, [theme]);
+
+  // Sync console log props to global config
+  React.useEffect(() => {
+    if (consoleLog !== undefined) {
+      ToastState.configure({
+        enabled: consoleLog,
+        format: consoleLogFormat || 'human',
+      });
+    }
+  }, [consoleLog, consoleLogFormat]);
 
   React.useEffect(() => {
     // Ensure expanded is always false when no toasts are present / only one left
