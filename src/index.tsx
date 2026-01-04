@@ -628,17 +628,9 @@ const Toaster = React.forwardRef<HTMLElement, ToasterProps>(function Toaster(pro
   const [heights, setHeights] = React.useState<HeightT[]>([]);
   const [expanded, setExpanded] = React.useState(false);
   const [interacting, setInteracting] = React.useState(false);
-  const [actualTheme, setActualTheme] = React.useState(
-    theme !== 'system'
-      ? theme
-      : typeof window !== 'undefined'
-      ? window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
-        ? 'dark'
-        : 'light'
-      : 'light',
-  );
+  const [actualTheme, setActualTheme] = React.useState(theme !== 'system' ? theme : 'light');
 
-  const listRef = React.useRef<HTMLOListElement>(null);
+  const listRefs = React.useRef<Array<HTMLOListElement | null>>([]);
   const hotkeyLabel = hotkey.join('+').replace(/Key/g, '').replace(/Digit/g, '');
   const lastFocusedElementRef = React.useRef<HTMLElement>(null);
   const isFocusWithinRef = React.useRef(false);
@@ -683,7 +675,7 @@ const Toaster = React.forwardRef<HTMLElement, ToasterProps>(function Toaster(pro
         });
       });
     });
-  }, [toasts]);
+  }, []);
 
   React.useEffect(() => {
     if (theme !== 'system') {
@@ -743,12 +735,16 @@ const Toaster = React.forwardRef<HTMLElement, ToasterProps>(function Toaster(pro
 
       if (isHotkeyPressed) {
         setExpanded(true);
-        listRef.current?.focus();
+        const firstValidList = listRefs.current.find((el) => el);
+        firstValidList?.focus();
       }
 
       if (
         event.code === 'Escape' &&
-        (document.activeElement === listRef.current || listRef.current?.contains(document.activeElement))
+        (document.activeElement === null ||
+          listRefs.current.some(
+            (listRef) => listRef === document.activeElement || listRef?.contains(document.activeElement),
+          ))
       ) {
         setExpanded(false);
       }
@@ -759,16 +755,14 @@ const Toaster = React.forwardRef<HTMLElement, ToasterProps>(function Toaster(pro
   }, [hotkey]);
 
   React.useEffect(() => {
-    if (listRef.current) {
-      return () => {
-        if (lastFocusedElementRef.current) {
-          lastFocusedElementRef.current.focus({ preventScroll: true });
-          lastFocusedElementRef.current = null;
-          isFocusWithinRef.current = false;
-        }
-      };
-    }
-  }, [listRef.current]);
+    return () => {
+      if (lastFocusedElementRef.current) {
+        lastFocusedElementRef.current.focus({ preventScroll: true });
+        lastFocusedElementRef.current = null;
+        isFocusWithinRef.current = false;
+      }
+    };
+  }, []);
 
   return (
     // Remove item from normal navigation flow, only available via hotkey
@@ -792,7 +786,7 @@ const Toaster = React.forwardRef<HTMLElement, ToasterProps>(function Toaster(pro
             key={position}
             dir={dir === 'auto' ? getDocumentDirection() : dir}
             tabIndex={-1}
-            ref={listRef}
+            ref={(el) => (listRefs.current[index] = el)}
             className={className}
             data-sonner-toaster
             data-sonner-theme={actualTheme}
