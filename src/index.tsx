@@ -741,10 +741,9 @@ const Toaster = React.forwardRef<HTMLElement, ToasterProps>(function Toaster(pro
 
       if (
         event.code === 'Escape' &&
-        (document.activeElement === null ||
-          listRefs.current.some(
-            (listRef) => listRef === document.activeElement || listRef?.contains(document.activeElement),
-          ))
+        listRefs.current.some(
+          (listRef) => listRef === document.activeElement || listRef?.contains(document.activeElement),
+        )
       ) {
         setExpanded(false);
       }
