@@ -423,11 +423,11 @@ const Toast = (props: ToastProps) => {
           data-close-button
           onClick={
             disabled || !dismissible
-              ? () => {}
+              ? () => { }
               : () => {
-                  deleteToast();
-                  toast.onDismiss?.(toast);
-                }
+                deleteToast();
+                toast.onDismiss?.(toast);
+              }
           }
           className={cn(classNames?.closeButton, toast?.classNames?.closeButton)}
         >
@@ -436,11 +436,12 @@ const Toast = (props: ToastProps) => {
       ) : null}
       {/* TODO: This can be cleaner */}
       {(toastType || toast.icon || toast.promise) &&
-      toast.icon !== null &&
-      (icons?.[toastType] !== null || toast.icon) ? (
+        toast.icon !== null &&
+        (icons?.[toastType] !== null || toast.icon) ? (
         <div data-icon="" className={cn(classNames?.icon, toast?.classNames?.icon)}>
-          {toast.promise || (toast.type === 'loading' && !toast.icon) ? toast.icon || getLoadingIcon() : null}
-          {toast.type !== 'loading' ? icon : null}
+          {toast.type === 'loading'
+            ? toast.icon || getLoadingIcon()
+            : icon}
         </div>
       ) : null}
 
@@ -632,10 +633,10 @@ const Toaster = React.forwardRef<HTMLElement, ToasterProps>(function Toaster(pro
     theme !== 'system'
       ? theme
       : typeof window !== 'undefined'
-      ? window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
-        ? 'dark'
-        : 'light'
-      : 'light',
+        ? window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+          ? 'dark'
+          : 'light'
+        : 'light',
   );
 
   const listRef = React.useRef<HTMLOListElement>(null);
