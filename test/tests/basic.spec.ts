@@ -337,4 +337,13 @@ test.describe('Basic functionality', () => {
     await expect(page.getByTestId('promise-test-toast')).toHaveText('Loading...');
     await expect(page.getByTestId('promise-test-toast')).toHaveText('Loaded');
   });
+
+  test('promise toast with custom icon should replace loader on success', async ({ page }) => {
+    await page.getByTestId('promise-custom-icon').click();
+    await expect(page.getByText('Loading...')).toBeVisible();
+    await expect(page.getByText('Finished!')).toBeVisible();
+    const icons = page.locator('[data-sonner-toast] svg');
+    await expect(icons).toHaveCount(1);
+  });
+
 });
