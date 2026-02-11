@@ -247,6 +247,16 @@ test.describe('Basic functionality', () => {
     await expect(page.getByText('My Updated Toast')).toHaveCount(1);
   });
 
+  test('duplicate toast vibrates existing toast instead of creating a new one', async ({ page }) => {
+    await page.getByTestId('vibrate-on-duplicate').click();
+    await expect(page.getByTestId('vibrate-target-toast')).toHaveCount(1);
+    await expect(page.getByTestId('vibrate-target-toast')).toHaveAttribute('data-vibration-count', '0');
+
+    await page.getByTestId('vibrate-on-duplicate').click();
+    await expect(page.getByTestId('vibrate-target-toast')).toHaveCount(1);
+    await expect(page.getByTestId('vibrate-target-toast')).toHaveAttribute('data-vibration-count', '1');
+  });
+
   test('should update toast content and duration after 3 seconds', async ({ page }) => {
     await page.getByTestId('update-toast-duration').click();
 

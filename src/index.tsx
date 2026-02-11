@@ -96,6 +96,7 @@ const Toast = (props: ToastProps) => {
   const [swiping, setSwiping] = React.useState(false);
   const [swipeOut, setSwipeOut] = React.useState(false);
   const [isSwiped, setIsSwiped] = React.useState(false);
+  const [vibrating, setVibrating] = React.useState(false);
   const [offsetBeforeRemove, setOffsetBeforeRemove] = React.useState(0);
   const [initialHeight, setInitialHeight] = React.useState(0);
   const remainingTime = React.useRef(toast.duration || durationFromToaster || TOAST_LIFETIME);
@@ -241,6 +242,23 @@ const Toast = (props: ToastProps) => {
     }
   }, [deleteToast, toast.delete]);
 
+  React.useEffect(() => {
+    if (!toast.duplicateCount) return;
+
+    setVibrating(false);
+    const frame = requestAnimationFrame(() => {
+      setVibrating(true);
+    });
+    const timeout = setTimeout(() => {
+      setVibrating(false);
+    }, 320);
+
+    return () => {
+      cancelAnimationFrame(frame);
+      clearTimeout(timeout);
+    };
+  }, [toast.duplicateCount]);
+
   function getLoadingIcon() {
     if (icons?.loading) {
       return (
@@ -284,6 +302,8 @@ const Toast = (props: ToastProps) => {
       data-index={index}
       data-front={isFront}
       data-swiping={swiping}
+      data-vibrating={vibrating}
+      data-vibration-count={toast.duplicateCount || 0}
       data-dismissible={dismissible}
       data-type={toastType}
       data-invert={invert}

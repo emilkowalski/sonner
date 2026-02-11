@@ -233,22 +233,32 @@ You can target a specific Toaster by passing a `toasterId` option:
 toast('This will show in the canvas Toaster', { toasterId: 'canvas' });
 ```
 
+### Vibrating duplicates
+
+Set `vibrateOnDuplicate` to `true` to avoid creating the same toast multiple times. When a duplicate is triggered,
+the existing toast is vibrated instead.
+
+```jsx
+toast('Saved', { vibrateOnDuplicate: true });
+```
+
 ## API Reference
 
-| Property          |                                              Description                                               |        Default |
-| :---------------- | :----------------------------------------------------------------------------------------------------: | -------------: |
-| description       |                           Toast's description, renders underneath the title.                           |            `-` |
-| closeButton       |                                          Adds a close button.                                          |        `false` |
-| invert            |                                Dark toast in light mode and vice versa.                                |        `false` |
-| duration          |            Time in milliseconds that should elapse before automatically closing the toast.             |         `4000` |
-| position          |                                         Position of the toast.                                         | `bottom-right` |
-| dismissible       |                     If `false`, it'll prevent the user from dismissing the toast.                      |         `true` |
-| icon              |                      Icon displayed in front of toast's text, aligned vertically.                      |            `-` |
-| action            |                      Renders a primary button, clicking it will close the toast.                       |            `-` |
-| cancel            |                     Renders a secondary button, clicking it will close the toast.                      |            `-` |
-| id                |                                        Custom id for the toast.                                        |            `-` |
-| onDismiss         |       The function gets called when either the close button is clicked, or the toast is swiped.        |            `-` |
-| onAutoClose       | Function that gets called when the toast disappears automatically after it's timeout (duration` prop). |            `-` |
-| unstyled          |                  Removes the default styling, which allows for easier customization.                   |        `false` |
-| actionButtonStyle |                                      Styles for the action button                                      |           `{}` |
-| cancelButtonStyle |                                      Styles for the cancel button                                      |           `{}` |
+| Property           |                                              Description                                               |        Default |
+| :----------------- | :----------------------------------------------------------------------------------------------------: | -------------: |
+| description        |                           Toast's description, renders underneath the title.                           |            `-` |
+| closeButton        |                                          Adds a close button.                                          |        `false` |
+| invert             |                                Dark toast in light mode and vice versa.                                |        `false` |
+| duration           |            Time in milliseconds that should elapse before automatically closing the toast.             |         `4000` |
+| position           |                                         Position of the toast.                                         | `bottom-right` |
+| dismissible        |                     If `false`, it'll prevent the user from dismissing the toast.                      |         `true` |
+| icon               |                      Icon displayed in front of toast's text, aligned vertically.                      |            `-` |
+| action             |                      Renders a primary button, clicking it will close the toast.                       |            `-` |
+| cancel             |                     Renders a secondary button, clicking it will close the toast.                      |            `-` |
+| id                 |                                        Custom id for the toast.                                        |            `-` |
+| vibrateOnDuplicate |         If `true`, duplicate toasts vibrate the existing toast instead of creating a new one.          |        `false` |
+| onDismiss          |       The function gets called when either the close button is clicked, or the toast is swiped.        |            `-` |
+| onAutoClose        | Function that gets called when the toast disappears automatically after it's timeout (duration` prop). |            `-` |
+| unstyled           |                  Removes the default styling, which allows for easier customization.                   |        `false` |
+| actionButtonStyle  |                                      Styles for the action button                                      |           `{}` |
+| cancelButtonStyle  |                                      Styles for the cancel button                                      |           `{}` |

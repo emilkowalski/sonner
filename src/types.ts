@@ -88,6 +88,8 @@ export interface ToastT {
   descriptionClassName?: string;
   position?: Position;
   testId?: string;
+  vibrateOnDuplicate?: boolean;
+  duplicateCount?: number;
 }
 
 export function isAction(action: Action | React.ReactNode): action is Action {
@@ -194,7 +196,7 @@ export interface ToastToDismiss {
   dismiss: boolean;
 }
 
-export type ExternalToast = Omit<ToastT, 'id' | 'type' | 'title' | 'jsx' | 'delete' | 'promise'> & {
+export type ExternalToast = Omit<ToastT, 'id' | 'type' | 'title' | 'jsx' | 'delete' | 'promise' | 'duplicateCount'> & {
   id?: number | string;
   toasterId?: string;
 };

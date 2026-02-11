@@ -322,6 +322,10 @@ html[dir='rtl'],
   height: var(--initial-height);
 }
 
+[data-sonner-toast][data-vibrating='true'] {
+  animation: sonner-vibrate 0.32s ease-in-out;
+}
+
 [data-sonner-toast][data-removed='true'][data-front='true'][data-swipe-out='false'] {
   --y: translateY(calc(var(--lift) * -100%));
   opacity: 0;
@@ -698,6 +702,25 @@ html[dir='rtl'],
   }
   100% {
     opacity: 0.15;
+  }
+}
+
+@keyframes sonner-vibrate {
+  0%,
+  100% {
+    translate: 0 0;
+  }
+  20% {
+    translate: -4px 0;
+  }
+  40% {
+    translate: 4px 0;
+  }
+  60% {
+    translate: -3px 0;
+  }
+  80% {
+    translate: 3px 0;
   }
 }
 
