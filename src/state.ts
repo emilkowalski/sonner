@@ -16,7 +16,7 @@ type titleT = (() => React.ReactNode) | React.ReactNode;
 
 class Observer {
   subscribers: Array<(toast: ExternalToast | ToastToDismiss) => void>;
-  toasts: Array<ToastT | ToastToDismiss>;
+  toasts: Array<ToastT>;
   dismissedToasts: Set<string | number>;
 
   constructor() {
@@ -53,11 +53,43 @@ class Observer {
     },
   ) => {
     const { message, ...rest } = data;
-    const id = typeof data?.id === 'number' || data.id?.length > 0 ? data.id : toastsCounter++;
+    const hasCustomId = typeof data?.id === 'number' || (typeof data?.id === 'string' && data.id.length > 0);
+    const dismissible = data.dismissible === undefined ? true : data.dismissible;
+
+    if (!hasCustomId && data.vibrateOnDuplicate) {
+      const duplicateToast = this.toasts.find((toast) => {
+        if (this.dismissedToasts.has(toast.id)) return false;
+
+        return (
+          toast.title === message &&
+          toast.type === data.type &&
+          toast.description === data.description &&
+          toast.toasterId === data.toasterId
+        );
+      });
+
+      if (duplicateToast) {
+        const duplicateCount = (duplicateToast.duplicateCount || 0) + 1;
+        const updatedToast = {
+          ...duplicateToast,
+          ...rest,
+          id: duplicateToast.id,
+          dismissible,
+          title: message,
+          duplicateCount,
+        };
+
+        this.publish(updatedToast);
+        this.toasts = this.toasts.map((toast) => (toast.id === duplicateToast.id ? updatedToast : toast));
+
+        return duplicateToast.id;
+      }
+    }
+
+    const id = hasCustomId ? data.id : toastsCounter++;
     const alreadyExists = this.toasts.find((toast) => {
       return toast.id === id;
     });
-    const dismissible = data.dismissible === undefined ? true : data.dismissible;
 
     if (this.dismissedToasts.has(id)) {
       this.dismissedToasts.delete(id);
@@ -255,14 +287,7 @@ export const ToastState = new Observer();
 
 // bind this to the toast function
 const toastFunction = (message: titleT, data?: ExternalToast) => {
-  const id = data?.id || toastsCounter++;
-
-  ToastState.addToast({
-    title: message,
-    ...data,
-    id,
-  });
-  return id;
+  return ToastState.create({ message, ...data });
 };
 
 const isHttpResponse = (data: any): data is Response => {

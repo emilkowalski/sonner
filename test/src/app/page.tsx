@@ -364,6 +364,18 @@ export default function Home({ searchParams }: any) {
       >
         Promise Toast with testId
       </button>
+      <button
+        data-testid="vibrate-on-duplicate"
+        className="button"
+        onClick={() =>
+          toast('Do not duplicate this toast', {
+            testId: 'vibrate-target-toast',
+            vibrateOnDuplicate: true,
+          })
+        }
+      >
+        Vibrate existing toast on duplicate
+      </button>
       {showAutoClose ? <div data-testid="auto-close-el" /> : null}
       {showDismiss ? <div data-testid="dismiss-el" /> : null}
       <Toaster
