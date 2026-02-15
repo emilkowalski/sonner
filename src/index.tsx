@@ -610,6 +610,7 @@ const Toaster = React.forwardRef<HTMLElement, ToasterProps>(function Toaster(pro
     dir = getDocumentDirection(),
     gap = GAP,
     icons,
+    customAriaLabel,
     containerAriaLabel = 'Notifications',
   } = props;
   const [toasts, setToasts] = React.useState<ToastT[]>([]);
@@ -738,7 +739,7 @@ const Toaster = React.forwardRef<HTMLElement, ToasterProps>(function Toaster(pro
 
   React.useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
-      const isHotkeyPressed = hotkey.every((key) => (event as any)[key] || event.code === key);
+      const isHotkeyPressed = hotkey.length > 0 && hotkey.every((key) => (event as any)[key] || event.code === key);
 
       if (isHotkeyPressed) {
         setExpanded(true);
@@ -773,12 +774,13 @@ const Toaster = React.forwardRef<HTMLElement, ToasterProps>(function Toaster(pro
     // Remove item from normal navigation flow, only available via hotkey
     <section
       ref={ref}
-      aria-label={`${containerAriaLabel} ${hotkeyLabel}`}
+      aria-label={customAriaLabel ?? `${containerAriaLabel} ${hotkeyLabel}`}
       tabIndex={-1}
       aria-live="polite"
       aria-relevant="additions text"
       aria-atomic="false"
       suppressHydrationWarning
+      data-react-aria-top-layer
     >
       {possiblePositions.map((position, index) => {
         const [y, x] = position.split('-');

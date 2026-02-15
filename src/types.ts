@@ -145,6 +145,7 @@ export interface ToasterProps {
   dir?: 'rtl' | 'ltr' | 'auto';
   swipeDirections?: SwipeDirection[];
   icons?: ToastIcons;
+  customAriaLabel?: string;
   containerAriaLabel?: string;
 }
 
