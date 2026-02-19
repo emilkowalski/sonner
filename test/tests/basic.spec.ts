@@ -29,6 +29,15 @@ test.describe('Basic functionality', () => {
     await expect(page.getByText('Loaded')).toHaveCount(1);
   });
 
+  test('toast.loading updated to toast.success via setTimeout preserves promise attribute for animation', async ({ page }) => {
+    await page.getByTestId('loading-to-success').click();
+    const toast = page.locator('[data-sonner-toast]');
+    await expect(toast).toHaveAttribute('data-type', 'loading');
+    await expect(toast).toHaveAttribute('data-promise', 'true');
+    await expect(toast).toHaveAttribute('data-type', 'success');
+    await expect(page.getByText('Loaded.')).toHaveCount(1);
+  });
+
   test('handle toast promise rejections', async ({ page }) => {
     const rejectedPromise = new Promise((_, reject) => setTimeout(() => reject(new Error('Promise rejected')), 100));
     try {

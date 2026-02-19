@@ -119,7 +119,7 @@ class Observer {
   };
 
   loading = (message: titleT | React.ReactNode, data?: ExternalToast) => {
-    return this.create({ ...data, type: 'loading', message });
+    return this.create({ ...data, type: 'loading', message, promise: Promise.resolve() });
   };
 
   promise = <ToastData>(promise: PromiseT<ToastData>, data?: PromiseData<ToastData>) => {
