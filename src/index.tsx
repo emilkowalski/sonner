@@ -167,9 +167,15 @@ const Toast = (props: ToastProps) => {
     if (!mounted) return;
     const toastNode = toastRef.current;
     const originalHeight = toastNode.style.height;
+    const originalTransition = toastNode.style.transition;
+    const originalTransform = toastNode.style.transform;
     toastNode.style.height = 'auto';
+    toastNode.style.transition = 'none';
+    toastNode.style.transform = 'none';
     const newHeight = toastNode.getBoundingClientRect().height;
     toastNode.style.height = originalHeight;
+    toastNode.style.transform = originalTransform;
+    toastNode.style.transition = originalTransition;
 
     setInitialHeight(newHeight);
 
