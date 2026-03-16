@@ -337,4 +337,17 @@ test.describe('Basic functionality', () => {
     await expect(page.getByTestId('promise-test-toast')).toHaveText('Loading...');
     await expect(page.getByTestId('promise-test-toast')).toHaveText('Loaded');
   });
+
+  test('close button is positioned on the left by default', async ({ page }) => {
+    await page.getByTestId('close-button').click();
+    const closeButton = page.locator('[data-close-button]');
+    await expect(closeButton).toHaveAttribute('data-close-button-position', 'left');
+  });
+
+  test('close button is positioned on the right when closeButtonPosition is right', async ({ page }) => {
+    await page.goto('/?closeButtonPosition=right');
+    await page.getByTestId('close-button').click();
+    const closeButton = page.locator('[data-close-button]');
+    await expect(closeButton).toHaveAttribute('data-close-button-position', 'right');
+  });
 });

@@ -70,6 +70,7 @@ export interface ToastT {
   richColors?: boolean;
   invert?: boolean;
   closeButton?: boolean;
+  closeButtonPosition?: CloseButtonPosition;
   dismissible?: boolean;
   description?: (() => React.ReactNode) | React.ReactNode;
   duration?: number;
@@ -95,6 +96,7 @@ export function isAction(action: Action | React.ReactNode): action is Action {
 }
 
 export type Position = 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right' | 'top-center' | 'bottom-center';
+export type CloseButtonPosition = 'left' | 'right';
 export interface HeightT {
   height: number;
   toastId: number | string;
@@ -104,6 +106,7 @@ export interface HeightT {
 interface ToastOptions {
   className?: string;
   closeButton?: boolean;
+  closeButtonPosition?: CloseButtonPosition;
   descriptionClassName?: string;
   style?: React.CSSProperties;
   cancelButtonStyle?: React.CSSProperties;
@@ -137,6 +140,7 @@ export interface ToasterProps {
   gap?: number;
   visibleToasts?: number;
   closeButton?: boolean;
+  closeButtonPosition?: CloseButtonPosition;
   toastOptions?: ToastOptions;
   className?: string;
   style?: React.CSSProperties;
@@ -166,6 +170,7 @@ export interface ToastProps {
   visibleToasts: number;
   expandByDefault: boolean;
   closeButton: boolean;
+  closeButtonPosition?: CloseButtonPosition;
   interacting: boolean;
   style?: React.CSSProperties;
   cancelButtonStyle?: React.CSSProperties;

@@ -369,6 +369,7 @@ export default function Home({ searchParams }: any) {
       <Toaster
         offset={32}
         position={searchParams.position || 'bottom-right'}
+        closeButtonPosition={searchParams.closeButtonPosition || undefined}
         toastOptions={{
           actionButtonStyle: { backgroundColor: 'rgb(219, 239, 255)' },
           cancelButtonStyle: { backgroundColor: 'rgb(254, 226, 226)' },
