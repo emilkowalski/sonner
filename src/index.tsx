@@ -76,6 +76,7 @@ const Toast = (props: ToastProps) => {
     removeToast,
     defaultRichColors,
     closeButton: closeButtonFromToaster,
+    closeButtonPosition: closeButtonPositionFromToaster,
     style,
     cancelButtonStyle,
     actionButtonStyle,
@@ -115,6 +116,10 @@ const Toast = (props: ToastProps) => {
   const closeButton = React.useMemo(
     () => toast.closeButton ?? closeButtonFromToaster,
     [toast.closeButton, closeButtonFromToaster],
+  );
+  const closeButtonPosition = React.useMemo(
+    () => toast.closeButtonPosition ?? closeButtonPositionFromToaster ?? 'left',
+    [toast.closeButtonPosition, closeButtonPositionFromToaster],
   );
   const duration = React.useMemo(
     () => toast.duration || durationFromToaster || TOAST_LIFETIME,
@@ -421,6 +426,7 @@ const Toast = (props: ToastProps) => {
           aria-label={closeButtonAriaLabel}
           data-disabled={disabled}
           data-close-button
+          data-close-button-position={closeButtonPosition}
           onClick={
             disabled || !dismissible
               ? () => {}
@@ -860,6 +866,7 @@ const Toaster = React.forwardRef<HTMLElement, ToasterProps>(function Toaster(pro
                   invert={invert}
                   visibleToasts={visibleToasts}
                   closeButton={toastOptions?.closeButton ?? closeButton}
+                  closeButtonPosition={toastOptions?.closeButtonPosition ?? props.closeButtonPosition}
                   interacting={interacting}
                   position={position}
                   style={toastOptions?.style}
@@ -886,4 +893,4 @@ const Toaster = React.forwardRef<HTMLElement, ToasterProps>(function Toaster(pro
 });
 
 export { toast, Toaster, type ExternalToast, type ToastT, type ToasterProps, useSonner };
-export { type ToastClassnames, type ToastToDismiss, type Action } from './types';
+export { type ToastClassnames, type ToastToDismiss, type Action, type CloseButtonPosition } from './types';

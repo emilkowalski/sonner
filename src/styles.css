@@ -241,6 +241,20 @@ html[dir='rtl'],
   box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1), 0 0 0 2px rgba(0, 0, 0, 0.2);
 }
 
+[data-sonner-toast][data-styled='true'] [data-close-button][data-close-button-position='right'] {
+  left: unset;
+  right: 0;
+  transform: translate(35%, -35%);
+}
+
+[data-sonner-toaster][dir='rtl']
+  [data-sonner-toast][data-styled='true']
+  [data-close-button][data-close-button-position='right'] {
+  left: 0;
+  right: unset;
+  transform: translate(-35%, -35%);
+}
+
 [data-sonner-toast][data-styled='true'] [data-disabled='true'] {
   cursor: not-allowed;
 }
