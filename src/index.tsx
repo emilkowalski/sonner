@@ -9,6 +9,7 @@ import { toast, ToastState } from './state';
 import './styles.css';
 import {
   isAction,
+  Position,
   SwipeDirection,
   type ExternalToast,
   type HeightT,
@@ -41,6 +42,25 @@ const SWIPE_THRESHOLD = 45;
 
 // Equal to exit animation duration
 const TIME_BEFORE_UNMOUNT = 200;
+
+// Resolve logical positions to physical ones based on text direction
+function resolvePosition(position: Position, dir: 'ltr' | 'rtl' | 'auto'): Position {
+  const resolvedDir = dir === 'auto' ? getDocumentDirection() : dir;
+  const isRTL = resolvedDir === 'rtl';
+
+  switch (position) {
+    case 'top-start':
+      return isRTL ? 'top-right' : 'top-left';
+    case 'top-end':
+      return isRTL ? 'top-left' : 'top-right';
+    case 'bottom-start':
+      return isRTL ? 'bottom-right' : 'bottom-left';
+    case 'bottom-end':
+      return isRTL ? 'bottom-left' : 'bottom-right';
+    default:
+      return position;
+  }
+}
 
 function cn(...classes: (string | undefined)[]) {
   return classes.filter(Boolean).join(' ');
@@ -621,10 +641,15 @@ const Toaster = React.forwardRef<HTMLElement, ToasterProps>(function Toaster(pro
     return toasts.filter((toast) => !toast.toasterId);
   }, [toasts, id]);
   const possiblePositions = React.useMemo(() => {
+    const resolved = resolvePosition(position, dir);
     return Array.from(
-      new Set([position].concat(filteredToasts.filter((toast) => toast.position).map((toast) => toast.position))),
+      new Set(
+        [resolved].concat(
+          filteredToasts.filter((toast) => toast.position).map((toast) => resolvePosition(toast.position, dir)),
+        ),
+      ),
     );
-  }, [filteredToasts, position]);
+  }, [filteredToasts, position, dir]);
   const [heights, setHeights] = React.useState<HeightT[]>([]);
   const [expanded, setExpanded] = React.useState(false);
   const [interacting, setInteracting] = React.useState(false);
@@ -783,7 +808,10 @@ const Toaster = React.forwardRef<HTMLElement, ToasterProps>(function Toaster(pro
       data-react-aria-top-layer
     >
       {possiblePositions.map((position, index) => {
-        const [y, x] = position.split('-');
+        console.log('position', position);
+        console.log('dir', dir);
+        const resolvedPos = resolvePosition(position, dir === 'auto' ? getDocumentDirection() : dir);
+        const [y, x] = resolvedPos.split('-');
 
         if (!filteredToasts.length) return null;
 
@@ -861,7 +889,7 @@ const Toaster = React.forwardRef<HTMLElement, ToasterProps>(function Toaster(pro
                   visibleToasts={visibleToasts}
                   closeButton={toastOptions?.closeButton ?? closeButton}
                   interacting={interacting}
-                  position={position}
+                  position={resolvedPos}
                   style={toastOptions?.style}
                   unstyled={toastOptions?.unstyled}
                   classNames={toastOptions?.classNames}

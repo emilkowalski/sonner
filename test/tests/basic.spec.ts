@@ -337,4 +337,15 @@ test.describe('Basic functionality', () => {
     await expect(page.getByTestId('promise-test-toast')).toHaveText('Loading...');
     await expect(page.getByTestId('promise-test-toast')).toHaveText('Loaded');
   });
+
+  test('top-start resolves to top-left in LTR', async ({ page }) => {
+    const toaster = page.locator('[data-sonner-toaster]');
+    await expect(toaster).toHaveAttribute('data-y-position', 'top');
+    await expect(toaster).toHaveAttribute('data-x-position', 'left');
+  });
+
+  test('top-start resolves to top-right in RTL', async ({ page }) => {
+    const toaster = page.locator('[data-sonner-toaster]');
+    await expect(toaster).toHaveAttribute('data-x-position', 'right');
+  });
 });
