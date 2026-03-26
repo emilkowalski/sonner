@@ -267,7 +267,7 @@ const Toast = (props: ToastProps) => {
         toastClassname,
         classNames?.toast,
         toast?.classNames?.toast,
-        classNames?.default,
+        toastType === 'default' ? classNames?.default : undefined,
         classNames?.[toastType],
         toast?.classNames?.[toastType],
       )}
