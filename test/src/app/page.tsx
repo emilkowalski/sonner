@@ -89,6 +89,18 @@ export default function Home({ searchParams }: any) {
         Loading to Success Toast
       </button>
       <button
+        data-testid="loading-to-error"
+        className="button"
+        onClick={() => {
+          const toastId = toast.loading('Loading...');
+          setTimeout(() => {
+            toast.error('Failed.', { id: toastId });
+          }, 2000);
+        }}
+      >
+        Loading to Error Toast
+      </button>
+      <button
         data-testid="rsf-promise"
         data-finally={isFinally ? '1' : '0'}
         className="button"
