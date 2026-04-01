@@ -119,7 +119,9 @@ class Observer {
   };
 
   loading = (message: titleT | React.ReactNode, data?: ExternalToast) => {
-    return this.create({ ...data, type: 'loading', message, promise: Promise.resolve() });
+    /** iconAnimationPromise is a no-op used to set data-promise. It triggers icon fade-in on state change. **/
+    const iconAnimationPromise = Promise.resolve();
+    return this.create({ ...data, type: 'loading', message, promise: iconAnimationPromise });
   };
 
   promise = <ToastData>(promise: PromiseT<ToastData>, data?: PromiseData<ToastData>) => {
