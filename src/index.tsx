@@ -683,7 +683,7 @@ const Toaster = React.forwardRef<HTMLElement, ToasterProps>(function Toaster(pro
         });
       });
     });
-  }, [toasts]);
+  }, []);
 
   React.useEffect(() => {
     if (theme !== 'system') {
