@@ -337,4 +337,10 @@ test.describe('Basic functionality', () => {
     await expect(page.getByTestId('promise-test-toast')).toHaveText('Loading...');
     await expect(page.getByTestId('promise-test-toast')).toHaveText('Loaded');
   });
+
+  // Regression for https://github.com/emilkowalski/sonner/issues/723
+  test('toast fired before Toaster subscribes is still displayed', async ({ page }) => {
+    await page.goto('/issue-723');
+    await expect(page.getByText('Toast fired before Toaster subscribed')).toHaveCount(1);
+  });
 });

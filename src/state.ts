@@ -29,9 +29,18 @@ class Observer {
   subscribe = (subscriber: (toast: ToastT | ToastToDismiss) => void) => {
     this.subscribers.push(subscriber);
 
+    // Replay toasts queued before this subscriber attached (issue #723).
+    for (const toast of this.toasts) {
+      if ('dismiss' in toast && (toast as ToastToDismiss).dismiss) continue;
+      if (this.dismissedToasts.has(toast.id)) continue;
+      subscriber(toast);
+    }
+
     return () => {
       const index = this.subscribers.indexOf(subscriber);
-      this.subscribers.splice(index, 1);
+      if (index !== -1) {
+        this.subscribers.splice(index, 1);
+      }
     };
   };
 
