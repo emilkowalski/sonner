@@ -779,7 +779,7 @@ const Toaster = React.forwardRef<HTMLElement, ToasterProps>(function Toaster(pro
       ref={ref}
       aria-label={customAriaLabel ?? `${containerAriaLabel} ${hotkeyLabel}`}
       aria-live={customAriaLive ?? 'polite'}
-      aria-atomic={customAriaAtomic ?? false}
+      aria-atomic={customAriaAtomic ?? 'false'}
       aria-relevant={customAriaRelevant ?? 'additions text'}
       tabIndex={-1}
       suppressHydrationWarning
