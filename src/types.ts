@@ -96,7 +96,7 @@ export function isAction(action: Action | React.ReactNode): action is Action {
 
 export type Position = 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right' | 'top-center' | 'bottom-center';
 export type AriaLive = 'assertive' | 'polite';
-export type AriaRelevant = 'additions' | 'text' | 'additions text' | 'all';
+export type AriaRelevant = 'additions' | 'removals' | 'additions removals' | 'text' | 'additions text' | 'removals text' | 'all';
 export type AriaAtomic = 'true' | 'false';
 export interface HeightT {
   height: number;
