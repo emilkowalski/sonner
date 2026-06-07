@@ -613,8 +613,8 @@ const Toaster = React.forwardRef<HTMLElement, ToasterProps>(function Toaster(pro
     customAriaLabel,
     containerAriaLabel = 'Notifications',
     customAriaLive,
-    customAriaAtomic,
     customAriaRelevant,
+    customAriaAtomic,
   } = props;
   const [toasts, setToasts] = React.useState<ToastT[]>([]);
   const filteredToasts = React.useMemo(() => {
@@ -779,8 +779,8 @@ const Toaster = React.forwardRef<HTMLElement, ToasterProps>(function Toaster(pro
       ref={ref}
       aria-label={customAriaLabel ?? `${containerAriaLabel} ${hotkeyLabel}`}
       aria-live={customAriaLive ?? 'polite'}
-      aria-atomic={customAriaAtomic ?? 'false'}
       aria-relevant={customAriaRelevant ?? 'additions text'}
+      aria-atomic={customAriaAtomic ?? 'false'}
       tabIndex={-1}
       suppressHydrationWarning
       data-react-aria-top-layer

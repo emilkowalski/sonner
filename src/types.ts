@@ -96,8 +96,8 @@ export function isAction(action: Action | React.ReactNode): action is Action {
 
 export type Position = 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right' | 'top-center' | 'bottom-center';
 export type AriaLive = 'assertive' | 'polite';
-export type AriaAtomic = 'true' | 'false';
 export type AriaRelevant = 'additions' | 'text' | 'additions text' | 'all';
+export type AriaAtomic = 'true' | 'false';
 export interface HeightT {
   height: number;
   toastId: number | string;
@@ -149,10 +149,10 @@ export interface ToasterProps {
   swipeDirections?: SwipeDirection[];
   icons?: ToastIcons;
   customAriaLabel?: string;
-  customAriaLive?: AriaLive;
-  customAriaAtomic?: AriaAtomic;
-  customAriaRelevant?: AriaRelevant;
   containerAriaLabel?: string;
+  customAriaLive?: AriaLive;
+  customAriaRelevant?: AriaRelevant;
+  customAriaAtomic?: AriaAtomic;
 }
 
 export type SwipeDirection = 'top' | 'right' | 'bottom' | 'left';
