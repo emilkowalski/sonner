@@ -118,6 +118,27 @@ test.describe('Basic functionality', () => {
     await expect(page.locator('[data-sonner-toast]')).toHaveCount(0);
   });
 
+  test('toast is not removed by a fast swipe in an excluded direction', async ({ page }) => {
+    await page.goto('/?position=top-center&swipeDirections=top,right');
+    await page.getByTestId('default-button').click();
+
+    const toast = page.locator('[data-sonner-toast]');
+    await toast.waitFor({ state: 'visible' });
+
+    const box = await toast.boundingBox();
+    if (!box) return;
+
+    const startX = box.x + box.width / 2;
+    const startY = box.y + box.height / 2;
+
+    await page.mouse.move(startX, startY);
+    await page.mouse.down();
+    await page.mouse.move(startX - 120, startY);
+    await page.mouse.up();
+
+    await expect(toast).toHaveCount(1);
+  });
+
   test('toast is not removed when hovered', async ({ page }) => {
     await page.getByTestId('default-button').click();
 

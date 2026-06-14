@@ -61,6 +61,22 @@ function getDefaultSwipeDirections(position: string): Array<SwipeDirection> {
   return directions;
 }
 
+function isSwipeDirectionAllowed(
+  swipeAmount: number,
+  swipeAxis: 'x' | 'y' | null,
+  swipeDirections: Array<SwipeDirection>,
+) {
+  if (swipeAxis === 'x') {
+    return swipeAmount > 0 ? swipeDirections.includes('right') : swipeDirections.includes('left');
+  }
+
+  if (swipeAxis === 'y') {
+    return swipeAmount > 0 ? swipeDirections.includes('bottom') : swipeDirections.includes('top');
+  }
+
+  return false;
+}
+
 const Toast = (props: ToastProps) => {
   const {
     invert: ToasterInvert,
@@ -322,6 +338,7 @@ const Toast = (props: ToastProps) => {
         if (swipeOut || !dismissible) return;
 
         pointerStartRef.current = null;
+        const swipeDirections = props.swipeDirections ?? getDefaultSwipeDirections(position);
         const swipeAmountX = Number(
           toastRef.current?.style.getPropertyValue('--swipe-amount-x').replace('px', '') || 0,
         );
@@ -333,7 +350,10 @@ const Toast = (props: ToastProps) => {
         const swipeAmount = swipeDirection === 'x' ? swipeAmountX : swipeAmountY;
         const velocity = Math.abs(swipeAmount) / timeTaken;
 
-        if (Math.abs(swipeAmount) >= SWIPE_THRESHOLD || velocity > 0.11) {
+        if (
+          isSwipeDirectionAllowed(swipeAmount, swipeDirection, swipeDirections) &&
+          (Math.abs(swipeAmount) >= SWIPE_THRESHOLD || velocity > 0.11)
+        ) {
           setOffsetBeforeRemove(offset.current);
 
           toast.onDismiss?.(toast);

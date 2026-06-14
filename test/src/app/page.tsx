@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Toaster, toast } from 'sonner';
+import { Toaster, toast, type SwipeDirection } from 'sonner';
 import { action } from '@/app/action';
 
 const promise = () => new Promise((resolve) => setTimeout(resolve, 2000));
@@ -12,6 +12,7 @@ export default function Home({ searchParams }: any) {
   const [theme, setTheme] = React.useState(searchParams.theme || 'light');
   const [isFinally, setIsFinally] = React.useState(false);
   const [showAriaLabels, setShowAriaLabels] = React.useState(false);
+  const swipeDirections = searchParams.swipeDirections?.split(',') as SwipeDirection[] | undefined;
 
   return (
     <>
@@ -369,6 +370,7 @@ export default function Home({ searchParams }: any) {
       <Toaster
         offset={32}
         position={searchParams.position || 'bottom-right'}
+        swipeDirections={swipeDirections}
         toastOptions={{
           actionButtonStyle: { backgroundColor: 'rgb(219, 239, 255)' },
           cancelButtonStyle: { backgroundColor: 'rgb(254, 226, 226)' },
