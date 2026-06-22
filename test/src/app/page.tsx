@@ -1,10 +1,11 @@
 'use client';
 
 import React from 'react';
-import { Toaster, toast, type SwipeDirection } from 'sonner';
+import { Toaster, toast } from 'sonner';
 import { action } from '@/app/action';
 
 const promise = () => new Promise((resolve) => setTimeout(resolve, 2000));
+type SwipeDirection = 'top' | 'right' | 'bottom' | 'left';
 
 export default function Home({ searchParams }: any) {
   const [showAutoClose, setShowAutoClose] = React.useState(false);
