@@ -448,18 +448,41 @@ html[dir='rtl'],
     width: 100%;
   }
 
-  [data-sonner-toaster][dir='rtl'] {
-    left: calc(var(--mobile-offset-left) * -1);
-  }
-
-  [data-sonner-toaster] [data-sonner-toast] {
+  [data-sonner-toaster][data-x-position='center'] [data-sonner-toast] {
     left: 0;
     right: 0;
     width: calc(100% - var(--mobile-offset-left) * 2);
   }
 
+  [data-sonner-toaster][data-x-position='left'],
+  [data-sonner-toaster][data-x-position='right'],
+  [data-sonner-toaster][data-x-position='start'],
+  [data-sonner-toaster][data-x-position='end'] {
+    width: var(--width);
+  }
+
   [data-sonner-toaster][data-x-position='left'] {
     left: var(--mobile-offset-left);
+    right: unset;
+  }
+
+  [data-sonner-toaster][data-x-position='right'] {
+    right: var(--mobile-offset-right);
+    left: unset;
+  }
+
+  [data-sonner-toaster][data-x-position='start'] {
+    left: unset;
+    right: unset;
+    inset-inline-start: var(--mobile-offset-left);
+    inset-inline-end: unset;
+  }
+
+  [data-sonner-toaster][data-x-position='end'] {
+    left: unset;
+    right: unset;
+    inset-inline-end: var(--mobile-offset-right);
+    inset-inline-start: unset;
   }
 
   [data-sonner-toaster][data-y-position='bottom'] {
