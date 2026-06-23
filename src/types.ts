@@ -94,7 +94,17 @@ export function isAction(action: Action | React.ReactNode): action is Action {
   return (action as Action).label !== undefined;
 }
 
-export type Position = 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right' | 'top-center' | 'bottom-center';
+export type Position =
+  | 'top-left'
+  | 'top-right'
+  | 'bottom-left'
+  | 'bottom-right'
+  | 'top-center'
+  | 'bottom-center'
+  | 'top-start'
+  | 'bottom-start'
+  | 'top-end'
+  | 'bottom-end';
 export interface HeightT {
   height: number;
   toastId: number | string;
