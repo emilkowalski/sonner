@@ -65,6 +65,14 @@ html[dir='rtl'],
   left: var(--offset-left);
 }
 
+[data-sonner-toaster][data-x-position='start'] {
+  inset-inline-start: var(--offset-left);
+}
+
+[data-sonner-toaster][data-x-position='end'] {
+  inset-inline-end: var(--offset-right);
+}
+
 [data-sonner-toaster][data-x-position='center'] {
   left: 50%;
   transform: translateX(-50%);
@@ -156,14 +164,14 @@ html[dir='rtl'],
   margin-right: var(--toast-icon-margin-end);
 }
 
-[data-sonner-toast][data-promise='true'] [data-icon] > svg {
+[data-sonner-toast][data-promise='true'] [data-icon]>svg {
   opacity: 0;
   transform: scale(0.8);
   transform-origin: center;
   animation: sonner-fade-in 300ms ease forwards;
 }
 
-[data-sonner-toast][data-styled='true'] [data-icon] > * {
+[data-sonner-toast][data-styled='true'] [data-icon]>* {
   flex-shrink: 0;
 }
 
@@ -296,7 +304,7 @@ html[dir='rtl'],
   height: var(--front-toast-height);
 }
 
-[data-sonner-toast] > * {
+[data-sonner-toast]>* {
   transition: opacity 400ms;
 }
 
@@ -308,7 +316,15 @@ html[dir='rtl'],
   left: 0;
 }
 
-[data-sonner-toast][data-expanded='false'][data-front='false'][data-styled='true'] > * {
+[data-sonner-toast][data-x-position='start'] {
+  inset-inline-start: 0;
+}
+
+[data-sonner-toast][data-x-position='end'] {
+  inset-inline-end: 0;
+}
+
+[data-sonner-toast][data-expanded='false'][data-front='false'][data-styled='true']>* {
   opacity: 0;
 }
 
@@ -348,7 +364,8 @@ html[dir='rtl'],
 }
 
 [data-sonner-toast][data-swiped='true'] {
-  -webkit-user-select: none; /* Safari 3+ */
+  -webkit-user-select: none;
+  /* Safari 3+ */
   user-select: none;
 }
 
@@ -675,6 +692,7 @@ html[dir='rtl'],
     opacity: 0;
     transform: scale(0.8);
   }
+
   100% {
     opacity: 1;
     transform: scale(1);
@@ -686,6 +704,7 @@ html[dir='rtl'],
     opacity: 1;
     transform: scale(1);
   }
+
   100% {
     opacity: 0;
     transform: scale(0.8);
@@ -696,14 +715,16 @@ html[dir='rtl'],
   0% {
     opacity: 1;
   }
+
   100% {
     opacity: 0.15;
   }
 }
 
 @media (prefers-reduced-motion) {
+
   [data-sonner-toast],
-  [data-sonner-toast] > *,
+  [data-sonner-toast]>*,
   .sonner-loading-bar {
     transition: none !important;
     animation: none !important;
