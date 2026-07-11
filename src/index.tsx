@@ -333,16 +333,23 @@ const Toast = (props: ToastProps) => {
         const swipeAmount = swipeDirection === 'x' ? swipeAmountX : swipeAmountY;
         const velocity = Math.abs(swipeAmount) / timeTaken;
 
-        if (Math.abs(swipeAmount) >= SWIPE_THRESHOLD || velocity > 0.11) {
+        const swipeDirections = props.swipeDirections ?? getDefaultSwipeDirections(position);
+        const intendedSwipeDirection =
+          swipeDirection === 'x'
+            ? swipeAmountX > 0
+              ? 'right'
+              : 'left'
+            : swipeAmountY > 0
+            ? 'down'
+            : 'up';
+        const isAllowedSwipe = swipeDirections.includes(intendedSwipeDirection as SwipeDirection);
+
+        if (isAllowedSwipe && (Math.abs(swipeAmount) >= SWIPE_THRESHOLD || velocity > 0.11)) {
           setOffsetBeforeRemove(offset.current);
 
           toast.onDismiss?.(toast);
 
-          if (swipeDirection === 'x') {
-            setSwipeOutDirection(swipeAmountX > 0 ? 'right' : 'left');
-          } else {
-            setSwipeOutDirection(swipeAmountY > 0 ? 'down' : 'up');
-          }
+          setSwipeOutDirection(intendedSwipeDirection as 'left' | 'right' | 'up' | 'down');
 
           deleteToast();
           setSwipeOut(true);
