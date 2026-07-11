@@ -181,7 +181,7 @@ const Toast = (props: ToastProps) => {
         return heights.map((height) => (height.toastId === toast.id ? { ...height, height: newHeight } : height));
       }
     });
-  }, [mounted, toast.title, toast.description, setHeights, toast.id, toast.jsx, toast.action, toast.cancel]);
+  }, [mounted, toast.title, toast.description, toast.type, toast.promise, setHeights, toast.id, toast.jsx, toast.action, toast.cancel]);
 
   const deleteToast = React.useCallback(() => {
     // Save the offset for the exit swipe animation
