@@ -89,13 +89,26 @@ class Observer {
     if (id) {
       this.dismissedToasts.add(id);
       requestAnimationFrame(() => this.subscribers.forEach((subscriber) => subscriber({ id, dismiss: true })));
+      // Clean up the toast from the internal array after the exit animation completes
+      setTimeout(() => {
+        this.toasts = this.toasts.filter((toast) => toast.id !== id);
+      }, 400);
     } else {
       this.toasts.forEach((toast) => {
         this.subscribers.forEach((subscriber) => subscriber({ id: toast.id, dismiss: true }));
       });
+      // Clean up all toasts from the internal array after the exit animation completes
+      setTimeout(() => {
+        this.toasts = [];
+      }, 400);
     }
 
     return id;
+  };
+
+  clearHistory = () => {
+    this.toasts = [];
+    this.dismissedToasts.clear();
   };
 
   message = (message: titleT | React.ReactNode, data?: ExternalToast) => {
@@ -294,6 +307,7 @@ export const toast = Object.assign(
     promise: ToastState.promise,
     dismiss: ToastState.dismiss,
     loading: ToastState.loading,
+    clearHistory: ToastState.clearHistory,
   },
   { getHistory, getToasts },
 );
