@@ -138,6 +138,20 @@ test.describe('Basic functionality', () => {
     await expect(page.locator('[data-sonner-toast]')).toHaveCount(1);
   });
 
+  test('toast is removed when the pointer gesture is cancelled', async ({ page }) => {
+    await page.getByTestId('default-button').click();
+
+    const toast = page.locator('[data-sonner-toast]');
+    await expect(toast).toBeVisible();
+
+    // The browser fires `pointercancel` instead of `pointerup` when it takes over the gesture,
+    // e.g. when touch scrolling starts. The toast should still dismiss itself afterwards.
+    await toast.dispatchEvent('pointerdown');
+    await toast.dispatchEvent('pointercancel');
+
+    await expect(toast).toHaveCount(0);
+  });
+
   test('toast is not removed if duration is set to infinity', async ({ page }) => {
     await page.getByTestId('infinity-toast').click();
 

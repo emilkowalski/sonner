@@ -844,6 +844,10 @@ const Toaster = React.forwardRef<HTMLElement, ToasterProps>(function Toaster(pro
               setInteracting(true);
             }}
             onPointerUp={() => setInteracting(false)}
+            // The browser fires `pointercancel` instead of `pointerup` when it takes over the
+            // gesture (e.g. touch scrolling). Without this, `interacting` stays true forever and
+            // every toast stops auto-dismissing.
+            onPointerCancel={() => setInteracting(false)}
           >
             {filteredToasts
               .filter((toast) => (!toast.position && index === 0) || toast.position === position)
