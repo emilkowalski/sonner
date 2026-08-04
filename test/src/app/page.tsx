@@ -148,6 +148,7 @@ export default function Home({ searchParams }: any) {
             ),
             {
               id: undefined,
+              duration: Infinity,
             },
           )
         }
