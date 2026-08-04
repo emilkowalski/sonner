@@ -23,6 +23,20 @@ export default function Home({ searchParams }: any) {
   const [isFinally, setIsFinally] = React.useState(false);
   const [showAriaLabels, setShowAriaLabels] = React.useState(false);
   const [historySize, setHistorySize] = React.useState<number | null>(null);
+  const [subscribeEvents, setSubscribeEvents] = React.useState(0);
+  const [subscribeDismissed, setSubscribeDismissed] = React.useState(0);
+  const dismissedIds = React.useRef(new Set<string | number>());
+
+  React.useEffect(() => {
+    return toast.subscribe((t) => {
+      setSubscribeEvents((count) => count + 1);
+
+      if ('dismiss' in t && t.dismiss) {
+        dismissedIds.current.add(t.id);
+        setSubscribeDismissed(dismissedIds.current.size);
+      }
+    });
+  }, []);
 
   return (
     <>
@@ -33,6 +47,8 @@ export default function Home({ searchParams }: any) {
       <button data-testid="default-button" className="button" onClick={() => toast('My Toast')}>
         Render Toast
       </button>
+      <span data-testid="subscribe-events">{subscribeEvents}</span>
+      <span data-testid="subscribe-dismissed">{subscribeDismissed}</span>
       <button data-testid="default-button-top" className="button" onClick={() => toast('My Toast')}>
         Render Toast Top
       </button>
