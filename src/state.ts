@@ -28,11 +28,14 @@ class Observer {
   subscribers: Array<(toast: ExternalToast | ToastToDismiss) => void>;
   toasts: Array<ToastT | ToastToDismiss>;
   dismissedToasts: Set<string | number>;
+  // Dismissals that have been requested but not handed to the subscribers yet
+  private pendingDismissals: Map<string | number, number>;
 
   constructor() {
     this.subscribers = [];
     this.toasts = [];
     this.dismissedToasts = new Set();
+    this.pendingDismissals = new Map();
   }
 
   // We use arrow functions to maintain the correct `this` reference
@@ -86,6 +89,18 @@ class Observer {
   ) => {
     const { message, ...rest } = data;
     const id = getToastId(data);
+
+    // A dismissal that hasn't reached the subscribers yet gets cancelled: the toast is still
+    // on screen, so this is an update of it rather than a new toast. Without this, creating a
+    // toast right after dismissing the same id (React's double effect in StrictMode does
+    // exactly that) would have the pending dismissal remove the toast that just got created.
+    const pendingDismissal = this.pendingDismissals.get(id);
+    if (pendingDismissal !== undefined) {
+      cancelAnimationFrame(pendingDismissal);
+      this.pendingDismissals.delete(id);
+      this.dismissedToasts.delete(id);
+    }
+
     const wasDismissed = this.dismissedToasts.has(id);
     const dismissible = data.dismissible === undefined ? true : data.dismissible;
 
@@ -135,13 +150,27 @@ class Observer {
     }
 
     this.dismissedToasts.add(id);
-    requestAnimationFrame(() => this.subscribers.forEach((subscriber) => subscriber({ id, dismiss: true })));
+
+    const alreadyPending = this.pendingDismissals.get(id);
+    if (alreadyPending !== undefined) {
+      cancelAnimationFrame(alreadyPending);
+    }
+
+    this.pendingDismissals.set(
+      id,
+      requestAnimationFrame(() => {
+        this.pendingDismissals.delete(id);
+        this.subscribers.forEach((subscriber) => subscriber({ id, dismiss: true }));
+      }),
+    );
 
     return id;
   };
 
   message = (message: titleT | React.ReactNode, data?: ExternalToast) => {
-    return this.create({ ...data, message });
+    // `type: undefined` resets the type when this updates a toast that had one, e.g. turning
+    // a loading toast into a plain one.
+    return this.create({ ...data, message, type: undefined });
   };
 
   error = (message: titleT | React.ReactNode, data?: ExternalToast) => {
@@ -297,7 +326,7 @@ export const ToastState = new Observer();
 
 // bind this to the toast function
 const toastFunction = (message: titleT, data?: ExternalToast) => {
-  return ToastState.create({ ...data, message });
+  return ToastState.message(message, data);
 };
 
 const isHttpResponse = (data: any): data is Response => {

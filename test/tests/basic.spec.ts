@@ -407,6 +407,46 @@ test.describe('Basic functionality', () => {
     await expect(toast).toHaveCount(1);
   });
 
+  test('toast() clears the loading state of a toast with the same id', async ({ page }) => {
+    await page.getByTestId('loading-toast-fixed-id').click();
+    const toast = page.locator('[data-sonner-toast]');
+    await expect(toast).toHaveAttribute('data-type', 'loading');
+
+    await page.getByTestId('default-toast-fixed-id').click();
+    await expect(toast).toHaveText('Done');
+    await expect(toast).not.toHaveAttribute('data-type', 'loading');
+    await expect(toast.locator('.sonner-loading-wrapper')).toHaveCount(0);
+  });
+
+  test('toast recreated right after being dismissed stays on screen', async ({ page }) => {
+    await page.getByTestId('dismiss-and-recreate').click();
+
+    // The pending dismissal must not take the newly created toast down with it
+    await page.waitForTimeout(500);
+    await expect(page.getByText('Remounted toast')).toHaveCount(1);
+  });
+
+  test('description fills the width of the toast', async ({ page }) => {
+    await page.getByTestId('react-node-description-wide').click();
+
+    const description = await page.getByTestId('wide-description').boundingBox();
+    const toast = await page.locator('[data-sonner-toast]').boundingBox();
+    if (!description || !toast) throw new Error('Toast not rendered');
+
+    // Full width minus the padding and the icon-less content offset
+    expect(description.width).toBeGreaterThan(toast.width - 60);
+  });
+
+  test('action button stays right aligned', async ({ page }) => {
+    await page.getByTestId('action').click();
+
+    const button = await page.locator('[data-action]').boundingBox();
+    const toast = await page.locator('[data-sonner-toast]').boundingBox();
+    if (!button || !toast) throw new Error('Toast not rendered');
+
+    expect(button.x + button.width).toBeGreaterThan(toast.x + toast.width - 30);
+  });
+
   test('toast is dismissed by a fast swipe in an allowed direction', async ({ page }) => {
     await page.goto('/?position=top-center&swipeDirections=top,right');
     await page.getByTestId('default-button').click();

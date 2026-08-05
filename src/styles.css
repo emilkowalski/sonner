@@ -176,6 +176,10 @@ html[dir='rtl'],
   display: flex;
   flex-direction: column;
   gap: 2px;
+  /* Take the space the icon and the buttons leave, so a custom title or description
+     isn't limited to the width of its text */
+  flex: 1;
+  min-width: 0;
 }
 
 [data-sonner-toast][data-styled='true'] [data-button] {

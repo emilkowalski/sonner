@@ -428,6 +428,44 @@ export default function Home({ searchParams }: any) {
         Create and dismiss a lot of toasts
       </button>
       {historySize !== null ? <div data-testid="history-size">{historySize}</div> : null}
+      <button
+        data-testid="loading-toast-fixed-id"
+        className="button"
+        onClick={() => toast.loading('Loading', { id: 'fixed-id' })}
+      >
+        Loading toast with a fixed id
+      </button>
+      <button
+        data-testid="default-toast-fixed-id"
+        className="button"
+        onClick={() => toast('Done', { id: 'fixed-id', duration: 10000 })}
+      >
+        Default toast with the same fixed id
+      </button>
+      <button
+        data-testid="dismiss-and-recreate"
+        className="button"
+        onClick={() => {
+          // What React does in StrictMode: effect, cleanup, effect
+          toast.warning('Remounted toast', { id: 'remounted', duration: 10000 });
+          toast.dismiss('remounted');
+          toast.warning('Remounted toast', { id: 'remounted', duration: 10000 });
+        }}
+      >
+        Dismiss and recreate a toast synchronously
+      </button>
+      <button
+        data-testid="react-node-description-wide"
+        className="button"
+        onClick={() =>
+          toast('Title', {
+            duration: 10000,
+            description: <div data-testid="wide-description" style={{ width: '100%', height: 8 }} />,
+          })
+        }
+      >
+        ReactNode description that fills the width
+      </button>
       {showAutoClose ? <div data-testid="auto-close-el" /> : null}
       {showDismiss ? <div data-testid="dismiss-el" /> : null}
       <Toaster
