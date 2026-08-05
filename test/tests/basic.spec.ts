@@ -418,6 +418,17 @@ test.describe('Basic functionality', () => {
     await expect(toast.locator('.sonner-loading-wrapper')).toHaveCount(0);
   });
 
+  test('toast.custom() clears the loading state of a toast with the same id', async ({ page }) => {
+    await page.getByTestId('loading-toast-fixed-id').click();
+    const toast = page.locator('[data-sonner-toast]');
+    await expect(toast).toHaveAttribute('data-type', 'loading');
+
+    await page.getByTestId('custom-toast-fixed-id').click();
+    await expect(toast).toHaveText('Custom done');
+    await expect(toast).not.toHaveAttribute('data-type', 'loading');
+    await expect(toast.locator('.sonner-loading-wrapper')).toHaveCount(0);
+  });
+
   test('toast recreated right after being dismissed stays on screen', async ({ page }) => {
     await page.getByTestId('dismiss-and-recreate').click();
 

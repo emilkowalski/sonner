@@ -443,6 +443,13 @@ export default function Home({ searchParams }: any) {
         Default toast with the same fixed id
       </button>
       <button
+        data-testid="custom-toast-fixed-id"
+        className="button"
+        onClick={() => toast.custom(() => <div>Custom done</div>, { id: 'fixed-id', duration: 10000 })}
+      >
+        Custom toast with the same fixed id
+      </button>
+      <button
         data-testid="dismiss-and-recreate"
         className="button"
         onClick={() => {

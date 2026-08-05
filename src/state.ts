@@ -313,7 +313,8 @@ class Observer {
 
   custom = (jsx: (id: number | string) => React.ReactElement, data?: ExternalToast) => {
     const id = getToastId(data);
-    this.create({ ...data, jsx: jsx(id), id });
+    // A custom toast has no type, so it resets the one of the toast it replaces
+    this.create({ ...data, jsx: jsx(id), id, type: undefined });
     return id;
   };
 
