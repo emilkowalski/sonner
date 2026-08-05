@@ -274,7 +274,7 @@ test.describe('Basic functionality', () => {
     await page.getByTestId('custom-with-empty-id').click();
 
     await expect(page.locator('[data-sonner-toast]')).toHaveCount(1);
-    await page.locator('[data-dismiss]').click();
+    await page.getByTestId('dismiss-button').click();
     await expect(page.locator('[data-sonner-toast]')).toHaveCount(0);
   });
 
@@ -336,5 +336,90 @@ test.describe('Basic functionality', () => {
     await expect(page.getByTestId('promise-test-toast')).toBeVisible();
     await expect(page.getByTestId('promise-test-toast')).toHaveText('Loading...');
     await expect(page.getByTestId('promise-test-toast')).toHaveText('Loaded');
+  });
+
+  test('classNames.default is only applied to toasts without a type', async ({ page }) => {
+    await page.getByTestId('default-button').click();
+    await expect(page.locator('[data-sonner-toast]')).toHaveClass(/default-toast-classname/);
+
+    await page.getByTestId('success').click();
+    const successToast = page.locator('[data-sonner-toast][data-type="success"]');
+    await expect(successToast).toHaveClass(/success-toast-classname/);
+    await expect(successToast).not.toHaveClass(/default-toast-classname/);
+  });
+
+  test('custom icon is only rendered once in a promise toast', async ({ page }) => {
+    await page.getByTestId('promise-custom-icon').click();
+    await expect(page.getByText('Loading...')).toHaveCount(1);
+
+    await expect(page.getByText('Loaded')).toHaveCount(1);
+    await expect(page.getByTestId('custom-success-icon')).toHaveCount(1);
+  });
+
+  test('icons are hidden from assistive technology', async ({ page }) => {
+    await page.getByTestId('close-button').click();
+    await expect(page.locator('[data-sonner-toast] [data-close-button] svg')).toHaveAttribute('aria-hidden', 'true');
+
+    await page.getByTestId('success').click();
+    await expect(page.locator('[data-sonner-toast] [data-icon] svg')).toHaveAttribute('aria-hidden', 'true');
+  });
+
+  test('toast created before the Toaster mounts is still shown', async ({ page }) => {
+    await page.goto('/?toastOnMount');
+    await expect(page.getByText('Toast rendered on mount')).toHaveCount(1);
+  });
+
+  test('a new toast reusing the id of a dismissed toast does not inherit its props', async ({ page }) => {
+    await page.getByTestId('reused-id-with-action').click();
+    await expect(page.locator('[data-action]')).toHaveCount(1);
+
+    // Wait for the first toast to close on its own
+    await expect(page.locator('[data-sonner-toast]')).toHaveCount(0);
+
+    await page.getByTestId('reused-id-without-action').click();
+    const newToast = page.locator('[data-sonner-toast]');
+    await expect(newToast).toHaveCount(1);
+    // Fails if the action button of the previous toast is still rendered
+    await expect(newToast).toHaveText('Toast without action');
+  });
+
+  test('dismissed toasts do not pile up in the history', async ({ page }) => {
+    await page.getByTestId('history-flood').click();
+    await expect(page.getByTestId('history-size')).toHaveText('100');
+  });
+
+  test('toast is not dismissed by a fast swipe in a direction that is not allowed', async ({ page }) => {
+    await page.goto('/?position=top-center&swipeDirections=top,right');
+    await page.getByTestId('default-button').click();
+
+    const toast = page.locator('[data-sonner-toast]');
+    const box = await toast.boundingBox();
+    if (!box) throw new Error('Toast not rendered');
+
+    // Fast flick to the left, `left` is not in swipeDirections
+    await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+    await page.mouse.down();
+    await page.mouse.move(box.x - 200, box.y + box.height / 2, { steps: 5 });
+    await page.mouse.up();
+
+    // Long enough for the exit animation to have removed the toast if it had been dismissed
+    await page.waitForTimeout(500);
+    await expect(toast).toHaveCount(1);
+  });
+
+  test('toast is dismissed by a fast swipe in an allowed direction', async ({ page }) => {
+    await page.goto('/?position=top-center&swipeDirections=top,right');
+    await page.getByTestId('default-button').click();
+
+    const toast = page.locator('[data-sonner-toast]');
+    const box = await toast.boundingBox();
+    if (!box) throw new Error('Toast not rendered');
+
+    await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+    await page.mouse.down();
+    await page.mouse.move(box.x + box.width + 200, box.y + box.height / 2, { steps: 5 });
+    await page.mouse.up();
+
+    await expect(toast).toHaveCount(0);
   });
 });

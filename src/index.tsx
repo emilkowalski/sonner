@@ -104,6 +104,8 @@ const Toast = (props: ToastProps) => {
   const isFront = index === 0;
   const isVisible = index + 1 <= visibleToasts;
   const toastType = toast.type;
+  // Toasts created with `toast()` have no type, `classNames.default` is the key for those.
+  const toastTypeKey = toastType ?? 'default';
   const dismissible = toast.dismissible !== false;
   const toastClassname = toast.className || '';
   const toastDescriptionClassname = toast.descriptionClassName || '';
@@ -136,6 +138,10 @@ const Toast = (props: ToastProps) => {
     }, 0);
   }, [heights, heightIndex]);
   const isDocumentHidden = useIsDocumentHidden();
+  const swipeDirections = React.useMemo(
+    () => props.swipeDirections ?? getDefaultSwipeDirections(position),
+    [props.swipeDirections, position],
+  );
 
   const invert = toast.invert || ToasterInvert;
   const disabled = toastType === 'loading';
@@ -267,9 +273,8 @@ const Toast = (props: ToastProps) => {
         toastClassname,
         classNames?.toast,
         toast?.classNames?.toast,
-        classNames?.default,
-        classNames?.[toastType],
-        toast?.classNames?.[toastType],
+        classNames?.[toastTypeKey],
+        toast?.classNames?.[toastTypeKey],
       )}
       data-sonner-toast=""
       data-rich-colors={toast.richColors ?? defaultRichColors}
@@ -333,7 +338,14 @@ const Toast = (props: ToastProps) => {
         const swipeAmount = swipeDirection === 'x' ? swipeAmountX : swipeAmountY;
         const velocity = Math.abs(swipeAmount) / timeTaken;
 
-        if (Math.abs(swipeAmount) >= SWIPE_THRESHOLD || velocity > 0.11) {
+        // Movement towards a direction that isn't allowed is dampened, not blocked, so a fast
+        // flick can still pass the velocity check. Only dismiss if the direction is allowed.
+        const isAllowedDirection =
+          swipeDirection === 'x'
+            ? swipeDirections.includes(swipeAmountX > 0 ? 'right' : 'left')
+            : swipeDirections.includes(swipeAmountY > 0 ? 'bottom' : 'top');
+
+        if (isAllowedDirection && (Math.abs(swipeAmount) >= SWIPE_THRESHOLD || velocity > 0.11)) {
           setOffsetBeforeRemove(offset.current);
 
           toast.onDismiss?.(toast);
@@ -364,8 +376,6 @@ const Toast = (props: ToastProps) => {
 
         const yDelta = event.clientY - pointerStartRef.current.y;
         const xDelta = event.clientX - pointerStartRef.current.x;
-
-        const swipeDirections = props.swipeDirections ?? getDefaultSwipeDirections(position);
 
         // Determine swipe direction if not already locked
         if (!swipeDirection && (Math.abs(xDelta) > 1 || Math.abs(yDelta) > 1)) {
@@ -439,8 +449,9 @@ const Toast = (props: ToastProps) => {
       toast.icon !== null &&
       (icons?.[toastType] !== null || toast.icon) ? (
         <div data-icon="" className={cn(classNames?.icon, toast?.classNames?.icon)}>
-          {toast.promise || (toast.type === 'loading' && !toast.icon) ? toast.icon || getLoadingIcon() : null}
-          {toast.type !== 'loading' ? icon : null}
+          {/* Promise toasts keep the loader mounted after they settle so it can animate out */}
+          {toastType === 'loading' ? toast.icon || getLoadingIcon() : toast.promise ? getLoadingIcon() : null}
+          {toastType !== 'loading' ? icon : null}
         </div>
       ) : null}
 
@@ -683,7 +694,7 @@ const Toaster = React.forwardRef<HTMLElement, ToasterProps>(function Toaster(pro
         });
       });
     });
-  }, [toasts]);
+  }, []);
 
   React.useEffect(() => {
     if (theme !== 'system') {
