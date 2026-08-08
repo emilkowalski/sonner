@@ -6,15 +6,27 @@ import { action } from '@/app/action';
 
 const promise = () => new Promise((resolve) => setTimeout(resolve, 2000));
 
+// Rendered above the <Toaster />, so its effect runs before the Toaster subscribes.
+function ToastOnMount() {
+  React.useEffect(() => {
+    // Fixed id so StrictMode's double effect doesn't render two toasts
+    toast('Toast rendered on mount', { id: 'toast-on-mount' });
+  }, []);
+
+  return null;
+}
+
 export default function Home({ searchParams }: any) {
   const [showAutoClose, setShowAutoClose] = React.useState(false);
   const [showDismiss, setShowDismiss] = React.useState(false);
   const [theme, setTheme] = React.useState(searchParams.theme || 'light');
   const [isFinally, setIsFinally] = React.useState(false);
   const [showAriaLabels, setShowAriaLabels] = React.useState(false);
+  const [historySize, setHistorySize] = React.useState<number | null>(null);
 
   return (
     <>
+      {searchParams.toastOnMount === '' ? <ToastOnMount /> : null}
       <button data-testid="theme-button" className="button" onClick={() => setTheme('dark')}>
         Change theme
       </button>
@@ -364,15 +376,117 @@ export default function Home({ searchParams }: any) {
       >
         Promise Toast with testId
       </button>
+      <button
+        data-testid="promise-custom-icon"
+        className="button"
+        onClick={() =>
+          toast.promise(promise, {
+            loading: 'Loading...',
+            success: () => ({
+              message: 'Loaded',
+              icon: <span data-testid="custom-success-icon">✓</span>,
+            }),
+            error: 'Error',
+          })
+        }
+      >
+        Promise Toast with custom success icon
+      </button>
+      <button
+        data-testid="reused-id-with-action"
+        className="button"
+        onClick={() =>
+          toast.error('Toast with action', {
+            id: 'reused-id',
+            duration: 1000,
+            action: {
+              label: 'Action',
+              onClick: () => console.log('Action'),
+            },
+          })
+        }
+      >
+        Toast with action and a fixed id
+      </button>
+      <button
+        data-testid="reused-id-without-action"
+        className="button"
+        onClick={() => toast.success('Toast without action', { id: 'reused-id', duration: 10000 })}
+      >
+        Toast without action and the same fixed id
+      </button>
+      <button
+        data-testid="history-flood"
+        className="button"
+        onClick={() => {
+          for (let i = 0; i < 120; i++) {
+            toast.dismiss(toast(`Flood ${i}`, { duration: 1 }));
+          }
+          setHistorySize(toast.getHistory().length);
+        }}
+      >
+        Create and dismiss a lot of toasts
+      </button>
+      {historySize !== null ? <div data-testid="history-size">{historySize}</div> : null}
+      <button
+        data-testid="loading-toast-fixed-id"
+        className="button"
+        onClick={() => toast.loading('Loading', { id: 'fixed-id' })}
+      >
+        Loading toast with a fixed id
+      </button>
+      <button
+        data-testid="default-toast-fixed-id"
+        className="button"
+        onClick={() => toast('Done', { id: 'fixed-id', duration: 10000 })}
+      >
+        Default toast with the same fixed id
+      </button>
+      <button
+        data-testid="custom-toast-fixed-id"
+        className="button"
+        onClick={() => toast.custom(() => <div>Custom done</div>, { id: 'fixed-id', duration: 10000 })}
+      >
+        Custom toast with the same fixed id
+      </button>
+      <button
+        data-testid="dismiss-and-recreate"
+        className="button"
+        onClick={() => {
+          // What React does in StrictMode: effect, cleanup, effect
+          toast.warning('Remounted toast', { id: 'remounted', duration: 10000 });
+          toast.dismiss('remounted');
+          toast.warning('Remounted toast', { id: 'remounted', duration: 10000 });
+        }}
+      >
+        Dismiss and recreate a toast synchronously
+      </button>
+      <button
+        data-testid="react-node-description-wide"
+        className="button"
+        onClick={() =>
+          toast('Title', {
+            duration: 10000,
+            description: <div data-testid="wide-description" style={{ width: '100%', height: 8 }} />,
+          })
+        }
+      >
+        ReactNode description that fills the width
+      </button>
       {showAutoClose ? <div data-testid="auto-close-el" /> : null}
       {showDismiss ? <div data-testid="dismiss-el" /> : null}
       <Toaster
         offset={32}
         position={searchParams.position || 'bottom-right'}
+        swipeDirections={searchParams.swipeDirections ? searchParams.swipeDirections.split(',') : undefined}
         toastOptions={{
           actionButtonStyle: { backgroundColor: 'rgb(219, 239, 255)' },
           cancelButtonStyle: { backgroundColor: 'rgb(254, 226, 226)' },
           closeButtonAriaLabel: showAriaLabels ? 'Yeet the notice' : undefined,
+          classNames: {
+            default: 'default-toast-classname',
+            success: 'success-toast-classname',
+          },
         }}
         theme={theme}
         dir={searchParams.dir || 'auto'}
