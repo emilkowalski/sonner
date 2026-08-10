@@ -321,6 +321,11 @@ class Observer {
   getActiveToasts = () => {
     return this.toasts.filter((toast) => !this.dismissedToasts.has(toast.id));
   };
+
+  clearHistory = () => {
+    this.toasts = this.getActiveToasts();
+    this.dismissedToasts.clear();
+  };
 }
 
 export const ToastState = new Observer();
@@ -345,6 +350,7 @@ const basicToast = toastFunction;
 
 const getHistory = () => ToastState.toasts;
 const getToasts = () => ToastState.getActiveToasts();
+const clearHistory = () => ToastState.clearHistory();
 
 // We use `Object.assign` to maintain the correct types as we would lose them otherwise
 export const toast = Object.assign(
@@ -360,5 +366,5 @@ export const toast = Object.assign(
     dismiss: ToastState.dismiss,
     loading: ToastState.loading,
   },
-  { getHistory, getToasts },
+  { getHistory, getToasts, clearHistory },
 );
