@@ -10,6 +10,12 @@ To start using the library, install it in your project:
 npm install sonner
 ```
 
+Alternatively you can use the `/ask-sonner` skill to do it for you and help you with any other Sonner-related questions.
+
+```bash
+npx skills add https://github.com/emilkowalski/skills --skill ask-sonner
+```
+
 Add `<Toaster />` to your app, it will be the place where all your toasts will be rendered.
 After that you can use `toast()` from anywhere in your app.
 
