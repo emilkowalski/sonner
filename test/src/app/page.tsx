@@ -89,6 +89,30 @@ export default function Home({ searchParams }: any) {
         Render Promise Toast
       </button>
       <button
+        data-testid="loading-to-success"
+        className="button"
+        onClick={() => {
+          const toastId = toast.loading('Loading...');
+          setTimeout(() => {
+            toast.success('Loaded.', { id: toastId });
+          }, 2000);
+        }}
+      >
+        Loading to Success Toast
+      </button>
+      <button
+        data-testid="loading-to-error"
+        className="button"
+        onClick={() => {
+          const toastId = toast.loading('Loading...');
+          setTimeout(() => {
+            toast.error('Failed.', { id: toastId });
+          }, 2000);
+        }}
+      >
+        Loading to Error Toast
+      </button>
+      <button
         data-testid="rsf-promise"
         data-finally={isFinally ? '1' : '0'}
         className="button"
