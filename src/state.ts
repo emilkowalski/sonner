@@ -360,5 +360,5 @@ export const toast = Object.assign(
     dismiss: ToastState.dismiss,
     loading: ToastState.loading,
   },
-  { getHistory, getToasts },
+  { getHistory, getToasts, subscribe: ToastState.subscribe },
 );

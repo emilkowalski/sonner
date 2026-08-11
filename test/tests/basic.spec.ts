@@ -473,4 +473,16 @@ test.describe('Basic functionality', () => {
 
     await expect(toast).toHaveCount(0);
   });
+
+  test('toast.subscribe notifies about lifecycle events', async ({ page }) => {
+    await expect(page.getByTestId('subscribe-events')).toHaveText('0');
+
+    await page.getByTestId('close-button').click();
+    await expect(page.getByTestId('subscribe-events')).toHaveText('1');
+    await expect(page.getByTestId('subscribe-dismissed')).toHaveText('0');
+
+    await page.locator('[data-sonner-toast]').hover();
+    await page.getByLabel('Close toast').click();
+    await expect(page.getByTestId('subscribe-dismissed')).toHaveText('1');
+  });
 });
