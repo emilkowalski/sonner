@@ -27,7 +27,7 @@ const VIEWPORT_OFFSET = '24px';
 // Mobile viewport padding
 const MOBILE_VIEWPORT_OFFSET = '16px';
 
-// Default lifetime of a toasts (in ms)
+// Default lifetime of a toast (in ms)
 const TOAST_LIFETIME = 4000;
 
 // Default toast width
@@ -481,7 +481,7 @@ const Toast = (props: ToastProps) => {
           data-cancel
           style={toast.cancelButtonStyle || cancelButtonStyle}
           onClick={(event) => {
-            // We need to check twice because typescript
+            // We need to check twice because TypeScript requires type narrowing
             if (!isAction(toast.cancel)) return;
             if (!dismissible) return;
             toast.cancel.onClick?.(event);
@@ -500,7 +500,7 @@ const Toast = (props: ToastProps) => {
           data-action
           style={toast.actionButtonStyle || actionButtonStyle}
           onClick={(event) => {
-            // We need to check twice because typescript
+            // We need to check twice because TypeScript requires type narrowing
             if (!isAction(toast.action)) return;
             toast.action.onClick?.(event);
             if (event.defaultPrevented) return;
@@ -517,7 +517,7 @@ const Toast = (props: ToastProps) => {
 
 function getDocumentDirection(): ToasterProps['dir'] {
   if (typeof window === 'undefined') return 'ltr';
-  if (typeof document === 'undefined') return 'ltr'; // For Fresh purpose
+  if (typeof document === 'undefined') return 'ltr'; // For Fresh framework compatibility
 
   const dirAttribute = document.documentElement.getAttribute('dir');
 
@@ -574,7 +574,7 @@ function useSonner() {
         return;
       }
 
-      // Prevent batching, temp solution.
+      // Prevent batching, temporary solution.
       setTimeout(() => {
         ReactDOM.flushSync(() => {
           setActiveToasts((toasts) => {
@@ -674,7 +674,7 @@ const Toaster = React.forwardRef<HTMLElement, ToasterProps>(function Toaster(pro
         return;
       }
 
-      // Prevent batching, temp solution.
+      // Prevent batching, temporary solution.
       setTimeout(() => {
         ReactDOM.flushSync(() => {
           setToasts((toasts) => {
@@ -703,12 +703,12 @@ const Toaster = React.forwardRef<HTMLElement, ToasterProps>(function Toaster(pro
     }
 
     if (theme === 'system') {
-      // check if current preference is dark
+      // Check if current preference is dark
       if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-        // it's currently dark
+        // It's currently dark
         setActualTheme('dark');
       } else {
-        // it's not dark
+        // It's not dark
         setActualTheme('light');
       }
     }
