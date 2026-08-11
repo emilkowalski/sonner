@@ -176,15 +176,17 @@ const Toast = (props: ToastProps) => {
     toastNode.style.height = 'auto';
     const newHeight = toastNode.getBoundingClientRect().height;
     toastNode.style.height = originalHeight;
+    // Adjust to --scale property from style.css file
+    const heightAdjustedToScale = expanded ? newHeight : newHeight / (1 - 0.05 * index);
 
-    setInitialHeight(newHeight);
+    setInitialHeight(heightAdjustedToScale);
 
     setHeights((heights) => {
       const alreadyExists = heights.find((height) => height.toastId === toast.id);
       if (!alreadyExists) {
-        return [{ toastId: toast.id, height: newHeight, position: toast.position }, ...heights];
+        return [{ toastId: toast.id, height: heightAdjustedToScale, position: toast.position }, ...heights];
       } else {
-        return heights.map((height) => (height.toastId === toast.id ? { ...height, height: newHeight } : height));
+        return heights.map((height) => (height.toastId === toast.id ? { ...height, height: heightAdjustedToScale } : height));
       }
     });
   }, [mounted, toast.title, toast.description, setHeights, toast.id, toast.jsx, toast.action, toast.cancel]);
