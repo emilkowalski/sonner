@@ -331,6 +331,16 @@ test.describe('Basic functionality', () => {
     await expect(toast).not.toHaveAttribute('data-testid');
   });
 
+  test('toast renders with data-toast-id attribute', async ({ page }) => {
+    await page.getByTestId('default-button').click();
+    await expect(page.locator('[data-sonner-toast]')).toHaveAttribute('data-toast-id', /.+/);
+  });
+
+  test('toast renders correct data-toast-id when custom id is provided', async ({ page }) => {
+    await page.getByTestId('custom-id-toast').click();
+    await expect(page.locator('[data-sonner-toast][data-toast-id="my-custom-id"]')).toHaveCount(1);
+  });
+
   test('promise toast with testId maintains testId through state changes', async ({ page }) => {
     await page.getByTestId('testid-promise-toast-button').click();
     await expect(page.getByTestId('promise-test-toast')).toBeVisible();

@@ -277,6 +277,7 @@ const Toast = (props: ToastProps) => {
         toast?.classNames?.[toastTypeKey],
       )}
       data-sonner-toast=""
+      data-toast-id={String(toast.id)}
       data-rich-colors={toast.richColors ?? defaultRichColors}
       data-styled={!Boolean(toast.jsx || toast.unstyled || unstyled)}
       data-mounted={mounted}
