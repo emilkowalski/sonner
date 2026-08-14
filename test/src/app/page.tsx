@@ -27,7 +27,11 @@ export default function Home({ searchParams }: any) {
   return (
     <>
       {searchParams.toastOnMount === '' ? <ToastOnMount /> : null}
-      <button data-testid="theme-button" className="button" onClick={() => setTheme('dark')}>
+      <button
+        data-testid="theme-button"
+        className="button"
+        onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+      >
         Change theme
       </button>
       <button data-testid="default-button" className="button" onClick={() => toast('My Toast')}>
