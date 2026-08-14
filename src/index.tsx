@@ -716,28 +716,28 @@ const Toaster = React.forwardRef<HTMLElement, ToasterProps>(function Toaster(pro
     if (typeof window === 'undefined') return;
     const darkMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
 
+    const handleChange = ({ matches }: MediaQueryListEvent) => {
+      if (matches) {
+        setActualTheme('dark');
+      } else {
+        setActualTheme('light');
+      }
+    };
+
     try {
       // Chrome & Firefox
-      darkMediaQuery.addEventListener('change', ({ matches }) => {
-        if (matches) {
-          setActualTheme('dark');
-        } else {
-          setActualTheme('light');
-        }
-      });
+      darkMediaQuery.addEventListener('change', handleChange);
+
+      return () => {
+        darkMediaQuery.removeEventListener('change', handleChange);
+      };
     } catch (error) {
       // Safari < 14
-      darkMediaQuery.addListener(({ matches }) => {
-        try {
-          if (matches) {
-            setActualTheme('dark');
-          } else {
-            setActualTheme('light');
-          }
-        } catch (e) {
-          console.error(e);
-        }
-      });
+      darkMediaQuery.addListener(handleChange);
+
+      return () => {
+        darkMediaQuery.removeListener(handleChange);
+      };
     }
   }, [theme]);
 
