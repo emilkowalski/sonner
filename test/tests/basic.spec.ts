@@ -407,6 +407,28 @@ test.describe('Basic functionality', () => {
     await expect(toast).toHaveCount(1);
   });
 
+  test('a cancelled swipe returns the toast to rest', async ({ page }) => {
+    await page.goto('/?position=top-center');
+    await page.getByTestId('default-button').click();
+
+    const toast = page.locator('[data-sonner-toast]').first();
+    const box = await toast.boundingBox();
+    if (!box) throw new Error('Toast not rendered');
+
+    await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+    await page.mouse.down();
+    await page.mouse.move(box.x + box.width / 2 + 40, box.y + box.height / 2, { steps: 5 });
+
+    await expect(toast).toHaveAttribute('data-swiping', 'true');
+
+    await toast.dispatchEvent('pointercancel', { bubbles: true });
+
+    await expect(toast).toHaveAttribute('data-swiping', 'false');
+    await expect
+      .poll(() => toast.evaluate((el: HTMLElement) => el.style.getPropertyValue('--swipe-amount-x')))
+      .toBe('0px');
+  });
+
   test('toast() clears the loading state of a toast with the same id', async ({ page }) => {
     await page.getByTestId('loading-toast-fixed-id').click();
     const toast = page.locator('[data-sonner-toast]');
