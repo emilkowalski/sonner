@@ -368,6 +368,18 @@ const Toast = (props: ToastProps) => {
         setSwiping(false);
         setSwipeDirection(null);
       }}
+      onPointerCancel={() => {
+        // The browser fires this instead of pointerup when it takes the gesture
+        // over, so the swipe has to be unwound here too.
+        if (swipeOut || !dismissible) return;
+
+        pointerStartRef.current = null;
+        toastRef.current?.style.setProperty('--swipe-amount-x', '0px');
+        toastRef.current?.style.setProperty('--swipe-amount-y', '0px');
+        setIsSwiped(false);
+        setSwiping(false);
+        setSwipeDirection(null);
+      }}
       onPointerMove={(event) => {
         if (!pointerStartRef.current || !dismissible) return;
 
@@ -855,6 +867,7 @@ const Toaster = React.forwardRef<HTMLElement, ToasterProps>(function Toaster(pro
               setInteracting(true);
             }}
             onPointerUp={() => setInteracting(false)}
+            onPointerCancel={() => setInteracting(false)}
           >
             {filteredToasts
               .filter((toast) => (!toast.position && index === 0) || toast.position === position)
