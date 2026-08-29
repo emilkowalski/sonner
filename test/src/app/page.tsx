@@ -25,7 +25,7 @@ export default function Home({ searchParams }: any) {
   const [historySize, setHistorySize] = React.useState<number | null>(null);
 
   return (
-    <>
+    <div style={searchParams.zoom ? { zoom: searchParams.zoom } : undefined}>
       {searchParams.toastOnMount === '' ? <ToastOnMount /> : null}
       <button data-testid="theme-button" className="button" onClick={() => setTheme('dark')}>
         Change theme
@@ -518,7 +518,7 @@ export default function Home({ searchParams }: any) {
           className: 'secondary-toaster',
         }}
       />
-    </>
+    </div>
   );
 }
 
