@@ -46,6 +46,19 @@ function cn(...classes: (string | undefined)[]) {
   return classes.filter(Boolean).join(' ');
 }
 
+/**
+ * Effective CSS `zoom` on a node, as the product of every zoom in its ancestor chain.
+ *
+ * Under an ancestor `zoom`, `getBoundingClientRect()` and pointer coordinates come back in
+ * on-screen px, while the custom properties they feed (`--initial-height`, `--offset`,
+ * `--swipe-amount-*`) are consumed as layout px inside that same zoomed subtree. Dividing by
+ * this puts both in one space.
+ */
+function getCssZoom(node: HTMLElement | null): number {
+  // `currentCSSZoom` is newer than this package's TypeScript DOM lib.
+  return (node as (HTMLElement & { currentCSSZoom?: number }) | null)?.currentCSSZoom || 1;
+}
+
 function getDefaultSwipeDirections(position: string): Array<SwipeDirection> {
   const [y, x] = position.split('-');
   const directions: Array<SwipeDirection> = [];
@@ -160,7 +173,7 @@ const Toast = (props: ToastProps) => {
   React.useEffect(() => {
     const toastNode = toastRef.current;
     if (toastNode) {
-      const height = toastNode.getBoundingClientRect().height;
+      const height = toastNode.getBoundingClientRect().height / getCssZoom(toastNode);
       // Add toast height to heights array after the toast is mounted
       setInitialHeight(height);
       setHeights((h) => [{ toastId: toast.id, height, position: toast.position }, ...h]);
@@ -174,7 +187,7 @@ const Toast = (props: ToastProps) => {
     const toastNode = toastRef.current;
     const originalHeight = toastNode.style.height;
     toastNode.style.height = 'auto';
-    const newHeight = toastNode.getBoundingClientRect().height;
+    const newHeight = toastNode.getBoundingClientRect().height / getCssZoom(toastNode);
     toastNode.style.height = originalHeight;
 
     setInitialHeight(newHeight);
@@ -374,8 +387,9 @@ const Toast = (props: ToastProps) => {
         const isHighlighted = window.getSelection()?.toString().length > 0;
         if (isHighlighted) return;
 
-        const yDelta = event.clientY - pointerStartRef.current.y;
-        const xDelta = event.clientX - pointerStartRef.current.x;
+        const pointerZoom = getCssZoom(toastRef.current);
+        const yDelta = (event.clientY - pointerStartRef.current.y) / pointerZoom;
+        const xDelta = (event.clientX - pointerStartRef.current.x) / pointerZoom;
 
         // Determine swipe direction if not already locked
         if (!swipeDirection && (Math.abs(xDelta) > 1 || Math.abs(yDelta) > 1)) {
