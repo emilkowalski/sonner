@@ -473,4 +473,15 @@ test.describe('Basic functionality', () => {
 
     await expect(toast).toHaveCount(0);
   });
+
+  test('remounted toaster does not replay a toast that was active when it unmounted', async ({ page }) => {
+    await page.getByTestId('infinity-toast').click();
+    await expect(page.getByText('My Toast')).toHaveCount(1);
+
+    await page.getByTestId('unmount-toaster').click();
+    await expect(page.getByText('My Toast')).toHaveCount(0);
+
+    await page.getByTestId('remount-toaster').click();
+    await expect(page.getByText('My Toast')).toHaveCount(0);
+  });
 });
