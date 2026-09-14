@@ -28,6 +28,9 @@ class Observer {
   subscribers: Array<(toast: ExternalToast | ToastToDismiss) => void>;
   toasts: Array<ToastT | ToastToDismiss>;
   dismissedToasts: Set<string | number>;
+  // Toasts that have already been handed to a subscriber. Used so remounting a
+  // Toaster does not replay something the user already saw.
+  deliveredToasts: Set<string | number>;
   // Dismissals that have been requested but not handed to the subscribers yet
   private pendingDismissals: Map<string | number, number>;
 
@@ -35,6 +38,7 @@ class Observer {
     this.subscribers = [];
     this.toasts = [];
     this.dismissedToasts = new Set();
+    this.deliveredToasts = new Set();
     this.pendingDismissals = new Map();
   }
 
@@ -43,9 +47,14 @@ class Observer {
     this.subscribers.push(subscriber);
 
     // A toast can be created before the `Toaster` had a chance to subscribe, e.g. when it's
-    // called in an effect of a component rendered above the `Toaster`. Replay whatever is
-    // still active so it doesn't get lost.
-    this.getActiveToasts().forEach((toast) => subscriber(toast as ToastT));
+    // called in an effect of a component rendered above the `Toaster`. Replay those that
+    // never reached a subscriber so they don't get lost. Skip ones that were already shown —
+    // remounting would otherwise keep replaying them, and their auto-close timer is gone.
+    this.getActiveToasts().forEach((toast) => {
+      if (this.deliveredToasts.has(toast.id)) return;
+      this.deliveredToasts.add(toast.id);
+      subscriber(toast as ToastT);
+    });
 
     return () => {
       const index = this.subscribers.indexOf(subscriber);
@@ -54,6 +63,9 @@ class Observer {
   };
 
   publish = (data: ToastT) => {
+    if (this.subscribers.length > 0) {
+      this.deliveredToasts.add(data.id);
+    }
     this.subscribers.forEach((subscriber) => subscriber(data));
   };
 
@@ -71,6 +83,7 @@ class Observer {
     this.toasts = this.toasts.filter((toast) => {
       if (toRemove > 0 && this.dismissedToasts.has(toast.id)) {
         this.dismissedToasts.delete(toast.id);
+        this.deliveredToasts.delete(toast.id);
         toRemove--;
         return false;
       }
@@ -106,6 +119,7 @@ class Observer {
 
     if (wasDismissed) {
       this.dismissedToasts.delete(id);
+      this.deliveredToasts.delete(id);
       // The previous toast with this id is gone, so this is a brand new toast. Drop the old
       // one instead of merging into it, otherwise its props (e.g. `action`) leak into the new one.
       this.toasts = this.toasts.filter((toast) => toast.id !== id);

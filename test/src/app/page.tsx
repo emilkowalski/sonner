@@ -23,6 +23,7 @@ export default function Home({ searchParams }: any) {
   const [isFinally, setIsFinally] = React.useState(false);
   const [showAriaLabels, setShowAriaLabels] = React.useState(false);
   const [historySize, setHistorySize] = React.useState<number | null>(null);
+  const [showToaster, setShowToaster] = React.useState(true);
 
   return (
     <>
@@ -473,44 +474,52 @@ export default function Home({ searchParams }: any) {
       >
         ReactNode description that fills the width
       </button>
+      <button data-testid="unmount-toaster" className="button" onClick={() => setShowToaster(false)}>
+        Unmount Toaster
+      </button>
+      <button data-testid="remount-toaster" className="button" onClick={() => setShowToaster(true)}>
+        Remount Toaster
+      </button>
       {showAutoClose ? <div data-testid="auto-close-el" /> : null}
       {showDismiss ? <div data-testid="dismiss-el" /> : null}
-      <Toaster
-        offset={32}
-        position={searchParams.position || 'bottom-right'}
-        swipeDirections={searchParams.swipeDirections ? searchParams.swipeDirections.split(',') : undefined}
-        toastOptions={{
-          actionButtonStyle: { backgroundColor: 'rgb(219, 239, 255)' },
-          cancelButtonStyle: { backgroundColor: 'rgb(254, 226, 226)' },
-          closeButtonAriaLabel: showAriaLabels ? 'Yeet the notice' : undefined,
-          classNames: {
-            default: 'default-toast-classname',
-            success: 'success-toast-classname',
-          },
-        }}
-        theme={theme}
-        dir={searchParams.dir || 'auto'}
-        containerAriaLabel={showAriaLabels ? 'Notices' : undefined}
-        icons={{
-          close:
-            searchParams.customCloseIcon === '' ? (
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="12"
-                height="12"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="3"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <line x1="18" y1="6" x2="6" y2="18"></line>
-                <line x1="6" y1="6" x2="18" y2="18"></line>
-              </svg>
-            ) : undefined,
-        }}
-      />
+      {showToaster ? (
+        <Toaster
+          offset={32}
+          position={searchParams.position || 'bottom-right'}
+          swipeDirections={searchParams.swipeDirections ? searchParams.swipeDirections.split(',') : undefined}
+          toastOptions={{
+            actionButtonStyle: { backgroundColor: 'rgb(219, 239, 255)' },
+            cancelButtonStyle: { backgroundColor: 'rgb(254, 226, 226)' },
+            closeButtonAriaLabel: showAriaLabels ? 'Yeet the notice' : undefined,
+            classNames: {
+              default: 'default-toast-classname',
+              success: 'success-toast-classname',
+            },
+          }}
+          theme={theme}
+          dir={searchParams.dir || 'auto'}
+          containerAriaLabel={showAriaLabels ? 'Notices' : undefined}
+          icons={{
+            close:
+              searchParams.customCloseIcon === '' ? (
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="12"
+                  height="12"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="3"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <line x1="18" y1="6" x2="6" y2="18"></line>
+                  <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+              ) : undefined,
+          }}
+        />
+      ) : null}
       <Toaster
         id="secondary"
         position="top-left"
