@@ -189,16 +189,58 @@ const Toast = (props: ToastProps) => {
     });
   }, [mounted, toast.title, toast.description, setHeights, toast.id, toast.jsx, toast.action, toast.cancel]);
 
+  const deleteToastTimeoutRef = React.useRef<ReturnType<typeof setTimeout> | null>(null);
+  // Tracks whether the pending removal below was triggered by the toast's
+  // own duration timer expiring, as opposed to an explicit user/app
+  // dismissal (close button, swipe, cancel/action button, toast.delete).
+  // Only an auto-close should ever be revived by a same-id update -- see
+  // the revival effect below, and #730.
+  const wasAutoClosedRef = React.useRef(false);
+
   const deleteToast = React.useCallback(() => {
     // Save the offset for the exit swipe animation
     setRemoved(true);
     setOffsetBeforeRemove(offset.current);
     setHeights((h) => h.filter((height) => height.toastId !== toast.id));
 
-    setTimeout(() => {
+    if (deleteToastTimeoutRef.current) {
+      clearTimeout(deleteToastTimeoutRef.current);
+    }
+    deleteToastTimeoutRef.current = setTimeout(() => {
       removeToast(toast);
     }, TIME_BEFORE_UNMOUNT);
   }, [toast, removeToast, setHeights, offset]);
+
+  React.useEffect(() => {
+    // If a toast is auto-closed by its own duration timer, then updated
+    // with the same id (e.g. via toast(..., { id })) while still mid exit
+    // animation, the update would otherwise render briefly and then get
+    // unmounted anyway by the stale removal timer above, regardless of the
+    // fresh content -- see #730. Cancel that pending removal and bring the
+    // toast back instead.
+    //
+    // Deliberately scoped to auto-close only: reviving an *explicit*
+    // dismissal (close button, swipe, cancel/action button, toast.delete)
+    // the same way would silently undo the user's own action, and for
+    // swipe specifically would also leave stale swipeOut/swipeOutDirection
+    // state behind, rendering the revived toast mid swipe-away animation.
+    if (!removed || !wasAutoClosedRef.current) return;
+    wasAutoClosedRef.current = false;
+    if (deleteToastTimeoutRef.current) {
+      clearTimeout(deleteToastTimeoutRef.current);
+      deleteToastTimeoutRef.current = null;
+    }
+    // The auto-close timer already fully elapsed once (that's what got us
+    // here), and remainingTime.current is only reset by the effect above
+    // when toast.duration itself changes value -- a content-only update
+    // wouldn't trigger it. Without this, a toast revived after being
+    // shortened by an earlier hover-then-leave (pauseTimer) would restart
+    // its duration timer with whatever depleted value was left over,
+    // closing again almost immediately instead of getting a fresh window.
+    remainingTime.current = duration;
+    setRemoved(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [toast.title, toast.description, toast.jsx, toast.action, toast.cancel]);
 
   React.useEffect(() => {
     if ((toast.promise && toastType === 'loading') || toast.duration === Infinity || toast.type === 'loading') return;
@@ -227,6 +269,7 @@ const Toast = (props: ToastProps) => {
       // Let the toast know it has started
       timeoutId = setTimeout(() => {
         toast.onAutoClose?.(toast);
+        wasAutoClosedRef.current = true;
         deleteToast();
       }, remainingTime.current);
     };
