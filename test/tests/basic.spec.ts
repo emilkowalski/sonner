@@ -474,3 +474,68 @@ test.describe('Basic functionality', () => {
     await expect(toast).toHaveCount(0);
   });
 });
+
+test.describe('Forced colors', () => {
+  test('loading spinner stays visible in forced-colors mode', async ({ page, browserName }) => {
+    test.skip(browserName !== 'chromium', 'forced-colors emulation is only reliable in Chromium');
+
+    await page.emulateMedia({ forcedColors: 'active' });
+    await page.getByTestId('loading-toast-fixed-id').click();
+
+    const bar = page.locator('.sonner-loading-bar').first();
+    await expect(bar).toBeVisible();
+
+    const barBackground = await bar.evaluate((el) => getComputedStyle(el).backgroundColor);
+    const toastBackground = await page
+      .locator('[data-sonner-toast]')
+      .first()
+      .evaluate((el) => getComputedStyle(el).backgroundColor);
+
+    expect(barBackground).not.toBe(toastBackground);
+  });
+
+  test('toast focus indicator is visible in forced-colors mode', async ({ page, browserName }) => {
+    test.skip(browserName !== 'chromium', 'forced-colors emulation is only reliable in Chromium');
+
+    await page.emulateMedia({ forcedColors: 'active' });
+    await page.getByTestId('default-button').click();
+
+    const toast = page.locator('[data-sonner-toast]').first();
+    await toast.waitFor();
+
+    await page.keyboard.press('Alt+KeyT');
+    await page.keyboard.press('Tab');
+
+    await expect(toast).toBeFocused();
+    const isFocusVisible = await toast.evaluate((el) => el.matches(':focus-visible'));
+    expect(isFocusVisible).toBe(true);
+
+    const outlineStyle = await toast.evaluate((el) => getComputedStyle(el).outlineStyle);
+    const outlineWidth = await toast.evaluate((el) => getComputedStyle(el).outlineWidth);
+    expect(outlineStyle).not.toBe('none');
+    expect(outlineWidth).not.toBe('0px');
+  });
+
+  test('action button focus indicator is visible in forced-colors mode', async ({ page, browserName }) => {
+    test.skip(browserName !== 'chromium', 'forced-colors emulation is only reliable in Chromium');
+
+    await page.emulateMedia({ forcedColors: 'active' });
+    await page.getByTestId('action').click();
+
+    const button = page.locator('[data-sonner-toast] [data-button]').first();
+    await button.waitFor();
+
+    await page.keyboard.press('Alt+KeyT');
+    await page.keyboard.press('Tab');
+    await page.keyboard.press('Tab');
+
+    await expect(button).toBeFocused();
+    const isFocusVisible = await button.evaluate((el) => el.matches(':focus-visible'));
+    expect(isFocusVisible).toBe(true);
+
+    const outlineStyle = await button.evaluate((el) => getComputedStyle(el).outlineStyle);
+    const outlineWidth = await button.evaluate((el) => getComputedStyle(el).outlineWidth);
+    expect(outlineStyle).not.toBe('none');
+    expect(outlineWidth).not.toBe('0px');
+  });
+});

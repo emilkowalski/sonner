@@ -714,6 +714,18 @@ html[dir='rtl'],
   }
 }
 
+@media (forced-colors: active) {
+  .sonner-loading-bar {
+    background: CanvasText;
+  }
+
+  [data-sonner-toast]:focus-visible,
+  [data-sonner-toast][data-styled='true'] [data-button]:focus-visible {
+    outline: 2px solid Highlight;
+    outline-offset: 2px;
+  }
+}
+
 .sonner-loader {
   position: absolute;
   top: 50%;
