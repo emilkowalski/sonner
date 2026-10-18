@@ -189,16 +189,22 @@ const Toast = (props: ToastProps) => {
     });
   }, [mounted, toast.title, toast.description, setHeights, toast.id, toast.jsx, toast.action, toast.cancel]);
 
+  const removalTimeoutRef = React.useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+
   const deleteToast = React.useCallback(() => {
     // Save the offset for the exit swipe animation
     setRemoved(true);
     setOffsetBeforeRemove(offset.current);
     setHeights((h) => h.filter((height) => height.toastId !== toast.id));
 
-    setTimeout(() => {
+    clearTimeout(removalTimeoutRef.current);
+    removalTimeoutRef.current = setTimeout(() => {
       removeToast(toast);
     }, TIME_BEFORE_UNMOUNT);
   }, [toast, removeToast, setHeights, offset]);
+
+  // Unmounting before the exit animation ends means a new toast took this id, so don't remove it
+  React.useEffect(() => () => clearTimeout(removalTimeoutRef.current), []);
 
   React.useEffect(() => {
     if ((toast.promise && toastType === 'loading') || toast.duration === Infinity || toast.type === 'loading') return;
@@ -653,6 +659,7 @@ const Toaster = React.forwardRef<HTMLElement, ToasterProps>(function Toaster(pro
   const hotkeyLabel = hotkey.join('+').replace(/Key/g, '').replace(/Digit/g, '');
   const lastFocusedElementRef = React.useRef<HTMLElement>(null);
   const isFocusWithinRef = React.useRef(false);
+  const pendingDismissalsRef = React.useRef(new Map<number | string, number>());
 
   const removeToast = React.useCallback((toastToRemove: ToastT) => {
     setToasts((toasts) => {
@@ -668,14 +675,30 @@ const Toaster = React.forwardRef<HTMLElement, ToasterProps>(function Toaster(pro
     return ToastState.subscribe((toast) => {
       if ((toast as ToastToDismiss).dismiss) {
         // Prevent batching of other state updates
-        requestAnimationFrame(() => {
+        const frame = requestAnimationFrame(() => {
+          pendingDismissalsRef.current.delete(toast.id);
           setToasts((toasts) => toasts.map((t) => (t.id === toast.id ? { ...t, delete: true } : t)));
         });
+        pendingDismissalsRef.current.set(toast.id, frame);
         return;
+      }
+
+      // Shown again before its dismissal reached the list: this toast replaces the dismissed one,
+      // so the dismissal must not mark it for removal and the old props must not leak into it
+      const pendingDismissal = pendingDismissalsRef.current.get(toast.id);
+      if (pendingDismissal !== undefined) {
+        cancelAnimationFrame(pendingDismissal);
+        pendingDismissalsRef.current.delete(toast.id);
       }
 
       // Prevent batching, temp solution.
       setTimeout(() => {
+        // The dismissed toast with this id is still animating out: take it out first so this one mounts as a new toast
+        ReactDOM.flushSync(() => {
+          setToasts((toasts) =>
+            toasts.some((t) => t.id === toast.id && t.delete) ? toasts.filter((t) => t.id !== toast.id) : toasts,
+          );
+        });
         ReactDOM.flushSync(() => {
           setToasts((toasts) => {
             const indexOfExistingToast = toasts.findIndex((t) => t.id === toast.id);
@@ -684,7 +707,7 @@ const Toaster = React.forwardRef<HTMLElement, ToasterProps>(function Toaster(pro
             if (indexOfExistingToast !== -1) {
               return [
                 ...toasts.slice(0, indexOfExistingToast),
-                { ...toasts[indexOfExistingToast], ...toast },
+                pendingDismissal === undefined ? { ...toasts[indexOfExistingToast], ...toast } : toast,
                 ...toasts.slice(indexOfExistingToast + 1),
               ];
             }

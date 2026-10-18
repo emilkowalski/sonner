@@ -437,6 +437,22 @@ test.describe('Basic functionality', () => {
     await expect(page.getByText('Remounted toast')).toHaveCount(1);
   });
 
+  for (const [scenario, title] of [
+    ['next-frame', 'in the frame after it was dismissed'],
+    ['during-exit', 'while its dismissed predecessor animates out'],
+  ]) {
+    test(`toast shown again ${title} stays on screen`, async ({ page }) => {
+      await page.getByTestId(`dismiss-and-show-again-${scenario}`).click();
+      const toast = page.locator('[data-sonner-toast]');
+      await expect(toast).toHaveCount(1);
+
+      // Long enough for the dismissal to have taken the new toast down with it
+      await page.waitForTimeout(1500);
+      await expect(toast).toHaveCount(1);
+      await expect(toast).toHaveAttribute('data-removed', 'false');
+    });
+  }
+
   test('description fills the width of the toast', async ({ page }) => {
     await page.getByTestId('react-node-description-wide').click();
 
