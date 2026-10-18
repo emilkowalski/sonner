@@ -462,6 +462,32 @@ export default function Home({ searchParams }: any) {
         Dismiss and recreate a toast synchronously
       </button>
       <button
+        data-testid="dismiss-and-show-again-next-frame"
+        className="button"
+        onClick={() => {
+          toast.warning('Shown again', { id: 'shown-again', duration: 10000 });
+          setTimeout(() => {
+            toast.dismiss('shown-again');
+            requestAnimationFrame(() => toast.warning('Shown again', { id: 'shown-again', duration: 10000 }));
+          }, 500);
+        }}
+      >
+        Dismiss a toast and show it again in the next frame
+      </button>
+      <button
+        data-testid="dismiss-and-show-again-during-exit"
+        className="button"
+        onClick={() => {
+          toast.warning('Shown again', { id: 'shown-again', duration: 10000 });
+          setTimeout(() => {
+            toast.dismiss('shown-again');
+            setTimeout(() => toast.warning('Shown again', { id: 'shown-again', duration: 10000 }), 100);
+          }, 500);
+        }}
+      >
+        Dismiss a toast and show it again while it animates out
+      </button>
+      <button
         data-testid="react-node-description-wide"
         className="button"
         onClick={() =>
