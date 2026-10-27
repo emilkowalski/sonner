@@ -20,74 +20,74 @@ export type PromiseTResult<Data = any> =
 export type PromiseExternalToast = Omit<ExternalToast, 'description'>;
 
 export type PromiseData<ToastData = any> = PromiseExternalToast & {
-  loading?: string | React.ReactNode;
-  success?: PromiseTResult<ToastData> | PromiseTExtendedResult<ToastData>;
-  error?: PromiseTResult | PromiseTExtendedResult;
-  description?: PromiseTResult;
-  finally?: () => void | Promise<void>;
+  loading?: string | React.ReactNode | undefined;
+  success?: PromiseTResult<ToastData> | PromiseTExtendedResult<ToastData> | undefined;
+  error?: PromiseTResult | PromiseTExtendedResult | undefined;
+  description?: PromiseTResult | undefined;
+  finally?: (() => void | Promise<void>) | undefined;
 };
 
 export interface ToastClassnames {
-  toast?: string;
-  title?: string;
-  description?: string;
-  loader?: string;
-  closeButton?: string;
-  cancelButton?: string;
-  actionButton?: string;
-  success?: string;
-  error?: string;
-  info?: string;
-  warning?: string;
-  loading?: string;
-  default?: string;
-  content?: string;
-  icon?: string;
+  toast?: string | undefined;
+  title?: string | undefined;
+  description?: string | undefined;
+  loader?: string | undefined;
+  closeButton?: string | undefined;
+  cancelButton?: string | undefined;
+  actionButton?: string | undefined;
+  success?: string | undefined;
+  error?: string | undefined;
+  info?: string | undefined;
+  warning?: string | undefined;
+  loading?: string | undefined;
+  default?: string | undefined;
+  content?: string | undefined;
+  icon?: string | undefined;
 }
 
 export interface ToastIcons {
-  success?: React.ReactNode;
-  info?: React.ReactNode;
-  warning?: React.ReactNode;
-  error?: React.ReactNode;
-  loading?: React.ReactNode;
-  close?: React.ReactNode;
+  success?: React.ReactNode | undefined;
+  info?: React.ReactNode | undefined;
+  warning?: React.ReactNode | undefined;
+  error?: React.ReactNode | undefined;
+  loading?: React.ReactNode | undefined;
+  close?: React.ReactNode | undefined;
 }
 
 export interface Action {
   label: React.ReactNode;
   onClick: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
-  actionButtonStyle?: React.CSSProperties;
+  actionButtonStyle?: React.CSSProperties | undefined;
 }
 
 export interface ToastT {
   id: number | string;
-  toasterId?: string;
-  title?: (() => React.ReactNode) | React.ReactNode;
-  type?: ToastTypes;
-  icon?: React.ReactNode;
-  jsx?: React.ReactNode;
-  richColors?: boolean;
-  invert?: boolean;
-  closeButton?: boolean;
-  dismissible?: boolean;
-  description?: (() => React.ReactNode) | React.ReactNode;
-  duration?: number;
-  delete?: boolean;
-  action?: Action | React.ReactNode;
-  cancel?: Action | React.ReactNode;
-  onDismiss?: (toast: ToastT) => void;
-  onAutoClose?: (toast: ToastT) => void;
-  promise?: PromiseT;
-  cancelButtonStyle?: React.CSSProperties;
-  actionButtonStyle?: React.CSSProperties;
-  style?: React.CSSProperties;
-  unstyled?: boolean;
-  className?: string;
-  classNames?: ToastClassnames;
-  descriptionClassName?: string;
-  position?: Position;
-  testId?: string;
+  toasterId?: string | undefined;
+  title?: (() => React.ReactNode) | React.ReactNode | undefined;
+  type?: ToastTypes | undefined;
+  icon?: React.ReactNode | undefined;
+  jsx?: React.ReactNode | undefined;
+  richColors?: boolean | undefined;
+  invert?: boolean | undefined;
+  closeButton?: boolean | undefined;
+  dismissible?: boolean | undefined;
+  description?: (() => React.ReactNode) | React.ReactNode | undefined;
+  duration?: number | undefined;
+  delete?: boolean | undefined;
+  action?: Action | React.ReactNode | undefined;
+  cancel?: Action | React.ReactNode | undefined;
+  onDismiss?: ((toast: ToastT) => void) | undefined;
+  onAutoClose?: ((toast: ToastT) => void) | undefined;
+  promise?: PromiseT | undefined;
+  cancelButtonStyle?: React.CSSProperties | undefined;
+  actionButtonStyle?: React.CSSProperties | undefined;
+  style?: React.CSSProperties | undefined;
+  unstyled?: boolean | undefined;
+  className?: string | undefined;
+  classNames?: ToastClassnames | undefined;
+  descriptionClassName?: string | undefined;
+  position?: Position | undefined;
+  testId?: string | undefined;
 }
 
 export function isAction(action: Action | React.ReactNode): action is Action {
@@ -102,51 +102,51 @@ export interface HeightT {
 }
 
 interface ToastOptions {
-  className?: string;
-  closeButton?: boolean;
-  descriptionClassName?: string;
-  style?: React.CSSProperties;
-  cancelButtonStyle?: React.CSSProperties;
-  actionButtonStyle?: React.CSSProperties;
-  duration?: number;
-  unstyled?: boolean;
-  classNames?: ToastClassnames;
-  closeButtonAriaLabel?: string;
-  toasterId?: string;
+  className?: string | undefined;
+  closeButton?: boolean | undefined;
+  descriptionClassName?: string | undefined;
+  style?: React.CSSProperties | undefined;
+  cancelButtonStyle?: React.CSSProperties | undefined;
+  actionButtonStyle?: React.CSSProperties | undefined;
+  duration?: number | undefined;
+  unstyled?: boolean | undefined;
+  classNames?: ToastClassnames | undefined;
+  closeButtonAriaLabel?: string | undefined;
+  toasterId?: string | undefined;
 }
 
 type Offset =
   | {
-      top?: string | number;
-      right?: string | number;
-      bottom?: string | number;
-      left?: string | number;
+      top?: string | number | undefined;
+      right?: string | number | undefined;
+      bottom?: string | number | undefined;
+      left?: string | number | undefined;
     }
   | string
   | number;
 
 export interface ToasterProps {
-  id?: string;
-  invert?: boolean;
-  theme?: 'light' | 'dark' | 'system';
-  position?: Position;
-  hotkey?: string[];
-  richColors?: boolean;
-  expand?: boolean;
-  duration?: number;
-  gap?: number;
-  visibleToasts?: number;
-  closeButton?: boolean;
-  toastOptions?: ToastOptions;
-  className?: string;
-  style?: React.CSSProperties;
-  offset?: Offset;
-  mobileOffset?: Offset;
-  dir?: 'rtl' | 'ltr' | 'auto';
-  swipeDirections?: SwipeDirection[];
-  icons?: ToastIcons;
-  customAriaLabel?: string;
-  containerAriaLabel?: string;
+  id?: string | undefined;
+  invert?: boolean | undefined;
+  theme?: 'light' | 'dark' | 'system' | undefined;
+  position?: Position | undefined;
+  hotkey?: string[] | undefined;
+  richColors?: boolean | undefined;
+  expand?: boolean | undefined;
+  duration?: number | undefined;
+  gap?: number | undefined;
+  visibleToasts?: number | undefined;
+  closeButton?: boolean | undefined;
+  toastOptions?: ToastOptions | undefined;
+  className?: string | undefined;
+  style?: React.CSSProperties | undefined;
+  offset?: Offset | undefined;
+  mobileOffset?: Offset | undefined;
+  dir?: 'rtl' | 'ltr' | 'auto' | undefined;
+  swipeDirections?: SwipeDirection[] | undefined;
+  icons?: ToastIcons | undefined;
+  customAriaLabel?: string | undefined;
+  containerAriaLabel?: string | undefined;
 }
 
 export type SwipeDirection = 'top' | 'right' | 'bottom' | 'left';
@@ -155,30 +155,30 @@ export interface ToastProps {
   toast: ToastT;
   toasts: ToastT[];
   index: number;
-  swipeDirections?: SwipeDirection[];
+  swipeDirections?: SwipeDirection[] | undefined;
   expanded: boolean;
   invert: boolean;
   heights: HeightT[];
   setHeights: React.Dispatch<React.SetStateAction<HeightT[]>>;
   removeToast: (toast: ToastT) => void;
-  gap?: number;
+  gap?: number | undefined;
   position: Position;
   visibleToasts: number;
   expandByDefault: boolean;
   closeButton: boolean;
   interacting: boolean;
-  style?: React.CSSProperties;
-  cancelButtonStyle?: React.CSSProperties;
-  actionButtonStyle?: React.CSSProperties;
-  duration?: number;
-  className?: string;
-  unstyled?: boolean;
-  descriptionClassName?: string;
-  loadingIcon?: React.ReactNode;
-  classNames?: ToastClassnames;
-  icons?: ToastIcons;
-  closeButtonAriaLabel?: string;
-  defaultRichColors?: boolean;
+  style?: React.CSSProperties | undefined;
+  cancelButtonStyle?: React.CSSProperties | undefined;
+  actionButtonStyle?: React.CSSProperties | undefined;
+  duration?: number | undefined;
+  className?: string | undefined;
+  unstyled?: boolean | undefined;
+  descriptionClassName?: string | undefined;
+  loadingIcon?: React.ReactNode | undefined;
+  classNames?: ToastClassnames | undefined;
+  icons?: ToastIcons | undefined;
+  closeButtonAriaLabel?: string | undefined;
+  defaultRichColors?: boolean | undefined;
 }
 
 export enum SwipeStateTypes {
@@ -195,6 +195,6 @@ export interface ToastToDismiss {
 }
 
 export type ExternalToast = Omit<ToastT, 'id' | 'type' | 'title' | 'jsx' | 'delete' | 'promise'> & {
-  id?: number | string;
-  toasterId?: string;
+  id?: number | string | undefined;
+  toasterId?: string | undefined;
 };
