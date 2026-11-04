@@ -458,6 +458,20 @@ test.describe('Basic functionality', () => {
     expect(button.x + button.width).toBeGreaterThan(toast.x + toast.width - 30);
   });
 
+  test('pointerdown for a pointer that is no longer active does not throw', async ({ page }) => {
+    const errors: Error[] = [];
+    page.on('pageerror', (error) => errors.push(error));
+    await page.getByTestId('default-button').click();
+
+    // The browser can drop a pointer (e.g. a cancelled touch) before React handles its pointerdown.
+    await page.locator('[data-sonner-toast]').evaluate((toast) => {
+      toast.dispatchEvent(new PointerEvent('pointerdown', { pointerId: 999, bubbles: true }));
+    });
+
+    expect(errors).toEqual([]);
+    await expect(page.locator('[data-sonner-toast]')).toHaveCount(1);
+  });
+
   test('toast is dismissed by a fast swipe in an allowed direction', async ({ page }) => {
     await page.goto('/?position=top-center&swipeDirections=top,right');
     await page.getByTestId('default-button').click();

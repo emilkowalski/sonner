@@ -318,7 +318,13 @@ const Toast = (props: ToastProps) => {
         dragStartTime.current = new Date();
         setOffsetBeforeRemove(offset.current);
         // Ensure we maintain correct pointer capture even when going outside of the toast (e.g. when swiping)
-        (event.target as HTMLElement).setPointerCapture(event.pointerId);
+        try {
+          (event.target as HTMLElement).setPointerCapture(event.pointerId);
+        } catch {
+          // The browser can drop the pointer (e.g. a cancelled touch) before this handler runs,
+          // in which case no pointerup will follow, so there is no swipe to track.
+          return;
+        }
         if ((event.target as HTMLElement).tagName === 'BUTTON') return;
         setSwiping(true);
         pointerStartRef.current = { x: event.clientX, y: event.clientY };
