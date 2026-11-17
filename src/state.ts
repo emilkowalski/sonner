@@ -210,6 +210,8 @@ class Observer {
       });
     }
 
+    // A loading toast already owns its options; only seed them when completion creates the first toast.
+    const initialToastOptions = id === undefined ? data : undefined;
     const p = Promise.resolve(promise instanceof Function ? promise() : promise);
 
     let shouldDismiss = id !== undefined;
@@ -221,7 +223,14 @@ class Observer {
         const isReactElementResponse = React.isValidElement(response);
         if (isReactElementResponse) {
           shouldDismiss = false;
-          this.create({ id, type: 'default', message: response });
+          const { description, ...toastOptions } = initialToastOptions || {};
+          this.create({
+            ...toastOptions,
+            id: id ?? data.id,
+            type: 'default',
+            message: response,
+            ...(typeof description !== 'function' && description !== undefined ? { description } : {}),
+          });
         } else if (isHttpResponse(response) && !response.ok) {
           shouldDismiss = false;
 
@@ -239,7 +248,7 @@ class Observer {
             ? (promiseData as PromiseIExtendedResult)
             : { message: promiseData };
 
-          this.create({ id, type: 'error', description, ...toastSettings });
+          this.create({ ...initialToastOptions, id: id ?? data.id, type: 'error', description, ...toastSettings });
         } else if (response instanceof Error) {
           shouldDismiss = false;
 
@@ -254,7 +263,7 @@ class Observer {
             ? (promiseData as PromiseIExtendedResult)
             : { message: promiseData };
 
-          this.create({ id, type: 'error', description, ...toastSettings });
+          this.create({ ...initialToastOptions, id: id ?? data.id, type: 'error', description, ...toastSettings });
         } else if (data.success !== undefined) {
           shouldDismiss = false;
           const promiseData = typeof data.success === 'function' ? await data.success(response) : data.success;
@@ -268,7 +277,7 @@ class Observer {
             ? (promiseData as PromiseIExtendedResult)
             : { message: promiseData };
 
-          this.create({ id, type: 'success', description, ...toastSettings });
+          this.create({ ...initialToastOptions, id: id ?? data.id, type: 'success', description, ...toastSettings });
         }
       })
       .catch(async (error) => {
@@ -285,7 +294,7 @@ class Observer {
             ? (promiseData as PromiseIExtendedResult)
             : { message: promiseData };
 
-          this.create({ id, type: 'error', description, ...toastSettings });
+          this.create({ ...initialToastOptions, id: id ?? data.id, type: 'error', description, ...toastSettings });
         }
       })
       .finally(() => {
