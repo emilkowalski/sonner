@@ -437,6 +437,17 @@ test.describe('Basic functionality', () => {
     await expect(page.getByText('Remounted toast')).toHaveCount(1);
   });
 
+  test('toast updated twice by id ends on the latest update', async ({ page }) => {
+    await page.getByTestId('update-from-nested-timers').click();
+    const toast = page.locator('[data-sonner-toast]');
+    await expect(toast).toHaveText('Sent');
+
+    // The older update, published from nested timers, must not be applied after the newer one
+    await page.waitForTimeout(500);
+    await expect(toast).toHaveCount(1);
+    await expect(toast).toHaveText('Sent');
+  });
+
   test('description fills the width of the toast', async ({ page }) => {
     await page.getByTestId('react-node-description-wide').click();
 

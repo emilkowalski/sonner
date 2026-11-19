@@ -462,6 +462,25 @@ export default function Home({ searchParams }: any) {
         Dismiss and recreate a toast synchronously
       </button>
       <button
+        data-testid="update-from-nested-timers"
+        className="button"
+        onClick={() => {
+          // Like a polling or retry loop: the first update runs deep inside nested timer callbacks,
+          // where browsers delay new timers, and the next one comes from another task.
+          const nested = (depth: number, fn: () => void): void => {
+            setTimeout(() => (depth === 1 ? fn() : nested(depth - 1, fn)));
+          };
+          nested(12, () => {
+            toast.info('Sending', { id: 'nested-timers', duration: Infinity });
+            const channel = new MessageChannel();
+            channel.port1.onmessage = () => toast.success('Sent', { id: 'nested-timers', duration: Infinity });
+            channel.port2.postMessage(null);
+          });
+        }}
+      >
+        Update a toast from nested timers, then from another task
+      </button>
+      <button
         data-testid="react-node-description-wide"
         className="button"
         onClick={() =>
