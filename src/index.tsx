@@ -564,32 +564,38 @@ function useSonner() {
   const [activeToasts, setActiveToasts] = React.useState<ToastT[]>([]);
 
   React.useEffect(() => {
+    // Timers don't always fire in the order they were set (browsers delay the ones set from
+    // deeply nested timer callbacks), so each timer applies the oldest pending change rather
+    // than the one it was set for. That keeps the changes in the order they were published.
+    const pendingChanges: Array<ToastT | ToastToDismiss> = [];
+
     return ToastState.subscribe((toast) => {
-      if ((toast as ToastToDismiss).dismiss) {
-        setTimeout(() => {
-          ReactDOM.flushSync(() => {
-            setActiveToasts((toasts) => toasts.filter((t) => t.id !== toast.id));
-          });
-        });
-        return;
-      }
+      pendingChanges.push(toast);
 
       // Prevent batching, temp solution.
       setTimeout(() => {
+        const change = pendingChanges.shift();
+        if (!change) return;
+
         ReactDOM.flushSync(() => {
+          if ((change as ToastToDismiss).dismiss) {
+            setActiveToasts((toasts) => toasts.filter((t) => t.id !== change.id));
+            return;
+          }
+
           setActiveToasts((toasts) => {
-            const indexOfExistingToast = toasts.findIndex((t) => t.id === toast.id);
+            const indexOfExistingToast = toasts.findIndex((t) => t.id === change.id);
 
             // Update the toast if it already exists
             if (indexOfExistingToast !== -1) {
               return [
                 ...toasts.slice(0, indexOfExistingToast),
-                { ...toasts[indexOfExistingToast], ...toast },
+                { ...toasts[indexOfExistingToast], ...change },
                 ...toasts.slice(indexOfExistingToast + 1),
               ];
             }
 
-            return [toast, ...toasts];
+            return [change, ...toasts];
           });
         });
       });
@@ -665,6 +671,11 @@ const Toaster = React.forwardRef<HTMLElement, ToasterProps>(function Toaster(pro
   }, []);
 
   React.useEffect(() => {
+    // Timers don't always fire in the order they were set (browsers delay the ones set from
+    // deeply nested timer callbacks), so each timer applies the oldest pending update rather
+    // than the one it was set for. That keeps the updates in the order they were published.
+    const pendingUpdates: ToastT[] = [];
+
     return ToastState.subscribe((toast) => {
       if ((toast as ToastToDismiss).dismiss) {
         // Prevent batching of other state updates
@@ -674,22 +685,27 @@ const Toaster = React.forwardRef<HTMLElement, ToasterProps>(function Toaster(pro
         return;
       }
 
+      pendingUpdates.push(toast);
+
       // Prevent batching, temp solution.
       setTimeout(() => {
+        const update = pendingUpdates.shift();
+        if (!update) return;
+
         ReactDOM.flushSync(() => {
           setToasts((toasts) => {
-            const indexOfExistingToast = toasts.findIndex((t) => t.id === toast.id);
+            const indexOfExistingToast = toasts.findIndex((t) => t.id === update.id);
 
             // Update the toast if it already exists
             if (indexOfExistingToast !== -1) {
               return [
                 ...toasts.slice(0, indexOfExistingToast),
-                { ...toasts[indexOfExistingToast], ...toast },
+                { ...toasts[indexOfExistingToast], ...update },
                 ...toasts.slice(indexOfExistingToast + 1),
               ];
             }
 
-            return [toast, ...toasts];
+            return [update, ...toasts];
           });
         });
       });
