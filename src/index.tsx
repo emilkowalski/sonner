@@ -169,24 +169,40 @@ const Toast = (props: ToastProps) => {
   }, [setHeights, toast.id]);
 
   React.useLayoutEffect(() => {
-    // Keep height up to date with the content in case it updates
+    // Keep height up to date with the content and the width in case they update
     if (!mounted) return;
     const toastNode = toastRef.current;
-    const originalHeight = toastNode.style.height;
-    toastNode.style.height = 'auto';
-    const newHeight = toastNode.getBoundingClientRect().height;
-    toastNode.style.height = originalHeight;
 
-    setInitialHeight(newHeight);
+    const measure = () => {
+      const originalHeight = toastNode.style.height;
+      toastNode.style.height = 'auto';
+      // offsetHeight, as a stacked toast's scale would shrink getBoundingClientRect()
+      const newHeight = toastNode.offsetHeight;
+      toastNode.style.height = originalHeight;
 
-    setHeights((heights) => {
-      const alreadyExists = heights.find((height) => height.toastId === toast.id);
-      if (!alreadyExists) {
-        return [{ toastId: toast.id, height: newHeight, position: toast.position }, ...heights];
-      } else {
-        return heights.map((height) => (height.toastId === toast.id ? { ...height, height: newHeight } : height));
-      }
+      setInitialHeight(newHeight);
+
+      setHeights((heights) => {
+        const alreadyExists = heights.find((height) => height.toastId === toast.id);
+        if (!alreadyExists) {
+          return [{ toastId: toast.id, height: newHeight, position: toast.position }, ...heights];
+        } else {
+          return heights.map((height) => (height.toastId === toast.id ? { ...height, height: newHeight } : height));
+        }
+      });
+    };
+
+    measure();
+
+    // A width change rewraps the text; height changes alone are this toast's own transitions
+    let width = toastNode.offsetWidth;
+    const observer = new ResizeObserver(() => {
+      if (toastNode.offsetWidth === width) return;
+      width = toastNode.offsetWidth;
+      measure();
     });
+    observer.observe(toastNode);
+    return () => observer.disconnect();
   }, [mounted, toast.title, toast.description, setHeights, toast.id, toast.jsx, toast.action, toast.cancel]);
 
   const deleteToast = React.useCallback(() => {

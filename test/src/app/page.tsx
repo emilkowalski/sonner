@@ -473,6 +473,18 @@ export default function Home({ searchParams }: any) {
       >
         ReactNode description that fills the width
       </button>
+      <button
+        data-testid="long-toasts"
+        className="button"
+        onClick={() => {
+          toast('A first notice long enough to wrap onto more lines once the toast is narrower than when it was shown');
+          toast(
+            'A second notice long enough to wrap onto more lines once the toast is narrower than when it was shown',
+          );
+        }}
+      >
+        Render two long toasts
+      </button>
       {showAutoClose ? <div data-testid="auto-close-el" /> : null}
       {showDismiss ? <div data-testid="dismiss-el" /> : null}
       <Toaster

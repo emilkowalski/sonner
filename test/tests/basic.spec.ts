@@ -473,4 +473,29 @@ test.describe('Basic functionality', () => {
 
     await expect(toast).toHaveCount(0);
   });
+
+  test('a shown toast is measured again when its width changes', async ({ page }) => {
+    // At 600px and below a toast is as wide as the window, so narrowing the window rewraps a shown toast's text
+    await page.setViewportSize({ width: 600, height: 800 });
+    await page.getByTestId('long-toasts').click();
+    const toasts = page.locator('[data-sonner-toast]');
+    await expect(toasts).toHaveCount(2);
+    const widthBefore = (await toasts.first().boundingBox())?.width ?? 0;
+
+    await page.setViewportSize({ width: 320, height: 800 });
+    await toasts.first().hover();
+    await expect(toasts.last()).toHaveAttribute('data-expanded', 'true');
+    // Let the height and offset transitions finish
+    await page.waitForTimeout(600);
+
+    const newer = await toasts.first().boundingBox();
+    const older = await toasts.last().boundingBox();
+    if (!newer || !older) throw new Error('Toasts not rendered');
+    expect(newer.width).toBeLessThan(widthBefore);
+    for (const toast of await toasts.all()) {
+      const fit = await toast.evaluate((element) => ({ content: element.scrollHeight, box: element.clientHeight }));
+      expect(fit.content).toBeLessThanOrEqual(fit.box);
+    }
+    expect(older.y + older.height).toBeLessThanOrEqual(newer.y);
+  });
 });
