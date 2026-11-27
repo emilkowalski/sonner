@@ -555,19 +555,35 @@ test.describe('Basic functionality', () => {
     await expect.poll(gap).toBeLessThan(1);
   });
 
-  test("a shown toast's stored height is its height as laid out, to the fraction of a pixel", async ({ page }) => {
+  test('a toast laid out at a fraction of a pixel and then narrowed is stored at its height as laid out, the fraction included', async ({
+    page,
+  }) => {
     await page.getByTestId('default-button').click();
     const toast = page.locator('[data-sonner-toast]');
     await expect(toast).toHaveAttribute('data-mounted', 'true');
-    const heights = await toast.evaluate((element: HTMLElement) => {
-      const inline = element.style.height;
-      element.style.height = 'auto';
-      const laidOut = getComputedStyle(element).height;
-      element.style.height = inline;
-      return { laidOut, stored: element.style.getPropertyValue('--initial-height') };
+    // The height sonner stored and the height the toast is laid out at with its content alone deciding
+    const heights = () =>
+      toast.evaluate((element: HTMLElement) => {
+        const inline = element.style.height;
+        element.style.height = 'auto';
+        const laidOut = getComputedStyle(element).height;
+        element.style.height = inline;
+        return { laidOut, stored: element.style.getPropertyValue('--initial-height') };
+      });
+    const before = await heights();
+    await toast.evaluate((element: HTMLElement) => {
+      // More padding under the text, so the toast's height ends half a pixel past a whole one
+      const height = parseFloat(getComputedStyle(element).height);
+      const more = 0.5 - (height % 1) + (height % 1 >= 0.5 ? 1 : 0);
+      element.style.paddingBottom = `${parseFloat(getComputedStyle(element).paddingBottom) + more}px`;
+      // A toaster one pixel narrower, so sonner measures the toast again
+      const toaster = element.closest<HTMLElement>('[data-sonner-toaster]')!;
+      toaster.style.setProperty('--width', `${parseFloat(getComputedStyle(toaster).width) - 1}px`);
     });
-    expect(heights.laidOut).not.toMatch(/^\d+px$/);
-    expect(heights.stored).toBe(heights.laidOut);
+    await expect.poll(async () => (await heights()).stored).not.toBe(before.stored);
+    const after = await heights();
+    expect(after.laidOut).not.toMatch(/^\d+px$/);
+    expect(after.stored).toBe(after.laidOut);
   });
 
   test('a toast shows and closes where the browser has no ResizeObserver', async ({ page }) => {
