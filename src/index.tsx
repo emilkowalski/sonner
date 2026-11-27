@@ -210,11 +210,12 @@ const Toast = (props: ToastProps) => {
     // Without ResizeObserver (jsdom, older browsers) the toast is measured again on content changes only
     if (typeof ResizeObserver === 'undefined') return;
 
-    // A width change rewraps the text; height changes alone are this toast's own transitions
-    let width = size.width;
-    const observer = new ResizeObserver(() => {
-      if (size.width === width) return;
-      width = size.width;
+    // The text wraps in the content box, the box the observer watches: a change of its width rewraps the text, and height
+    // changes alone are this toast's own transitions. Unset at first, so the first report is measured too
+    let width: number | undefined;
+    const observer = new ResizeObserver(([entry]) => {
+      if (entry.contentRect.width === width) return;
+      width = entry.contentRect.width;
       measure();
     });
     observer.observe(toastNode);

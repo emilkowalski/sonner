@@ -473,6 +473,7 @@ export default function Home({ searchParams }: any) {
       >
         ReactNode description that fills the width
       </button>
+      {/* The toasts below stay until they are closed, so no lifetime ends before a test's checks */}
       <button
         data-testid="long-toasts"
         className="button"
@@ -481,11 +482,12 @@ export default function Home({ searchParams }: any) {
             'A first notice long enough to wrap onto more lines once the toast is narrower than when it was shown',
             {
               closeButton: true,
+              duration: Infinity,
             },
           );
           toast(
             'A second notice long enough to wrap onto more lines once the toast is narrower than when it was shown',
-            { closeButton: true },
+            { closeButton: true, duration: Infinity },
           );
         }}
       >
@@ -495,13 +497,21 @@ export default function Home({ searchParams }: any) {
         data-testid="box-models"
         className="button"
         onClick={() => {
-          toast('A toast in the border box sonner gives it');
+          toast('A toast in the border box sonner gives it', { duration: Infinity });
           toast('A toast in a content box, its padding and border outside its height', {
             style: { boxSizing: 'content-box' },
+            duration: Infinity,
           });
         }}
       >
         Render a border-box toast and a content-box toast
+      </button>
+      <button
+        data-testid="held-close-button"
+        className="button"
+        onClick={() => toast('Toast with close button', { closeButton: true, duration: Infinity })}
+      >
+        Render close button, held until closed
       </button>
       {showAutoClose ? <div data-testid="auto-close-el" /> : null}
       {showDismiss ? <div data-testid="dismiss-el" /> : null}

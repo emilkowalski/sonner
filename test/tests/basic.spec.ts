@@ -593,10 +593,44 @@ test.describe('Basic functionality', () => {
     await expect.poll(gap).toBeLessThan(1);
   });
 
+  test('a toast whose padding grows with its width unchanged, enough to rewrap its title, is measured again', async ({
+    page,
+  }) => {
+    await page.getByTestId('long-toasts').click();
+    const toasts = page.locator('[data-sonner-toast]');
+    await expect(toasts).toHaveCount(2);
+    const toast = toasts.first();
+    // The height sonner stored against the height the toast is laid out at with its content alone deciding
+    const gap = () =>
+      toast.evaluate((element: HTMLElement) => {
+        const inline = element.style.height;
+        element.style.height = 'auto';
+        const laidOut = parseFloat(getComputedStyle(element).height);
+        element.style.height = inline;
+        return Math.abs(parseFloat(element.style.getPropertyValue('--initial-height')) - laidOut);
+      });
+    await expect.poll(gap).toBeLessThan(1);
+
+    const sizes = await toast.evaluate((element: HTMLElement) => {
+      const style = getComputedStyle(element);
+      const title = element.querySelector<HTMLElement>('[data-title]')!;
+      const at = () => ({ width: style.width, titleHeight: title.offsetHeight });
+      const before = at();
+      // A quarter of the width more padding on each side, so the text has less than half the width to wrap in
+      const more = parseFloat(before.width) / 4;
+      element.style.paddingLeft = `${parseFloat(style.paddingLeft) + more}px`;
+      element.style.paddingRight = `${parseFloat(style.paddingRight) + more}px`;
+      return { before, after: at() };
+    });
+    expect(sizes.after.width).toBe(sizes.before.width);
+    expect(sizes.after.titleHeight).toBeGreaterThan(sizes.before.titleHeight);
+    await expect.poll(gap).toBeLessThan(1);
+  });
+
   test('a toast laid out at a fraction of a pixel and then narrowed is stored at its height as laid out, the fraction included', async ({
     page,
   }) => {
-    await page.getByTestId('default-button').click();
+    await page.getByTestId('infinity-toast').click();
     const toast = page.locator('[data-sonner-toast]');
     await expect(toast).toHaveAttribute('data-mounted', 'true');
     // The height sonner stored and the height the toast is laid out at with its content alone deciding
@@ -631,7 +665,7 @@ test.describe('Basic functionality', () => {
     const errors: string[] = [];
     page.on('pageerror', (error) => errors.push(error.message));
     await page.goto('/');
-    await page.getByTestId('close-button').click();
+    await page.getByTestId('held-close-button').click();
     const toast = page.locator('[data-sonner-toast]');
     await expect(toast).toHaveCount(1);
     await toast.locator('[data-close-button]').click();
@@ -647,7 +681,10 @@ test.describe('Basic functionality', () => {
     await page.getByTestId('long-toasts').click();
     const toasts = page.locator('[data-sonner-toast]');
     await expect(toasts).toHaveCount(2);
-    await page.clock.pauseAt(await page.evaluate(() => Date.now() + 1000));
+    // An hour on, longer than the test may run, so the pause is never in the page's past; these toasts have no lifetime to end
+    const holdFor = 60 * 60 * 1000;
+    expect(holdFor).toBeGreaterThan(test.info().timeout);
+    await page.clock.pauseAt(await page.evaluate((ms) => Date.now() + ms, holdFor));
     const newer = toasts.first();
     const older = toasts.last();
     const style = (toast: typeof older, name: string) =>
@@ -667,7 +704,7 @@ test.describe('Basic functionality', () => {
   test('a hovered toast whose box gets shorter inside with its width unchanged keeps the height it was given', async ({
     page,
   }) => {
-    await page.getByTestId('default-button').click();
+    await page.getByTestId('infinity-toast').click();
     const toast = page.locator('[data-sonner-toast]');
     // Hovered, the toast's height is the one sonner stored, so a taller padding leaves less height inside
     await toast.hover();
@@ -741,7 +778,7 @@ test.describe('Basic functionality', () => {
       });
     });
     await page.goto('/');
-    await page.getByTestId('close-button').click();
+    await page.getByTestId('held-close-button').click();
     const toast = page.locator('[data-sonner-toast]');
     const element = await toast.elementHandle();
     const watchers = () =>
