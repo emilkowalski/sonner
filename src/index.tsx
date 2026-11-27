@@ -185,7 +185,8 @@ const Toast = (props: ToastProps) => {
       setHeights((heights) => {
         const alreadyExists = heights.find((height) => height.toastId === toast.id);
         if (!alreadyExists) {
-          return [{ toastId: toast.id, height: newHeight, position: toast.position }, ...heights];
+          // Dismissal took this toast's height out of the list; a measure while it leaves must not put it back
+          return heights;
         } else {
           return heights.map((height) => (height.toastId === toast.id ? { ...height, height: newHeight } : height));
         }

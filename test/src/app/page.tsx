@@ -477,9 +477,15 @@ export default function Home({ searchParams }: any) {
         data-testid="long-toasts"
         className="button"
         onClick={() => {
-          toast('A first notice long enough to wrap onto more lines once the toast is narrower than when it was shown');
+          toast(
+            'A first notice long enough to wrap onto more lines once the toast is narrower than when it was shown',
+            {
+              closeButton: true,
+            },
+          );
           toast(
             'A second notice long enough to wrap onto more lines once the toast is narrower than when it was shown',
+            { closeButton: true },
           );
         }}
       >

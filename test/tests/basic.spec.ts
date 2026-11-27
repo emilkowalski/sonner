@@ -506,4 +506,121 @@ test.describe('Basic functionality', () => {
     }
     expect(older.y + older.height).toBeLessThanOrEqual(newer.y);
   });
+
+  test('a toast dismissed while the width changes stays out of the stack', async ({ page }) => {
+    // Browser time is held below, so the dismissed toast stays on the page, leaving, while the window narrows
+    await page.clock.install();
+    await page.goto('/');
+    await page.setViewportSize({ width: 600, height: 800 });
+    await page.getByTestId('long-toasts').click();
+    const toasts = page.locator('[data-sonner-toast]');
+    await expect(toasts).toHaveCount(2);
+    await page.clock.pauseAt(await page.evaluate(() => Date.now() + 1000));
+    const newer = toasts.first();
+    const older = toasts.last();
+    const style = (toast: typeof older, name: string) =>
+      toast.evaluate((element: HTMLElement, name) => element.style.getPropertyValue(name), name);
+
+    await newer.locator('[data-close-button]').click();
+    await expect(newer).toHaveAttribute('data-removed', 'true');
+    const heightBefore = await style(older, '--initial-height');
+    await page.setViewportSize({ width: 320, height: 800 });
+
+    // The older toast is measured again at its new width
+    await expect.poll(() => style(older, '--initial-height')).not.toBe(heightBefore);
+    await expect(newer).toHaveAttribute('data-removed', 'true');
+    expect(await style(older, '--offset')).toBe('0px');
+  });
+
+  test('a hovered toast whose box gets shorter inside with its width unchanged keeps the height it was given', async ({
+    page,
+  }) => {
+    await page.getByTestId('default-button').click();
+    const toast = page.locator('[data-sonner-toast]');
+    // Hovered, the toast's height is the one sonner stored, so a taller padding leaves less height inside
+    await toast.hover();
+    await expect(toast).toHaveAttribute('data-expanded', 'true');
+    const stored = () => toast.evaluate((element: HTMLElement) => element.style.getPropertyValue('--initial-height'));
+    const heightBefore = await stored();
+
+    const sizes = await toast.evaluate(async (element: HTMLElement) => {
+      // The box inside the padding, which is the box a resize observer watches
+      const inner = () => {
+        const style = getComputedStyle(element);
+        return {
+          width: element.clientWidth - parseFloat(style.paddingLeft) - parseFloat(style.paddingRight),
+          height: element.clientHeight - parseFloat(style.paddingTop) - parseFloat(style.paddingBottom),
+        };
+      };
+      let notified = () => {};
+      const notice = () => new Promise<void>((resolve) => (notified = resolve));
+      const observer = new ResizeObserver(() => notified());
+      let next = notice();
+      observer.observe(element);
+      // An observation's first notice comes with no change
+      await next;
+      const start = inner();
+      next = notice();
+      element.style.paddingBottom = '40px';
+      const padded = inner();
+      // The change's notice; sonner's observer, made first, had it before this one
+      await next;
+      observer.disconnect();
+      // State sonner set in its observer renders in posted-message tasks
+      for (let task = 0; task < 3; task += 1)
+        await new Promise<void>((resolve) => {
+          const channel = new MessageChannel();
+          channel.port1.onmessage = () => resolve();
+          channel.port2.postMessage(null);
+        });
+      return { start, padded };
+    });
+
+    expect(sizes.padded.width).toBe(sizes.start.width);
+    expect(sizes.padded.height).toBeLessThan(sizes.start.height);
+    expect(await stored()).toBe(heightBefore);
+  });
+
+  test('one resize observer watches a shown toast, and none once it is closed and gone', async ({ page }) => {
+    // Every resize observer the page makes, with the elements it watches until it lets them go
+    await page.addInitScript(() => {
+      const watched = new Map<ResizeObserver, Set<Element>>();
+      const Native = window.ResizeObserver;
+      window.ResizeObserver = class extends Native {
+        constructor(callback: ResizeObserverCallback) {
+          super(callback);
+          watched.set(this, new Set());
+        }
+        observe(target: Element, options?: ResizeObserverOptions) {
+          watched.get(this)!.add(target);
+          super.observe(target, options);
+        }
+        unobserve(target: Element) {
+          watched.get(this)!.delete(target);
+          super.unobserve(target);
+        }
+        disconnect() {
+          watched.get(this)!.clear();
+          super.disconnect();
+        }
+      };
+      Object.assign(window, {
+        watchersOf: (target: Element) => [...watched.values()].filter((targets) => targets.has(target)).length,
+      });
+    });
+    await page.goto('/');
+    await page.getByTestId('close-button').click();
+    const toast = page.locator('[data-sonner-toast]');
+    const element = await toast.elementHandle();
+    const watchers = () =>
+      page.evaluate(
+        (node) => (window as unknown as { watchersOf: (target: Element) => number }).watchersOf(node),
+        element,
+      );
+    expect(await watchers()).toBe(1);
+
+    await toast.locator('[data-close-button]').click();
+    await expect(toast).toHaveCount(0);
+    expect(await watchers()).toBe(0);
+  });
 });
