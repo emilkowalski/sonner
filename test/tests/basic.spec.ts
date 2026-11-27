@@ -627,6 +627,45 @@ test.describe('Basic functionality', () => {
     await expect.poll(gap).toBeLessThan(1);
   });
 
+  for (const hovered of [false, true]) {
+    test(`a ${
+      hovered ? 'hovered ' : ''
+    }toast whose title is drawn wider with its width unchanged, enough to rewrap it, is measured again`, async ({
+      page,
+    }) => {
+      await page.getByTestId('long-toasts').click();
+      const toasts = page.locator('[data-sonner-toast]');
+      await expect(toasts).toHaveCount(2);
+      const toast = toasts.first();
+      if (hovered) {
+        await toast.hover();
+        await expect(toast).toHaveAttribute('data-expanded', 'true');
+      }
+      // The height sonner stored against the height the toast is laid out at with its content alone deciding
+      const gap = () =>
+        toast.evaluate((element: HTMLElement) => {
+          const inline = element.style.height;
+          element.style.height = 'auto';
+          const laidOut = parseFloat(getComputedStyle(element).height);
+          element.style.height = inline;
+          return Math.abs(parseFloat(element.style.getPropertyValue('--initial-height')) - laidOut);
+        });
+      await expect.poll(gap).toBeLessThan(1);
+
+      const sizes = await toast.evaluate((element: HTMLElement) => {
+        const title = element.querySelector<HTMLElement>('[data-title]')!;
+        const at = () => ({ width: getComputedStyle(element).width, titleHeight: title.offsetHeight });
+        const before = at();
+        // Wider glyphs, as a face that finishes loading after the toast is shown can draw the title
+        title.style.letterSpacing = '0.25em';
+        return { before, after: at() };
+      });
+      expect(sizes.after.width).toBe(sizes.before.width);
+      expect(sizes.after.titleHeight).toBeGreaterThan(sizes.before.titleHeight);
+      await expect.poll(gap).toBeLessThan(1);
+    });
+  }
+
   test('a toast laid out at a fraction of a pixel and then narrowed is stored at its height as laid out, the fraction included', async ({
     page,
   }) => {

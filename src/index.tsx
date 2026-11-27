@@ -210,15 +210,18 @@ const Toast = (props: ToastProps) => {
     // Without ResizeObserver (jsdom, older browsers) the toast is measured again on content changes only
     if (typeof ResizeObserver === 'undefined') return;
 
-    // The text wraps in the content box, the box the observer watches: a change of its width rewraps the text, and height
-    // changes alone are this toast's own transitions. Unset at first, so the first report is measured too
+    // The text wraps in the toast's content box: a change of its width rewraps the text, and height changes alone are this
+    // toast's own transitions. Its children are laid out by their content, which those transitions leave alone, so a
+    // change of a child's size, such as a font finishing loading, changes the height the toast needs. Unset at first, so
+    // the toast's first report is measured too
     let width: number | undefined;
-    const observer = new ResizeObserver(([entry]) => {
-      if (entry.contentRect.width === width) return;
-      width = entry.contentRect.width;
-      measure();
+    const observer = new ResizeObserver((entries) => {
+      const changed = entries.some((entry) => entry.target !== toastNode || entry.contentRect.width !== width);
+      for (const entry of entries) if (entry.target === toastNode) width = entry.contentRect.width;
+      if (changed) measure();
     });
     observer.observe(toastNode);
+    for (const child of Array.from(toastNode.children)) observer.observe(child);
     return () => observer.disconnect();
   }, [mounted, toast.title, toast.description, setHeights, toast.id, toast.jsx, toast.action, toast.cancel]);
 
