@@ -178,11 +178,21 @@ const Toast = (props: ToastProps) => {
     const measure = () => {
       const originalHeight = toastNode.style.height;
       toastNode.style.height = 'auto';
-      // A toast that is not rendered has no height laid out, and is stored as 0
-      const newHeight = parseFloat(size.height) || 0;
+      // Its height in its own box-sizing, which its `height` style takes; a toast that is not rendered has none, stored as 0
+      const laidOut = parseFloat(size.height);
+      const ownHeight = laidOut || 0;
+      // Its outer height, which places the older toasts: a content box leaves its padding and borders out of its height
+      const outerHeight =
+        size.boxSizing === 'content-box' && !Number.isNaN(laidOut)
+          ? laidOut +
+            parseFloat(size.paddingTop) +
+            parseFloat(size.paddingBottom) +
+            parseFloat(size.borderTopWidth) +
+            parseFloat(size.borderBottomWidth)
+          : ownHeight;
       toastNode.style.height = originalHeight;
 
-      setInitialHeight(newHeight);
+      setInitialHeight(ownHeight);
 
       setHeights((heights) => {
         const alreadyExists = heights.find((height) => height.toastId === toast.id);
@@ -190,7 +200,7 @@ const Toast = (props: ToastProps) => {
           // Dismissal took this toast's height out of the list; a measure while it leaves must not put it back
           return heights;
         } else {
-          return heights.map((height) => (height.toastId === toast.id ? { ...height, height: newHeight } : height));
+          return heights.map((height) => (height.toastId === toast.id ? { ...height, height: outerHeight } : height));
         }
       });
     };

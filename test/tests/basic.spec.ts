@@ -508,6 +508,44 @@ test.describe('Basic functionality', () => {
     }).toPass();
   });
 
+  test('a content-box toast and a border-box toast, expanded: each is as tall as its content, and the older ends one gap from the newer', async ({
+    page,
+  }) => {
+    await page.getByTestId('box-models').click();
+    const toasts = page.locator('[data-sonner-toast]');
+    await expect(toasts).toHaveCount(2);
+    const newer = toasts.first();
+    const older = toasts.last();
+    const boxSizing = (toast: typeof newer) => toast.evaluate((element) => getComputedStyle(element).boxSizing);
+    expect(await boxSizing(newer)).toBe('content-box');
+    expect(await boxSizing(older)).toBe('border-box');
+    const gap = await newer.evaluate((element) =>
+      parseFloat(getComputedStyle(element.closest('[data-sonner-toaster]')!).getPropertyValue('--gap')),
+    );
+    await newer.hover();
+    await expect(older).toHaveAttribute('data-expanded', 'true');
+
+    // The height and offset transitions run on browser time, so the checks are tried again until they hold
+    await expect(async () => {
+      for (const toast of [newer, older]) {
+        // The height it is shown at against its height with its content alone deciding
+        const heights = await toast.evaluate((element: HTMLElement) => {
+          const shown = element.offsetHeight;
+          const inline = element.style.height;
+          element.style.height = 'auto';
+          const content = element.offsetHeight;
+          element.style.height = inline;
+          return { shown, content };
+        });
+        expect(heights.shown).toBe(heights.content);
+      }
+      const newerBox = await newer.boundingBox();
+      const olderBox = await older.boundingBox();
+      if (!newerBox || !olderBox) throw new Error('Toasts not rendered');
+      expect(newerBox.y - (olderBox.y + olderBox.height)).toBeCloseTo(gap, 0);
+    }).toPass();
+  });
+
   test('a toast whose width changes by less than a pixel, enough to rewrap its title, is measured again', async ({
     page,
   }) => {

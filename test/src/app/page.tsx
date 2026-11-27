@@ -491,6 +491,18 @@ export default function Home({ searchParams }: any) {
       >
         Render two long toasts
       </button>
+      <button
+        data-testid="box-models"
+        className="button"
+        onClick={() => {
+          toast('A toast in the border box sonner gives it');
+          toast('A toast in a content box, its padding and border outside its height', {
+            style: { boxSizing: 'content-box' },
+          });
+        }}
+      >
+        Render a border-box toast and a content-box toast
+      </button>
       {showAutoClose ? <div data-testid="auto-close-el" /> : null}
       {showDismiss ? <div data-testid="dismiss-el" /> : null}
       <Toaster
