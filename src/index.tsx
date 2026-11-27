@@ -172,12 +172,14 @@ const Toast = (props: ToastProps) => {
     // Keep height up to date with the content and the width in case they update
     if (!mounted) return;
     const toastNode = toastRef.current;
+    // The toast's sizes as laid out, fractions of a pixel included, which a stacked toast's scale does not shrink
+    const size = getComputedStyle(toastNode);
 
     const measure = () => {
       const originalHeight = toastNode.style.height;
       toastNode.style.height = 'auto';
-      // offsetHeight, as a stacked toast's scale would shrink getBoundingClientRect()
-      const newHeight = toastNode.offsetHeight;
+      // A toast that is not rendered has no height laid out, and is stored as 0
+      const newHeight = parseFloat(size.height) || 0;
       toastNode.style.height = originalHeight;
 
       setInitialHeight(newHeight);
@@ -195,11 +197,14 @@ const Toast = (props: ToastProps) => {
 
     measure();
 
+    // Without ResizeObserver (jsdom, older browsers) the toast is measured again on content changes only
+    if (typeof ResizeObserver === 'undefined') return;
+
     // A width change rewraps the text; height changes alone are this toast's own transitions
-    let width = toastNode.offsetWidth;
+    let width = size.width;
     const observer = new ResizeObserver(() => {
-      if (toastNode.offsetWidth === width) return;
-      width = toastNode.offsetWidth;
+      if (size.width === width) return;
+      width = size.width;
       measure();
     });
     observer.observe(toastNode);

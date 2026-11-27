@@ -485,26 +485,104 @@ test.describe('Basic functionality', () => {
     await page.setViewportSize({ width: 320, height: 800 });
     await toasts.first().hover();
     await expect(toasts.last()).toHaveAttribute('data-expanded', 'true');
-    // Let the height and offset transitions finish
-    await page.waitForTimeout(600);
 
-    const newer = await toasts.first().boundingBox();
-    const older = await toasts.last().boundingBox();
-    if (!newer || !older) throw new Error('Toasts not rendered');
-    expect(newer.width).toBeLessThan(widthBefore);
-    for (const toast of await toasts.all()) {
-      // The height it is shown at against its height with its content alone deciding
-      const heights = await toast.evaluate((element: HTMLElement) => {
-        const shown = element.offsetHeight;
+    // The height and offset transitions run on browser time, so the checks are tried again until they hold
+    await expect(async () => {
+      const newer = await toasts.first().boundingBox();
+      const older = await toasts.last().boundingBox();
+      if (!newer || !older) throw new Error('Toasts not rendered');
+      expect(newer.width).toBeLessThan(widthBefore);
+      for (const toast of await toasts.all()) {
+        // The height it is shown at against its height with its content alone deciding
+        const heights = await toast.evaluate((element: HTMLElement) => {
+          const shown = element.offsetHeight;
+          const inline = element.style.height;
+          element.style.height = 'auto';
+          const content = element.offsetHeight;
+          element.style.height = inline;
+          return { shown, content };
+        });
+        expect(heights.shown).toBe(heights.content);
+      }
+      expect(older.y + older.height).toBeLessThanOrEqual(newer.y);
+    }).toPass();
+  });
+
+  test('a toast whose width changes by less than a pixel, enough to rewrap its title, is measured again', async ({
+    page,
+  }) => {
+    await page.getByTestId('long-toasts').click();
+    const toasts = page.locator('[data-sonner-toast]');
+    await expect(toasts).toHaveCount(2);
+    const toast = toasts.first();
+    // Two widths of the toaster less than a pixel apart, the newer toast's title wrapped to more lines at the narrower
+    const widths = await toast.evaluate((element: HTMLElement) => {
+      const toaster = element.closest<HTMLElement>('[data-sonner-toaster]')!;
+      const title = element.querySelector<HTMLElement>('[data-title]')!;
+      const at = (width: number) => {
+        toaster.style.setProperty('--width', `${width}px`);
+        return { titleHeight: title.offsetHeight, whole: element.offsetWidth };
+      };
+      let wide = parseFloat(getComputedStyle(toaster).width);
+      let narrow = wide / 2;
+      const start = at(wide).titleHeight;
+      if (at(narrow).titleHeight <= start) throw new Error('The title does not wrap to more lines at half the width');
+      while (wide - narrow > 1 / 64) {
+        const middle = (wide + narrow) / 2;
+        if (at(middle).titleHeight > start) narrow = middle;
+        else wide = middle;
+      }
+      const narrowAt = at(narrow);
+      const wideAt = at(wide);
+      return { wide, narrow, wideAt, narrowAt };
+    });
+    expect(widths.narrowAt.titleHeight).toBeGreaterThan(widths.wideAt.titleHeight);
+    expect(widths.narrowAt.whole).toBe(widths.wideAt.whole);
+    // The height sonner stored against the height the toast is laid out at with its content alone deciding
+    const gap = () =>
+      toast.evaluate((element: HTMLElement) => {
         const inline = element.style.height;
         element.style.height = 'auto';
-        const content = element.offsetHeight;
+        const laidOut = parseFloat(getComputedStyle(element).height);
         element.style.height = inline;
-        return { shown, content };
+        return Math.abs(parseFloat(element.style.getPropertyValue('--initial-height')) - laidOut);
       });
-      expect(heights.shown).toBe(heights.content);
-    }
-    expect(older.y + older.height).toBeLessThanOrEqual(newer.y);
+    await expect.poll(gap).toBeLessThan(1);
+
+    await toast.evaluate((element: HTMLElement, width) => {
+      element.closest<HTMLElement>('[data-sonner-toaster]')!.style.setProperty('--width', `${width}px`);
+    }, widths.narrow);
+    await expect.poll(gap).toBeLessThan(1);
+  });
+
+  test("a shown toast's stored height is its height as laid out, to the fraction of a pixel", async ({ page }) => {
+    await page.getByTestId('default-button').click();
+    const toast = page.locator('[data-sonner-toast]');
+    await expect(toast).toHaveAttribute('data-mounted', 'true');
+    const heights = await toast.evaluate((element: HTMLElement) => {
+      const inline = element.style.height;
+      element.style.height = 'auto';
+      const laidOut = getComputedStyle(element).height;
+      element.style.height = inline;
+      return { laidOut, stored: element.style.getPropertyValue('--initial-height') };
+    });
+    expect(heights.laidOut).not.toMatch(/^\d+px$/);
+    expect(heights.stored).toBe(heights.laidOut);
+  });
+
+  test('a toast shows and closes where the browser has no ResizeObserver', async ({ page }) => {
+    await page.addInitScript(() => {
+      delete (window as { ResizeObserver?: unknown }).ResizeObserver;
+    });
+    const errors: string[] = [];
+    page.on('pageerror', (error) => errors.push(error.message));
+    await page.goto('/');
+    await page.getByTestId('close-button').click();
+    const toast = page.locator('[data-sonner-toast]');
+    await expect(toast).toHaveCount(1);
+    await toast.locator('[data-close-button]').click();
+    await expect(toast).toHaveCount(0);
+    expect(errors).toEqual([]);
   });
 
   test('a toast dismissed while the width changes stays out of the stack', async ({ page }) => {
