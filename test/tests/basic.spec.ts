@@ -493,8 +493,16 @@ test.describe('Basic functionality', () => {
     if (!newer || !older) throw new Error('Toasts not rendered');
     expect(newer.width).toBeLessThan(widthBefore);
     for (const toast of await toasts.all()) {
-      const fit = await toast.evaluate((element) => ({ content: element.scrollHeight, box: element.clientHeight }));
-      expect(fit.content).toBeLessThanOrEqual(fit.box);
+      // The height it is shown at against its height with its content alone deciding
+      const heights = await toast.evaluate((element: HTMLElement) => {
+        const shown = element.offsetHeight;
+        const inline = element.style.height;
+        element.style.height = 'auto';
+        const content = element.offsetHeight;
+        element.style.height = inline;
+        return { shown, content };
+      });
+      expect(heights.shown).toBe(heights.content);
     }
     expect(older.y + older.height).toBeLessThanOrEqual(newer.y);
   });
